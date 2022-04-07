@@ -41,18 +41,17 @@ public class Main extends ListenerAdapter {
         return embed;
     }
 
-    static String toTimestamp(long number) {
-        if (number <= 0) {
+    static String toTimestamp(long seconds) {
+        if (seconds <= 0) {
             return "0 seconds";
         } else {
-            number = number / (1000);
-            long days = number / (24 * 3600);
-            number = number % (24 * 3600);
-            long hours = number / 3600;
-            number %= 3600;
-            long minutes = number / 60;
-            number %= 60;
-            long seconds = number;
+            seconds /= 1000;
+            long days = seconds / 86400;
+            seconds %= 86400;
+            long hours = seconds / 3600;
+            seconds %= 3600;
+            long minutes = seconds / 60;
+            seconds %= 60;
             ArrayList totalSet = new ArrayList();
             if (days > 0) {
                 totalSet.add(days + " day(s)");
@@ -66,10 +65,7 @@ public class Main extends ListenerAdapter {
             if (seconds > 0) {
                 totalSet.add(seconds + " second(s)");
             }
-            String time = String.valueOf(totalSet);
-            String temptime = time.replace("[", "");
-            String othertime = temptime.replace("]", "");
-            return othertime;
+            return String.valueOf(totalSet).replace("[", "").replace("]", "");
         }
     }
 
@@ -122,7 +118,7 @@ public class Main extends ListenerAdapter {
         }
 
         if (msg.getContentRaw().equals(botPrefix + "join vc")) {
-            if (vc != null) {
+            if (vc) {
                 connectTo(vc);
                 }
             else {
