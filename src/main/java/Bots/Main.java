@@ -1,9 +1,13 @@
 package Bots;
 
+import Bots.commands.CommandDebug;
+import Bots.commands.CommandPing;
+import Bots.commands.CommandPlay;
+import Bots.commands.CommandSkip;
+import ca.tristan.jdacommands.JDACommands;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -15,27 +19,42 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     private static final long Uptime = currentTimeMillis();
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES};
     String botPrefix = "&";
     String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv"};
-    static AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+
 
     public static void main(String[] args) throws InterruptedException, LoginException {
-        JDA bot = JDABuilder.createDefault(token.botToken)
+
+        JDACommands jdaCommands = new JDACommands("&");
+        jdaCommands.registerCommand(new CommandPing());
+        jdaCommands.registerCommand(new CommandPlay());
+        jdaCommands.registerCommand(new CommandDebug());
+        jdaCommands.registerCommand(new CommandSkip());
+
+        JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
+                .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .addEventListeners(new Main())
+                .addEventListeners(jdaCommands)
                 .setActivity(Activity.playing("in development..."))
                 .build();
         bot.awaitReady();
         System.out.println("bot is now running, have fun ig");
     }
 
-    static MessageEmbed createQuickEmbed(String title, String description) {
+    public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
         eb.setColor(new Color(0, 0, 255));
@@ -43,7 +62,7 @@ public class Main extends ListenerAdapter {
         return eb.build();
     }
 
-    static String toTimestamp(long seconds) {
+    public static String toTimestamp(long seconds) {
         if (seconds <= 0) {
             return "0 seconds";
         } else {
@@ -81,21 +100,13 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    private void connectTo(AudioChannel channel) {
-        Guild guild = channel.getGuild();
-        AudioManager audioManager = guild.getAudioManager();
-        audioManager.openAudioConnection(channel);
-    }
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) { // this is going to get unreadable fast
         Message msg = event.getMessage();
-
         User user = msg.getAuthor();
         if (user.isBot()) {
             return;
         }
-
         String content = msg.getContentRaw();
         Guild guild = event.getGuild();
         MessageChannel channel = event.getChannel();
@@ -106,16 +117,11 @@ public class Main extends ListenerAdapter {
         assert voiceState != null;
         AudioChannel vc = voiceState.getChannel();
 
-
         if (content.startsWith(botPrefix + "uptime")) {
             long finalUptime = currentTimeMillis() - Main.Uptime;
             String finalTime = toTimestamp(finalUptime);
             channel.sendMessageEmbeds(createQuickEmbed(" ", "⏰ uptime: " + finalTime)).queue();
             System.out.println(finalTime);
-        }
-
-        if (!event.isFromGuild()) {
-            return;
         }
 
         if (content.startsWith(botPrefix + "help")) {
@@ -125,39 +131,6 @@ public class Main extends ListenerAdapter {
             //ArrayList DJ = new ArrayList();
             //ArrayList Admin = new ArrayList();
         }
-
-        if (msg.getContentRaw().equals(botPrefix + "ping")) {
-            long time = currentTimeMillis();
-            channel.sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
-        }
-
-        if (msg.getContentRaw().equals(botPrefix + "song")) {
-            List<Message.Attachment> messageAttachments = msg.getAttachments();
-            if (messageAttachments.isEmpty()) {
-                channel.sendMessageEmbeds(createQuickEmbed("Error", "No attachments found.")).queue();
-            } else {
-                String ext = messageAttachments.get(0).getFileExtension();
-                for (String audioFile : audioFiles) {
-                    if (Objects.equals(audioFile, ext)) {
-                        channel.sendMessageEmbeds(createQuickEmbed(" ", "I found your attachment, it's a " + ext + ", I will attempt to play it")).queue();
-                        AudioPlayer player = playerManager.createPlayer();
-                        return;
-                    }
-                }
-                channel.sendMessageEmbeds(createQuickEmbed("Error", "I found your attachment, it's a " + ext + " but is not playable by the bot.")).queue();
-            }
-
-            if (msg.getContentRaw().equals(botPrefix + "join vc")) {
-                if (vc == null) {
-                    channel.sendMessageEmbeds(createQuickEmbed("Error", "you arent in a vc cunt")).queue();
-                } else {
-                    connectTo(vc);
-                }
-            }
-        }
-    }
-
-    public AudioPlayerManager getPlayerManager() {
-        return Main.playerManager;
     }
 }
+
