@@ -42,6 +42,7 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
+
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setTitle((audioTrack.getInfo().title), (audioTrack.getInfo().uri));
                 embed.setColor(new Color(0, 0, 255));

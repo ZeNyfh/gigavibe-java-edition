@@ -2,19 +2,18 @@ package Bots.commands;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.*;
-import com.sedmelluq.discord.lavaplayer.player.*;
-import net.dv8tion.jda.api.entities.*;
+import ca.tristan.jdacommands.ExecuteArgs;
+import ca.tristan.jdacommands.ICommand;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 
-import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandSkip implements ICommand {
+public class CommandNowPlaying implements ICommand {
 
     @Override
     public void execute(ExecuteArgs event) {
@@ -36,43 +35,36 @@ public class CommandSkip implements ICommand {
             return;
         }
 
-        if(!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "You need to be in the same voice channel to use this command." )).queue();
-            return;
-        }
-
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if(audioPlayer.getPlayingTrack() == null){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "No tracks are playing right now." )).queue();
+            channel.sendMessageEmbeds(createQuickEmbed(" ", "No tracks are playing right now." )).queue(); // not an error, intended
             return;
         }
-        String fileToDelete = null;
-        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains("C:\\Users\\ZeNyfh\\Desktop\\tempmusic")){
-            fileToDelete = musicManager.audioPlayer.getPlayingTrack().getInfo().identifier;
-        }
-        musicManager.scheduler.nextTrack();
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track." )).queue();
-        try {
-            assert fileToDelete != null;
-            Files.delete(Paths.get(fileToDelete));
-        } catch (IOException ignored) {}
+
+        Long totalTime = audioPlayer.getPlayingTrack().getDuration();
+        Long trackPos = audioPlayer.getPlayingTrack().getPosition();
+        String Title = audioPlayer.getPlayingTrack().getInfo().title;
+
+        System.out.println("total. " + totalTime);
+        System.out.println("pos. " + trackPos);
+        System.out.println("title. " + Title);
+
     }
 
     @Override
     public String getName() {
-        return "skip";
+        return "np";
     }
 
     @Override
     public String helpMessage() {
-        return "Casts a vote or skips the current song."; // voting not yet implemented
+        return "Shows you the track currently playing";
     }
 
     @Override
     public boolean needOwner() {
         return false;
     }
-
 }

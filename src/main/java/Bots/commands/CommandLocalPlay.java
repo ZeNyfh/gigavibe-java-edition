@@ -3,13 +3,14 @@ import Bots.lavaplayer.PlayerManager;
 import ca.tristan.jdacommands.*;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandPlay implements ICommand {
+public class CommandLocalPlay implements ICommand {
 
     @Override
     public void execute(ExecuteArgs event) {
@@ -25,37 +26,20 @@ public class CommandPlay implements ICommand {
 
             audioManager.openAudioConnection(memberChannel);
         }
-
-        String link = String.join(" ", event.getArgs());
-
-        if(!isUrl(link)){
-            link = "ytsearch:" + link;
-            link = link.replace("&play", "");
-            if (link.contains("youtu.be/")){
-                link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
-            }
-        }
-
-        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
-
-    }
-    private boolean isUrl(String url){
-        try{
-            new URI(url);
-            return true;
-        } catch (URISyntaxException e){
-            return false;
-        }
+        String path = String.join(" ", event.getArgs());
+        path = path.replace("&playfile ", "");
+        Path finalpath = Paths.get(path);
+        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalpath));
     }
 
     @Override
     public String getName() {
-        return "play";
+        return "playfile";
     }
 
     @Override
     public String helpMessage() {
-        return "Plays songs or playlists from youtube.";
+        return "Plays songs from a directory.";
     }
 
     @Override

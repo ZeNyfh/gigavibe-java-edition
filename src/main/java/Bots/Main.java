@@ -1,9 +1,6 @@
 package Bots;
 
-import Bots.commands.CommandDebug;
-import Bots.commands.CommandPing;
-import Bots.commands.CommandPlay;
-import Bots.commands.CommandSkip;
+import Bots.commands.*;
 import ca.tristan.jdacommands.JDACommands;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
@@ -30,11 +27,9 @@ import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-    private static final long Uptime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES};
+    public static final long Uptime = currentTimeMillis();
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES};
     String botPrefix = "&";
-    String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv"};
-
 
     public static void main(String[] args) throws InterruptedException, LoginException {
 
@@ -43,6 +38,10 @@ public class Main extends ListenerAdapter {
         jdaCommands.registerCommand(new CommandPlay());
         jdaCommands.registerCommand(new CommandDebug());
         jdaCommands.registerCommand(new CommandSkip());
+        jdaCommands.registerCommand(new CommandLocalPlay());
+        jdaCommands.registerCommand(new CommandPlayAttachment());
+        jdaCommands.registerCommand(new CommandNowPlaying());
+        jdaCommands.registerCommand(new CommandUptime());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -97,39 +96,6 @@ public class Main extends ListenerAdapter {
                 }
                 return String.valueOf(totalSet).replace("[", "").replace("]", "");
             }
-        }
-    }
-
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event) { // this is going to get unreadable fast
-        Message msg = event.getMessage();
-        User user = msg.getAuthor();
-        if (user.isBot()) {
-            return;
-        }
-        String content = msg.getContentRaw();
-        Guild guild = event.getGuild();
-        MessageChannel channel = event.getChannel();
-        Member member = event.getMember();
-        JDA bot = event.getJDA();
-        assert member != null;
-        GuildVoiceState voiceState = member.getVoiceState();
-        assert voiceState != null;
-        AudioChannel vc = voiceState.getChannel();
-
-        if (content.startsWith(botPrefix + "uptime")) {
-            long finalUptime = currentTimeMillis() - Main.Uptime;
-            String finalTime = toTimestamp(finalUptime);
-            channel.sendMessageEmbeds(createQuickEmbed(" ", "⏰ uptime: " + finalTime)).queue();
-            System.out.println(finalTime);
-        }
-
-        if (content.startsWith(botPrefix + "help")) {
-            channel.sendMessage("literally only the help command rn").queue(); // will be worked on in the future
-            //ArrayList General = new ArrayList();
-            //ArrayList Music = new ArrayList();
-            //ArrayList DJ = new ArrayList();
-            //ArrayList Admin = new ArrayList();
         }
     }
 }
