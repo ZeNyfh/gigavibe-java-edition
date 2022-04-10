@@ -1,15 +1,17 @@
 package Bots.lavaplayer;
-import com.sedmelluq.discord.lavaplayer.player.*;
-import com.sedmelluq.discord.lavaplayer.player.event.*;
-import com.sedmelluq.discord.lavaplayer.track.*;
 
-import java.io.File;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.sun.jmx.snmp.ThreadContext.contains;
+import static Bots.commands.CommandLoop.loop;
 
 public class TrackScheduler extends AudioEventAdapter {
 
@@ -40,9 +42,14 @@ public class TrackScheduler extends AudioEventAdapter {
                 e.printStackTrace();
             }
         }
-        if(endReason.mayStartNext){
-            nextTrack();
+        if (loop) {
+            this.player.startTrack(track, false); // doesn't work, uses the last track, literally
+            PlayerManager.getInstance().loadAndPlay(null, track.getInfo().uri); // doesn't work, uses the url of the last track
+            return;
         }
+        if(endReason.mayStartNext){
+                nextTrack();
+            }
     }
 }
 

@@ -1,6 +1,8 @@
 package Bots.commands;
+
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.*;
+import ca.tristan.jdacommands.ExecuteArgs;
+import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
@@ -15,15 +17,17 @@ public class CommandPlay implements ICommand {
     public void execute(ExecuteArgs event) {
 
         if(!event.getMemberVoiceState().inAudioChannel()){
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
             return;
         }
 
         if(!event.getSelfVoiceState().inAudioChannel()){
             final AudioManager audioManager = event.getGuild().getAudioManager();
             final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
-
             audioManager.openAudioConnection(memberChannel);
+        } else if (event.getMemberVoiceState().getChannel() != event.getSelfVoiceState().getChannel()){
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in the same vc.")).queue();
+            return;
         }
 
         String link = String.join(" ", event.getArgs());

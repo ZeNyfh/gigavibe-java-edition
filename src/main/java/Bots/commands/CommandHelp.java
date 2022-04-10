@@ -26,6 +26,5 @@ public class CommandHelp implements ICommand {
     @Override
     public boolean needOwner() {
         return false;
-
     }
 }

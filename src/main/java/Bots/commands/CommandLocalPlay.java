@@ -1,9 +1,10 @@
 package Bots.commands;
+
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.*;
+import ca.tristan.jdacommands.ExecuteArgs;
+import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

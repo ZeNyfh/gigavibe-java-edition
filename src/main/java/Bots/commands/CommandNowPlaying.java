@@ -5,13 +5,15 @@ import Bots.lavaplayer.PlayerManager;
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.Objects;
+import java.awt.*;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.toSimpleTimestamp;
 
 public class CommandNowPlaying implements ICommand {
 
@@ -23,7 +25,7 @@ public class CommandNowPlaying implements ICommand {
 
         assert selfVoiceState != null;
         if(!selfVoiceState.inAudioChannel()){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc." )).queue();
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc." )).queue();
             return;
         }
 
@@ -31,7 +33,7 @@ public class CommandNowPlaying implements ICommand {
         final GuildVoiceState memberVoiceState = event.getMemberVoiceState();
 
         if(!memberVoiceState.inAudioChannel()){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "You need to be in a voice channel to use this command." )).queue();
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command." )).queue();
             return;
         }
 
@@ -43,14 +45,20 @@ public class CommandNowPlaying implements ICommand {
             return;
         }
 
-        Long totalTime = audioPlayer.getPlayingTrack().getDuration();
-        Long trackPos = audioPlayer.getPlayingTrack().getPosition();
-        String Title = audioPlayer.getPlayingTrack().getInfo().title;
-
-        System.out.println("total. " + totalTime);
-        System.out.println("pos. " + trackPos);
-        System.out.println("title. " + Title);
-
+        long totalTime = audioPlayer.getPlayingTrack().getDuration();
+        long trackPos = audioPlayer.getPlayingTrack().getPosition();
+        int trackLocation = Math.toIntExact(Math.round(((double)totalTime-trackPos)/totalTime*20d)); //WHY DOES (double) MATTER -9382
+        String barText = new String(new char[20-trackLocation]).replace("\0","━")+"\uD83D\uDD18"+new String(new char[trackLocation]).replace("\0","━");
+        EmbedBuilder embed = new EmbedBuilder();
+        if (audioPlayer.getPlayingTrack().getInfo().uri.contains("C:\\Users\\ZeNyfh\\Desktop\\")){
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace("C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\", ""));
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
+        } else {
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```\n" + "**Channel:** \n" +  (audioPlayer.getPlayingTrack().getInfo().author));
+        }
+        embed.setColor(new Color(0, 0, 255));
+        channel.sendMessageEmbeds(embed.build()).queue();
     }
 
     @Override
@@ -60,7 +68,7 @@ public class CommandNowPlaying implements ICommand {
 
     @Override
     public String helpMessage() {
-        return "Shows you the track currently playing";
+        return "Shows you the track that is currently playing";
     }
 
     @Override

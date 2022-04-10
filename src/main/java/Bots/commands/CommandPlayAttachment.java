@@ -1,11 +1,12 @@
 package Bots.commands;
+
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.*;
+import ca.tristan.jdacommands.ExecuteArgs;
+import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandPlayAttachment implements ICommand {
 
-    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv"};
+    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv", "m4a", "aac", "webm", "opus"};
 
     @Override
     public void execute(ExecuteArgs event) {
@@ -27,20 +28,28 @@ public class CommandPlayAttachment implements ICommand {
             return;
         }
 
+        List<Message.Attachment> attachment = event.getMessage().getAttachments();
+        String url = String.join(" ", event.getArgs());
+        url = url.replace("&playattachment ", "");
+
+        if (attachment.isEmpty()){
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No attachment was found.")).queue();
+            return;
+        }
+
         if(!event.getSelfVoiceState().inAudioChannel()){
             final AudioManager audioManager = event.getGuild().getAudioManager();
             final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
 
             audioManager.openAudioConnection(memberChannel);
         }
-        List<Message.Attachment> attachment = event.getMessage().getAttachments();
-        String url = String.join(" ", event.getArgs());
-        url = url.replace("&playattachment ", "");
+
         if (url.contains("discordapp")) {
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (url));
             return;
         }
-        if (Arrays.toString(audioFiles).contains(Objects.requireNonNull(attachment.get(0).getFileExtension()))) {
+
+        if (Arrays.toString(audioFiles).contains(Objects.requireNonNull(attachment.get(0).getFileExtension().toLowerCase()))) {
             attachment.get(0).downloadToFile("C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\" + attachment.get(0).getFileName());
             String path = "C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\" + attachment.get(0).getFileName();
             String finalPath = String.valueOf(Paths.get(path));
@@ -59,7 +68,7 @@ public class CommandPlayAttachment implements ICommand {
 
     @Override
     public String getName() {
-        return "playattachment";
+        return "song";
     }
 
     @Override

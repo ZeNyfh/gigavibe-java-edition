@@ -1,11 +1,12 @@
 package Bots.lavaplayer;
 
-import com.sedmelluq.discord.lavaplayer.player.*;
-import com.sedmelluq.discord.lavaplayer.track.playback.*;
-import net.dv8tion.jda.api.audio.*;
-import org.jetbrains.annotations.*;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
+import net.dv8tion.jda.api.audio.AudioSendHandler;
+import org.jetbrains.annotations.Nullable;
 
-import java.nio.*;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 public class AudioPlayerSendHandler implements AudioSendHandler {
 
