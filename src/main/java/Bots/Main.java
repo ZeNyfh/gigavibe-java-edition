@@ -78,7 +78,7 @@ public class Main extends ListenerAdapter {
             if (hours == 1) {
                 totalSet.add(hours + " hour");
             } else if (hours != 0) {
-                totalSet.add(days + " hours");
+                totalSet.add(hours + " hours");
             }
             if (minutes == 1) {
                 totalSet.add(minutes + " minute");
@@ -88,7 +88,7 @@ public class Main extends ListenerAdapter {
             if (seconds == 1) {
                 totalSet.add(seconds + " second");
             } else if (seconds != 0) {
-                totalSet.add(seconds + " seconds"); // im sorry but it was annoying me, I needed to remove the brackets
+                totalSet.add(seconds + " seconds");
             }
             return String.valueOf(totalSet).replace("[", "").replace("]", "");
         }
