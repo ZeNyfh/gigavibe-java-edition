@@ -35,17 +35,17 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (track.getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")){
+        if (loop && endReason.toString().equals("FINISHED")) {
+            this.player.startTrack(track, false); // doesn't work, uses the last track, literally
+            PlayerManager.getInstance().loadAndPlay(null, track.getInfo().uri); // doesn't work, uses the url of the last track
+            return;
+        }
+        if (track.getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")) {
             try {
                 Files.delete(Paths.get(track.getInfo().identifier));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        if (loop) {
-            this.player.startTrack(track, false); // doesn't work, uses the last track, literally
-            PlayerManager.getInstance().loadAndPlay(null, track.getInfo().uri); // doesn't work, uses the url of the last track
-            return;
         }
         if(endReason.mayStartNext){
             nextTrack();
