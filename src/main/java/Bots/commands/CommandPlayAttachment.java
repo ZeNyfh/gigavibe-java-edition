@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -50,9 +52,13 @@ public class CommandPlayAttachment implements ICommand {
         }
 
         if (Arrays.toString(audioFiles).contains(Objects.requireNonNull(attachment.get(0).getFileExtension().toLowerCase()))) {
-            attachment.get(0).downloadToFile("C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\" + attachment.get(0).getFileName());
-            String path = "C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\" + attachment.get(0).getFileName();
-            String finalPath = String.valueOf(Paths.get(path));
+            final Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
+            if (!Files.exists(musicFolder)) {
+                musicFolder.toFile().mkdirs();
+            }
+            final String musicPath = musicFolder + "\\"; //For some reason the \ gets omitted when converting using .toString() -9382
+            attachment.get(0).downloadToFile(musicPath + attachment.get(0).getFileName());
+            String finalPath = String.valueOf(Paths.get(musicPath + attachment.get(0).getFileName()));
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
             try {
                 TimeUnit.SECONDS.sleep(2);
