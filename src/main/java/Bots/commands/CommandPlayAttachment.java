@@ -32,7 +32,7 @@ public class CommandPlayAttachment implements ICommand {
 
         List<Message.Attachment> attachment = event.getMessage().getAttachments();
         String url = String.join(" ", event.getArgs());
-        url = url.replace("&playattachment ", "");
+        url = url.replace("&playattachment ", ""); //Whats the point? If theres no attachments, it just says no anyways, so when is this in use? -9382
 
         if (attachment.isEmpty()){
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No attachment was found.")).queue();

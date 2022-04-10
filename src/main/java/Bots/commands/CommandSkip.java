@@ -51,7 +51,7 @@ public class CommandSkip implements ICommand {
             return;
         }
         String fileToDelete = null;
-        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains("C:\\Users\\ZeNyfh\\Desktop\\tempmusic")){
+        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")){
             fileToDelete = musicManager.audioPlayer.getPlayingTrack().getInfo().identifier;
             try {
                 assert fileToDelete != null;

@@ -50,8 +50,8 @@ public class CommandNowPlaying implements ICommand {
         int trackLocation = Math.toIntExact(Math.round(((double)totalTime-trackPos)/totalTime*20d)); //WHY DOES (double) MATTER -9382
         String barText = new String(new char[20-trackLocation]).replace("\0","━")+"\uD83D\uDD18"+new String(new char[trackLocation]).replace("\0","━");
         EmbedBuilder embed = new EmbedBuilder();
-        if (audioPlayer.getPlayingTrack().getInfo().uri.contains("C:\\Users\\ZeNyfh\\Desktop\\")){
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace("C:\\Users\\ZeNyfh\\Desktop\\tempmusic\\", ""));
+        if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir")+"\\temp\\music\\")){
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir")+"\\temp\\music\\", ""));
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
         } else {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
