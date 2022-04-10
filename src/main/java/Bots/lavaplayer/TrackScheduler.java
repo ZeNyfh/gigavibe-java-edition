@@ -35,7 +35,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (track.getInfo().identifier.contains("C:\\Users\\ZeNyfh\\Desktop\\tempmusic")){
+        if (track.getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")){
             try {
                 Files.delete(Paths.get(track.getInfo().identifier));
             } catch (IOException e) {
@@ -48,8 +48,8 @@ public class TrackScheduler extends AudioEventAdapter {
             return;
         }
         if(endReason.mayStartNext){
-                nextTrack();
-            }
+            nextTrack();
+        }
     }
 }
 
