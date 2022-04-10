@@ -119,7 +119,7 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
-        if (event.getMember().getId().equals("915014248759955498")) { // im sorry, im lazy, this will be changed at a later date
+        if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
         }
     }
