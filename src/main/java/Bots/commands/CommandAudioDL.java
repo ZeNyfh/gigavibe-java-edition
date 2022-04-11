@@ -14,6 +14,7 @@ import static Bots.Main.createQuickEmbed;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL implements ICommand {
+    public static int queue = 0;
     @Override
     public void execute(ExecuteArgs event) {
         Path musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
@@ -31,13 +32,19 @@ public class CommandAudioDL implements ICommand {
         if (event.getGuild().getBoostCount() <= 7) {
             filesize = "50m";
         }
-        String tempfilename = event.getMember().getId() + System.currentTimeMillis();
-        try {
-            Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
-        } catch (IOException ignored) {
-        }
-        File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
+        String finalFilesize = filesize;
         new Thread(() -> {
+            for (int loop = 900; loop > 0 && queue >= 1; loop--) {
+                try {Thread.sleep(2000);} catch (Exception ignored) {}
+                event.getTextChannel().sendTyping().queue();
+                System.out.println(queue);
+            }
+            queue++;
+            String tempfilename = event.getMember().getId() + System.currentTimeMillis();
+            try {
+                Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + finalFilesize + "\" --part -x --audio-format mp3", null, dir);
+            } catch (IOException ignored) {}
+            File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
             for (int i = 100; i > 0 && !finalDir.exists(); i--) {
                 try {
                     event.getTextChannel().sendTyping().queue();
@@ -47,7 +54,15 @@ public class CommandAudioDL implements ICommand {
                         File mp4 = new File(dir + "\\" + tempfilename + ".mp4");
                         for (int i1 = 150; i1 > 0; i1--) {
                             Thread.sleep(2000);
+                            File part = new File("\\" + tempfilename + ".part");
+                            if (i1 <= 130 && part.exists()){
+                                queue--;
+                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
+                                Files.delete(Paths.get(String.valueOf(part)));
+                                return;
+                            }
                             if (!mp4.exists()) {
+                                queue--;
                                 try {
                                     event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
                                 } catch (Exception e) {
@@ -66,9 +81,13 @@ public class CommandAudioDL implements ICommand {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    queue--;
+                } catch (IOException ignored) {
+                    queue--;
                 }
             }
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
+            queue--;
         }).start();
     }
 

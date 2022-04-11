@@ -13,6 +13,7 @@ import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandVideoDL implements ICommand {
+    public static int queue = 0;
     @Override
     public void execute(ExecuteArgs event) {
         Path musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
@@ -30,14 +31,27 @@ public class CommandVideoDL implements ICommand {
         if (event.getGuild().getBoostCount() <= 7) {
             filesize = "-f \"b\" -S \"filesize~50m\" --no-playlist";
         }
-        String tempfilename = event.getMember().getId() + System.currentTimeMillis();
-        try {
-            Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
-        } catch (IOException ignored) {
-        }
-        File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
+        String finalFilesize = filesize;
         new Thread(() -> {
+            for (int loop = 900; loop > 0 && queue >= 1; loop--) {
+                try {Thread.sleep(2000);} catch (Exception ignored) {}
+                event.getTextChannel().sendTyping().queue();
+                System.out.println(queue);
+            }
+            queue++;
+            String tempfilename = event.getMember().getId() + System.currentTimeMillis();
+            try {
+                Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " " + finalFilesize, null, dir); // if you can, try and make the filesize even smaller
+            } catch (IOException ignored) {}
+            File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
             for (int i = 150; i > 0 && !finalDir.exists(); i--) {
+                File part = new File("\\" + tempfilename + ".part");
+                if (i <= 130 && part.exists()){
+                    queue--;
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
+                    try {Files.delete(Paths.get(String.valueOf(part)));} catch (IOException ignored) {}
+                    return;
+                }
                 try {
                     Thread.sleep(5000);
                     event.getTextChannel().sendTyping().queue();
@@ -54,6 +68,7 @@ public class CommandVideoDL implements ICommand {
                             } catch (Exception ignored) {
                             }
                         }
+                        queue--;
                         return;
                     }
                 } catch (InterruptedException e) {
