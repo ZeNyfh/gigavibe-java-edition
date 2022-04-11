@@ -14,6 +14,7 @@ public class CommandDJ implements ICommand {
     public static JSONArray DJList = new JSONArray(); // i could not get this to work
     @Override
     public void execute(ExecuteArgs event) {
+        //NOTE: Guild specific behaviour is gonna be needed for this at a later date -9382
         if (event.getMember().hasPermission(Permission.MESSAGE_MANAGE)){
             List<Member> members = event.getMessage().getMentionedMembers(event.getGuild());
             DJList.add(members.get(0).getIdLong());
