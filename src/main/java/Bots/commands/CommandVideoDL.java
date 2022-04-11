@@ -6,6 +6,7 @@ import ca.tristan.jdacommands.ICommand;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static Bots.Main.botPrefix;
@@ -13,6 +14,14 @@ import static Bots.Main.botPrefix;
 public class CommandVideoDL implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
+        Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
+        if (!Files.exists(musicFolder)) {
+            musicFolder.toFile().mkdirs();
+        }
+        musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\auddl");
+        if (!Files.exists(musicFolder)) {
+            musicFolder.toFile().mkdirs();
+        }
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "videodl ", "").replace(" ", "");
         File dir = new File((System.getProperty("user.dir") + "\\temp\\viddl"));

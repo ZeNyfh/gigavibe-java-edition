@@ -22,10 +22,14 @@ import static jdk.nashorn.internal.runtime.ScriptingFunctions.exec;
 public class CommandAudioDL implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
-        final Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
+        Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
         } // im lazy and tired
+        musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\auddl");
+        if (!Files.exists(musicFolder)) {
+            musicFolder.toFile().mkdirs();
+        }
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "dl ", "").replace(" ", ""); // replacing all spaces just in case
         File dir = new File((System.getProperty("user.dir") + "\\temp\\auddl"));
