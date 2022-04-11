@@ -33,7 +33,7 @@ public class CommandVideoDL implements ICommand {
         }
         String finalFilesize = filesize;
         new Thread(() -> {
-            for (int loop = 900; loop > 0 && queue >= 1; loop--) {
+            for (int loop = 900; loop > 0 && queue >= 1; loop--) { // queue system
                 try {Thread.sleep(2000);} catch (Exception ignored) {}
                 event.getTextChannel().sendTyping().queue();
                 System.out.println(queue);
@@ -46,14 +46,14 @@ public class CommandVideoDL implements ICommand {
             File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
             for (int i = 150; i > 0 && !finalDir.exists(); i--) {
                 File part = new File("\\" + tempfilename + ".part");
-                if (i <= 130 && part.exists()){
+                if (i <= 130 && part.exists()){ // error handler for if the file fails to download
                     queue--;
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
                     try {Files.delete(Paths.get(String.valueOf(part)));} catch (IOException ignored) {}
                     return;
                 }
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(5000);  // download process
                     event.getTextChannel().sendTyping().queue();
                     if (finalDir.exists()) {
                         try {
@@ -61,7 +61,7 @@ public class CommandVideoDL implements ICommand {
                         } catch (Exception e) {
                             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large.")).queue();
                         }
-                        for (int i1 = 5; i1 > 0; i1--) {
+                        for (int i1 = 5; i1 > 0; i1--) { // file deletion
                             try {
                                 Thread.sleep(1000);
                                 Files.delete(Paths.get(String.valueOf(finalDir)));

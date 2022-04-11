@@ -34,7 +34,7 @@ public class CommandAudioDL implements ICommand {
         }
         String finalFilesize = filesize;
         new Thread(() -> {
-            for (int loop = 900; loop > 0 && queue >= 1; loop--) {
+            for (int loop = 900; loop > 0 && queue >= 1; loop--) { // queue system
                 try {Thread.sleep(2000);} catch (Exception ignored) {}
                 event.getTextChannel().sendTyping().queue();
                 System.out.println(queue);
@@ -45,16 +45,16 @@ public class CommandAudioDL implements ICommand {
                 Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + finalFilesize + "\" --part -x --audio-format mp3", null, dir);
             } catch (IOException ignored) {}
             File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
-            for (int i = 100; i > 0 && !finalDir.exists(); i--) {
+            for (int i = 100; i > 0 && !finalDir.exists(); i--) { // download process
                 try {
                     event.getTextChannel().sendTyping().queue();
                     Thread.sleep(5000);
                     if (finalDir.exists()) {
                         i = 0;
-                        File mp4 = new File(dir + "\\" + tempfilename + ".mp4");
+                        File mp4 = new File(dir + "\\" + tempfilename + ".mp4"); // check for if the file is fully written to
                         for (int i1 = 150; i1 > 0; i1--) {
                             Thread.sleep(2000);
-                            File part = new File("\\" + tempfilename + ".part");
+                            File part = new File("\\" + tempfilename + ".part"); // error handler for if the file fails to download
                             if (i1 <= 130 && part.exists()){
                                 queue--;
                                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
@@ -68,7 +68,7 @@ public class CommandAudioDL implements ICommand {
                                 } catch (Exception e) {
                                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large.")).queue();
                                 }
-                                for (int i2 = 5; i2 > 0; i2--) {
+                                for (int i2 = 5; i2 > 0; i2--) {  // file deletion
                                     try {
                                         Thread.sleep(1000);
                                         Files.delete(Paths.get(valueOf(finalDir)));
