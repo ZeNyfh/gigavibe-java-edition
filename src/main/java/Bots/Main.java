@@ -1,7 +1,6 @@
 package Bots;
 
 import Bots.commands.*;
-import ca.tristan.jdacommands.ICommand;
 import ca.tristan.jdacommands.JDACommands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
