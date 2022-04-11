@@ -16,26 +16,26 @@ public class CommandPlay implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
 
-        if(!event.getMemberVoiceState().inAudioChannel()){
+        if (!event.getMemberVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
             return;
         }
 
-        if(!event.getSelfVoiceState().inAudioChannel()){
+        if (!event.getSelfVoiceState().inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
             final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
             audioManager.openAudioConnection(memberChannel);
-        } else if (event.getMemberVoiceState().getChannel() != event.getSelfVoiceState().getChannel()){
+        } else if (event.getMemberVoiceState().getChannel() != event.getSelfVoiceState().getChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in the same vc.")).queue();
             return;
         }
 
         String link = String.join(" ", event.getArgs());
 
-        if(!isUrl(link)){
+        if (!isUrl(link)) {
             link = "ytsearch:" + link;
             link = link.replace("&play", "");
-            if (link.contains("youtu.be/")){
+            if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
         }
@@ -43,11 +43,12 @@ public class CommandPlay implements ICommand {
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
 
     }
-    private boolean isUrl(String url){
-        try{
+
+    private boolean isUrl(String url) {
+        try {
             new URI(url);
             return true;
-        } catch (URISyntaxException e){
+        } catch (URISyntaxException e) {
             return false;
         }
     }

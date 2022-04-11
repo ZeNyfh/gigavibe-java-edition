@@ -15,7 +15,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandVideoDL implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
-        Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
+        Path musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
         }
@@ -33,22 +33,26 @@ public class CommandVideoDL implements ICommand {
         String tempfilename = event.getMember().getId() + System.currentTimeMillis();
         try {
             Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
         new Thread(() -> {
-            for (int i = 150; i > 0 && !finalDir.exists(); i--){
+            for (int i = 150; i > 0 && !finalDir.exists(); i--) {
                 try {
                     Thread.sleep(5000);
                     event.getTextChannel().sendTyping().queue();
-                    if (finalDir.exists()){
+                    if (finalDir.exists()) {
                         try {
                             event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
-                        } catch (Exception e) {event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large." )).queue();}
+                        } catch (Exception e) {
+                            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large.")).queue();
+                        }
                         for (int i1 = 5; i1 > 0; i1--) {
                             try {
                                 Thread.sleep(1000);
                                 Files.delete(Paths.get(String.valueOf(finalDir)));
-                            } catch (Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                         }
                         return;
                     }
@@ -56,7 +60,7 @@ public class CommandVideoDL implements ICommand {
                     e.printStackTrace();
                 }
             }
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out." )).queue();
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
         }).start();
     }
 

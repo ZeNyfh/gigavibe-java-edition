@@ -25,41 +25,42 @@ public class CommandSkip implements ICommand {
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         assert selfVoiceState != null;
-        if(!selfVoiceState.inAudioChannel()){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc." )).queue();
+        if (!selfVoiceState.inAudioChannel()) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc.")).queue();
             return;
         }
 
         final Member member = event.getMember();
         final GuildVoiceState memberVoiceState = event.getMemberVoiceState();
 
-        if(!memberVoiceState.inAudioChannel()){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command." )).queue();
+        if (!memberVoiceState.inAudioChannel()) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
-        if(!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command." )).queue();
+        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
-        if(audioPlayer.getPlayingTrack() == null){
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now." )).queue();
+        if (audioPlayer.getPlayingTrack() == null) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
             return;
         }
         String fileToDelete = null;
-        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")){
+        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
             fileToDelete = musicManager.audioPlayer.getPlayingTrack().getInfo().identifier;
             try {
                 assert fileToDelete != null;
                 Files.delete(Paths.get(fileToDelete));
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
         musicManager.scheduler.nextTrack();
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track." )).queue();
+        channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
     }
 
     @Override

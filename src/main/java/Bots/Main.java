@@ -1,7 +1,6 @@
 package Bots;
 
 import Bots.commands.*;
-import ca.tristan.jdacommands.ICommand;
 import ca.tristan.jdacommands.JDACommands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -20,8 +19,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static Bots.commands.CommandDJ.DJList;
 import static Bots.commands.CommandBoosterDJ.boosterDJ;
+import static Bots.commands.CommandDJ.DJList;
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
@@ -125,13 +124,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean isDJ(Member member) {
+        // the json array
         if (member.isBoosting() && boosterDJ) {
             return true;
-        }
-        else if (DJList.contains(member.getIdLong())) { // the json array
-             return true;
-        }
-        return false;
+        } else return DJList.contains(member.getIdLong());
     }
 
     @Override

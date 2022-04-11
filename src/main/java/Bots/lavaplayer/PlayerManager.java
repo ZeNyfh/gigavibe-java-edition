@@ -24,7 +24,7 @@ public class PlayerManager {
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
 
-    public PlayerManager(){
+    public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
 
@@ -32,7 +32,14 @@ public class PlayerManager {
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
 
-    public GuildMusicManager getMusicManager(Guild guild){
+    public static PlayerManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PlayerManager();
+        }
+        return INSTANCE;
+    }
+
+    public GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
@@ -60,7 +67,7 @@ public class PlayerManager {
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
-                if(!tracks.isEmpty()){
+                if (!tracks.isEmpty()) {
                     musicManager.scheduler.queue(tracks.get(0));
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
@@ -82,13 +89,6 @@ public class PlayerManager {
 
             }
         });
-    }
-
-    public static PlayerManager getInstance(){
-        if(INSTANCE == null) {
-            INSTANCE = new PlayerManager();
-        }
-        return INSTANCE;
     }
 
 }

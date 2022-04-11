@@ -16,12 +16,12 @@ public class CommandLocalPlay implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
 
-        if(!event.getMemberVoiceState().inAudioChannel()){
+        if (!event.getMemberVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
             return;
         }
 
-        if(!event.getSelfVoiceState().inAudioChannel()){
+        if (!event.getSelfVoiceState().inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
             final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
 

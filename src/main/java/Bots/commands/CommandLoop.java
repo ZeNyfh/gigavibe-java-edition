@@ -13,15 +13,15 @@ public class CommandLoop implements ICommand {
     public void execute(ExecuteArgs event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
-        if (!audioManager.isConnected()){
+        if (!audioManager.isConnected()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not playing anything.")).queue();
             return;
         }
 
         loop = !loop;
-        if (loop){
+        if (loop) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track.")).queue();
-        }  else {
+        } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track.")).queue();
         }
     }

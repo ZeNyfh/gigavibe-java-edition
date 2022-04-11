@@ -25,7 +25,7 @@ public class CommandPlayAttachment implements ICommand {
     @Override
     public void execute(ExecuteArgs event) {
 
-        if(!event.getMemberVoiceState().inAudioChannel()){
+        if (!event.getMemberVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
             return;
         }
@@ -34,12 +34,12 @@ public class CommandPlayAttachment implements ICommand {
         String url = String.join(" ", event.getArgs());
         url = url.replace("&playattachment ", ""); //Whats the point? If theres no attachments, it just says no anyways, so when is this in use? -9382
 
-        if (attachment.isEmpty()){
+        if (attachment.isEmpty()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No attachment was found.")).queue();
             return;
         }
 
-        if(!event.getSelfVoiceState().inAudioChannel()){
+        if (!event.getSelfVoiceState().inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
             final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
 
@@ -52,7 +52,7 @@ public class CommandPlayAttachment implements ICommand {
         }
 
         if (Arrays.toString(audioFiles).contains(Objects.requireNonNull(attachment.get(0).getFileExtension().toLowerCase()))) {
-            final Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
+            final Path musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
             if (!Files.exists(musicFolder)) {
                 musicFolder.toFile().mkdirs();
             }

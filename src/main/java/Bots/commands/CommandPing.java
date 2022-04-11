@@ -5,7 +5,7 @@ import ca.tristan.jdacommands.ICommand;
 
 import static java.lang.System.currentTimeMillis;
 
-public class CommandPing implements ICommand{
+public class CommandPing implements ICommand {
 
     @Override
     public void execute(ExecuteArgs event) {

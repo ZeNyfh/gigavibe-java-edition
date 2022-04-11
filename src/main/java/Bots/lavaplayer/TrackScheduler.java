@@ -23,13 +23,13 @@ public class TrackScheduler extends AudioEventAdapter {
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    public void queue(AudioTrack track){
-        if(!this.player.startTrack(track, true)){
+    public void queue(AudioTrack track) {
+        if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }
     }
 
-    public void nextTrack(){
+    public void nextTrack() {
         this.player.startTrack(this.queue.poll(), false);
     }
 
@@ -40,14 +40,14 @@ public class TrackScheduler extends AudioEventAdapter {
             PlayerManager.getInstance().loadAndPlay(null, track.getInfo().uri); // doesn't work, uses the url of the last track
             return;
         }
-        if (track.getInfo().identifier.contains(System.getProperty("user.dir")+"\\temp\\music\\")) {
+        if (track.getInfo().identifier.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
             try {
                 Files.delete(Paths.get(track.getInfo().identifier));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(endReason.mayStartNext){
+        if (endReason.mayStartNext) {
             nextTrack();
         }
     }
