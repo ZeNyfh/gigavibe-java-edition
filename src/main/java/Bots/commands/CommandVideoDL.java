@@ -31,8 +31,7 @@ public class CommandVideoDL implements ICommand {
             filesize = "-f \"b\" -S \"filesize~50m\" --no-playlist";
         }
         try {
-            Process process = Runtime.getRuntime()
-                    .exec("yt-dlp -o \"track.%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
+            Runtime.getRuntime().exec("yt-dlp -o \"track.%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
         } catch (IOException ignored) {}
         File finalDir = new File((dir + "\\track.mp4")); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
         new Thread(() -> {
