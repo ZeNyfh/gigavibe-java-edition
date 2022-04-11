@@ -39,7 +39,7 @@ public class CommandAudioDL implements ICommand {
         }
         try {
             Process process = Runtime.getRuntime()
-                    .exec("yt-dlp -o \"track.%(ext)s\" " + arg + " -f \"[filesize<" + filesize + "]\" -x --audio-format mp3", null, dir);
+                    .exec("yt-dlp -o \"track.%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
         } catch (IOException ignored) {} // spat out an error but made the file anyways, ignored
         File finalDir = new File((dir + "\\track.mp3")); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
         new Thread(() -> {
@@ -60,7 +60,7 @@ public class CommandAudioDL implements ICommand {
                                         Files.delete(Paths.get(String.valueOf(finalDir)));
                                     } catch (Exception ignored) {}
                                 }
-                                break;
+                                return;
                             }
                         }
                     }
@@ -68,6 +68,7 @@ public class CommandAudioDL implements ICommand {
                     e.printStackTrace();
                 }
             }
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out." )).queue();
         }).start();
     }
 

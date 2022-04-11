@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static Bots.Main.botPrefix;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandVideoDL implements ICommand {
     @Override
@@ -41,18 +42,19 @@ public class CommandVideoDL implements ICommand {
                     event.getTextChannel().sendTyping().queue();
                     if (finalDir.exists()){
                         event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
-                        for (int i1 = 5; i1 > 0; i1--) { // i am very lazy
+                        for (int i1 = 10; i1 > 0; i1--) { // i am very lazy
                             try {
                                 Thread.sleep(1000);
                                 Files.delete(Paths.get(String.valueOf(finalDir)));
                             } catch (Exception ignored) {}
                         }
-                        break;
+                        return;
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out." )).queue();
         }).start();
     }
 
