@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -18,6 +19,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//import static Bots.commands.CommandBoosterDJ.DJList;
+//import static Bots.commands.CommandBoosterDJ.boosterDJ;
+import static Bots.commands.CommandBoosterDJ.DJList;
+import static Bots.commands.CommandBoosterDJ.boosterDJ;
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
@@ -25,7 +30,7 @@ import static java.lang.System.currentTimeMillis;
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
-    String botPrefix = "&";
+    public final static String botPrefix = "&";
 
     public static void main(String[] args) throws InterruptedException, LoginException {
 
@@ -39,9 +44,12 @@ public class Main extends ListenerAdapter {
         jdaCommands.registerCommand(new CommandNowPlaying());
         jdaCommands.registerCommand(new CommandUptime());
         jdaCommands.registerCommand(new CommandHelp());
+        jdaCommands.registerCommand(new CommandVideoDL());
+        jdaCommands.registerCommand(new CommandAudioDL());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
                 .addEventListeners(new Main())
                 .addEventListeners(jdaCommands)
                 .setActivity(Activity.playing("in development..."))
@@ -116,6 +124,17 @@ public class Main extends ListenerAdapter {
         }
         return String.valueOf(totalSet).replace("[", "").replace("]", "").replace(", ", "");
     }
+
+    public static boolean isDJ(Member member) {
+        if (member.isBoosting() && boosterDJ) {
+            return true;
+        }
+        else if (DJList.contains(member.getIdLong())) { // the json array
+             return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
