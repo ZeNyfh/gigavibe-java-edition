@@ -57,8 +57,9 @@ public class CommandPlayAttachment implements ICommand {
                 musicFolder.toFile().mkdirs();
             }
             final String musicPath = musicFolder + "\\"; //For some reason the \ gets omitted when converting using .toString() -9382
-            attachment.get(0).downloadToFile(musicPath + attachment.get(0).getFileName());
-            String finalPath = String.valueOf(Paths.get(musicPath + attachment.get(0).getFileName()));
+            String unix = String.valueOf(System.currentTimeMillis());
+            attachment.get(0).downloadToFile(musicPath + unix + attachment.get(0).getFileName());
+            String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
             try {
                 TimeUnit.SECONDS.sleep(2);
