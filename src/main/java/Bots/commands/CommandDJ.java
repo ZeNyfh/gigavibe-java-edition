@@ -4,13 +4,14 @@ import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import org.json.simple.JSONArray;
 
 import java.util.List;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.commands.CommandBoosterDJ.DJList;
 
 public class CommandDJ implements ICommand {
+    public static JSONArray DJList = new JSONArray(); // i could not get this to work
     @Override
     public void execute(ExecuteArgs event) {
         if (event.getMember().hasPermission(Permission.MESSAGE_MANAGE)){

@@ -2,23 +2,16 @@ package Bots.commands;
 
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
-import javafx.concurrent.Task;
-import net.dv8tion.jda.api.entities.Guild;
-import org.jetbrains.annotations.Async;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.IntStream;
 
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 import static java.lang.String.valueOf;
-import static java.lang.Thread.sleep;
-import static jdk.nashorn.internal.runtime.ScriptingFunctions.exec;
 
 public class CommandAudioDL implements ICommand {
     @Override

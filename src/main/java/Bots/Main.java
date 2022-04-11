@@ -19,8 +19,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//import static Bots.commands.CommandBoosterDJ.DJList;
-//import static Bots.commands.CommandBoosterDJ.boosterDJ;
 import static Bots.commands.CommandBoosterDJ.DJList;
 import static Bots.commands.CommandBoosterDJ.boosterDJ;
 import static Bots.commands.CommandLoop.loop;

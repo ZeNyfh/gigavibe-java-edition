@@ -2,13 +2,11 @@ package Bots.commands;
 
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
-import org.json.simple.JSONArray;
 
 import static Bots.Main.createQuickEmbed;
 
 public class CommandBoosterDJ implements ICommand {
     public static Boolean boosterDJ = false;
-    public static JSONArray DJList = new JSONArray(); // i could not get this to work
 
     @Override
     public void execute(ExecuteArgs event) {
