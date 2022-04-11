@@ -40,8 +40,7 @@ public class CommandAudioDL implements ICommand {
         }
         String tempfilename = event.getMember().getId() + System.currentTimeMillis();
         try {
-            Process process = Runtime.getRuntime()
-                    .exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
+            Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
         } catch (IOException ignored) {}
         File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
         new Thread(() -> {
