@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
+import static java.lang.String.valueOf;
 import static java.lang.Thread.sleep;
 import static jdk.nashorn.internal.runtime.ScriptingFunctions.exec;
 
@@ -37,27 +38,30 @@ public class CommandAudioDL implements ICommand {
         if (event.getGuild().getBoostCount() <= 7) {
             filesize = "50m";
         }
+        String tempfilename = event.getMember().getId() + System.currentTimeMillis();
         try {
             Process process = Runtime.getRuntime()
-                    .exec("yt-dlp -o \"track.%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
-        } catch (IOException ignored) {} // spat out an error but made the file anyways, ignored
-        File finalDir = new File((dir + "\\track.mp3")); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
+                    .exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + filesize + "\" --part -x --audio-format mp3", null, dir);
+        } catch (IOException ignored) {}
+        File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
         new Thread(() -> {
-            for (int i = 10; i > 0 && !finalDir.exists(); i--){
+            for (int i = 100; i > 0 && !finalDir.exists(); i--){
                 try {
                     event.getTextChannel().sendTyping().queue();
                     Thread.sleep(5000);
                     if (finalDir.exists()){
                         i = 0;
-                        File mp4 = new File(dir + "\\track.mp4"); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
-                        for (int i1 = 10; i1 > 0; i1--) {
+                        File mp4 = new File(dir + "\\" + tempfilename + ".mp4");
+                        for (int i1 = 150; i1 > 0; i1--) {
                             Thread.sleep(2000);
                             if (!mp4.exists()){
-                                event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
+                                try {
+                                    event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
+                                } catch (Exception e) {event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large." )).queue();}
                                 for (int i2 = 5; i2 > 0; i2--) {
                                     try {
                                         Thread.sleep(1000);
-                                        Files.delete(Paths.get(String.valueOf(finalDir)));
+                                        Files.delete(Paths.get(valueOf(finalDir)));
                                     } catch (Exception ignored) {}
                                 }
                                 return;

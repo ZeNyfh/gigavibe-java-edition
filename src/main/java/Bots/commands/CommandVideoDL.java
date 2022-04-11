@@ -36,13 +36,15 @@ public class CommandVideoDL implements ICommand {
         } catch (IOException ignored) {}
         File finalDir = new File((dir + "\\track.mp4")); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
         new Thread(() -> {
-            for (int i = 30; i > 0 && !finalDir.exists(); i--){
+            for (int i = 150; i > 0 && !finalDir.exists(); i--){
                 try {
                     Thread.sleep(5000);
                     event.getTextChannel().sendTyping().queue();
                     if (finalDir.exists()){
-                        event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
-                        for (int i1 = 10; i1 > 0; i1--) { // i am very lazy
+                        try {
+                            event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
+                        } catch (Exception e) {event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large." )).queue();}
+                        for (int i1 = 5; i1 > 0; i1--) { // i am very lazy
                             try {
                                 Thread.sleep(1000);
                                 Files.delete(Paths.get(String.valueOf(finalDir)));
