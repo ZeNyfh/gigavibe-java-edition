@@ -19,7 +19,7 @@ public class CommandVideoDL implements ICommand {
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
         }
-        musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\auddl");
+        musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\viddl");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
         }
@@ -30,10 +30,11 @@ public class CommandVideoDL implements ICommand {
         if (event.getGuild().getBoostCount() <= 7) {
             filesize = "-f \"b\" -S \"filesize~50m\" --no-playlist";
         }
+        String tempfilename = event.getMember().getId() + System.currentTimeMillis();
         try {
-            Runtime.getRuntime().exec("yt-dlp -o \"track.%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
+            Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " " + filesize, null, dir); // if you can, try and make the filesize even smaller
         } catch (IOException ignored) {}
-        File finalDir = new File((dir + "\\track.mp4")); // will be renamed to idk, probably something which allows the user to do multiple tracks at the same time
+        File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
         new Thread(() -> {
             for (int i = 150; i > 0 && !finalDir.exists(); i--){
                 try {
@@ -43,7 +44,7 @@ public class CommandVideoDL implements ICommand {
                         try {
                             event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
                         } catch (Exception e) {event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large." )).queue();}
-                        for (int i1 = 5; i1 > 0; i1--) { // i am very lazy
+                        for (int i1 = 5; i1 > 0; i1--) {
                             try {
                                 Thread.sleep(1000);
                                 Files.delete(Paths.get(String.valueOf(finalDir)));

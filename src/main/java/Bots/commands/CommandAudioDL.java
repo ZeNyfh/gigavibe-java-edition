@@ -19,13 +19,13 @@ public class CommandAudioDL implements ICommand {
         Path musicFolder = Paths.get(System.getProperty("user.dir")+"\\temp\\music\\");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
-        } // im lazy and tired
+        }
         musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\auddl");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
         }
         String message = event.getMessage().getContentRaw();
-        String arg = message.replace(botPrefix + "dl ", "").replace(" ", ""); // replacing all spaces just in case
+        String arg = message.replace(botPrefix + "dl ", "").replace(" ", "");
         File dir = new File((System.getProperty("user.dir") + "\\temp\\auddl"));
         String filesize = "8m";
         if (event.getGuild().getBoostCount() <= 7) {
