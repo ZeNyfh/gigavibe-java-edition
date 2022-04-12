@@ -16,6 +16,10 @@ public class CommandUptime implements ICommand {
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "⏰ uptime: " + finalTime)).queue();
     }
 
+    public String getCategory() {
+        return "General";
+    }
+
     @Override
     public String getName() {
         return "uptime";

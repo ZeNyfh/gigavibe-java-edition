@@ -62,6 +62,10 @@ public class CommandNowPlaying implements ICommand {
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
+    public String getCategory() {
+        return "Music";
+    }
+
     @Override
     public String getName() {
         return "np";

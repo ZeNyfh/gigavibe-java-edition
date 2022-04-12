@@ -19,6 +19,10 @@ public class CommandBoosterDJ implements ICommand {
         }
     }
 
+    public String getCategory() {
+        return "Admin";
+    }
+
     @Override
     public String getName() {
         return "boosterdj";

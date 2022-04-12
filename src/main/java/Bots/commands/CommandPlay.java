@@ -52,6 +52,10 @@ public class CommandPlay implements ICommand {
         }
     }
 
+    public String getCategory() {
+        return "Music";
+    }
+
     @Override
     public String getName() {
         return "play";

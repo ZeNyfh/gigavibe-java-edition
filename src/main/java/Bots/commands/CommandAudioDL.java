@@ -96,6 +96,9 @@ public class CommandAudioDL implements ICommand {
         }).start();
     }
 
+    public String getCategory() {
+        return "Music";
+    }
 
     @Override
     public String getName() {

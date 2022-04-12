@@ -63,6 +63,10 @@ public class CommandSkip implements ICommand {
         channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
     }
 
+    public String getCategory() {
+        return "Music";
+    }
+
     @Override
     public String getName() {
         return "skip";

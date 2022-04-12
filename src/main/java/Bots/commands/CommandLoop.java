@@ -26,6 +26,10 @@ public class CommandLoop implements ICommand {
         }
     }
 
+    public String getCategory() {
+        return "Music";
+    }
+
     @Override
     public String getName() {
         return "loop";

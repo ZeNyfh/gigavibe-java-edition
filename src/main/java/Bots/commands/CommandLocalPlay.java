@@ -33,6 +33,10 @@ public class CommandLocalPlay implements ICommand {
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalpath));
     }
 
+    public String getCategory() {
+        return "Music";
+    }
+
     @Override
     public String getName() {
         return "playfile";

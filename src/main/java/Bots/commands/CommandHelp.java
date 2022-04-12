@@ -4,13 +4,15 @@ import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
 
 public class CommandHelp implements ICommand {
+    public static final CommandLoop CLoop = new CommandLoop();
     @Override
     public void execute(ExecuteArgs event) {
         event.getTextChannel().sendMessage("literally only the help command rn").queue(); // will be worked on in the future
-        //ArrayList General = new ArrayList();
-        //ArrayList Music = new ArrayList();
-        //ArrayList DJ = new ArrayList();
-        //ArrayList Admin = new ArrayList();
+        CLoop.getCategory()
+    }
+
+    public String getCategory() {
+        return "General";
     }
 
     @Override

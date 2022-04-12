@@ -13,6 +13,10 @@ public class CommandPing implements ICommand {
         event.getTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
 
+    public String getCategory() {
+        return "General";
+    }
+
     @Override
     public String getName() {
         return "ping";

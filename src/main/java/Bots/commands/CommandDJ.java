@@ -24,6 +24,10 @@ public class CommandDJ implements ICommand {
         }
     }
 
+    public String getCategory() {
+        return "Admin";
+    }
+
     @Override
     public String getName() {
         return null;

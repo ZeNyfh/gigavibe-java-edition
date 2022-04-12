@@ -87,6 +87,9 @@ public class CommandVideoDL implements ICommand {
         }).start();
     }
 
+    public String getCategory() {
+        return "Music";
+    }
 
     @Override
     public String getName() {
