@@ -24,6 +24,7 @@ public class CommandHandler extends ListenerAdapter {
         System.out.println("message found");
         if (event.getMessage().getContentRaw().startsWith(botPrefix)){
             System.out.println("prefix found");
+            commands.forEach(iCommand -> {
                 System.out.println(iCommand);
                 if (event.getMessage().getContentRaw().startsWith(botPrefix + iCommand)) {
                     System.out.println("your command is: " + iCommand);
