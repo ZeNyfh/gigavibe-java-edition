@@ -56,12 +56,15 @@ public class PlayerManager {
                 musicManager.scheduler.queue(audioTrack);
 
                 EmbedBuilder embed = new EmbedBuilder();
-                embed.setTitle((audioTrack.getInfo().title), (audioTrack.getInfo().uri));
-                embed.setColor(new Color(0, 0, 255));
-                String author = (audioTrack.getInfo().author);
                 String length = toTimestamp((audioTrack.getInfo().length));
-                embed.setDescription("Duration: `" + length + "`" + System.lineSeparator() + "Channel: `" + author + "`");
-                textChannel.sendMessageEmbeds(embed.build()).queue();
+                embed.setColor(new Color(0, 0, 255));
+                if (audioTrack.getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                    embed.setTitle((audioTrack.getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+                    embed.setDescription("Duration: `" + length + "`");
+                } else {
+                    embed.setTitle((audioTrack.getInfo().title), (audioTrack.getInfo().uri));
+                    embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+                }
             }
 
             @Override
@@ -70,7 +73,11 @@ public class PlayerManager {
                 if (!tracks.isEmpty()) {
                     musicManager.scheduler.queue(tracks.get(0));
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
+                    if (tracks.get(0).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                        embed.setTitle((tracks.get(0).getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+                    } else {
+                        embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
+                    }
                     embed.setColor(new Color(0, 0, 255));
                     String author = (tracks.get(0).getInfo().author);
                     String length = toTimestamp((tracks.get(0).getInfo().length));

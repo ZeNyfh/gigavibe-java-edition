@@ -3,17 +3,18 @@ package Bots.commands;
 import Bots.lavaplayer.PlayerManager;
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static Bots.Main.createQuickEmbed;
 
@@ -61,6 +62,10 @@ public class CommandPlayAttachment implements ICommand {
             attachment.get(0).downloadToFile(musicPath + unix + attachment.get(0).getFileName());
             String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setTitle(attachment.get(0).getFileName());
+            embed.setColor(new Color(0, 0, 255));
+            event.getTextChannel().sendMessageEmbeds(embed.build()).queue();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

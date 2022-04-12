@@ -15,7 +15,6 @@ public class CommandPlay implements ICommand {
 
     @Override
     public void execute(ExecuteArgs event) {
-
         if (!event.getMemberVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
             return;
