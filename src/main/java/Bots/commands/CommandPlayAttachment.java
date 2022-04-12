@@ -62,7 +62,7 @@ public class CommandPlayAttachment implements ICommand {
             String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
             try {
-                TimeUnit.SECONDS.sleep(2);
+                Thread.sleep(4000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

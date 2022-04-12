@@ -52,10 +52,13 @@ public class CommandNowPlaying implements ICommand {
         EmbedBuilder embed = new EmbedBuilder();
         if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+            embed.addField("**Queued by:**", event.getMember().getEffectiveName(), true);
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
         } else {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```\n" + "**Channel:** \n" + (audioPlayer.getPlayingTrack().getInfo().author));
+            embed.addField("**Queued by:**", event.getMember().getEffectiveName(), true);
+            embed.addField("**Channel:**", audioPlayer.getPlayingTrack().getInfo().author, true);
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
         }
         embed.setColor(new Color(0, 0, 255));
         channel.sendMessageEmbeds(embed.build()).queue();
