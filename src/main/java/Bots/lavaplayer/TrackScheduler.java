@@ -41,10 +41,12 @@ public class TrackScheduler extends AudioEventAdapter {
             return;
         }
         if (track.getInfo().identifier.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            try {
-                Files.delete(Paths.get(track.getInfo().identifier));
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (int i2 = 5; i2 > 0; i2--) {  // file deletion
+                try {
+                    Thread.sleep(500);
+                    Files.delete(Paths.get(track.getInfo().identifier));
+                } catch (Exception ignored) {
+                }
             }
         }
         if (endReason.mayStartNext) {
