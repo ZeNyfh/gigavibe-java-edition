@@ -95,9 +95,15 @@ public class CommandAudioDL implements BaseCommand {
         }).start();
     }
 
-    public String getCategory() { return "Music"; }
+    public String getCategory() {
+        return "Music";
+    }
 
-    public String getName() { return "dl"; }
+    public String getName() {
+        return "dl";
+    }
 
-    public String getDescription() { return "Downloads a video from a compatible URL."; }
+    public String getDescription() {
+        return "Downloads a video from a compatible URL.";
+    }
 }

@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -19,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static Bots.commands.CommandBoosterDJ.boosterDJ;
-import static Bots.commands.CommandDJ.DJList;
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
@@ -29,7 +26,7 @@ public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static String botPrefix = "&";
-    private static List<BaseCommand> commands = new ArrayList<>();
+    public static List<BaseCommand> commands = new ArrayList<>();
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -49,6 +46,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandHelp());
         registerCommand(new CommandVideoDL());
         registerCommand(new CommandAudioDL());
+        registerCommand(new CommandDisconnect());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -101,7 +99,7 @@ public class Main extends ListenerAdapter {
             } else if (seconds != 0) {
                 totalSet.add(seconds + " seconds");
             }
-            return String.valueOf(totalSet).replace("[", "").replace("]", "");
+            return String.join(", ", totalSet);
         }
     }
 
@@ -125,15 +123,15 @@ public class Main extends ListenerAdapter {
             String finalSeconds = String.valueOf(seconds);
             totalSet.add(finalSeconds);
         }
-        return String.valueOf(totalSet).replace("[", "").replace("]", "").replace(", ", "");
+        return String.join("", totalSet);
     }
 
-    public static boolean isDJ(Member member) {
-        // the json array
-        if (member.isBoosting() && boosterDJ) {
-            return true;
-        } else return DJList.contains(member.getIdLong());
-    }
+    //public static boolean isDJ(Member member) {
+    // the json array
+    //if (member.isBoosting() && boosterDJ) {
+    //return true;
+    //} else return DJList.contains(member.getIdLong());
+    //}
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
@@ -144,7 +142,7 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getMessage().getContentRaw().startsWith(botPrefix)){
+        if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
                 if (event.getMessage().getContentRaw().startsWith(botPrefix + Command.getName())) {
                     System.out.println("your command is: " + Command);

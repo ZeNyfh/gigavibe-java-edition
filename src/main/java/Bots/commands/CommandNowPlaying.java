@@ -45,7 +45,7 @@ public class CommandNowPlaying implements BaseCommand {
 
         long totalTime = audioPlayer.getPlayingTrack().getDuration();
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
-        System.out.println(totalTime+" - "+toSimpleTimestamp(totalTime));
+        System.out.println(totalTime + " - " + toSimpleTimestamp(totalTime));
         int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
         String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
         EmbedBuilder embed = new EmbedBuilder();
