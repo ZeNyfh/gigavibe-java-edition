@@ -2,13 +2,17 @@ package Bots.commands;
 
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
+import ca.tristan.jdacommands.JDACommands;
+
+import java.util.List;
+
+import static Bots.Main.botPrefix;
 
 public class CommandHelp implements ICommand {
-    public static final CommandLoop CLoop = new CommandLoop();
+
     @Override
     public void execute(ExecuteArgs event) {
         event.getTextChannel().sendMessage("literally only the help command rn").queue(); // will be worked on in the future
-        CLoop.getCategory()
     }
 
     public String getCategory() {
