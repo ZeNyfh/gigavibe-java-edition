@@ -1,6 +1,7 @@
 # Gigavibe
 
-Discord bot written in skript for audio functionality. Has youtube music, custom (user defined) dj roles.
+ Discord bot written in skript for audio functionality.
+ Has youtube music, custom (user defined) dj roles. 
 
 ## Prerequisites
 
