@@ -1,16 +1,15 @@
 package Bots.commands;
 
+import Bots.BaseCommand;
 import Bots.Main;
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
 import static java.lang.System.currentTimeMillis;
 
-public class CommandUptime implements ICommand {
-    @Override
-    public void execute(ExecuteArgs event) {
+public class CommandUptime implements BaseCommand {
+    public void execute(MessageReceivedEvent event) {
         long finalUptime = currentTimeMillis() - Main.Uptime;
         String finalTime = toTimestamp(finalUptime);
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "⏰ uptime: " + finalTime)).queue();
@@ -20,18 +19,11 @@ public class CommandUptime implements ICommand {
         return "General";
     }
 
-    @Override
     public String getName() {
         return "uptime";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Returns the bot's uptime.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

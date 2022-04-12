@@ -1,35 +1,38 @@
 package Bots.commands;
 
+import Bots.BaseCommand;
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandPlay implements ICommand {
+public class CommandPlay implements BaseCommand {
 
-    @Override
-    public void execute(ExecuteArgs event) {
-        if (!event.getMemberVoiceState().inAudioChannel()) {
+    public void execute(MessageReceivedEvent event) {
+        GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
+        GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
+        if (!memberState.inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
             return;
         }
 
-        if (!event.getSelfVoiceState().inAudioChannel()) {
+        if (!selfState.inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
-            final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
+            final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
             audioManager.openAudioConnection(memberChannel);
-        } else if (event.getMemberVoiceState().getChannel() != event.getSelfVoiceState().getChannel()) {
+        } else if (memberState.getChannel() != selfState.getChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in the same vc.")).queue();
             return;
         }
 
-        String link = String.join(" ", event.getArgs());
+        String link = event.getMessage().getContentRaw();
 
         if (!isUrl(link)) {
             link = "ytsearch:" + link;
@@ -56,18 +59,11 @@ public class CommandPlay implements ICommand {
         return "Music";
     }
 
-    @Override
     public String getName() {
         return "play";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Plays songs or playlists from youtube.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

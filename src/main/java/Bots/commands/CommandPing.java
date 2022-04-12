@@ -1,14 +1,13 @@
 package Bots.commands;
 
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import Bots.BaseCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static java.lang.System.currentTimeMillis;
 
-public class CommandPing implements ICommand {
+public class CommandPing implements BaseCommand {
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
         long time = currentTimeMillis();
         event.getTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
@@ -17,18 +16,11 @@ public class CommandPing implements ICommand {
         return "General";
     }
 
-    @Override
     public String getName() {
         return "ping";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Shows you the bot's ping.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

@@ -1,7 +1,7 @@
 package Bots.commands;
 
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import Bots.BaseCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +12,10 @@ import java.nio.file.Paths;
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 
-public class CommandVideoDL implements ICommand {
+public class CommandVideoDL implements BaseCommand {
     public static int queue = 0;
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
         Path musicFolder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
         if (!Files.exists(musicFolder)) {
             musicFolder.toFile().mkdirs();
@@ -91,18 +90,11 @@ public class CommandVideoDL implements ICommand {
         return "Music";
     }
 
-    @Override
     public String getName() {
         return "videodl";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Downloads a video from a compatible URL.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

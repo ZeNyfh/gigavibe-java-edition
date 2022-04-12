@@ -1,11 +1,14 @@
 package Bots.commands;
 
+import Bots.BaseCommand;
 import Bots.lavaplayer.PlayerManager;
 import ca.tristan.jdacommands.ExecuteArgs;
 import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.awt.*;
@@ -18,20 +21,18 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandPlayAttachment implements ICommand {
-
+public class CommandPlayAttachment implements BaseCommand {
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv", "m4a", "aac", "webm", "opus"};
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
 
-        if (!event.getMemberVoiceState().inAudioChannel()) {
+        if (!event.getMember().getVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
             return;
         }
 
         List<Message.Attachment> attachment = event.getMessage().getAttachments();
-        String url = String.join(" ", event.getArgs());
+        String url = event.getMessage().getContentRaw();
         url = url.replace("&playattachment ", ""); //Whats the point? If theres no attachments, it just says no anyways, so when is this in use? -9382
 
         if (attachment.isEmpty()) {
@@ -39,9 +40,9 @@ public class CommandPlayAttachment implements ICommand {
             return;
         }
 
-        if (!event.getSelfVoiceState().inAudioChannel()) {
+        if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
-            final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
+            final VoiceChannel memberChannel = (VoiceChannel) event.getMember().getVoiceState().getChannel();
 
             audioManager.openAudioConnection(memberChannel);
         }
@@ -81,18 +82,11 @@ public class CommandPlayAttachment implements ICommand {
         return "Music";
     }
 
-    @Override
     public String getName() {
         return "song";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Plays songs from a directory.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

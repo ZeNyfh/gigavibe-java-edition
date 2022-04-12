@@ -1,7 +1,6 @@
 package Bots;
 
 import Bots.commands.*;
-import ca.tristan.jdacommands.JDACommands;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -9,15 +8,16 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static Bots.commands.CommandBoosterDJ.boosterDJ;
 import static Bots.commands.CommandDJ.DJList;
@@ -29,30 +29,35 @@ public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static String botPrefix = "&";
+    private static List<BaseCommand> commands = new ArrayList<>();
+
+    private static void registerCommand(BaseCommand command) {
+        commands.add(command);
+        //Possibly other uses idk yet -9382
+    }
 
     public static void main(String[] args) throws InterruptedException, LoginException {
 
-        JDACommands jdaCommands = new JDACommands(botPrefix);
-        jdaCommands.registerCommand(new CommandPing());
-        jdaCommands.registerCommand(new CommandPlay());
-        jdaCommands.registerCommand(new CommandLoop());
-        jdaCommands.registerCommand(new CommandSkip());
-        jdaCommands.registerCommand(new CommandLocalPlay());
-        jdaCommands.registerCommand(new CommandPlayAttachment());
-        jdaCommands.registerCommand(new CommandNowPlaying());
-        jdaCommands.registerCommand(new CommandUptime());
-        jdaCommands.registerCommand(new CommandHelp());
-        jdaCommands.registerCommand(new CommandVideoDL());
-        jdaCommands.registerCommand(new CommandAudioDL());
+        registerCommand(new CommandPing());
+        registerCommand(new CommandPlay());
+        registerCommand(new CommandLoop());
+        registerCommand(new CommandSkip());
+        registerCommand(new CommandLocalPlay());
+        registerCommand(new CommandPlayAttachment());
+        registerCommand(new CommandNowPlaying());
+        registerCommand(new CommandUptime());
+        registerCommand(new CommandHelp());
+        registerCommand(new CommandVideoDL());
+        registerCommand(new CommandAudioDL());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
                 .addEventListeners(new Main())
-                .addEventListeners(jdaCommands)
                 .setActivity(Activity.playing("in development..."))
                 .build();
         bot.awaitReady();
+
         System.out.println("bot is now running, have fun ig");
     }
 
@@ -131,9 +136,23 @@ public class Main extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
+        }
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getMessage().getContentRaw().startsWith(botPrefix)){
+            for (BaseCommand Command : commands) {
+                if (event.getMessage().getContentRaw().startsWith(botPrefix + Command.getName())) {
+                    System.out.println("your command is: " + Command);
+                    //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
+                    Command.execute(event);
+                    break;
+                }
+            }
         }
     }
 }

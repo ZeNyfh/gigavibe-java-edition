@@ -1,16 +1,15 @@
 package Bots.commands;
 
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import Bots.BaseCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandLoop implements ICommand {
+public class CommandLoop implements BaseCommand {
     public static Boolean loop = false;
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {
@@ -30,18 +29,11 @@ public class CommandLoop implements ICommand {
         return "Music";
     }
 
-    @Override
     public String getName() {
         return "loop";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Loops the current track.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

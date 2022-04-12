@@ -1,9 +1,9 @@
 package Bots.commands;
 
+import Bots.BaseCommand;
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Path;
@@ -11,44 +11,35 @@ import java.nio.file.Paths;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandLocalPlay implements ICommand {
+public class CommandLocalPlay implements BaseCommand {
+    public void execute(MessageReceivedEvent event) {
 
-    @Override
-    public void execute(ExecuteArgs event) {
-
-        if (!event.getMemberVoiceState().inAudioChannel()) {
+        if (!event.getMember().getVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
             return;
         }
 
-        if (!event.getSelfVoiceState().inAudioChannel()) {
+        if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
             final AudioManager audioManager = event.getGuild().getAudioManager();
-            final VoiceChannel memberChannel = (VoiceChannel) event.getMemberVoiceState().getChannel();
+            final VoiceChannel memberChannel = (VoiceChannel) event.getMember().getVoiceState().getChannel();
 
             audioManager.openAudioConnection(memberChannel);
         }
-        String path = String.join(" ", event.getArgs());
+        String path = event.getMessage().getContentRaw();
         path = path.replace("&playfile ", "");
         Path finalpath = Paths.get(path);
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalpath));
     }
 
     public String getCategory() {
-        return "Music";
+        return "music";
     }
 
-    @Override
     public String getName() {
         return "playfile";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Plays songs from a directory.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

@@ -1,17 +1,10 @@
 package Bots.commands;
 
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
-import ca.tristan.jdacommands.JDACommands;
+import Bots.BaseCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.List;
-
-import static Bots.Main.botPrefix;
-
-public class CommandHelp implements ICommand {
-
-    @Override
-    public void execute(ExecuteArgs event) {
+public class CommandHelp implements BaseCommand {
+    public void execute(MessageReceivedEvent event) {
         event.getTextChannel().sendMessage("literally only the help command rn").queue(); // will be worked on in the future
     }
 
@@ -19,18 +12,11 @@ public class CommandHelp implements ICommand {
         return "General";
     }
 
-    @Override
     public String getName() {
         return "help";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Shows you a list of commands.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }

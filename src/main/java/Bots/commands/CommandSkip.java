@@ -1,13 +1,13 @@
 package Bots.commands;
 
+import Bots.BaseCommand;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,12 +16,11 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandSkip implements ICommand {
+public class CommandSkip implements BaseCommand {
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
         final TextChannel channel = event.getTextChannel();
-        final Member self = event.getSelfMember();
+        final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         assert selfVoiceState != null;
@@ -31,7 +30,7 @@ public class CommandSkip implements ICommand {
         }
 
         final Member member = event.getMember();
-        final GuildVoiceState memberVoiceState = event.getMemberVoiceState();
+        final GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
 
         if (!memberVoiceState.inAudioChannel()) {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
@@ -67,19 +66,11 @@ public class CommandSkip implements ICommand {
         return "Music";
     }
 
-    @Override
     public String getName() {
         return "skip";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Casts a vote or skips the current song."; // voting not yet implemented
     }
-
-    @Override
-    public boolean needOwner() {
-        return false;
-    }
-
 }

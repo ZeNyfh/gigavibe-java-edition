@@ -1,15 +1,14 @@
 package Bots.commands;
 
-import ca.tristan.jdacommands.ExecuteArgs;
-import ca.tristan.jdacommands.ICommand;
+import Bots.BaseCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandBoosterDJ implements ICommand {
+public class CommandBoosterDJ implements BaseCommand {
     public static Boolean boosterDJ = false;
 
-    @Override
-    public void execute(ExecuteArgs event) {
+    public void execute(MessageReceivedEvent event) {
         //NOTE: Guild specific behaviour is gonna be needed for this at a later date -9382
         boosterDJ = !boosterDJ;
         if (boosterDJ) {
@@ -23,18 +22,11 @@ public class CommandBoosterDJ implements ICommand {
         return "Admin";
     }
 
-    @Override
     public String getName() {
         return "boosterdj";
     }
 
-    @Override
-    public String helpMessage() {
+    public String getDescription() {
         return "Makes it so boosters have DJ permissions.";
-    }
-
-    @Override
-    public boolean needOwner() {
-        return false;
     }
 }
