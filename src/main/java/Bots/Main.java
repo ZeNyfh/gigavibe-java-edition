@@ -32,7 +32,7 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws InterruptedException, LoginException {
 
-        JDACommands jdaCommands = new JDACommands("&");
+        JDACommands jdaCommands = new JDACommands(botPrefix);
         jdaCommands.registerCommand(new CommandPing());
         jdaCommands.registerCommand(new CommandPlay());
         jdaCommands.registerCommand(new CommandLoop());

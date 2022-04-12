@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-
 public class CommandPlayAttachment implements ICommand {
 
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv", "m4a", "aac", "webm", "opus"};
