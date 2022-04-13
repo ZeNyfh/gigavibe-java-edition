@@ -1,6 +1,6 @@
 # Gigavibe
 
- Discord bot written in skript for audio functionality.
+ Discord bot written in java using JDA and lavaplayer for audio functionality.
  Has youtube music, custom (user defined) dj roles. 
 
 ## Prerequisites
@@ -9,7 +9,7 @@
 
 > YT-DLP (added to path)
 
-The rest will be in the pom.xml file and/or Referenced Libraries.
+The rest will be in the pom.xml file.
 
 ## Usage
 
