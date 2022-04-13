@@ -11,7 +11,7 @@ public class CommandDisconnect implements BaseCommand {
 
     @Override
     public String getName() {
-        return "Disconnect";
+        return "disconnect";
     }
 
     @Override
