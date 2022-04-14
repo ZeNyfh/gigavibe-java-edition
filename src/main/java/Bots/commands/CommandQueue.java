@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +34,13 @@ public class CommandQueue implements BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            embed.setTitle(("__**Now playing:**\n" + audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+            embed.setTitle(("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
         } else {
-            embed.setTitle("__**Now playing:**\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
+            embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
         }
+        embed.build();
+        embed.setColor(new Color(0, 0, 255));
+        channel.sendMessageEmbeds(embed.build()).queue();
     }
 
     @Override
