@@ -55,10 +55,15 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 String length = null;
                 System.out.println("audioTrack");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 musicManager.scheduler.queue(audioTrack);
 
                 EmbedBuilder embed = new EmbedBuilder();
-                if (audioTrack.getInfo().length > 432000) { // 5 days
+                if (audioTrack.getInfo().length > 432000000) { // 5 days
                     length = "Unknown";
                 } else {
                     length = toTimestamp((audioTrack.getInfo().length));

@@ -7,12 +7,14 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import static Bots.Main.createQuickEmbed;
 
@@ -55,18 +57,22 @@ public class CommandPlayAttachment implements BaseCommand {
             final String musicPath = musicFolder + "\\"; //For some reason the \ gets omitted when converting using .toString() -9382
             String unix = String.valueOf(System.currentTimeMillis());
             attachment.get(0).downloadToFile(musicPath + unix + attachment.get(0).getFileName());
-            String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            long size = attachment.get(0).getSize();
+            File file = new File(musicPath + unix + attachment.get(0).getFileName());
+            int num = 0;
+            while (size > file.length()){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+                System.out.println(num++);
             }
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath)); // failsafe, causes 0 issues
+            System.out.println("done looping");
+            String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
+            System.out.println(finalPath);
+            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), finalPath);
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This isn't a file that I can play")).queue();
         }
-
     }
 
     public String getCategory() {

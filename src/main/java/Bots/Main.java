@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
@@ -83,6 +84,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandAudioDL());
         registerCommand(new CommandDisconnect());
         registerCommand(new CommandBlockChannel());
+        registerCommand(new CommandQueue());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
