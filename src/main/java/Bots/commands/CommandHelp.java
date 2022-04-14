@@ -32,7 +32,6 @@ public class CommandHelp implements BaseCommand {
             }
             if (Command.getCategory().equals("Admin")) {
                 adminCommands.add(Command.getName());
-                System.out.println(Command.getName());
             }
         }
         finalGeneralCommands = "`" + String.join("` `", generalCommands) + "`";
