@@ -45,24 +45,20 @@ public class CommandNowPlaying implements BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
         long totalTime = audioPlayer.getPlayingTrack().getDuration();
+        String totalTimeText;
         if (totalTime < 432000000) { // 5 days
-            int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
-            String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
-            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-                embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
-            } else {
-                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-                embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
-            }
+            totalTimeText = "Unknown"; //Assume malformed
         } else {
-            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-                embed.setDescription("```" + toSimpleTimestamp(trackPos) + " / " + "Unknown" + "```");
-            } else {
-                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-                embed.setDescription("```" + toSimpleTimestamp(trackPos) + " / " + "Unknown" + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
-            }
+            totalTimeText = toSimpleTimestamp(totalTime);
+        }
+        int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
+        String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
+        if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
+        } else {
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
         }
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             if (Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
