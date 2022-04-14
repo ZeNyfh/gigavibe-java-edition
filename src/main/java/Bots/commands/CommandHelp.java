@@ -11,16 +11,15 @@ import java.util.List;
 import static Bots.Main.commands;
 
 public class CommandHelp implements BaseCommand {
-    List<String> generalCommands = new ArrayList<>();
-    String finalGeneralCommands = "";
-    List<String> musicCommands = new ArrayList<>();
-    String finalMusicCommands = "";
-    List<String> DJCommands = new ArrayList<>();
-    String finalDJCommands = "";
-    List<String> adminCommands = new ArrayList<>();
-    String finalAdminCommands = "";
-
     public void execute(MessageReceivedEvent event) {
+        List<String> generalCommands = new ArrayList<>();
+        String finalGeneralCommands = "";
+        List<String> musicCommands = new ArrayList<>();
+        String finalMusicCommands = "";
+        List<String> DJCommands = new ArrayList<>();
+        String finalDJCommands = "";
+        List<String> adminCommands = new ArrayList<>();
+        String finalAdminCommands = "";
         for (BaseCommand Command : commands) {
             if (Command.getCategory().equals("General")) {
                 generalCommands.add(Command.getName());
