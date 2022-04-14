@@ -44,7 +44,7 @@ public class Main extends ListenerAdapter {
 
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
-    public final static String botPrefix = "##";
+    public final static String botPrefix = "&";
     public static List<BaseCommand> commands = new ArrayList<>();
 
     private static void registerCommand(BaseCommand command) {
