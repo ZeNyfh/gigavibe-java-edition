@@ -45,7 +45,7 @@ public class CommandNowPlaying implements BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
         long totalTime = audioPlayer.getPlayingTrack().getDuration();
-        if (totalTime < 432000) { // 5 days
+        if (totalTime < 432000000) { // 5 days
             int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
             String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
             if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
