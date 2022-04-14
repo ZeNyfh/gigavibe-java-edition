@@ -46,7 +46,7 @@ public class CommandNowPlaying implements BaseCommand {
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
         long totalTime = audioPlayer.getPlayingTrack().getDuration();
         String totalTimeText;
-        if (totalTime < 432000000) { // 5 days
+        if (totalTime > 432000000) { // 5 days
             totalTimeText = "Unknown"; //Assume malformed
         } else {
             totalTimeText = toSimpleTimestamp(totalTime);
