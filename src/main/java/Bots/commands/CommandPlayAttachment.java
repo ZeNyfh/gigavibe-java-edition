@@ -59,10 +59,6 @@ public class CommandPlayAttachment implements BaseCommand {
             attachment.get(0).downloadToFile(musicPath + unix + attachment.get(0).getFileName());
             String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (finalPath));
-            EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(attachment.get(0).getFileName());
-            embed.setColor(new Color(0, 0, 255));
-            event.getTextChannel().sendMessageEmbeds(embed.build()).queue();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

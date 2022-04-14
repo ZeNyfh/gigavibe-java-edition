@@ -53,6 +53,7 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
+                System.out.println("audioTrack");
                 musicManager.scheduler.queue(audioTrack);
 
                 EmbedBuilder embed = new EmbedBuilder();
@@ -65,10 +66,12 @@ public class PlayerManager {
                     embed.setTitle((audioTrack.getInfo().title), (audioTrack.getInfo().uri));
                     embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
                 }
+                textChannel.sendMessageEmbeds(embed.build()).queue();
             }
 
             @Override
-            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+            public void playlistLoaded(AudioPlaylist audioPlaylist) { // why does this work as the "track"
+                System.out.println("audioPlaylist");
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     musicManager.scheduler.queue(tracks.get(0));
