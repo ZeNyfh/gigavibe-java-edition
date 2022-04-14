@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
+import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.toSimpleTimestamp;
+import static Bots.Main.*;
 
 public class CommandNowPlaying implements BaseCommand {
 
@@ -42,19 +42,34 @@ public class CommandNowPlaying implements BaseCommand {
             channel.sendMessageEmbeds(createQuickEmbed(" ", "No tracks are playing right now.")).queue(); // not an error, intended
             return;
         }
-
-        long totalTime = audioPlayer.getPlayingTrack().getDuration();
-        long trackPos = audioPlayer.getPlayingTrack().getPosition();
-        int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
-        String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
         EmbedBuilder embed = new EmbedBuilder();
-        if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
+        long trackPos = audioPlayer.getPlayingTrack().getPosition();
+        long totalTime = audioPlayer.getPlayingTrack().getDuration();
+        if (totalTime < 432000) { // 5 days
+            int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
+            String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
+            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+                embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
+            } else {
+                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+                embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
+            }
         } else {
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-            embed.addField("**Channel:**", audioPlayer.getPlayingTrack().getInfo().author, true);
-            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + toSimpleTimestamp(totalTime) + "```");
+            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+                embed.setDescription("```" + toSimpleTimestamp(trackPos) + " / " + "Unknown" + "```");
+            } else {
+                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+                embed.setDescription("```" + toSimpleTimestamp(trackPos) + " / " + "Unknown" + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
+            }
+        }
+        if (getTrackFromQueue(event.getGuild(), 0) != null) {
+            if (Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13), true);
+            } else {
+                embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title, true);
+            }
         }
         embed.setColor(new Color(0, 0, 255));
         channel.sendMessageEmbeds(embed.build()).queue();

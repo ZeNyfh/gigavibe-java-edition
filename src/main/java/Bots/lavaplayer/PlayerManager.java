@@ -53,11 +53,16 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
+                String length = null;
                 System.out.println("audioTrack");
                 musicManager.scheduler.queue(audioTrack);
 
                 EmbedBuilder embed = new EmbedBuilder();
-                String length = toTimestamp((audioTrack.getInfo().length));
+                if (audioTrack.getInfo().length > 432000) { // 5 days
+                    length = "Unknown";
+                } else {
+                    length = toTimestamp((audioTrack.getInfo().length));
+                }
                 embed.setColor(new Color(0, 0, 255));
                 if (audioTrack.getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
                     embed.setTitle((audioTrack.getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
