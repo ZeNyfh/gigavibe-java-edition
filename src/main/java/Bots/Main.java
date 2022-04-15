@@ -227,7 +227,11 @@ public class Main extends ListenerAdapter {
                 if (event.getMessage().getContentRaw().startsWith(botPrefix + Command.getName())) {
                     System.out.println("your command is: " + Command);
                     //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
-                    Command.execute(event);
+                    try {
+                        Command.execute(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
             }

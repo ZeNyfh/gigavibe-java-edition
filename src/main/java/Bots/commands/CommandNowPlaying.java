@@ -64,7 +64,7 @@ public class CommandNowPlaying implements BaseCommand {
             if (Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
                 embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13), true);
             } else {
-                embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title, true);
+                embed.addField("**Up next:**\n[", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + getTrackFromQueue(event.getGuild(), 1).getInfo().uri + ")", true);
             }
         }
         embed.setColor(new Color(0, 0, 255));
