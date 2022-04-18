@@ -2,11 +2,13 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.lavaplayer.PlayerManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +16,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 import static Bots.Main.createQuickEmbed;
 
@@ -30,7 +31,7 @@ public class CommandPlayAttachment implements BaseCommand {
 
         List<Message.Attachment> attachment = event.getMessage().getAttachments();
         String url = event.getMessage().getContentRaw();
-        url = url.replace("&playattachment ", ""); //Whats the point? If theres no attachments, it just says no anyways, so when is this in use? -9382
+        url = url.replace("&playattachment ", "");
 
         if (attachment.isEmpty()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No attachment was found.")).queue();
@@ -59,17 +60,32 @@ public class CommandPlayAttachment implements BaseCommand {
             attachment.get(0).downloadToFile(musicPath + unix + attachment.get(0).getFileName());
             long size = attachment.get(0).getSize();
             File file = new File(musicPath + unix + attachment.get(0).getFileName());
-            int num = 0;
-            while (size > file.length()){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {}
-                System.out.println(num++);
-            }
-            System.out.println("done looping");
-            String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
-            System.out.println(finalPath);
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), finalPath);
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(new Color(0, 0, 255));
+            eb.setTitle("**Downloading...**");
+            eb.setDescription(" ");
+            event.getTextChannel().sendMessageEmbeds(eb.build()).queue(response -> {
+                int num = 0;
+                while (size > file.length()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {
+                    }
+                    System.out.println(num++);
+                }
+                response.delete().queue();
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Finished downloading.")).queue(response2 -> {
+                    String finalPath = String.valueOf(Paths.get(musicPath + unix + attachment.get(0).getFileName()));
+                    System.out.println(finalPath);
+                    PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), finalPath);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    response2.delete().queue();
+                });
+            });
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This isn't a file that I can play")).queue();
         }

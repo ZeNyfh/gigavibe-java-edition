@@ -15,10 +15,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.getTrackFromQueue;
+import static Bots.Main.toTimestamp;
 
 public class CommandQueue implements BaseCommand {
     @Override
@@ -41,13 +40,22 @@ public class CommandQueue implements BaseCommand {
         } else {
             embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
         }
-        if (queue.isEmpty()){
+        if (queue.isEmpty()) {
             channel.sendMessageEmbeds(createQuickEmbed(" ", "❌ The queue is empty.")).queue();
             embed.clear();
             return;
         }
         int queueLength = queue.size();
-        for (int i = 0; i < 5 && i < queueLength;) {
+        long queueTimeLength = 0;
+        for (int x = 0; x < queueLength; ) {
+            if (queue.get(x).getInfo().length > 432000000) {
+                x++;
+                continue; // will be slightly inaccurate due to tracks with unknown duration
+            }
+            queueTimeLength = queueTimeLength + queue.get(x).getInfo().length;
+            x++;
+        }
+        for (int i = 0; i < 5 && i < queueLength; ) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             if (trackInfo.uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
                 embed.appendDescription(i + 1 + ". " + (trackInfo.uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13) + "\n");
@@ -56,10 +64,12 @@ public class CommandQueue implements BaseCommand {
             }
             i++;
         }
+        embed.setFooter(queueLength + " songs queued. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(new Color(0, 0, 255));
         embed.build();
         channel.sendMessageEmbeds(embed.build()).queue();
     }
+
     @Override
     public String getName() {
         return "queue";
