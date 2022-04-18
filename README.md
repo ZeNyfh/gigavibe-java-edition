@@ -9,6 +9,8 @@
 
 > YT-DLP (added to path)
 
+(this can be acquired through "pip install yt-dlp" or "choco install yt-dlp" or "sudo snap install yt-dlp")
+
 The rest will be in the pom.xml file.
 
 ## Usage
