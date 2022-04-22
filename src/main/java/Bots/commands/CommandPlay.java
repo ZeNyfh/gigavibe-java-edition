@@ -33,26 +33,21 @@ public class CommandPlay implements BaseCommand {
         }
 
         String link = event.getMessage().getContentRaw();
-
-        if (!isUrl(link)) {
-            link = "ytsearch:" + link;
-            link = link.replace("&play", "");
+        link = link.replace("&play ", "");
+        link = link.replace("&play", ""); // just in case someone supplied 0 args
+        if (link.equals("") || (link.equals(" "))){
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
+            return;
+        }
+        if (link.contains("https://") || link.contains("http://")) {
+            link = link.replace("&play ", "");
             if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
+        } else {
+            link = "ytsearch: " + link;
         }
-
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
-
-    }
-
-    private boolean isUrl(String url) {
-        try {
-            new URI(url);
-            return true;
-        } catch (URISyntaxException e) {
-            return false;
-        }
     }
 
     public String getCategory() {
@@ -64,6 +59,6 @@ public class CommandPlay implements BaseCommand {
     }
 
     public String getDescription() {
-        return "Plays songs or playlists from youtube.";
+        return "Plays songs or playlists from: youtube, soundcloud, bandcamp, twitch, vimeo, http urls and discord attachments.";
     }
 }

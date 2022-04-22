@@ -31,7 +31,23 @@ public class CommandPlayAttachment implements BaseCommand {
 
         List<Message.Attachment> attachment = event.getMessage().getAttachments();
         String url = event.getMessage().getContentRaw();
-        url = url.replace("&playattachment ", "");
+        url = url.replace("&song ", "");
+
+        if (url.contains("cdn.discordapp.com") || url.contains("media.discordapp.net")) {
+            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (url));
+            if (!attachment.isEmpty()){
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Favouring url over embed.")).queue(response -> {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    response.delete().queue();
+                });
+            }
+            return;
+        }
 
         if (attachment.isEmpty()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No attachment was found.")).queue();
@@ -43,11 +59,6 @@ public class CommandPlayAttachment implements BaseCommand {
             final VoiceChannel memberChannel = (VoiceChannel) event.getMember().getVoiceState().getChannel();
 
             audioManager.openAudioConnection(memberChannel);
-        }
-
-        if (url.contains("discordapp")) {
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (url));
-            return;
         }
 
         if (Arrays.toString(audioFiles).contains(Objects.requireNonNull(attachment.get(0).getFileExtension().toLowerCase()))) {

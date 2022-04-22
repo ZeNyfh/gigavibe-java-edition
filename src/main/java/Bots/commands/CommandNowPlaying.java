@@ -57,6 +57,7 @@ public class CommandNowPlaying implements BaseCommand {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
+            embed.setThumbnail(audioPlayer.getPlayingTrack().getInfo().uri + "?format=jpeg");
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
         }
@@ -64,7 +65,8 @@ public class CommandNowPlaying implements BaseCommand {
             if (Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
                 embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13), true);
             } else {
-                embed.addField("**Up next:**\n[", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + getTrackFromQueue(event.getGuild(), 1).getInfo().uri + ")", true);
+                embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+                embed.addField("**Up next:**\n(", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + ")[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + "]", true);
             }
         }
         embed.setColor(new Color(0, 0, 255));
