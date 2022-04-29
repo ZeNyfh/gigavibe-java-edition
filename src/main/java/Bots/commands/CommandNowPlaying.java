@@ -70,7 +70,7 @@ public class CommandNowPlaying implements BaseCommand {
                 embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13), true);
             } else {
                 embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-                embed.addField("**Up next:**\n","(" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + ")[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + "]", true);
+                embed.addField("**Up next:**\n", "(" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + ")[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + "]", true);
             }
         }
         embed.setColor(new Color(0, 0, 255));

@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public class PlayerManager {
                 embed.setColor(new Color(0, 0, 255));
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    if (tracks.size() > 1 && !playlistCheck){
+                    if (tracks.size() > 1 && !playlistCheck) {
                         System.out.println(tracks.get(0).getIdentifier());
                         if (tracks.get(0).getInfo().length > 432000000) { // 5 days
                             length = "Unknown";
@@ -111,7 +110,7 @@ public class PlayerManager {
                         textChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
-                        for (int i = 0; i < tracks.size();){
+                        for (int i = 0; i < tracks.size(); ) {
                             lengthSeconds = (lengthSeconds + tracks.get(i).getInfo().length);
                             musicManager.scheduler.queue(tracks.get(i));
                             i++;

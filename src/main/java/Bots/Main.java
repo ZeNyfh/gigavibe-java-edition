@@ -11,12 +11,10 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,7 +31,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
@@ -197,27 +194,7 @@ public class Main extends ListenerAdapter {
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
-        }
-    }
-
-    @Override
-    public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
-        if (Objects.equals(event.getButton().getId(), "general")) {
-            event.editMessageEmbeds().setEmbeds();
-            event.deferEdit();
-        }
-        if (Objects.equals(event.getButton().getId(), "music")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
-        }
-        if (Objects.equals(event.getButton().getId(), "dj")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
-        }
-        if (Objects.equals(event.getButton().getId(), "admin")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
-        }
+        } // bot leave timeout here.
     }
 
     @Override

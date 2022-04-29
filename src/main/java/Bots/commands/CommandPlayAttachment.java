@@ -37,7 +37,7 @@ public class CommandPlayAttachment implements BaseCommand {
         if (url.contains("cdn.discordapp.com") || url.contains("media.discordapp.net")) {
             event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
             PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (url));
-            if (!attachment.isEmpty()){
+            if (!attachment.isEmpty()) {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Favouring url over embed.")).queue(response -> {
                     try {
                         Thread.sleep(5000);
@@ -98,7 +98,7 @@ public class CommandPlayAttachment implements BaseCommand {
                     response2.delete().queue();
                 });
             });
-        //} else if (Arrays.toString(midiAudioFiles).contains(audioTrack.getInfo().uri)){
+            //} else if (Arrays.toString(midiAudioFiles).contains(audioTrack.getInfo().uri)){
 
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This isn't a file that I can play")).queue();

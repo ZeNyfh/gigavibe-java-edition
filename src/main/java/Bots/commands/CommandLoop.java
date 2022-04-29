@@ -11,7 +11,7 @@ public class CommandLoop implements BaseCommand {
 
     public void execute(MessageReceivedEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
-        if (event.getMessage().getContentRaw().contains("loopqueue")){
+        if (event.getMessage().getContentRaw().contains("loopqueue")) {
             return;
         }
         if (!audioManager.isConnected()) {

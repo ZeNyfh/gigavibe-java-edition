@@ -32,7 +32,7 @@ public class CommandLoopQueue implements BaseCommand {
     public String getCategory() {
         return "Music";
     }
-    
+
     public String getDescription() {
         return "Loops the current queue.";
     }

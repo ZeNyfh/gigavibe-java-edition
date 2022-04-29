@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
@@ -36,7 +34,7 @@ public class CommandPlay implements BaseCommand {
         String link = event.getMessage().getContentRaw();
         link = link.replace("&play ", "");
         link = link.replace("&play", ""); // just in case someone supplied 0 args
-        if (link.equals("") || (link.equals(" "))){
+        if (link.equals("") || (link.equals(" "))) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
             return;
         }

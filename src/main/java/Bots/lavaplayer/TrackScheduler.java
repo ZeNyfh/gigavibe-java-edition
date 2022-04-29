@@ -1,11 +1,9 @@
 package Bots.lavaplayer;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,6 +17,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
+
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
@@ -38,10 +37,12 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (loop && endReason.toString().equals("FINISHED")) {
             AudioTrack loopTrack = track.makeClone();
-            this.player.startTrack(loopTrack, false);
+            this.player.startTrack(loopTrack, true);
             return;
-        } else if (loopQueue && endReason.toString().equals("FINISHED")){
-            PlayerManager.getInstance().loadAndPlay(null, this.player.getPlayingTrack().getInfo().uri); // idk how to return text channel here
+        } else if (loopQueue && endReason.toString().equals("FINISHED")) {
+            AudioTrack loopTrack = track.makeClone();
+            nextTrack();
+            queue(loopTrack);
             return;
         }
         if (track.getInfo().identifier.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
