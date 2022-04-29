@@ -12,11 +12,13 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static Bots.Main.toTimestamp;
+import static Bots.commands.CommandPlay.playlistCheck;
 
 public class PlayerManager {
 
@@ -49,6 +51,7 @@ public class PlayerManager {
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl) {
         final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
+        String[] midiAudioFiles = {"mid", "midi", "mod"};
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
@@ -85,7 +88,7 @@ public class PlayerManager {
                 embed.setColor(new Color(0, 0, 255));
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    if (tracks.size() <= 1){
+                    if (tracks.size() > 1 && !playlistCheck){
                         System.out.println(tracks.get(0).getIdentifier());
                         if (tracks.get(0).getInfo().length > 432000000) { // 5 days
                             length = "Unknown";

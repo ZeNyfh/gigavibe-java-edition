@@ -14,6 +14,7 @@ import java.util.Objects;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandPlay implements BaseCommand {
+    public static boolean playlistCheck = false;
 
     public void execute(MessageReceivedEvent event) {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
@@ -44,8 +45,10 @@ public class CommandPlay implements BaseCommand {
             if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
+            playlistCheck = true;
         } else {
             link = "ytsearch: " + link;
+            playlistCheck = false;
         }
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
     }

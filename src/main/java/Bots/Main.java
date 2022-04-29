@@ -72,6 +72,7 @@ public class Main extends ListenerAdapter {
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());
+        registerCommand(new CommandLoopQueue());
         registerCommand(new CommandLoop());
         registerCommand(new CommandSkip());
         registerCommand(new CommandLocalPlay());

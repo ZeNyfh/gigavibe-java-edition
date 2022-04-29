@@ -21,6 +21,7 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandPlayAttachment implements BaseCommand {
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "m4a", "mov", "wmv", "m4a", "aac", "webm", "opus"};
+    public String[] midiAudioFiles = {"mid", "midi", "mod"};
 
     public void execute(MessageReceivedEvent event) {
 
@@ -97,6 +98,8 @@ public class CommandPlayAttachment implements BaseCommand {
                     response2.delete().queue();
                 });
             });
+        //} else if (Arrays.toString(midiAudioFiles).contains(audioTrack.getInfo().uri)){
+
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This isn't a file that I can play")).queue();
         }
