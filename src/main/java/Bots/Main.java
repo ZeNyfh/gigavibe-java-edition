@@ -7,9 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -31,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
@@ -82,6 +81,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandBlockChannel());
         registerCommand(new CommandQueue());
         registerCommand(new CommandBotInfo());
+        registerCommand(new CommandShuffle());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -192,16 +192,31 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
+        assert botChannel != null;
+        List<Member> vcMembers = botChannel.getMembers();
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
-        } // bot leave timeout here.
+            return;
+        }
+        int botChannelMemberCount = (int) vcMembers.stream()
+                .filter(user -> !user.getUser().isBot()).count();
+        if (botChannelMemberCount == 0) {
+            try {
+                Thread.sleep(300000); // 5 minute
+            } catch (InterruptedException ignored) {
+            }
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
+            event.getGuild().getAudioManager().closeAudioConnection();
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
+        }
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
-                if (event.getMessage().getContentRaw().startsWith(botPrefix + Command.getName())) {
+                if (event.getMessage().getContentRaw().toLowerCase().startsWith(botPrefix + Command.getName())) {
                     System.out.println("your command is: " + Command);
                     //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
                     try {
