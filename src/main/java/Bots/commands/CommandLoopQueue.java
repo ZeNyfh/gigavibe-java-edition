@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import Bots.MessageEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.createQuickEmbed;
@@ -9,7 +9,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandLoopQueue extends BaseCommand {
     public static Boolean loopQueue = false;
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {

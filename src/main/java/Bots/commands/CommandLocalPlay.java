@@ -1,9 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Path;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLocalPlay extends BaseCommand {
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
 
         if (!event.getMember().getVoiceState().inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();

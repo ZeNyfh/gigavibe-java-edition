@@ -1,13 +1,13 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +18,7 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandSkip extends BaseCommand {
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         final TextChannel channel = event.getTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();

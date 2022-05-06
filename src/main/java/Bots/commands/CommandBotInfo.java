@@ -2,8 +2,8 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.Main;
+import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class CommandBotInfo extends BaseCommand {
     @Override
-    public void execute(MessageReceivedEvent event) throws IOException {
+    public void execute(MessageEvent event) throws IOException {
         int CommandCount = 0;
         long id = Long.parseLong("211789389401948160"); // why
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {

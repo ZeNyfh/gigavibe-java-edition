@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ public class CommandHelp extends BaseCommand {
     List<String> adminDescription = new ArrayList<>();
     List<String> devDescription = new ArrayList<>();
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         generalCommands.clear();
         musicCommands.clear();
         DJCommands.clear();

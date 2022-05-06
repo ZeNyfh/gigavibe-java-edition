@@ -1,9 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandDJ extends BaseCommand {
     public static JSONArray DJList = new JSONArray(); // i could not get this to work
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         //NOTE: Guild specific behaviour is gonna be needed for this at a later date -9382
         if (event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
             List<Member> members = event.getMessage().getMentionedMembers(event.getGuild());

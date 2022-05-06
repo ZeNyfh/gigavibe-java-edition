@@ -1,15 +1,15 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static Bots.Main.createQuickEmbed;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();

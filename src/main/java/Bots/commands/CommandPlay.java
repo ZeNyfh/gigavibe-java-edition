@@ -1,10 +1,10 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.Objects;
@@ -14,7 +14,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (!memberState.inAudioChannel()) {

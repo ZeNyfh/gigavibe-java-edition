@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import Bots.MessageEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandVideoDL extends BaseCommand {
     public static int queue = 0;
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "videodl ", "").replace(" ", "");
         File dir = new File((System.getProperty("user.dir") + "\\temp\\viddl"));

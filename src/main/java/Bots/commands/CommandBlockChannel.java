@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import Bots.MessageEvent;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
@@ -11,7 +11,7 @@ public class CommandBlockChannel extends BaseCommand {
     private static FileWriter file;
 
     @Override
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         JSONObject obj = new JSONObject();
         obj.put("GuildID", event.getGuild().getIdLong());
         obj.put("ChannelID", event.getGuildChannel().getIdLong());

@@ -1,7 +1,5 @@
 package Bots;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,7 +12,7 @@ elements like getArgs() could be quite useful
 */
 public class BaseCommand {
     /* Would use an interface, however that prevents optional arguments, and I want getAlias() -9382 */
-    public void execute(MessageReceivedEvent event) throws IOException {}
+    public void execute(MessageEvent event) throws IOException {}
 
     public String getName() { return "default";}
 

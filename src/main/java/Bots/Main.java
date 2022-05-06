@@ -288,7 +288,7 @@ public class Main extends ListenerAdapter {
         if (commandLower.startsWith(matchTerm)) {
             System.out.println("your command is: " + Command);
             try {
-                Command.execute(event);
+                Command.execute(new MessageEvent(event));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import Bots.MessageEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import static java.lang.String.valueOf;
 public class CommandAudioDL extends BaseCommand {
     public static int queue = 0;
 
-    public void execute(MessageReceivedEvent event) {
+    public void execute(MessageEvent event) {
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "dl ", "").replace(" ", "");
         File dir = new File((System.getProperty("user.dir") + "\\temp\\auddl"));
