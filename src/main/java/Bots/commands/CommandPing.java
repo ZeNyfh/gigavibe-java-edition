@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static java.lang.System.currentTimeMillis;
 
-public class CommandPing implements BaseCommand {
+public class CommandPing extends BaseCommand {
 
     public void execute(MessageReceivedEvent event) {
         long time = currentTimeMillis();

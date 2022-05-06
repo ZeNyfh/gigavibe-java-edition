@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandDisconnect implements BaseCommand {
+public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageReceivedEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

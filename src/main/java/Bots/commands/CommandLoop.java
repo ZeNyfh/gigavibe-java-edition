@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandLoop implements BaseCommand {
+public class CommandLoop extends BaseCommand {
     public static Boolean loop = false;
 
     public void execute(MessageReceivedEvent event) {

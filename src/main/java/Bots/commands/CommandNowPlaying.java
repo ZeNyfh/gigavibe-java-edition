@@ -15,7 +15,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandNowPlaying implements BaseCommand {
+public class CommandNowPlaying extends BaseCommand {
 
     public void execute(MessageReceivedEvent event) {
         final TextChannel channel = event.getTextChannel();

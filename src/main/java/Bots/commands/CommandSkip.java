@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandSkip implements BaseCommand {
+public class CommandSkip extends BaseCommand {
 
     public void execute(MessageReceivedEvent event) {
         final TextChannel channel = event.getTextChannel();

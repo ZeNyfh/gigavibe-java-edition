@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class CommandBlockChannel implements BaseCommand {
+public class CommandBlockChannel extends BaseCommand {
     private static FileWriter file;
 
     @Override

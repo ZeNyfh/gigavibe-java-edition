@@ -19,7 +19,7 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandPlayAttachment implements BaseCommand {
+public class CommandPlayAttachment extends BaseCommand {
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
     public String[] midiAudioFiles = {"mid", "midi", "mod"};
 

@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandLocalPlay implements BaseCommand {
+public class CommandLocalPlay extends BaseCommand {
     public void execute(MessageReceivedEvent event) {
 
         if (!event.getMember().getVoiceState().inAudioChannel()) {

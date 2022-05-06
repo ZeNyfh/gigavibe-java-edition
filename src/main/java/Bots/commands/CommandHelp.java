@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import static Bots.Main.commands;
 
-public class CommandHelp implements BaseCommand {
+public class CommandHelp extends BaseCommand {
     String description = "";
     List<String> generalCommands = new ArrayList<>();
     String finalGeneralCommands = "";

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandPlay implements BaseCommand {
+public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
 
     public void execute(MessageReceivedEvent event) {

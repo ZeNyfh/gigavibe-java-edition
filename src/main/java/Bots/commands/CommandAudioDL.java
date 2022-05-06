@@ -12,7 +12,7 @@ import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 import static java.lang.String.valueOf;
 
-public class CommandAudioDL implements BaseCommand {
+public class CommandAudioDL extends BaseCommand {
     public static int queue = 0;
 
     public void execute(MessageReceivedEvent event) {

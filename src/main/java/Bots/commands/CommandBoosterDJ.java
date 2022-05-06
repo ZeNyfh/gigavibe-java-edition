@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandBoosterDJ implements BaseCommand {
+public class CommandBoosterDJ extends BaseCommand {
     public static Boolean boosterDJ = false;
 
     public void execute(MessageReceivedEvent event) {

@@ -20,7 +20,7 @@ import java.util.List;
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
 
-public class CommandQueue implements BaseCommand {
+public class CommandQueue extends BaseCommand {
     @Override
     public void execute(MessageReceivedEvent event) {
         final TextChannel channel = event.getTextChannel();

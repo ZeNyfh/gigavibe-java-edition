@@ -280,19 +280,30 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    private void processCommand(BaseCommand Command, MessageReceivedEvent event) {
+        //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
+        System.out.println("your command is: " + Command);
+        try {
+            Command.execute(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
-                if (event.getMessage().getContentRaw().toLowerCase().startsWith(botPrefix + Command.getName())) {
-                    System.out.println("your command is: " + Command);
-                    //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
-                    try {
-                        Command.execute(event);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                String commandLower = event.getMessage().getContentRaw().toLowerCase();
+                if (commandLower.startsWith(botPrefix + Command.getName())) {
+                    processCommand(Command,event);
                     break;
+                }
+                for (String alias : Command.getAlias()) {
+                    if (commandLower.startsWith(botPrefix + alias)) {
+                        processCommand(Command,event);
+                        break;
+                    }
                 }
             }
         }

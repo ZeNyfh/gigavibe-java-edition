@@ -10,7 +10,7 @@ import java.util.List;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandDJ implements BaseCommand {
+public class CommandDJ extends BaseCommand {
     public static JSONArray DJList = new JSONArray(); // i could not get this to work
 
     public void execute(MessageReceivedEvent event) {

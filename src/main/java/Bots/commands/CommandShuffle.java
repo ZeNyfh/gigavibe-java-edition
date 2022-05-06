@@ -18,7 +18,7 @@ import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandShuffle implements BaseCommand {
+public class CommandShuffle extends BaseCommand {
     @Override
     public void execute(MessageReceivedEvent event) throws IOException {
         final TextChannel channel = event.getTextChannel();

@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 
-public class CommandVideoDL implements BaseCommand {
+public class CommandVideoDL extends BaseCommand {
     public static int queue = 0;
 
     public void execute(MessageReceivedEvent event) {
