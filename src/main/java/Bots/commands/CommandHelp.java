@@ -66,7 +66,7 @@ public class CommandHelp implements BaseCommand {
         finalDevCommands = "`" + String.join("` `", devCommands) + "`";
 
         EmbedBuilder eb = new EmbedBuilder();
-        if (event.getMessage().getContentRaw().contains("general".toLowerCase())) {
+        if (event.getMessage().getContentRaw().toLowerCase().contains("general")) {
             eb.setTitle("📖 `General`");
             for (BaseCommand command : commands) {
                 if (Objects.equals(command.getCategory(), "General")) {
@@ -77,7 +77,7 @@ public class CommandHelp implements BaseCommand {
             eb.setColor(new Color(0, 0, 255));
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             return;
-        } else if (event.getMessage().getContentRaw().contains("music".toLowerCase())) {
+        } else if (event.getMessage().getContentRaw().toLowerCase().contains("music")) {
             eb.setTitle("\uD83D\uDD0A `Music`");
             for (BaseCommand command : commands) {
                 if (Objects.equals(command.getCategory(), "Music")) {
@@ -88,7 +88,7 @@ public class CommandHelp implements BaseCommand {
             eb.setColor(new Color(0, 0, 255));
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             return;
-        } else if (event.getMessage().getContentRaw().contains("dj".toLowerCase())) {
+        } else if (event.getMessage().getContentRaw().toLowerCase().contains("dj")) {
             eb.setTitle("\uD83C\uDFA7 `DJ`");
             for (BaseCommand command : commands) {
                 if (Objects.equals(command.getCategory(), "DJ")) {
@@ -99,7 +99,7 @@ public class CommandHelp implements BaseCommand {
             eb.setColor(new Color(0, 0, 255));
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             return;
-        } else if (event.getMessage().getContentRaw().contains("admin".toLowerCase())) {
+        } else if (event.getMessage().getContentRaw().toLowerCase().contains("admin")) {
             eb.setTitle("\uD83D\uDCD1 `Admin`");
             for (BaseCommand command : commands) {
                 if (Objects.equals(command.getCategory(), "Admin")) {
@@ -110,7 +110,7 @@ public class CommandHelp implements BaseCommand {
             eb.setColor(new Color(0, 0, 255));
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             return;
-        } else if (event.getMessage().getContentRaw().contains("dev".toLowerCase())) {
+        } else if (event.getMessage().getContentRaw().toLowerCase().contains("dev")) {
             if (Objects.requireNonNull(event.getMember()).getId().equals("211789389401948160") || Objects.requireNonNull(event.getMember()).getId().equals("260016427900076033")) {
                 eb.setTitle("\uD83D\uDD27 `Dev`");
                 for (BaseCommand command : commands) {
