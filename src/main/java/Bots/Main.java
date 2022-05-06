@@ -280,31 +280,34 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    private void processCommand(BaseCommand Command, MessageReceivedEvent event) {
+    private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
-        System.out.println("your command is: " + Command);
-        try {
-            Command.execute(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String commandLower = event.getMessage().getContentRaw().toLowerCase();
+        //NOTE: USE A BETTER SYSTEM THAN "startsWith"
+        //(The note above is the reason this is a seperate function, its a less of a mess that way) -9382
+        if (commandLower.startsWith(matchTerm)) {
+            System.out.println("your command is: " + Command);
+            try {
+                Command.execute(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
+        return false;
     }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
-                String commandLower = event.getMessage().getContentRaw().toLowerCase();
-                if (commandLower.startsWith(botPrefix + Command.getName())) {
-                    processCommand(Command,event);
-                    break;
-                }
+                if (processCommand(botPrefix+Command.getName(),Command,event)) {break;}
+                boolean fullyBreak = false;
                 for (String alias : Command.getAlias()) {
-                    if (commandLower.startsWith(botPrefix + alias)) {
-                        processCommand(Command,event);
-                        break;
-                    }
+                    //fullyBreak is so that we can stop checking commands after an alias works (breaks only escape the top loop) -9382
+                    if (processCommand(botPrefix+alias,Command,event)) {fullyBreak = true; break;}
                 }
+                if (fullyBreak) {break;}
             }
         }
     }
