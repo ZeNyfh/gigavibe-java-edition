@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,10 +18,12 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
+    public MessageReceivedEvent event;
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
+        this.event = event;
     }
 
     public void queue(AudioTrack track) {

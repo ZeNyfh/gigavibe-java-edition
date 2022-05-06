@@ -8,11 +8,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.ExceptionEvent;
+import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,6 +30,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,23 +169,34 @@ public class Main extends ListenerAdapter {
     public static String toSimpleTimestamp(long seconds) {
         ArrayList<String> totalSet = new ArrayList<>();
         seconds /= 1000;
+        long hours = seconds / 3600;
         seconds %= 3600;
         long minutes = seconds / 60;
         seconds %= 60;
+        String finalMinutes;
+        String finalHours;
+
+        if (hours != 0) {
+            if (hours < 10) {
+                finalHours = ("0" + hours);
+                totalSet.add(finalHours + ":");
+            } else {
+                totalSet.add(hours + ":");
+            }
+        }
         if (minutes < 10) {
-            String finalMinutes = ("0" + minutes);
-            totalSet.add(finalMinutes + ":");
+            finalMinutes = ("0" + minutes);
         } else {
-            String finalMinutes = String.valueOf(minutes);
-            totalSet.add(finalMinutes + ":");
+            finalMinutes = String.valueOf(minutes);
         }
+        totalSet.add(finalMinutes + ":");
+        String finalSeconds;
         if (seconds < 10) {
-            String finalSeconds = ("0" + seconds);
-            totalSet.add(finalSeconds);
+            finalSeconds = ("0" + seconds);
         } else {
-            String finalSeconds = String.valueOf(seconds);
-            totalSet.add(finalSeconds);
+            finalSeconds = String.valueOf(seconds);
         }
+        totalSet.add(finalSeconds);
         return String.join("", totalSet);
     }
 
@@ -191,24 +208,75 @@ public class Main extends ListenerAdapter {
     //}
 
     @Override
+    public void onButtonInteraction(ButtonInteractionEvent event) {
+        if (Objects.equals(event.getButton().getId(), "general")) {
+            event.editMessageEmbeds().setEmbeds();
+            event.deferEdit();
+        }
+        if (Objects.equals(event.getButton().getId(), "music")) {
+            event.editMessageEmbeds();
+            event.deferEdit();
+        }
+        if (Objects.equals(event.getButton().getId(), "dj")) {
+            event.editMessageEmbeds();
+            event.deferEdit();
+        }
+        if (Objects.equals(event.getButton().getId(), "admin")) {
+            event.editMessageEmbeds();
+            event.deferEdit();
+        }
+        if (Objects.equals(event.getButton().getId(), "queueBack")) {
+            event.editMessageEmbeds();
+            event.deferEdit();
+        }
+        if (Objects.equals(event.getButton().getId(), "queueForward")) {
+            event.editMessageEmbeds();
+            event.deferEdit();
+        }
+    }
+
+    @Override
+    public void onGenericGuildVoice(@NotNull GenericGuildVoiceEvent event) {
+        if (Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel() != null) {
+            int i = 1;
+            List<Member> a = event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers();
+            if (a.listIterator().next().getUser().isBot()) {
+                i++;
+            }
+            if (event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().size() - i == 0) {
+                event.getGuild().getAudioManager().closeAudioConnection();
+            }
+        }
+    }
+
+    @Override
+    public void onException(@NotNull ExceptionEvent event) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now));
+        event.getCause().printStackTrace();
+    }
+
+    @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-        assert botChannel != null;
-        List<Member> vcMembers = botChannel.getMembers();
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
-            return;
         }
-        int botChannelMemberCount = (int) vcMembers.stream()
-                .filter(user -> !user.getUser().isBot()).count();
-        if (botChannelMemberCount == 0) {
-            try {
-                Thread.sleep(300000); // 5 minute
-            } catch (InterruptedException ignored) {
+        AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
+        if (Objects.requireNonNull(event.getMember().getVoiceState()) == Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState())) {
+            assert botChannel != null;
+            List<Member> vcMembers = botChannel.getMembers();
+            int botChannelMemberCount = (int) vcMembers.stream()
+                    .filter(user -> !user.getUser().isBot()).count();
+            if (botChannelMemberCount == 0) {
+                try {
+                    Thread.sleep(150000); // 2m 30s minute
+                } catch (InterruptedException ignored) {
+                }
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
+                event.getGuild().getAudioManager().closeAudioConnection();
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
             }
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-            event.getGuild().getAudioManager().closeAudioConnection();
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
         }
     }
 

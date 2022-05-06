@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,15 +36,18 @@ public class CommandQueue implements BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
-        if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-        } else {
-            embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
-        }
         if (queue.isEmpty()) {
             channel.sendMessageEmbeds(createQuickEmbed(" ", "❌ The queue is empty.")).queue();
             embed.clear();
             return;
+        }
+        try {
+            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
+                embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
+            } else {
+                embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
+            }
+        } catch (Exception ignored) {
         }
         int queueLength = queue.size();
         long queueTimeLength = 0;
@@ -66,8 +70,11 @@ public class CommandQueue implements BaseCommand {
         }
         embed.setFooter(queueLength + " songs queued. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(new Color(0, 0, 255));
-        embed.build();
-        channel.sendMessageEmbeds(embed.build()).queue();
+        embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+        channel.sendMessageEmbeds(embed.build()).queue(a -> {
+            a.editMessageComponents().setActionRow(Button.secondary("queueBack", "◄️"), Button.secondary("queueForward", "►️")).queue();
+        });
+
     }
 
     @Override
@@ -82,6 +89,6 @@ public class CommandQueue implements BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Shows you the current queue.";
+        return "<[Integer]>` - Shows you the current queue.";
     }
 }

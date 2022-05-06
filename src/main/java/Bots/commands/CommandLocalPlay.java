@@ -32,7 +32,7 @@ public class CommandLocalPlay implements BaseCommand {
     }
 
     public String getCategory() {
-        return "music";
+        return "dev";
     }
 
     public String getName() {
@@ -40,6 +40,6 @@ public class CommandLocalPlay implements BaseCommand {
     }
 
     public String getDescription() {
-        return "Plays songs from a directory.";
+        return "<Path>` - Plays songs from a directory.";
     }
 }

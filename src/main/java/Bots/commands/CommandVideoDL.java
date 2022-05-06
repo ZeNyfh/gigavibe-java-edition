@@ -86,6 +86,6 @@ public class CommandVideoDL implements BaseCommand {
     }
 
     public String getDescription() {
-        return "Downloads a video from a compatible URL.";
+        return "<URL>` - Downloads a video from a compatible URL.";
     }
 }

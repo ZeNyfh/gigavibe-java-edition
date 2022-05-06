@@ -28,10 +28,10 @@ public class CommandDJ implements BaseCommand {
     }
 
     public String getName() {
-        return null;
+        return "dj";
     }
 
     public String getDescription() {
-        return null;
+        return "<[Role]>` - Sets a role to have dj permissions or shows all current DJs.";
     }
 }

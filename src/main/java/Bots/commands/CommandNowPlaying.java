@@ -61,7 +61,7 @@ public class CommandNowPlaying implements BaseCommand {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setThumbnail(audioPlayer.getPlayingTrack().getInfo().uri + "?format=jpeg");
+            embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
         }
@@ -86,6 +86,6 @@ public class CommandNowPlaying implements BaseCommand {
     }
 
     public String getDescription() {
-        return "Shows you the track that is currently playing";
+        return "- Shows you the track that is currently playing";
     }
 }

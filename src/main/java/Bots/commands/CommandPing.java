@@ -21,6 +21,6 @@ public class CommandPing implements BaseCommand {
     }
 
     public String getDescription() {
-        return "Shows you the bot's ping.";
+        return "- Shows you the bot's ping.";
     }
 }

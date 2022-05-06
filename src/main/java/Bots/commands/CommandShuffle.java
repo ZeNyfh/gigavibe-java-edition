@@ -66,6 +66,6 @@ public class CommandShuffle implements BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Shuffles the current queue.";
+        return "- Shuffles the current queue.";
     }
 }
