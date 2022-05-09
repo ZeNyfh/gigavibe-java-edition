@@ -12,13 +12,20 @@ elements like getArgs() could be quite useful
 */
 public class BaseCommand {
     /* Would use an interface, however that prevents optional arguments, and I want getAlias() -9382 */
-    public void execute(MessageEvent event) throws IOException {}
+    public void execute(MessageEvent event) throws IOException {
+    }
 
-    public String getName() { return "default";}
+    public String getName() {
+        return "default";
+    }
 
-    public String getCategory() { return "default";}
+    public String getCategory() {
+        return "default";
+    }
 
-    public String getDescription() { return "default";}
+    public String getDescription() {
+        return "default";
+    }
 
     public ArrayList<String> getAlias() {
         ArrayList<String> aliases = new ArrayList<>();
@@ -27,6 +34,8 @@ public class BaseCommand {
     }
 
     //For help command
-    public String getParams() { return "";} //E.g. "<url> [format]"
+    public String getParams() {
+        return "";
+    } //E.g. "<url> [format]"
 
 }

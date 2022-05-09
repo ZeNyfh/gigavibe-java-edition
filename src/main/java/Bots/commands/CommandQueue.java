@@ -94,5 +94,7 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
-    public String getParams() { return "[Page]";}
+    public String getParams() {
+        return "[Page]";
+    }
 }

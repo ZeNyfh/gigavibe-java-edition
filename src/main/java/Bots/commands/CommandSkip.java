@@ -70,5 +70,7 @@ public class CommandSkip extends BaseCommand {
         return "skip";
     }
 
-    public String getDescription() { return "Casts a vote or skips the current song.";} // voting not yet implemented
+    public String getDescription() {
+        return "Casts a vote or skips the current song.";
+    } // voting not yet implemented
 }

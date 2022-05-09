@@ -102,5 +102,7 @@ public class CommandAudioDL extends BaseCommand {
         return "Downloads a video from a compatible URL.";
     }
 
-    public String getParams() { return "<URL>";}
+    public String getParams() {
+        return "<URL>";
+    }
 }
