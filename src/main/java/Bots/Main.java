@@ -280,6 +280,8 @@ public class Main extends ListenerAdapter {
         }
     }
 
+
+    // if message content is what is expected, and it does have a space or a newline or nothing: run command code
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
         String commandLower = event.getMessage().getContentRaw().toLowerCase();

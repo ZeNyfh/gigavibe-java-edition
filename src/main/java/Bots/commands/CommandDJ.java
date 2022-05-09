@@ -32,6 +32,6 @@ public class CommandDJ extends BaseCommand {
     }
 
     public String getDescription() {
-        return "<[Role]>` - Sets a role to have dj permissions or shows all current DJs.";
+        return "<[Role]>** - Sets a role to have dj permissions or shows all current DJs.";
     }
 }

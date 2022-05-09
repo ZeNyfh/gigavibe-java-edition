@@ -61,6 +61,6 @@ public class CommandBotInfo extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "- Tells you bot info.";
+        return "**- Tells you bot info.";
     }
 }

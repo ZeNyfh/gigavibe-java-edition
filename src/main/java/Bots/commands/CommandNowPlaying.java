@@ -62,7 +62,9 @@ public class CommandNowPlaying extends BaseCommand {
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
             embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+            try {
+                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+            } catch (Exception ignored){embed.setTitle("Unknown");}
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
         }
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
@@ -86,6 +88,6 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     public String getDescription() {
-        return "- Shows you the track that is currently playing";
+        return "**- Shows you the track that is currently playing";
     }
 }

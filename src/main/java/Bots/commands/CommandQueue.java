@@ -89,6 +89,6 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "<[Integer]>` - Shows you the current queue.";
+        return "<[Integer]>** - Shows you the current queue.";
     }
 }

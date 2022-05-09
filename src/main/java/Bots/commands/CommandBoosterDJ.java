@@ -27,6 +27,6 @@ public class CommandBoosterDJ extends BaseCommand {
     }
 
     public String getDescription() {
-        return "- Makes it so boosters have DJ permissions.";
+        return "**- Makes it so boosters have DJ permissions.";
     }
 }
