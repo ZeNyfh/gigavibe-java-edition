@@ -59,7 +59,7 @@ public class CommandPlay extends BaseCommand {
         return "play";
     }
 
-    public String getDescription() {
-        return "<URL>/<String>** - Plays songs or playlists from: youtube, soundcloud, bandcamp, twitch, vimeo, http urls and discord attachments.";
-    }
+    public String getDescription() { return "Plays songs or playlists from: youtube, soundcloud, bandcamp, twitch, vimeo, http urls and discord attachments.";}
+
+    public String getParams() { return "<URL or Keywords>";}
 }

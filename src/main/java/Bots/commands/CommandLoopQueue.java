@@ -34,6 +34,6 @@ public class CommandLoopQueue extends BaseCommand {
     }
 
     public String getDescription() {
-        return "**- Loops the current queue.";
+        return "Loops the current queue.";
     }
 }

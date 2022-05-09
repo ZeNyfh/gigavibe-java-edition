@@ -88,6 +88,6 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     public String getDescription() {
-        return "**- Shows you the track that is currently playing";
+        return "Shows you the track that is currently playing";
     }
 }

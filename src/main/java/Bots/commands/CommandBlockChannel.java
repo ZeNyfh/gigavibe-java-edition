@@ -42,7 +42,8 @@ public class CommandBlockChannel extends BaseCommand {
     }
 
     @Override
-    public String getDescription() {
-        return "<Channel>** - Disallows certain commands to be used in specified channel/s (eg: play)";
-    }
+    public String getDescription() { return "Disallows certain commands to be used in specified channel/s (eg: play)";}
+
+    @Override
+    public String getParams() { return "<Channel>";}
 }

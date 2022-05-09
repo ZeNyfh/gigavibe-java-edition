@@ -40,6 +40,8 @@ public class CommandLocalPlay extends BaseCommand {
     }
 
     public String getDescription() {
-        return "<Path>** - Plays songs from a directory.";
+        return "Plays songs from a directory.";
     }
+
+    public String getParams() { return "<Path>";}
 }

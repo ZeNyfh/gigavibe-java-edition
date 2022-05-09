@@ -16,14 +16,17 @@ public class BaseCommand {
 
     public String getName() { return "default";}
 
-    public String getCategory()  { return "default";}
+    public String getCategory() { return "default";}
 
-    public String getDescription()  { return "default";}
+    public String getDescription() { return "default";}
 
     public ArrayList<String> getAlias() {
         ArrayList<String> aliases = new ArrayList<>();
         /* aliases.add("XYZ"); Example for aliases (Im aware its odd, but its just the system for now) -9382 */
         return aliases;
     }
+
+    //For help command
+    public String getParams() { return "";} //E.g. "<url> [format]"
 
 }

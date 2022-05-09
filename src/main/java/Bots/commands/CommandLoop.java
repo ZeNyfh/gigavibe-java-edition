@@ -36,6 +36,6 @@ public class CommandLoop extends BaseCommand {
     }
 
     public String getDescription() {
-        return "**- Loops the current track.";
+        return "Loops the current track.";
     }
 }

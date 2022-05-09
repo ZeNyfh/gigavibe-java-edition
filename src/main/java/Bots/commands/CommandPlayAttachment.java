@@ -114,6 +114,6 @@ public class CommandPlayAttachment extends BaseCommand {
     }
 
     public String getDescription() {
-        return "**- Plays songs from attachments (deprecated).";
+        return "Plays songs from attachments (deprecated).";
     }
 }

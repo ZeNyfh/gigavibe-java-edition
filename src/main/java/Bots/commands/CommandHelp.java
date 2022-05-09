@@ -44,7 +44,7 @@ public class CommandHelp extends BaseCommand {
         for (BaseCommand Command : commands) {
             if (Command.getCategory().toLowerCase().equals(Arg)){
                 i++;
-                embed.appendDescription("`"+ i + ")` **" + Command.getName() + " " + Command.getDescription() + "\n");
+                embed.appendDescription("`"+ i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
             }
         }
         if ("general".equals(Arg)) {
@@ -81,6 +81,8 @@ public class CommandHelp extends BaseCommand {
     }
 
     public String getDescription() {
-        return "<[Category]>** - Shows you a list of commands.";
+        return "Shows you a list of commands.";
     }
+
+    public String getParams() { return "[Category]";}
 }
