@@ -21,6 +21,7 @@ import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
 
 public class CommandQueue extends BaseCommand {
+
     @Override
     public void execute(MessageEvent event) {
         final TextChannel channel = event.getTextChannel();

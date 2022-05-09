@@ -88,6 +88,9 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandQueue());
         registerCommand(new CommandBotInfo());
         registerCommand(new CommandShuffle());
+        registerCommand(new CommandGithub());
+        registerCommand(new CommandDJ());
+        registerCommand(new CommandExec());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -210,7 +213,8 @@ public class Main extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (Objects.equals(event.getButton().getId(), "general")) {
-            event.editMessageEmbeds().setEmbeds();
+
+            event.getInteraction().getMessage().editMessageEmbeds().setEmbeds();
             event.deferEdit();
         }
         if (Objects.equals(event.getButton().getId(), "music")) {
@@ -274,20 +278,21 @@ public class Main extends ListenerAdapter {
                 } catch (InterruptedException ignored) {
                 }
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-                event.getGuild().getAudioManager().closeAudioConnection();
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
+                event.getGuild().getAudioManager().closeAudioConnection();
             }
         }
     }
 
-
-    // if message content is what is expected, and it does have a space or a newline or nothing: run command code
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
-        //NOTE: Consider using custom event that extends ontop of MessageRecievedEvent -9382
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
-        //NOTE: USE A BETTER SYSTEM THAN "startsWith"
-        //(The note above is the reason this is a seperate function, its a less of a mess that way) -9382
         if (commandLower.startsWith(matchTerm)) {
+            if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting -9382
+                String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
+                if (!afterChar.equals(" ") && !afterChar.equals("\n")) {
+                    return false;
+                }
+            }
             System.out.println("your command is: " + Command);
             try {
                 Command.execute(new MessageEvent(event));
@@ -303,13 +308,20 @@ public class Main extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
-                if (processCommand(botPrefix+Command.getName(),Command,event)) {break;}
+                if (processCommand(botPrefix + Command.getName(), Command, event)) {
+                    break;
+                }
                 boolean fullyBreak = false;
                 for (String alias : Command.getAlias()) {
                     //fullyBreak is so that we can stop checking commands after an alias works (breaks only escape the top loop) -9382
-                    if (processCommand(botPrefix+alias,Command,event)) {fullyBreak = true; break;}
+                    if (processCommand(botPrefix + alias, Command, event)) {
+                        fullyBreak = true;
+                        break;
+                    }
                 }
-                if (fullyBreak) {break;}
+                if (fullyBreak) {
+                    break;
+                }
             }
         }
     }

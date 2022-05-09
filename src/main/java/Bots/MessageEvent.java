@@ -13,10 +13,12 @@ public class MessageEvent extends MessageReceivedEvent {
 
     public MessageEvent(MessageReceivedEvent event) {
         //Gain the previous MRE object properties.
-        super(event.getJDA(),event.getResponseNumber(),event.getMessage()); //(Is this a good idea?)
+        super(event.getJDA(), event.getResponseNumber(), event.getMessage()); //(Is this a good idea?)
         //New features on-top of MRE
         this.args = this.getMessage().getContentRaw().split(" ");
     }
 
-    public String[] getArgs() { return this.args; }
+    public String[] getArgs() {
+        return this.args;
+    }
 }

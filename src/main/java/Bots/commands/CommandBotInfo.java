@@ -16,7 +16,7 @@ public class CommandBotInfo extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         int CommandCount = 0;
-        long id = Long.parseLong("211789389401948160"); // why
+        long id = Long.parseLong("211789389401948160");
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {

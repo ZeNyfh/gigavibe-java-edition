@@ -64,7 +64,9 @@ public class CommandNowPlaying extends BaseCommand {
             embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
             try {
                 embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-            } catch (Exception ignored){embed.setTitle("Unknown");}
+            } catch (Exception ignored) {
+                embed.setTitle("Unknown");
+            }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
         }
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
