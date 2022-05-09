@@ -18,6 +18,10 @@ public class CommandVideoDL extends BaseCommand {
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "videodl ", "").replace(" ", "");
         File dir = new File((System.getProperty("user.dir") + "\\temp\\viddl"));
+        if (arg.equals("") || arg.equals(" ")){
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
+            return;
+        }
         String filesize = "-f \"[filesize<\"8m\"]\" --no-playlist"; // these parameters will be changed for file size
         if (event.getGuild().getBoostCount() <= 7) {
             filesize = "-f \"b\" -S \"filesize~50m\" --no-playlist"; // these parameters will be changed for file size
