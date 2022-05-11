@@ -79,7 +79,6 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandLoop());
         registerCommand(new CommandSkip());
         registerCommand(new CommandLocalPlay());
-        registerCommand(new CommandPlayAttachment());
         registerCommand(new CommandNowPlaying());
         registerCommand(new CommandHelp());
         registerCommand(new CommandVideoDL());
