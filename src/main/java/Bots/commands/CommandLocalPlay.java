@@ -25,9 +25,9 @@ public class CommandLocalPlay extends BaseCommand {
 
             audioManager.openAudioConnection(memberChannel);
         }
-        String path = event.getMessage().getContentRaw();
-        path = path.replace("&playfile ", "");
-        Path finalpath = Paths.get(path);
+        String string = event.getMessage().getContentRaw();
+        String[] args = string.split(" ", 2);
+        Path finalpath = Paths.get(args[1]);
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalpath));
     }
 

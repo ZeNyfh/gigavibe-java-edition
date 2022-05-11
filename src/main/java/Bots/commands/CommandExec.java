@@ -22,8 +22,8 @@ public class CommandExec extends BaseCommand {
         }
         String string = event.getMessage().getContentRaw();
         String[] args = string.split(" ", 2);
-        JShell.create().eval(args[1]);
         try {
+            JShell.create().eval(args[1]);
             event.getTextChannel().sendMessage("\uD83D\uDC4D\n\n").queue();
         } catch (Exception e) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", String.valueOf(e))).queue();
