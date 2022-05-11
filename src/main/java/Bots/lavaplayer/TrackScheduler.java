@@ -20,10 +20,10 @@ public class TrackScheduler extends AudioEventAdapter {
     public final BlockingQueue<AudioTrack> queue;
     public MessageReceivedEvent event;
 
+
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
-        this.event = event;
     }
 
     public void queue(AudioTrack track) {
@@ -59,6 +59,20 @@ public class TrackScheduler extends AudioEventAdapter {
         }
         if (endReason.mayStartNext) {
             nextTrack();
+            //    EmbedBuilder eb = new EmbedBuilder();
+            //    if (!nextTrack.getInfo().title.isEmpty()){
+            //        eb.setTitle("[Now playing: " + nextTrack.getInfo().title + "](" + nextTrack.getInfo().uri + ")");
+            //    } else {
+            //        eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
+            //    }
+            //    if (nextTrack.getInfo().length >= 432000000) {
+            //        eb.setDescription("**Channel:**\n" + nextTrack.getInfo().author + "\n\n**Duration:**\n" + toSimpleTimestamp(nextTrack.getInfo().length));
+            //    } else {
+            //        eb.setDescription("**Channel:**\n" + nextTrack.getInfo().author + "\n\n**Duration:**\nUnknown");
+            //    }
+            //    eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
+            //    eb.setColor(new Color(0, 0, 255));
+            //    System.out.println(nextTrack.getInfo().title);
         }
     }
 }

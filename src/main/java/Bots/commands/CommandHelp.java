@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static Bots.Main.commands;
 
@@ -30,7 +29,7 @@ public class CommandHelp extends BaseCommand {
     public void execute(MessageEvent event) {
         int i = 0;
         try {
-            Arg = Arrays.toString(event.getArgs()).substring(8).replace("]", "").toLowerCase();
+            Arg = event.getArgs().get(1).toLowerCase();
         } catch (Exception ignored) {
             Arg = "";
         }

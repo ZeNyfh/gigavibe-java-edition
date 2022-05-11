@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ExceptionEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -265,6 +266,7 @@ public class Main extends ListenerAdapter {
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             loop = false;
+            return;
         }
         AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
         if (Objects.requireNonNull(event.getMember().getVoiceState()) == Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState())) {
@@ -302,6 +304,12 @@ public class Main extends ListenerAdapter {
             return true;
         }
         return false;
+    }
+
+
+    @Override
+    public void onShutdown(@NotNull ShutdownEvent event) {
+        event.getJDA().getAudioManagers().clear();
     }
 
     @Override

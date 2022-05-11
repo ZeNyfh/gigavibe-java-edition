@@ -2,14 +2,14 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import jdk.jshell.JShell;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
 public class CommandExec extends BaseCommand {
+
     @Override
     public void execute(MessageEvent event) {
         long id = Long.parseLong("211789389401948160");
@@ -20,9 +20,9 @@ public class CommandExec extends BaseCommand {
                 return;
             }
         }
-        ScriptEngine se = new ScriptEngineManager().getEngineByName("Nashhorn");
         String string = event.getMessage().getContentRaw();
-        String[] args = string.split(" ", 2); // cool
+        String[] args = string.split(" ", 2);
+        JShell.create().eval(args[1]);
         try {
             event.getTextChannel().sendMessage("\uD83D\uDC4D\n\n").queue();
         } catch (Exception e) {
@@ -30,9 +30,10 @@ public class CommandExec extends BaseCommand {
         }
     }
 
+
     @Override
     public String getName() {
-        return "eval";
+        return "exec";
     }
 
     @Override
