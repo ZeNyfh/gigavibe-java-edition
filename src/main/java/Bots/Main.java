@@ -268,20 +268,19 @@ public class Main extends ListenerAdapter {
             return;
         }
         AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-        if (Objects.requireNonNull(event.getMember().getVoiceState()) == Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState())) {
-            assert botChannel != null;
-            List<Member> vcMembers = botChannel.getMembers();
-            int botChannelMemberCount = (int) vcMembers.stream()
-                    .filter(user -> !user.getUser().isBot()).count();
-            if (botChannelMemberCount == 0) {
-                try {
-                    Thread.sleep(150000); // 2m 30s minute
-                } catch (InterruptedException ignored) {
-                }
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
-                event.getGuild().getAudioManager().closeAudioConnection();
+        assert botChannel != null;
+        int botChannelMemberCount = 0;
+        for (int i = 0; i < botChannel.getMembers().size();) {
+            if (!botChannel.getMembers().get(i).getUser().isBot()) {
+                botChannelMemberCount = botChannelMemberCount + 1;
             }
+            i++;
+        }
+        System.out.println(botChannelMemberCount);
+        if (botChannelMemberCount == 0) {
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
+            event.getGuild().getAudioManager().closeAudioConnection();
         }
     }
 
