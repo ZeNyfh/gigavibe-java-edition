@@ -276,7 +276,6 @@ public class Main extends ListenerAdapter {
             }
             i++;
         }
-        System.out.println(botChannelMemberCount);
         if (botChannelMemberCount == 0) {
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
