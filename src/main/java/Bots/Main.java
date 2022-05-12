@@ -47,6 +47,7 @@ public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static String botPrefix = "&";
+    public final static Color botColour = new Color(0, 0, 255);
     public static List<BaseCommand> commands = new ArrayList<>();
 
     private static void registerCommand(BaseCommand command) {
@@ -109,7 +110,7 @@ public class Main extends ListenerAdapter {
     public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
-        eb.setColor(new Color(0, 0, 255));
+        eb.setColor(botColour);
         eb.setDescription(description);
         return eb.build();
     }

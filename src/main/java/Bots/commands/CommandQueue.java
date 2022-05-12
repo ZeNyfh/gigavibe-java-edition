@@ -17,8 +17,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.toTimestamp;
+import static Bots.Main.*;
 import static java.lang.Math.round;
 
 public class CommandQueue extends BaseCommand {
@@ -79,7 +78,7 @@ public class CommandQueue extends BaseCommand {
             i++;
         }
         embed.setFooter(queueLength + " songs queued. | " + round((queueLength/5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
-        embed.setColor(new Color(0, 0, 255));
+        embed.setColor(botColour);
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
         channel.sendMessageEmbeds(embed.build()).queue(a -> a.editMessageComponents().setActionRow(Button.secondary("queueBack", "◄️"), Button.secondary("queueForward", "►️")).queue());
 

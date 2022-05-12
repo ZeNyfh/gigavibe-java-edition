@@ -30,7 +30,7 @@ public class CommandBotInfo extends BaseCommand {
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(event.getJDA().getSelfUser().getName() + " Info", null);
-        eb.setColor(new Color(0, 0, 255));
+        eb.setColor(botColour);
         eb.appendDescription("\uD83D\uDD27  **Ram usage:** " + memoryUsed / 1000 / 1000 + "MB\n\n");
         //
         long finalUptime = currentTimeMillis() - Main.Uptime;

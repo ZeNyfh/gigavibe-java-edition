@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 
+import static Bots.Main.botColour;
 import static Bots.Main.commands;
 
 public class CommandHelp extends BaseCommand {
@@ -34,7 +35,7 @@ public class CommandHelp extends BaseCommand {
             Arg = "";
         }
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setColor(new Color(0, 0, 255));
+        embed.setColor(botColour);
         embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument.");
         for (BaseCommand Command : commands) {
             if (Command.getCategory().toLowerCase().equals(Arg)) {

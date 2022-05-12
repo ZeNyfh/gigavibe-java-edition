@@ -77,7 +77,7 @@ public class CommandNowPlaying extends BaseCommand {
                 embed.addField("**Up next:**\n", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
             }
         }
-        embed.setColor(new Color(0, 0, 255));
+        embed.setColor(botColour);
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
