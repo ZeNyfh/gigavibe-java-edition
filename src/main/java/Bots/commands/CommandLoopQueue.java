@@ -4,6 +4,8 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.ArrayList;
+
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLoopQueue extends BaseCommand {
@@ -23,6 +25,13 @@ public class CommandLoopQueue extends BaseCommand {
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue.")).queue();
         }
+    }
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("loopq");
+        return list;
     }
 
     public String getName() {

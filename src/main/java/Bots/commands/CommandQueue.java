@@ -85,6 +85,13 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("q");
+        return list;
+    }
+
+    @Override
     public String getName() {
         return "queue";
     }

@@ -50,6 +50,17 @@ public class CommandClearQueue extends BaseCommand {
     }
 
     @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("queue clear");
+        list.add("clearqueue");
+        list.add("queueclear");
+        list.add("clearq");
+        list.add("qclear");
+        return list;
+    }
+
+    @Override
     public String getName() {
         return "clear queue";
     }

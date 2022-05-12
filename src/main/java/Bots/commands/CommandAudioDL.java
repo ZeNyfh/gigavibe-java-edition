@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
@@ -88,6 +89,14 @@ public class CommandAudioDL extends BaseCommand {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
             queue--;
         }).start();
+    }
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("adl");
+        list.add("audio");
+        return list;
     }
 
     public String getCategory() {

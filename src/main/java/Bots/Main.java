@@ -95,6 +95,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandRemove());
         registerCommand(new CommandClearQueue());
         registerCommand(new CommandVolume());
+        registerCommand(new CommandForceSkip());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)

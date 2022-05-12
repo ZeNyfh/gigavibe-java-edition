@@ -5,6 +5,8 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
+import java.util.ArrayList;
+
 import static Bots.Main.createQuickEmbed;
 
 public class CommandDisconnect extends BaseCommand {
@@ -17,6 +19,13 @@ public class CommandDisconnect extends BaseCommand {
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue.")).queue();
 
     } // this will also need to be checked with DJ permissions in the future
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("leave");
+        return list;
+    }
 
     @Override
     public String getName() {

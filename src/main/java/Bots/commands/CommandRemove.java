@@ -58,6 +58,13 @@ public class CommandRemove extends BaseCommand {
     }
 
     @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("rem");
+        return list;
+    }
+
+    @Override
     public String getParams() {
         return "<Number>";
     }

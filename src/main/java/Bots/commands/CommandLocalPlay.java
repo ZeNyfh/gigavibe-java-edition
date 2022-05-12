@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
@@ -30,6 +31,13 @@ public class CommandLocalPlay extends BaseCommand {
         String[] args = string.split(" ", 2);
         Path finalPath = Paths.get(args[1]);
         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalPath));
+    }
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("pf");
+        return list;
     }
 
     public String getCategory() {

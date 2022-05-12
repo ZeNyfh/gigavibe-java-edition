@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
@@ -34,7 +35,6 @@ public class CommandVideoDL extends BaseCommand {
                 } catch (Exception ignored) {
                 }
                 event.getTextChannel().sendTyping().queue();
-                System.out.println(queue);
             }
             queue++;
             String tempfilename = event.getMember().getId() + System.currentTimeMillis();
@@ -79,6 +79,15 @@ public class CommandVideoDL extends BaseCommand {
             }
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
         }).start();
+    }
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("vdl");
+        list.add("video");
+        list.add("viddl");
+        return list;
     }
 
     public String getCategory() {

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -63,6 +64,12 @@ public class CommandPlay extends BaseCommand {
         } catch (FriendlyException ignored) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
         }
+    }
+
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("p");
+        return list;
     }
 
     public String getCategory() {
