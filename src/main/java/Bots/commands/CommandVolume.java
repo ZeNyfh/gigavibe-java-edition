@@ -32,7 +32,7 @@ public class CommandVolume extends BaseCommand {
             string = string.replaceAll("[^0-9]", "");
             volume = Integer.parseInt(string);
         } else {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Defaulted back to 100 volume.")).queue();
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Defaulted back to **100** volume.")).queue();
             musicManager.audioPlayer.setVolume(100);
             return;
         }
