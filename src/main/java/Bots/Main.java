@@ -91,6 +91,8 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandGithub());
         registerCommand(new CommandDJ());
         registerCommand(new CommandExec());
+        registerCommand(new CommandRemove());
+        registerCommand(new CommandClearQueue());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -268,7 +270,9 @@ public class Main extends ListenerAdapter {
             return;
         }
         AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-        assert botChannel != null;
+        if (botChannel == null) {
+            return;
+        }
         int botChannelMemberCount = 0;
         for (int i = 0; i < botChannel.getMembers().size();) {
             if (!botChannel.getMembers().get(i).getUser().isBot()) {

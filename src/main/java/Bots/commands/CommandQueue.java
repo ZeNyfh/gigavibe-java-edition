@@ -38,7 +38,7 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            channel.sendMessageEmbeds(createQuickEmbed(" ", "❌ The queue is empty.")).queue();
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The queue is empty.")).queue();
             embed.clear();
             return;
         }

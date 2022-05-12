@@ -1,0 +1,66 @@
+package Bots.commands;
+
+import Bots.BaseCommand;
+import Bots.MessageEvent;
+import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.PlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import static Bots.Main.createQuickEmbed;
+
+public class CommandClearQueue extends BaseCommand {
+    @Override
+    public void execute(MessageEvent event) throws IOException {
+        final TextChannel channel = event.getTextChannel();
+        final Member self = event.getGuild().getSelfMember();
+        final GuildVoiceState selfVoiceState = self.getVoiceState();
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
+        assert selfVoiceState != null;
+        if (!selfVoiceState.inAudioChannel()) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc.")).queue();
+            return;
+        }
+
+        assert memberVoiceState != null;
+        if (!memberVoiceState.inAudioChannel()) {
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            return;
+        }
+
+        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            return;
+        }
+
+        musicManager.scheduler.queue.clear();
+        musicManager.scheduler.nextTrack();
+        musicManager.audioPlayer.destroy();
+        channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Cleared the queue successfully!")).queue(); // not an error, intended
+    }
+
+    @Override
+    public String getName() {
+        return "clear queue";
+    }
+
+    @Override
+    public String getCategory() {
+        return "DJ";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Clears the current queue.";
+    }
+}
