@@ -18,6 +18,8 @@ public class CommandDJ extends BaseCommand {
         if (event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
             List<Member> members = event.getMessage().getMentionedMembers(event.getGuild());
             DJList.add(members.get(0).getIdLong());
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Added " + members.get(0).getUser().getName() + "#" + members.get(0).getUser().getDiscriminator() + " to the list.")).queue();
+
         } else {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You don't have the required permissions to do this.")).queue();
         }

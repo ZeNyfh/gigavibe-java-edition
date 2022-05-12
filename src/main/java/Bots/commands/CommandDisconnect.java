@@ -14,7 +14,7 @@ public class CommandDisconnect extends BaseCommand {
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Disconnected from the voice channel and cleared the queue.")).queue();
+        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue.")).queue();
 
     } // this will also need to be checked with DJ permissions in the future
 

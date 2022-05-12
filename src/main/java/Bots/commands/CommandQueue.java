@@ -19,6 +19,7 @@ import java.util.List;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
+import static java.lang.Math.round;
 
 public class CommandQueue extends BaseCommand {
 
@@ -60,7 +61,15 @@ public class CommandQueue extends BaseCommand {
             queueTimeLength = queueTimeLength + queue.get(x).getInfo().length;
             x++;
         }
-        for (int i = 0; i < 5 && i < queueLength; ) {
+        String string = event.getMessage().getContentRaw();
+        int multiplier = 1;
+        if (string.contains(" ")) {
+            String[] args = string.split(" ", 2);
+            string = args[1];
+            string = string.replaceAll("[^0-9]", "");
+            multiplier = Integer.parseInt(string);
+        }
+        for (int i = 5 * multiplier - 5; i < 5 * multiplier && i < queueLength; ) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             if (trackInfo.uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
                 embed.appendDescription(i + 1 + ". " + (trackInfo.uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13) + "\n");
@@ -69,12 +78,10 @@ public class CommandQueue extends BaseCommand {
             }
             i++;
         }
-        embed.setFooter(queueLength + " songs queued. | Length: " + toTimestamp(queueTimeLength));
+        embed.setFooter(queueLength + " songs queued. | " + round((queueLength/5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(new Color(0, 0, 255));
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-        channel.sendMessageEmbeds(embed.build()).queue(a -> {
-            a.editMessageComponents().setActionRow(Button.secondary("queueBack", "◄️"), Button.secondary("queueForward", "►️")).queue();
-        });
+        channel.sendMessageEmbeds(embed.build()).queue(a -> a.editMessageComponents().setActionRow(Button.secondary("queueBack", "◄️"), Button.secondary("queueForward", "►️")).queue());
 
     }
 

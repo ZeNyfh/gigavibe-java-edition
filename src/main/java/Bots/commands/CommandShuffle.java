@@ -25,7 +25,6 @@ public class CommandShuffle extends BaseCommand {
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
@@ -42,7 +41,7 @@ public class CommandShuffle extends BaseCommand {
         }
 
         if (queue.size() == 0) {
-            channel.sendMessageEmbeds(createQuickEmbed(" ", "There is nothing in the queue.")).queue(); // not an error, intended
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "There is nothing in the queue.")).queue();
             return;
         }
 
@@ -51,7 +50,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        channel.sendMessageEmbeds(createQuickEmbed("✅", "Shuffled the queue successfully!")).queue(); // not an error, intended
+        channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Shuffled the queue successfully!")).queue();
     }
 
     @Override

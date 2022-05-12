@@ -23,6 +23,7 @@ public class CommandPlay extends BaseCommand {
         final AudioManager audioManager = event.getGuild().getAudioManager();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
+        assert memberState != null;
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (!memberState.inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
