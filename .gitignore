@@ -3,3 +3,4 @@ target/
 temp/
 out/artifacts/gigavibe_java_edition_jar/gigavibe-java-edition.jar
 jsonStorage.json
+Users.json
