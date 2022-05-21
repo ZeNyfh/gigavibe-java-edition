@@ -35,17 +35,15 @@ public class CommandRemove extends BaseCommand {
         String string = event.getMessage().getContentRaw();
         String[] args = string.split(" ", 2);
         string = args[1];
-        try {
-            string = string.replaceAll("[^0-9]", "");
-        } catch (Exception Ignored) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Couldn't find a number in your argument.")).queue();
+        if (string.matches("^[0-9]+$")) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, numbers only.")).queue();
             return;
         }
-        if (queue.isEmpty()){
+        if (queue.isEmpty()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "What are you trying to remove, the queue is empty.")).queue();
             return;
         }
-        if (queue.size() < Integer.parseInt(string) - 1){
+        if (queue.size() < Integer.parseInt(string) - 1) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The provided number was too large.")).queue();
             return;
         }

@@ -57,19 +57,15 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
 
-        Path folder = Paths.get(System.getProperty("user.dir") + "\\temp\\music\\");
+        Path folder = Paths.get("\\temp\\viddl");
         if (!Files.exists(folder)) {
             folder.toFile().mkdirs();
         }
-        folder = Paths.get(System.getProperty("user.dir") + "\\temp\\viddl");
+        folder = Paths.get("\\temp\\auddl");
         if (!Files.exists(folder)) {
             folder.toFile().mkdirs();
         }
-        folder = Paths.get(System.getProperty("user.dir") + "\\temp\\auddl");
-        if (!Files.exists(folder)) {
-            folder.toFile().mkdirs();
-        }
-        File file = new File(System.getProperty("user.dir") + "\\jsonStorage.json");
+        File file = new File("Users.json");
         if (!file.exists()) {
             file.createNewFile();
         }
@@ -96,6 +92,8 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandClearQueue());
         registerCommand(new CommandVolume());
         registerCommand(new CommandForceSkip());
+        registerCommand(new CommandRadio());
+        registerCommand(new CommandSeek());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -114,18 +112,6 @@ public class Main extends ListenerAdapter {
         eb.setColor(botColour);
         eb.setDescription(description);
         return eb.build();
-    }
-
-    public static Boolean isBlocked(JSONObject json, String guild, String channel) throws IOException, ParseException {
-        JSONParser parser = new org.json.simple.parser.JSONParser();
-        try {
-            Object obj = parser.parse(new FileReader(System.getProperty("user.dir") + "\\jsonStorage.txt"));
-            json = (JSONObject) obj;
-            JSONArray array = (JSONArray) json.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public static AudioTrack getTrackFromQueue(Guild guild, int queuePos) {
@@ -208,13 +194,6 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
-    //public static boolean isDJ(Member member) {
-    // the json array
-    //if (member.isBoosting() && boosterDJ) {
-    //return true;
-    //} else return DJList.contains(member.getIdLong());
-    //}
-
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (Objects.equals(event.getButton().getId(), "general")) {
@@ -277,7 +256,7 @@ public class Main extends ListenerAdapter {
             return;
         }
         int botChannelMemberCount = 0;
-        for (int i = 0; i < botChannel.getMembers().size();) {
+        for (int i = 0; i < botChannel.getMembers().size(); ) {
             if (!botChannel.getMembers().get(i).getUser().isBot()) {
                 botChannelMemberCount = botChannelMemberCount + 1;
             }
@@ -287,6 +266,7 @@ public class Main extends ListenerAdapter {
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
             event.getGuild().getAudioManager().closeAudioConnection();
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
         }
     }
 

@@ -26,15 +26,21 @@ public class CommandVolume extends BaseCommand {
         }
         String string = event.getMessage().getContentRaw();
         int volume = 0;
-        if (string.contains(" ")) {
-            String[] args = string.split(" ", 2);
-            string = args[1];
-            string = string.replaceAll("[^0-9]", "");
-            volume = Integer.parseInt(string);
-        } else {
+        if (string.matches("[^0-9]")) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Defaulted back to **100** volume.")).queue();
             musicManager.audioPlayer.setVolume(100);
             return;
+        } else {
+            String[] args = string.split(" ", 2);
+            string = args[1];
+            //string = string.replaceAll("[^0-9]", ""); commented out because idk if the new solution will work
+            if (string.matches("[^0-9]")) {
+                //if (string.equals("")){
+                musicManager.audioPlayer.setVolume(round(volume));
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to: **" + volume + ".**")).queue();
+                return;
+            }
+            volume = Integer.parseInt(string);
         }
         if (volume > 200) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Volume too high.")).queue();

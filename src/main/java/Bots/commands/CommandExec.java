@@ -12,9 +12,9 @@ public class CommandExec extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        long id = Long.parseLong("211789389401948160");
+        long id = 211789389401948160L;
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-            id = Long.parseLong("260016427900076033");
+            id = 260016427900076033L;
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
                 return;

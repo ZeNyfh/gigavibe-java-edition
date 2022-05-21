@@ -30,7 +30,7 @@ public class CommandLocalPlay extends BaseCommand {
         String string = event.getMessage().getContentRaw();
         String[] args = string.split(" ", 2);
         Path finalPath = Paths.get(args[1]);
-        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalPath));
+        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalPath), true);
     }
 
     @Override

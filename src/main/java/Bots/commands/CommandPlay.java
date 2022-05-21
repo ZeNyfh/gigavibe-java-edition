@@ -34,7 +34,7 @@ public class CommandPlay extends BaseCommand {
         if (!event.getMessage().getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getMessage().getAttachments().get(0).getFileExtension()))) {
             String link = event.getMessage().getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
+            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link, true);
             return;
         }
         String link;
@@ -60,7 +60,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
         try {
-            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link);
+            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), link, true);
         } catch (FriendlyException ignored) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
         }

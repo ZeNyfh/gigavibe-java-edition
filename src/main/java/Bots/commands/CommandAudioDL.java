@@ -19,7 +19,7 @@ public class CommandAudioDL extends BaseCommand {
     public void execute(MessageEvent event) {
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "dl ", "").replace(" ", "");
-        File dir = new File((System.getProperty("user.dir") + "\\temp\\auddl"));
+        File dir = new File("\\temp\\auddl");
         if (arg.equals("") || arg.equals(" ")) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
             return;
@@ -95,6 +95,7 @@ public class CommandAudioDL extends BaseCommand {
     public ArrayList<String> getAlias() {
         ArrayList list = new ArrayList();
         list.add("adl");
+        list.add("dl");
         list.add("audio");
         return list;
     }
@@ -104,7 +105,7 @@ public class CommandAudioDL extends BaseCommand {
     }
 
     public String getName() {
-        return "dl";
+        return "audiodl";
     }
 
     public String getDescription() {

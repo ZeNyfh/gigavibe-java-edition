@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,11 +61,10 @@ public class CommandQueue extends BaseCommand {
         }
         String string = event.getMessage().getContentRaw();
         int multiplier = 1;
-        if (string.contains(" ")) {
-            String[] args = string.split(" ", 2);
+        String[] args = string.split(" ", 2);
+        if (args.length >= 2) {
             string = args[1];
-            string = string.replaceAll("[^0-9]", "");
-            multiplier = Integer.parseInt(string);
+            multiplier = Integer.parseInt(string.replaceAll("[^0-9]", ""));
         }
         for (int i = 5 * multiplier - 5; i < 5 * multiplier && i < queueLength; ) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
@@ -77,7 +75,7 @@ public class CommandQueue extends BaseCommand {
             }
             i++;
         }
-        embed.setFooter(queueLength + " songs queued. | " + round((queueLength/5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+        embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
         channel.sendMessageEmbeds(embed.build()).queue(a -> a.editMessageComponents().setActionRow(Button.secondary("queueBack", "◄️"), Button.secondary("queueForward", "►️")).queue());

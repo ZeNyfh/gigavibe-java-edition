@@ -10,8 +10,6 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;

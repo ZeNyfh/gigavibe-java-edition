@@ -5,7 +5,6 @@ import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 

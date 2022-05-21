@@ -5,8 +5,6 @@ import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.awt.*;
-
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 

@@ -48,21 +48,19 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel textChannel, String trackUrl) {
+    public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
         final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
         String[] midiAudioFiles = {"mid", "midi", "mod"};
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                String length;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (!sendEmbed) {
+                    musicManager.scheduler.queue(audioTrack);
+                    return;
                 }
+                String length;
                 musicManager.scheduler.queue(audioTrack);
-
                 EmbedBuilder embed = new EmbedBuilder();
                 if (audioTrack.getInfo().length > 432000000) { // 5 days
                     length = "Unknown";
@@ -70,13 +68,14 @@ public class PlayerManager {
                     length = toTimestamp((audioTrack.getInfo().length));
                 }
                 embed.setColor(new Color(0, 0, 255));
-                if (audioTrack.getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                    embed.setTitle((audioTrack.getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-                    embed.setDescription("Duration: `" + length + "`");
+                if (audioTrack.getInfo().title.isEmpty()) {
+                    String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
+                    String trackName = trackNameArray[trackNameArray.length - 1];
+                    embed.setTitle((trackName), (audioTrack.getInfo().uri));
                 } else {
-                    embed.setTitle((audioTrack.getInfo().title), (audioTrack.getInfo().uri));
-                    embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+                    embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                 }
+                embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
                 textChannel.sendMessageEmbeds(embed.build()).queue();
             }
 
@@ -88,7 +87,10 @@ public class PlayerManager {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     if (tracks.size() > 1 && !playlistCheck) {
-                        System.out.println(tracks.get(0).getIdentifier());
+                        if (!sendEmbed) {
+                            musicManager.scheduler.queue(tracks.get(0));
+                            return;
+                        }
                         if (tracks.get(0).getInfo().length > 432000000) { // 5 days
                             length = "Unknown";
                         } else {
