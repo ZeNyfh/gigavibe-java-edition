@@ -35,8 +35,8 @@ public class CommandRemove extends BaseCommand {
         String string = event.getMessage().getContentRaw();
         String[] args = string.split(" ", 2);
         string = args[1];
-        if (string.matches("^[0-9]+$")) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, numbers only.")).queue();
+        if (!string.matches("^[0-9]")) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, integers only.")).queue();
             return;
         }
         if (queue.isEmpty()) {
@@ -52,7 +52,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Skipped the **" + (Integer.parseInt(string) - 1) + "th** track successfully.")).queue(); // not an error, intended
+        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")).queue(); // not an error, intended
     }
 
     @Override
