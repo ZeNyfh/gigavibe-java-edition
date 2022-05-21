@@ -34,7 +34,7 @@ public class CommandRadio extends BaseCommand {
             eb.appendDescription("**[" + radioList[i] + "](" + radioURls[i] + ")**\n");
             i++;
         }
-        eb.setFooter("Use \"" + botPrefix + "radio [Radio Name]\" to play a radio station.");
+        eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         assert arg != null;
         if (arg.equals("list") || event.getArgs().size() == 1) {
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();

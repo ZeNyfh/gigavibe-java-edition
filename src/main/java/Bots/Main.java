@@ -196,22 +196,32 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+        EmbedBuilder eb = new EmbedBuilder();
+        int i = 0;
+        String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
+        if (buttonID.equals("general") || (buttonID.equals("music") || (buttonID.equals("dj") || (buttonID.equals("admin"))))) {
+            for (BaseCommand Command : commands) {
+                if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
+                    i++;
+                    eb.appendDescription("`" + i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+                }
+            }
+        }
         if (Objects.equals(event.getButton().getId(), "general")) {
-
-            event.getInteraction().getMessage().editMessageEmbeds().setEmbeds();
-            event.deferEdit();
+            eb.setTitle("\uD83D\uDCD6 **General**");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "music")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
+            eb.setTitle("\uD83D\uDD0A **Music**");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
-        if (Objects.equals(event.getButton().getId(), "dj")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
+        if (Objects.equals(event.getButton().getId().toLowerCase(), "dj")) {
+            eb.setTitle("\uD83C\uDFA7 **DJ**");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "admin")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
+            eb.setTitle("\uD83D\uDCD1 **Admin**");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "queueBack")) {
             event.editMessageEmbeds();
