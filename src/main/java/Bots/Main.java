@@ -3,7 +3,9 @@ package Bots;
 import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -40,6 +42,7 @@ import java.util.Objects;
 
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
+import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -193,10 +196,10 @@ public class Main extends ListenerAdapter {
         totalSet.add(finalSeconds);
         return String.join("", totalSet);
     }
-
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(botColour);
         int i = 0;
         String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
         if (buttonID.equals("general") || (buttonID.equals("music") || (buttonID.equals("dj") || (buttonID.equals("admin"))))) {
@@ -222,14 +225,6 @@ public class Main extends ListenerAdapter {
         if (Objects.equals(event.getButton().getId(), "admin")) {
             eb.setTitle("\uD83D\uDCD1 **Admin**");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
-        if (Objects.equals(event.getButton().getId(), "queueBack")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
-        }
-        if (Objects.equals(event.getButton().getId(), "queueForward")) {
-            event.editMessageEmbeds();
-            event.deferEdit();
         }
     }
 
