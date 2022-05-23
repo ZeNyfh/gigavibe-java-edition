@@ -24,6 +24,8 @@ public class CommandDisconnect extends BaseCommand {
     public ArrayList<String> getAlias() {
         ArrayList list = new ArrayList();
         list.add("leave");
+        list.add("fuckoff");
+        list.add("fuck off");
         return list;
     }
 

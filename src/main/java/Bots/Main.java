@@ -97,6 +97,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandForceSkip());
         registerCommand(new CommandRadio());
         registerCommand(new CommandSeek());
+        registerCommand(new CommandPlaylist());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
