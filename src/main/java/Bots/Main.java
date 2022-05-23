@@ -29,6 +29,7 @@ import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,6 +72,10 @@ public class Main extends ListenerAdapter {
         File file = new File("Users.json");
         if (!file.exists()) {
             file.createNewFile();
+            FileWriter writer = new FileWriter("Users.json");
+            writer.write("{}");
+            writer.flush();
+            writer.close();
         }
 
         registerCommand(new CommandPing());
