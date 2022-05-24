@@ -18,7 +18,7 @@ public class CommandVideoDL extends BaseCommand {
     public void execute(MessageEvent event) {
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "videodl ", "").replace(" ", "");
-        File dir = new File("\\temp\\viddl");
+        File dir = new File("viddl");
         if (arg.equals("") || arg.equals(" ")) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
             return;

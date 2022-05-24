@@ -67,7 +67,7 @@ public class CommandPlaylist extends BaseCommand {
             // Playlist1 adding
             if (args.get(2).equals("1")) {
                 if (args.size() >= 4) {
-                    playlist1Array.add(args.get(4));
+                    playlist1Array.add(args.get(3));
                 } else if (currentTrack != null) {
                     playlist1Array.add(currentTrack.getInfo().uri);
                 } else {
@@ -78,7 +78,7 @@ public class CommandPlaylist extends BaseCommand {
             // Playlist2 adding
             if (args.get(2).equals("2")) {
                 if (args.size() >= 4) {
-                    playlist2Array.add(args.get(4));
+                    playlist2Array.add(args.get(3));
                 } else if (currentTrack != null) {
                     playlist2Array.add(currentTrack.getInfo().uri);
                 } else {
@@ -89,7 +89,7 @@ public class CommandPlaylist extends BaseCommand {
             // Playlist3 adding
             if (args.get(2).equals("3")) {
                 if (args.size() >= 4) {
-                    playlist3Array.add(args.get(4));
+                    playlist3Array.add(args.get(3));
                 } else if (currentTrack != null) {
                     playlist3Array.add(currentTrack.getInfo().uri);
                 } else {

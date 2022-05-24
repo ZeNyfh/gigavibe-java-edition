@@ -61,11 +61,11 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
 
-        Path folder = Paths.get("\\temp\\viddl");
+        Path folder = Paths.get("viddl");
         if (!Files.exists(folder)) {
             folder.toFile().mkdirs();
         }
-        folder = Paths.get("\\temp\\auddl");
+        folder = Paths.get("auddl");
         if (!Files.exists(folder)) {
             folder.toFile().mkdirs();
         }
@@ -108,7 +108,7 @@ public class Main extends ListenerAdapter {
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
                 .addEventListeners(new Main())
-                .setActivity(Activity.playing("in development..."))
+                .setActivity(Activity.playing("Beta test!"))
                 .build();
         bot.awaitReady();
 

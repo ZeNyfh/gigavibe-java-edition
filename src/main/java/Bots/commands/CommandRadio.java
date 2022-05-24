@@ -65,7 +65,7 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public String getParams() {
-        return "<Radio Name>";
+        return "<List/Radio Name>";
     }
 
     public String getCategory() {
