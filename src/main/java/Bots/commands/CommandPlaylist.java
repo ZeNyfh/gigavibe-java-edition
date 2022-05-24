@@ -4,6 +4,9 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,160 +18,114 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandPlaylist extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
-        JSONObject User;
-        JSONObject jsonFileContents = null;
-        List<String> args = event.getArgs();
         String userID = event.getAuthor().getId();
-        String finalPlaylist1 = "";
-        String finalPlaylist2 = "";
-        String finalPlaylist3 = "";
-
-        JSONParser jsonParserCheck = new JSONParser();
-
-        try (FileReader reader = new FileReader("Users.json")) {
-            jsonFileContents = (JSONObject) jsonParserCheck.parse(reader);
-        } catch (ParseException e) {e.printStackTrace();
-        }
-        JSONObject UserCheck = new JSONObject();
-        UserCheck.putIfAbsent("Playlist1", "");
-        UserCheck.putIfAbsent("Playlist2", "");
-        UserCheck.putIfAbsent("Playlist3", "");
-        assert jsonFileContents != null;
-        jsonFileContents.put(userID, UserCheck);
-        FileWriter file = new FileWriter("Users.json");
-        file.write(jsonFileContents.toJSONString());try {
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        JSONObject json;
+        List<String> args = List.of(event.getMessage().getContentRaw().split(" ", 4)); // I had to fall back to this as arg 4 is a string that can contain spaces and getArgs() is not as flexible here.
+        //List<String> args = event.getArgs();
         JSONParser jsonParser = new JSONParser();
+        JSONObject jsonFileContents = null;
         try (FileReader reader = new FileReader("Users.json")) {
             jsonFileContents = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        assert jsonFileContents != null;
-        JSONObject userStuff = (JSONObject) jsonFileContents.get(userID);
-        String stringPlaylist1 = userStuff.get("Playlist1").toString();
-        String stringPlaylist2 = userStuff.get("Playlist2").toString();
-        String stringPlaylist3 = userStuff.get("Playlist3").toString();
-        if (args.size() >= 2) {
-            AudioTrack curTrack = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
-            finalPlaylist1 = stringPlaylist1;
-            finalPlaylist2 = stringPlaylist2;
-            finalPlaylist3 = stringPlaylist3;
-            if (args.get(1).equalsIgnoreCase("add") && args.get(2).equals("1")) {
+        JSONObject json = jsonFileContents;
+        JSONObject User = new JSONObject();
+        JSONObject userObj = (JSONObject) json.get(userID);
+
+        // if the values dont exist for the userid, it adds them here.
+        User.put("Playlist1", new JSONArray());
+        User.put("Playlist2", new JSONArray());
+        User.put("Playlist3", new JSONArray());
+        json.putIfAbsent(userID, User);
+        FileWriter file = new FileWriter("Users.json");
+        file.write(json.toJSONString());
+        try {
+            file.flush();
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JSONArray playlist1Array = new JSONArray();
+        JSONArray playlist2Array = new JSONArray();
+        JSONArray playlist3Array = new JSONArray();
+        try {
+            playlist1Array = (JSONArray) userObj.get("Playlist1"); // getting the values from the file
+            playlist2Array = (JSONArray) userObj.get("Playlist2");
+            playlist3Array = (JSONArray) userObj.get("Playlist3");
+        }catch (Exception ignored){}
+        AudioTrack currentTrack = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
+        GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
+        final GuildVoiceState selfVoiceState = event.getGuild().getSelfMember().getVoiceState();
+
+        if (args.get(1).equalsIgnoreCase("add")) {
+            // Playlist1 adding
+            if (args.get(2).equals("1")) {
                 if (args.size() >= 4) {
-                    finalPlaylist1 = finalPlaylist1 + args.get(3);
-                } else if (curTrack.getInfo().uri != null) {
-                    finalPlaylist1 = finalPlaylist1 + curTrack.getInfo().uri;
-                } else if (curTrack.getInfo().title != null) {
-                    finalPlaylist1 = finalPlaylist1 + curTrack.getInfo().title;
+                    playlist1Array.add(args.get(4));
+                } else if (currentTrack != null) {
+                    playlist1Array.add(currentTrack.getInfo().uri);
                 } else {
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not add the track to the playlist.")).queue();
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 1 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
-                json = jsonFileContents;
-                User = new JSONObject();
-                User.put("Playlist1", finalPlaylist1 + "\n");
-                User.put("Playlist2", finalPlaylist2);
-                User.put("Playlist3", finalPlaylist3);
-                json.put(userID, User);
-                file = new FileWriter("Users.json");
-                file.write(json.toJSONString());
-                try {
-                    file.flush();
-                    file.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
-            if (args.get(1).equalsIgnoreCase("add") && args.get(2).equals("2")) {
+            // Playlist2 adding
+            if (args.get(2).equals("2")) {
                 if (args.size() >= 4) {
-                    finalPlaylist2 = finalPlaylist2 + args.get(3);
-                } else if (curTrack.getInfo().uri != null) {
-                    finalPlaylist2 = finalPlaylist2 + curTrack.getInfo().uri;
-                } else if (curTrack.getInfo().title != null) {
-                    finalPlaylist2 = finalPlaylist2 + curTrack.getInfo().title;
+                    playlist2Array.add(args.get(4));
+                } else if (currentTrack != null) {
+                    playlist2Array.add(currentTrack.getInfo().uri);
                 } else {
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not add the track to the playlist.")).queue();
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 2 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
-                json = jsonFileContents;
-                User = new JSONObject();
-                User.put("Playlist1", finalPlaylist2);
-                User.put("Playlist2", finalPlaylist2 + "\n");
-                User.put("Playlist3", finalPlaylist3);
-                json.put(userID, User);
-                file = new FileWriter("Users.json");
-                file.write(json.toJSONString());
-                try {
-                    file.flush();
-                    file.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
-            if (args.get(1).equalsIgnoreCase("add") && args.get(2).equals("3")) {
+            // Playlist3 adding
+            if (args.get(2).equals("3")) {
                 if (args.size() >= 4) {
-                    finalPlaylist3 = finalPlaylist3 + args.get(3);
-                } else if (curTrack.getInfo().uri != null) {
-                    finalPlaylist3 = finalPlaylist3 + curTrack.getInfo().uri;
-                } else if (curTrack.getInfo().title != null) {
-                    finalPlaylist3 = finalPlaylist3 + curTrack.getInfo().title;
+                    playlist3Array.add(args.get(4));
+                } else if (currentTrack != null) {
+                    playlist3Array.add(currentTrack.getInfo().uri);
                 } else {
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not add the track to the playlist.")).queue();
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 3 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
-                json = jsonFileContents;
-                User = new JSONObject();
-                User.put("Playlist1", finalPlaylist1);
-                User.put("Playlist2", finalPlaylist2);
-                User.put("Playlist3", finalPlaylist3 + "\n");
-                json.put(userID, User);
-                file = new FileWriter("Users.json");
-                file.write(json.toJSONString());
-                try {
-                    file.flush();
-                    file.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            }
+            User.put("Playlist1", playlist1Array);
+            User.put("Playlist2", playlist2Array);
+            User.put("Playlist3", playlist3Array);
+            json.put(userID, User);
+            file = new FileWriter("Users.json");
+            file.write(json.toJSONString());
+            try {
+                file.flush();
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } if (args.get(1).equalsIgnoreCase("play") || args.get(1).equalsIgnoreCase("p")) {
+            if (selfVoiceState.getChannel() != null){
+                if (!Objects.equals(memberState.getChannel(), selfVoiceState.getChannel())) {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command with these arguments.")).queue();
+                    return;
                 }
             }
-            else if (args.get(1).equalsIgnoreCase("play")) {
-                if (args.size() == 3) {
-                    event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
-                    if (Objects.equals(args.get(2), "1")) {
-                        String[] playlist = stringPlaylist1.split("(\\r\\n|\\r|\\n)");
-                        for (int i = 0; i < playlist.length;) {
-                            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), playlist[i].replace("\\", "").replace("\n", ""), false);
-                            i++;
-                        }
+            if (args.get(2).equals("1") || args.get(2).equals("2") || args.get(2).equals("3")){
+                JSONArray playlist = (JSONArray) userObj.get("Playlist" + event.getArgs().get(2));
+                if (playlist.size() >= 1) {
+                    event.getGuild().getAudioManager().openAudioConnection(memberState.getChannel());
+                    for (int i = 0; i < playlist.size(); ) {
+                        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (String) playlist.toArray()[i], false);
+                        i++;
                     }
-                    else if (Objects.equals(args.get(2), "2")) {
-                        String[] playlist = stringPlaylist2.split("(\\r\\n|\\r|\\n)");
-                        for (int i = 0; i < playlist.length;) {
-                            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), playlist[i].replace("\\", "").replace("\n", ""), false);
-                            i++;
-                        }
-                    }
-                    else if (Objects.equals(args.get(2), "3")) {
-                        String[] playlist = stringPlaylist3.split("(\\r\\n|\\r|\\n)");
-                        for (int i = 0; i < playlist.length;) {
-                            PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), playlist[i].replace("\\", "").replace("\n", ""), false);
-                            i++;
-                        }
-                    } else {
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid argument 2: `" + args.get(2) + "` \n\n Valid args: **1-3**.")).queue();
-                    }
+                } else {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This playlist is empty, try adding some tracks to it first!")).queue();
                 }
             }
         }
