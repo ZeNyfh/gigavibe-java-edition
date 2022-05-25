@@ -13,10 +13,10 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         JSONObject obj = new JSONObject();
-        obj.put("GuildID", event.getGuild().getIdLong());
-        obj.put("ChannelID", event.getGuildChannel().getIdLong());
+        obj.put("GuildID", event.getGuildChannel().getIdLong());
+
         try {
-            file = new FileWriter(System.getProperty("user.dir") + "\\jsonStorage.json");
+            file = new FileWriter("Guilds.json");
             file.write(obj.toJSONString());
 
         } catch (IOException e) {

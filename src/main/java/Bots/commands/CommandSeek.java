@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.toSimpleTimestamp;
 
 public class CommandSeek extends BaseCommand {
     @Override
@@ -69,12 +70,13 @@ public class CommandSeek extends BaseCommand {
                     position = Long.parseLong(times[0]);
                 }
                 position = position * 1000;
-                System.out.println(position);
                 if (position <= 0) {
                     channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Argument is lower than or equal to 0.")).queue();
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Set the position of the track to: **" + toSimpleTimestamp(position) + ".**")).queue();
+
             } else {
                 channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You cannot seek with this track.")).queue();
             }

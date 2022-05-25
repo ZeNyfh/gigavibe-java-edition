@@ -3,9 +3,7 @@ package Bots;
 import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -20,15 +18,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +36,6 @@ import java.util.Objects;
 
 import static Bots.commands.CommandLoop.loop;
 import static Bots.token.botToken;
-import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -73,6 +65,14 @@ public class Main extends ListenerAdapter {
         if (!file.exists()) {
             file.createNewFile();
             FileWriter writer = new FileWriter("Users.json");
+            writer.write("{}");
+            writer.flush();
+            writer.close();
+        }
+        file = new File("Guilds.json");
+        if (!file.exists()) {
+            file.createNewFile();
+            FileWriter writer = new FileWriter("Guilds.json");
             writer.write("{}");
             writer.flush();
             writer.close();
@@ -202,6 +202,7 @@ public class Main extends ListenerAdapter {
         totalSet.add(finalSeconds);
         return String.join("", totalSet);
     }
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();

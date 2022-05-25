@@ -50,7 +50,6 @@ public class PlayerManager {
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
         final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
-        String[] midiAudioFiles = {"mid", "midi", "mod"};
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override

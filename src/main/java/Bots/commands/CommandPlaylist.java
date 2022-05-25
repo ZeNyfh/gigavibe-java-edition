@@ -5,7 +5,6 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -58,7 +57,8 @@ public class CommandPlaylist extends BaseCommand {
             playlist1Array = (JSONArray) userObj.get("Playlist1"); // getting the values from the file
             playlist2Array = (JSONArray) userObj.get("Playlist2");
             playlist3Array = (JSONArray) userObj.get("Playlist3");
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         AudioTrack currentTrack = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         final GuildVoiceState selfVoiceState = event.getGuild().getSelfMember().getVoiceState();
@@ -68,8 +68,10 @@ public class CommandPlaylist extends BaseCommand {
             if (args.get(2).equals("1")) {
                 if (args.size() >= 4) {
                     playlist1Array.add(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + args.get(3) + " to playlist 1.")).queue();
                 } else if (currentTrack != null) {
                     playlist1Array.add(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 1.")).queue();
                 } else {
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 1 [**String/url**] to add a track to the playlist.")).queue();
                     return;
@@ -79,8 +81,10 @@ public class CommandPlaylist extends BaseCommand {
             if (args.get(2).equals("2")) {
                 if (args.size() >= 4) {
                     playlist2Array.add(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + args.get(3) + " to playlist 2.")).queue();
                 } else if (currentTrack != null) {
                     playlist2Array.add(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 2.")).queue();
                 } else {
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 2 [**String/url**] to add a track to the playlist.")).queue();
                     return;
@@ -90,8 +94,10 @@ public class CommandPlaylist extends BaseCommand {
             if (args.get(2).equals("3")) {
                 if (args.size() >= 4) {
                     playlist3Array.add(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + args.get(3) + " to playlist 3.")).queue();
                 } else if (currentTrack != null) {
                     playlist3Array.add(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 3.")).queue();
                 } else {
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 3 [**String/url**] to add a track to the playlist.")).queue();
                     return;
@@ -109,21 +115,26 @@ public class CommandPlaylist extends BaseCommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } if (args.get(1).equalsIgnoreCase("play") || args.get(1).equalsIgnoreCase("p")) {
-            if (selfVoiceState.getChannel() != null){
+        }
+        if (args.get(1).equalsIgnoreCase("play") || args.get(1).equalsIgnoreCase("p")) {
+            assert selfVoiceState != null;
+            if (selfVoiceState.getChannel() != null) {
+                assert memberState != null;
                 if (!Objects.equals(memberState.getChannel(), selfVoiceState.getChannel())) {
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command with these arguments.")).queue();
                     return;
                 }
             }
-            if (args.get(2).equals("1") || args.get(2).equals("2") || args.get(2).equals("3")){
+            if (args.get(2).equals("1") || args.get(2).equals("2") || args.get(2).equals("3")) {
                 JSONArray playlist = (JSONArray) userObj.get("Playlist" + event.getArgs().get(2));
                 if (playlist.size() >= 1) {
+                    assert memberState != null;
                     event.getGuild().getAudioManager().openAudioConnection(memberState.getChannel());
                     for (int i = 0; i < playlist.size(); ) {
                         PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (String) playlist.toArray()[i], false);
                         i++;
                     }
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ Successfully queued: **playlist " + args.get(2) + "**.", "Playlist size: **" + playlist.size() + "**")).queue();
                 } else {
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This playlist is empty, try adding some tracks to it first!")).queue();
                 }
@@ -150,7 +161,7 @@ public class CommandPlaylist extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "music";
+        return "Music";
     }
 
     @Override
