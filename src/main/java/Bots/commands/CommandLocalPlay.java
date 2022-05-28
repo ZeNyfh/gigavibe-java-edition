@@ -6,6 +6,7 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLocalPlay extends BaseCommand {
-    public void execute(MessageEvent event) {
+    public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
             return;
         }

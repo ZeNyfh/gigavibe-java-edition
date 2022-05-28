@@ -27,7 +27,7 @@ public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
 
-    public void execute(MessageEvent event) {
+    public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
             return;
         }
@@ -65,8 +65,6 @@ public class CommandPlay extends BaseCommand {
         } else {
             link = "ytsearch: " + link;
             playlistCheck = false;
-            System.out.println(PlayerManager.getInstance().getMusicManager(event.getGuild()));
-            System.out.println(audioManager);
         }
         if (!selfState.inAudioChannel()) {
             audioManager.openAudioConnection(memberChannel);

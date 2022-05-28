@@ -30,10 +30,7 @@ import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -213,13 +210,31 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
-    public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel){
+    public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {
         JSONParser jsonParser = new JSONParser();
+        JSONObject obj = new JSONObject();
+        JSONObject blocked = new JSONObject();
         JSONObject jsonFileContents = null;
         try (FileReader reader = new FileReader("Guilds.json")) {
             jsonFileContents = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException | IOException e) {
             e.printStackTrace();
+        }
+        JSONObject json = jsonFileContents;
+        blocked.put("BlockedChannels", new JSONArray());
+        json.putIfAbsent(guild.getId(), blocked);
+        FileWriter file = new FileWriter("Guilds.json");
+        try {
+            file.write(json.toJSONString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                file.flush();
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
         JSONArray blockedChannels = (JSONArray) guildObj.get("BlockedChannels");

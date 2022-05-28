@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -17,7 +18,7 @@ public class CommandRadio extends BaseCommand {
     String[] radioURls = {"https://server6.inetcast.nl:2015/stream", "http://cc5.beheerstream.com:8022/stream", "http://fr3.1mix.co.uk:8060/", "http://137.74.160.250:8000/;stream/1", "https://media-ssl.musicradio.com/HeartLondon", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48", "https://radio.m-1.fm/m1plius/aacp64", "https://ais-sa2.cdnstream1.com/1976_128.mp3", "https://hdradioclassicrock-rfritschka.radioca.st/stream", "http://fr1.1mix.co.uk:8060/320h", "http://83.137.145.141:14280/;"};
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(MessageEvent event) throws IOException {
         String arg = "null";
         String argFinal = "";
         if (event.getArgs().size() != 1) {
