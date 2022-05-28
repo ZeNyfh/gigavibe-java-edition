@@ -2,23 +2,50 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
+
+import static Bots.Main.botColour;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandBlockChannel extends BaseCommand {
-    private static FileWriter file;
-
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(MessageEvent event) throws IOException {
+
+        if (!event.getArgs().get(1).equalsIgnoreCase("list")) {
+            if (event.getArgs().size() != 3) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`")).queue();
+                return;
+            }
+        }
+
         JSONObject obj = new JSONObject();
-        obj.put("GuildID", event.getGuildChannel().getIdLong());
+        JSONObject blocked = new JSONObject();
+        JSONParser jsonParser = new JSONParser();
 
+        JSONObject jsonFileContents = null;
+        try (FileReader reader = new FileReader("BlockedChannels.json")) {
+            jsonFileContents = (JSONObject) jsonParser.parse(reader);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        JSONObject json = jsonFileContents;
+        blocked.put("BlockedChannels", new JSONArray());
+        json.putIfAbsent(event.getGuild().getId(), blocked);
+        FileWriter file = new FileWriter("BlockedChannels.json");
         try {
-            file = new FileWriter("Guilds.json");
-            file.write(obj.toJSONString());
-
+            file.write(json.toJSONString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -29,6 +56,85 @@ public class CommandBlockChannel extends BaseCommand {
                 e.printStackTrace();
             }
         }
+
+
+        JSONObject guildObj = (JSONObject) json.get(event.getGuild().getId());
+        JSONArray blockedChannels = new JSONArray();
+        try {
+            blockedChannels = (JSONArray) guildObj.get("BlockedChannels"); // getting the values from the file
+        } catch (Exception ignored) {
+        }
+
+        for (int i = 0; i < event.getGuild().getChannels().size();) {
+            GuildChannel guildChannel = event.getGuild().getChannels().get(i);
+            if (event.getArgs().get(1).equalsIgnoreCase("add")){
+                if (guildChannel.getId().equals(event.getArgs().get(2))) {
+                    blockedChannels.add(event.getArgs().get(2));
+                    blocked.put("BlockedChannels", blockedChannels);
+                    obj.put(event.getGuild().getId(), blocked);
+
+                    try {
+                        file = new FileWriter("BlockedChannels.json");
+                        file.write(obj.toJSONString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            file.flush();
+                            file.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return;
+                } else {
+                    i++;
+                }
+            } else if (event.getArgs().get(1).equalsIgnoreCase("remove")) {
+                if (guildChannel.getId().equals(event.getArgs().get(2))) {
+                    blockedChannels.remove(event.getArgs().get(2));
+                    blocked.put("BlockedChannels", blockedChannels);
+                    obj.put(event.getGuild().getId(), blocked);
+
+                    try {
+                        file = new FileWriter("BlockedChannels.json");
+                        file.write(obj.toJSONString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            file.flush();
+                            file.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + event.getJDA().getRoleById(event.getArgs().get(2)) + Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs().get(2))).getName() + " from the list.")).queue();
+                    return;
+                } else {
+                    i++;
+                }
+            }else if (event.getArgs().get(1).equalsIgnoreCase("list")){
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(botColour);
+                eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
+                if (blockedChannels.size() == 0) {
+                    eb.appendDescription("**None.**");
+                    event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+                    return;
+                }
+                for (int j = 0; j < blockedChannels.size();) {
+                    eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
+                    j++;
+                }
+                event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+                return;
+            } else {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`")).queue();
+                return;
+            }
+        }
+        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server..")).queue();
     }
 
     @Override
@@ -48,6 +154,6 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public String getParams() {
-        return "<Channel>";
+        return "<add/remove> <ChannelID> OR <list>";
     }
 }

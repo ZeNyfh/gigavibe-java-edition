@@ -11,10 +11,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLocalPlay extends BaseCommand {
     public void execute(MessageEvent event) {
+        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+            return;
+        }
 
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();

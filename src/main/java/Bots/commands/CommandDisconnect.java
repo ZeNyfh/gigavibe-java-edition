@@ -7,11 +7,15 @@ import Bots.lavaplayer.PlayerManager;
 
 import java.util.ArrayList;
 
+import static Bots.Main.IsDJ;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
+            return;
+        }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();

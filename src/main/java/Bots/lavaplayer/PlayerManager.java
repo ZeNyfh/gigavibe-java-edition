@@ -10,12 +10,14 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
 import static Bots.commands.CommandPlay.playlistCheck;
 
@@ -24,6 +26,7 @@ public class PlayerManager {
     private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
+
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -54,6 +57,7 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
+                audioTrack.setUserData(textChannel.getGuild());
                 if (!sendEmbed) {
                     musicManager.scheduler.queue(audioTrack);
                     return;
@@ -116,18 +120,23 @@ public class PlayerManager {
                             musicManager.scheduler.queue(tracks.get(i));
                             i++;
                         }
-                        length = String.valueOf(lengthSeconds);
+                    }
+                    for (int i = 0; i < tracks.size(); ) {
+                        tracks.get(i).setUserData(textChannel.getGuild());
+                        i++;
                     }
                 }
             }
 
             @Override
             public void noMatches() {
+                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No track was found.")).queue();
                 System.out.println("No track found.");
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
+                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Track failed to load. \n\n ```" + e.getMessage() + "```")).queue();
             }
         });
     }

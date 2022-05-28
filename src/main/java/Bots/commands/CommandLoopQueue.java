@@ -6,11 +6,9 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.ArrayList;
 
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandLoopQueue extends BaseCommand {
-    public static Boolean loopQueue = false;
-
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
@@ -19,11 +17,12 @@ public class CommandLoopQueue extends BaseCommand {
             return;
         }
 
-        loopQueue = !loopQueue;
-        if (loopQueue) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue.")).queue();
-        } else {
+        if (LoopQueueGuilds.contains(event.getGuild().getId())) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue.")).queue();
+            LoopQueueGuilds.remove(event.getGuild().getId());
+        } else {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue.")).queue();
+            LoopQueueGuilds.add(event.getGuild().getId());
         }
     }
 

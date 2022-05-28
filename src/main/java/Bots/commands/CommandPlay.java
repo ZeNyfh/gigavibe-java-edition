@@ -4,21 +4,34 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
 
     public void execute(MessageEvent event) {
+        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+            return;
+        }
+
         String string = event.getMessage().getContentRaw();
         String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
@@ -52,6 +65,8 @@ public class CommandPlay extends BaseCommand {
         } else {
             link = "ytsearch: " + link;
             playlistCheck = false;
+            System.out.println(PlayerManager.getInstance().getMusicManager(event.getGuild()));
+            System.out.println(audioManager);
         }
         if (!selfState.inAudioChannel()) {
             audioManager.openAudioConnection(memberChannel);

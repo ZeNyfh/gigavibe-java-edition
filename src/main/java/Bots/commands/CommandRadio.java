@@ -53,6 +53,9 @@ public class CommandRadio extends BaseCommand {
         System.out.println(argFinal);
         for (int i = 0; i < radioList.length; ) {
             if (radioList[i].toLowerCase().equals(argFinal)) {
+                if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+                    return;
+                }
                 audioManager.openAudioConnection(memberChannel);
                 PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), radioURls[i], false);
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + radioList[i] + "](" + radioURls[i] + ")**")).queue();

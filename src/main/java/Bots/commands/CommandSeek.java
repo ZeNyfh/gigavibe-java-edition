@@ -12,12 +12,15 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.util.List;
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.toSimpleTimestamp;
+import static Bots.Main.*;
 
 public class CommandSeek extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
+            return;
+        }
+
         long position = 0;
         final TextChannel channel = event.getTextChannel();
         final Member self = event.getGuild().getSelfMember();

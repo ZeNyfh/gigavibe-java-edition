@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static Bots.Main.botPrefix;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandPlaylist extends BaseCommand {
     @Override
@@ -115,8 +114,63 @@ public class CommandPlaylist extends BaseCommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } if (args.get(1).equalsIgnoreCase("remove")){
+            // Playlist1 removing
+            if (args.get(2).equals("1")) {
+                if (args.size() >= 4) {
+                    playlist1Array.remove(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + args.get(3) + " from playlist 1.")).queue();
+                } else if (currentTrack != null) {
+                    playlist1Array.remove(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 1.")).queue();
+                } else {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 1 [**String/url**] to remove a track from the playlist.")).queue();
+                    return;
+                }
+            }
+            // Playlist2 removing
+            if (args.get(2).equals("2")) {
+                if (args.size() >= 4) {
+                    playlist2Array.remove(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + args.get(3) + " from playlist 2.")).queue();
+                } else if (currentTrack != null) {
+                    playlist2Array.remove(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 2.")).queue();
+                } else {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 2 [**String/url**] to remove a track from the playlist.")).queue();
+                    return;
+                }
+            }
+            // Playlist3 removing
+            if (args.get(2).equals("3")) {
+                if (args.size() >= 4) {
+                    playlist3Array.remove(args.get(3));
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + args.get(3) + " from playlist 3.")).queue();
+                } else if (currentTrack != null) {
+                    playlist3Array.remove(currentTrack.getInfo().uri);
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 3.")).queue();
+                } else {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 3 [**String/url**] to remove a track from the playlist.")).queue();
+                    return;
+                }
+            }
+            User.put("Playlist1", playlist1Array);
+            User.put("Playlist2", playlist2Array);
+            User.put("Playlist3", playlist3Array);
+            json.put(userID, User);
+            file = new FileWriter("Users.json");
+            file.write(json.toJSONString());
+            try {
+                file.flush();
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if (args.get(1).equalsIgnoreCase("play") || args.get(1).equalsIgnoreCase("p")) {
+            if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+                return;
+            }
             assert selfVoiceState != null;
             if (selfVoiceState.getChannel() != null) {
                 assert memberState != null;

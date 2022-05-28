@@ -4,10 +4,10 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import static Bots.Main.LoopGuilds;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLoop extends BaseCommand {
-    public static Boolean loop = false;
 
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
@@ -19,11 +19,12 @@ public class CommandLoop extends BaseCommand {
             return;
         }
 
-        loop = !loop;
-        if (loop) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track.")).queue();
-        } else {
+        if (LoopGuilds.contains(event.getGuild().getId())) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track.")).queue();
+            LoopGuilds.remove(event.getGuild().getId());
+        } else {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track.")).queue();
+            LoopGuilds.add(event.getGuild().getId());
         }
     }
 

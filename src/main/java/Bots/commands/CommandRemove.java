@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static Bots.Main.IsDJ;
 import static Bots.Main.createQuickEmbed;
 
 
 public class CommandRemove extends BaseCommand {
     public void execute(MessageEvent event) {
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
+            return;
+        }
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
