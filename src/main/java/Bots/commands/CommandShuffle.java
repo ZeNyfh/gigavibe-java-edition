@@ -21,9 +21,9 @@ import static Bots.Main.createQuickEmbed;
 public class CommandShuffle extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
-        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
-            return;
-        }
+        //if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
+        //    return;
+        //}
         final TextChannel channel = event.getTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
