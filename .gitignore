@@ -6,4 +6,5 @@ Users.json
 src/main/java/META-INF/MANIFEST.MF
 /out/artifacts/bot_jar/bot.jar
 out/artifacts/gigavibe_java_edition_jar/bot.jar
-/Guilds.json
+/BlockedChannels.json
+/DJs.json

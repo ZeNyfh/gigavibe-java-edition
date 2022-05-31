@@ -3,15 +3,11 @@ package Bots.lavaplayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
-import com.sedmelluq.discord.lavaplayer.player.event.TrackStartEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -45,15 +41,16 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        Guild userData = (Guild) track.getUserData(); // UserData is being used here to return the guild, it is stored every time a new track is played.
-        if (LoopGuilds.contains(userData.getId())){
+        TextChannel userData = (TextChannel) track.getUserData();
+        AudioTrack nextTrack = getTrackFromQueue(userData.getGuild(), 0);
+        if (LoopGuilds.contains(userData.getGuild().getId())) {
             if (endReason.mayStartNext) {
                 AudioTrack loopTrack = track.makeClone();
                 this.player.startTrack(loopTrack, false);
                 return;
             }
         }
-        if (LoopQueueGuilds.contains(userData.getId())){
+        if (LoopQueueGuilds.contains(userData.getGuild().getId())) {
             if (endReason.mayStartNext) {
                 AudioTrack loopTrack = track.makeClone();
                 nextTrack();
@@ -61,25 +58,25 @@ public class TrackScheduler extends AudioEventAdapter {
                 return;
             }
         }
-        if (endReason.mayStartNext) {
-            nextTrack();
-            EmbedBuilder eb = new EmbedBuilder();
-            AudioTrack nextTrack = getTrackFromQueue(userData, 0);
-            if (nextTrack == null) {
-                return;
-            } else if (!nextTrack.getInfo().title.isEmpty()){
-                eb.setTitle("[Now playing: " + nextTrack.getInfo().title + "](" + nextTrack.getInfo().uri + ")");
-            } else {
-                eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
-            }
-            if (nextTrack.getInfo().length >= 432000000) {
-                eb.setDescription("**Channel:**\n" + nextTrack.getInfo().author + "\n\n**Duration:**\n" + toSimpleTimestamp(nextTrack.getInfo().length));
-            } else {
-                eb.setDescription("**Channel:**\n" + nextTrack.getInfo().author + "\n\n**Duration:**\nUnknown");
-            }
-            eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
-            eb.setColor(botColour);
-            System.out.println(nextTrack.getInfo().title);
+        nextTrack();
+        EmbedBuilder eb = new EmbedBuilder();
+        if (nextTrack == null) {
+            return;
+        } else if (!nextTrack.getInfo().title.isEmpty()) {
+            eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
+        } else {
+            eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
         }
+        if (nextTrack.getInfo().length <= 432000000) {
+            eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
+            eb.addField("**Duration**\n", toSimpleTimestamp(nextTrack.getInfo().length), true);
+        } else {
+            eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
+            eb.addField("**Duration**\n", "Unknown", true);
+        }
+        eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
+        eb.setColor(botColour);
+        System.out.println(nextTrack.getInfo().title);
+        userData.sendMessageEmbeds(eb.build()).queue();
     }
 }

@@ -114,7 +114,8 @@ public class CommandPlaylist extends BaseCommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } if (args.get(1).equalsIgnoreCase("remove")){
+        }
+        if (args.get(1).equalsIgnoreCase("remove")) {
             // Playlist1 removing
             if (args.get(2).equals("1")) {
                 if (args.size() >= 4) {
@@ -168,7 +169,7 @@ public class CommandPlaylist extends BaseCommand {
             }
         }
         if (args.get(1).equalsIgnoreCase("play") || args.get(1).equalsIgnoreCase("p")) {
-            if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+            if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
                 return;
             }
             assert selfVoiceState != null;

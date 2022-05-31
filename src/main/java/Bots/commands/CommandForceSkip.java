@@ -21,9 +21,9 @@ import static Bots.Main.createQuickEmbed;
 public class CommandForceSkip extends BaseCommand {
 
     public void execute(MessageEvent event) {
-        //if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
-        //    return;
-        //}
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            return;
+        }
         final TextChannel channel = event.getTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();

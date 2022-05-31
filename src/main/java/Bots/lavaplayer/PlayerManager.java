@@ -10,7 +10,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(textChannel.getGuild());
+                audioTrack.setUserData(textChannel);
                 if (!sendEmbed) {
                     musicManager.scheduler.queue(audioTrack);
                     return;
@@ -122,7 +121,7 @@ public class PlayerManager {
                         }
                     }
                     for (int i = 0; i < tracks.size(); ) {
-                        tracks.get(i).setUserData(textChannel.getGuild());
+                        tracks.get(i).setUserData(textChannel);
                         i++;
                     }
                 }

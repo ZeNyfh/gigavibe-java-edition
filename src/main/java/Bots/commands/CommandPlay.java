@@ -4,31 +4,24 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static Bots.Main.*;
+import static Bots.Main.IsChannelBlocked;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
 
     public void execute(MessageEvent event) throws IOException {
-        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
             return;
         }
 

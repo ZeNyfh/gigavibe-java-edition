@@ -17,9 +17,9 @@ import static Bots.Main.*;
 public class CommandSeek extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        //if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
-        //    return;
-        //}
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            return;
+        }
 
         long position = 0;
         final TextChannel channel = event.getTextChannel();

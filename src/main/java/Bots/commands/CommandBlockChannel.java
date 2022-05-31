@@ -3,14 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,14 +21,16 @@ import static Bots.Main.createQuickEmbed;
 public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
-
+        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
+            return;
+        }
         if (!event.getArgs().get(1).equalsIgnoreCase("list")) {
             if (event.getArgs().size() != 3) {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`")).queue();
                 return;
             }
         }
-
         JSONObject obj = new JSONObject();
         JSONObject blocked = new JSONObject();
         JSONParser jsonParser = new JSONParser();
@@ -65,9 +66,9 @@ public class CommandBlockChannel extends BaseCommand {
         } catch (Exception ignored) {
         }
 
-        for (int i = 0; i < event.getGuild().getChannels().size();) {
+        for (int i = 0; i < event.getGuild().getChannels().size(); ) {
             GuildChannel guildChannel = event.getGuild().getChannels().get(i);
-            if (event.getArgs().get(1).equalsIgnoreCase("add")){
+            if (event.getArgs().get(1).equalsIgnoreCase("add")) {
                 if (guildChannel.getId().equals(event.getArgs().get(2))) {
                     blockedChannels.add(event.getArgs().get(2));
                     blocked.put("BlockedChannels", blockedChannels);
@@ -114,7 +115,7 @@ public class CommandBlockChannel extends BaseCommand {
                 } else {
                     i++;
                 }
-            }else if (event.getArgs().get(1).equalsIgnoreCase("list")){
+            } else if (event.getArgs().get(1).equalsIgnoreCase("list")) {
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(botColour);
                 eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
@@ -123,7 +124,7 @@ public class CommandBlockChannel extends BaseCommand {
                     event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
                     return;
                 }
-                for (int j = 0; j < blockedChannels.size();) {
+                for (int j = 0; j < blockedChannels.size(); ) {
                     eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
                     j++;
                 }

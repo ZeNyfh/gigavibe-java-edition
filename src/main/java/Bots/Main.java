@@ -3,22 +3,17 @@ package Bots;
 import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -30,7 +25,10 @@ import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,12 +43,12 @@ import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-    public static List<String> LoopGuilds = new ArrayList<>();
-    public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static String botPrefix = "&";
     public final static Color botColour = new Color(0, 0, 255);
+    public static List<String> LoopGuilds = new ArrayList<>();
+    public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
 
     private static void registerCommand(BaseCommand command) {
@@ -62,24 +60,37 @@ public class Main extends ListenerAdapter {
 
         Path folder = Paths.get("viddl");
         if (!Files.exists(folder)) {
+            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
         folder = Paths.get("auddl");
         if (!Files.exists(folder)) {
+            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
         File file = new File("Users.json");
         if (!file.exists()) {
+            System.out.println(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter("Users.json");
             writer.write("{}");
             writer.flush();
             writer.close();
         }
-        file = new File("Guilds.json");
+        file = new File("BlockedChannels.json");
         if (!file.exists()) {
+            System.out.println(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter("BlockedChannels.json");
+            writer.write("{}");
+            writer.flush();
+            writer.close();
+        }
+        file = new File("DJs.json");
+        if (!file.exists()) {
+            System.out.println(file.getName() + " doesn't exist, creating now.");
+            file.createNewFile();
+            FileWriter writer = new FileWriter("DJs.json");
             writer.write("{}");
             writer.flush();
             writer.close();
@@ -215,7 +226,7 @@ public class Main extends ListenerAdapter {
         JSONObject obj = new JSONObject();
         JSONObject blocked = new JSONObject();
         JSONObject jsonFileContents = null;
-        try (FileReader reader = new FileReader("Guilds.json")) {
+        try (FileReader reader = new FileReader("BlockedChannels.json")) {
             jsonFileContents = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -223,7 +234,7 @@ public class Main extends ListenerAdapter {
         JSONObject json = jsonFileContents;
         blocked.put("BlockedChannels", new JSONArray());
         json.putIfAbsent(guild.getId(), blocked);
-        FileWriter file = new FileWriter("Guilds.json");
+        FileWriter file = new FileWriter("BlockedChannels.json");
         try {
             file.write(json.toJSONString());
         } catch (IOException e) {
@@ -238,8 +249,8 @@ public class Main extends ListenerAdapter {
         }
         JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
         JSONArray blockedChannels = (JSONArray) guildObj.get("BlockedChannels");
-        for (int i = 0; i < blockedChannels.size();) {
-            if (textChannel.getId().equals(blockedChannels.get(i))){
+        for (int i = 0; i < blockedChannels.size(); ) {
+            if (textChannel.getId().equals(blockedChannels.get(i))) {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
                 return true;
             }
@@ -248,34 +259,37 @@ public class Main extends ListenerAdapter {
         return false;
     }
 
-    public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member){
+    public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonFileContents = null;
-        try (FileReader reader = new FileReader("Guilds.json")) {
+        try (FileReader reader = new FileReader("DJs.json")) {
             jsonFileContents = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
         JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
-        JSONArray DJRoles = (JSONArray) guildObj.get("DJRoles");
-        for (int i = 0; i < DJRoles.size();) {
-            if (!member.getRoles().contains(DJRoles.get(i))){
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
-                return true;
+        JSONArray DJRoles = (JSONArray) guildObj.get("roles");
+        JSONArray DJUsers = (JSONArray) guildObj.get("users");
+        boolean check = false;
+        for (int i = 0; i < DJRoles.size(); ) {
+            if (member.getRoles().contains(guild.getJDA().getRoleById((String) DJRoles.get(i)))) {
+                check = true;
             }
             i++;
         }
-        return false;
-    }
-
-    public void onTrackEndGuild(TrackEndEvent event, Guild guild) {
-        if (event.endReason.toString().equals("FINISHED") && LoopGuilds.contains(guild.getId())){
-            event.player.startTrack(event.player.getPlayingTrack().makeClone(), true);
-        } else if (event.endReason.toString().equals("FINISHED") && LoopQueueGuilds.contains(guild.getId())) {
-            final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
-            List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
-            event.player.startTrack(musicManager.scheduler.queue.poll(), false);
-            queue.add(event.player.getPlayingTrack().makeClone());
+        if (!check) {
+            for (int i = 0; i < DJUsers.size(); ) {
+                if (DJUsers.get(i).equals(member.getId())) {
+                    check = true;
+                }
+                i++;
+            }
+        }
+        if (check) {
+            return true;
+        } else {
+            textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
+            return false;
         }
     }
 

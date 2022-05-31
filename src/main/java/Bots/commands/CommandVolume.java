@@ -16,9 +16,9 @@ import static java.lang.Math.round;
 public class CommandVolume extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
-        //if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())){
-        //    return;
-        //}
+        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            return;
+        }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (!event.getGuild().getAudioManager().isConnected()) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not in a vc.")).queue();

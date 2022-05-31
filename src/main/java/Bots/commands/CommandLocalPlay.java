@@ -17,7 +17,7 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandLocalPlay extends BaseCommand {
     public void execute(MessageEvent event) throws IOException {
-        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
             return;
         }
 

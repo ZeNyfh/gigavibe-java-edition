@@ -6,7 +6,8 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.ArrayList;
 
-import static Bots.Main.*;
+import static Bots.Main.LoopQueueGuilds;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandLoopQueue extends BaseCommand {
     public void execute(MessageEvent event) {

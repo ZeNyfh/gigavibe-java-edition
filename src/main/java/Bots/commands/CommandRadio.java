@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -54,7 +55,7 @@ public class CommandRadio extends BaseCommand {
         System.out.println(argFinal);
         for (int i = 0; i < radioList.length; ) {
             if (radioList[i].toLowerCase().equals(argFinal)) {
-                if (IsChannelBlocked(event.getGuild(), event.getTextChannel())){
+                if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
                     return;
                 }
                 audioManager.openAudioConnection(memberChannel);
@@ -66,6 +67,13 @@ public class CommandRadio extends BaseCommand {
         }
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
         event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+    }
+
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("radios");
+        return list;
     }
 
     @Override

@@ -27,13 +27,6 @@ public class CommandNowPlaying extends BaseCommand {
             return;
         }
 
-        final GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
-
-        if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
-            return;
-        }
-
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
