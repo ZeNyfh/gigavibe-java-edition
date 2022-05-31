@@ -96,7 +96,7 @@ public class CommandDJ extends BaseCommand {
                 }
             } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
                 if (event.getArgs().get(3).contains("<@&")) {
-                    String RoleID = event.getArgs().get(4).replace("<@&", "").replace(">", "");
+                    String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
                     DJRoles.add(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Roles list.")).queue();
                 }
@@ -123,7 +123,7 @@ public class CommandDJ extends BaseCommand {
                 }
             } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
                 if (event.getArgs().get(3).contains("<@&")) {
-                    String RoleID = event.getArgs().get(4).replace("<@&", "").replace(">", "");
+                    String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
                     DJRoles.remove(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Roles list.")).queue();
                 }
