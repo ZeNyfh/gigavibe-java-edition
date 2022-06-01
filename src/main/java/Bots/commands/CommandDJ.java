@@ -59,7 +59,7 @@ public class CommandDJ extends BaseCommand {
             DJUsers = (JSONArray) GuildContents.get("users");
             DJRoles = (JSONArray) GuildContents.get("roles");
         }
-        if (event.getArgs().size() >= 2){
+        if (event.getArgs().size() == 1){
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
             return;
         }
