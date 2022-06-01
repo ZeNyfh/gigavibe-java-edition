@@ -34,10 +34,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
@@ -57,7 +55,6 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
-
         Path folder = Paths.get("viddl");
         if (!Files.exists(folder)) {
             System.out.println(folder.getFileName() + " doesn't exist, creating now.");

@@ -59,7 +59,15 @@ public class CommandDJ extends BaseCommand {
             DJUsers = (JSONArray) GuildContents.get("users");
             DJRoles = (JSONArray) GuildContents.get("roles");
         }
+        if (event.getArgs().size() >= 2){
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+            return;
+        }
         if (event.getArgs().get(1).equalsIgnoreCase("list")) {
+            if (event.getArgs().size() >= 3){
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+                return;
+            }
             if (event.getArgs().get(2).equalsIgnoreCase("users") || event.getArgs().get(2).equalsIgnoreCase("roles")) {
                 String arg2 = event.getArgs().get(2).toLowerCase();
                 JSONArray arg2Array = (JSONArray) GuildContents.get(arg2);
@@ -89,12 +97,20 @@ public class CommandDJ extends BaseCommand {
             }
         } else if (event.getArgs().get(1).equalsIgnoreCase("add")) {
             if (event.getArgs().get(2).equalsIgnoreCase("user")) {
+                if (event.getArgs().size() >= 4){
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+                    return;
+                }
                 if (event.getArgs().get(3).contains("<@")) {
                     String UserID = event.getArgs().get(3).replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Users list.")).queue();
                     DJUsers.add(UserID);
                 }
             } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
+                if (event.getArgs().size() >= 4){
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+                    return;
+                }
                 if (event.getArgs().get(3).contains("<@&")) {
                     String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
                     DJRoles.add(RoleID);
@@ -116,12 +132,20 @@ public class CommandDJ extends BaseCommand {
             }
         } else if (event.getArgs().get(1).equalsIgnoreCase("remove")) {
             if (event.getArgs().get(2).equalsIgnoreCase("user")) {
+                if (event.getArgs().size() >= 4){
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+                    return;
+                }
                 if (event.getArgs().get(3).contains("<@")) {
                     String UserID = event.getArgs().get(3).replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Users list.")).queue();
                     DJUsers.remove(UserID);
                 }
             } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
+                if (event.getArgs().size() >= 4){
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Insufficient arguments.")).queue();
+                    return;
+                }
                 if (event.getArgs().get(3).contains("<@&")) {
                     String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
                     DJRoles.remove(RoleID);
