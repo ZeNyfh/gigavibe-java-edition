@@ -59,25 +59,25 @@ public class CommandDJ extends BaseCommand {
             DJUsers = (JSONArray) GuildContents.get("users");
             DJRoles = (JSONArray) GuildContents.get("roles");
         }
-        if (event.getArgs().get(1).equalsIgnoreCase("list")) {
-            if (event.getArgs().get(2).equalsIgnoreCase("users") || event.getArgs().get(2).equalsIgnoreCase("roles")) {
-                String arg2 = event.getArgs().get(2).toLowerCase();
+        if (event.getArgs()[1].equalsIgnoreCase("list")) {
+            if (event.getArgs()[2].equalsIgnoreCase("users") || event.getArgs()[2].equalsIgnoreCase("roles")) {
+                String arg2 = event.getArgs()[2].toLowerCase();
                 JSONArray arg2Array = (JSONArray) GuildContents.get(arg2);
                 EmbedBuilder eb = new EmbedBuilder();
-                eb.setTitle("** DJ " + event.getArgs().get(2) + "** for " + event.getGuild().getName());
+                eb.setTitle("** DJ " + event.getArgs()[2] + "** for " + event.getGuild().getName());
                 eb.setColor(botColour);
                 if (arg2Array.size() == 0) {
                     eb.setDescription("None.");
                     event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
                     return;
                 }
-                if (event.getArgs().get(2).equalsIgnoreCase("roles")) {
+                if (event.getArgs()[2].equalsIgnoreCase("roles")) {
                     for (int i = 0; i < arg2Array.size(); ) {
                         eb.appendDescription(arg2Array.get(i) + " - **" + Objects.requireNonNull(event.getJDA().getRoleById((String) arg2Array.get(i))).getName() + "**\n");
                         i++;
                     }
                 }
-                if (event.getArgs().get(2).equalsIgnoreCase("users")) {
+                if (event.getArgs()[2].equalsIgnoreCase("users")) {
                     for (int i = 0; i < arg2Array.size(); ) {
                         eb.appendDescription(arg2Array.get(i) + " - **" + Objects.requireNonNull(event.getJDA().getUserById((String) arg2Array.get(i))).getName() + "**\n");
                         i++;
@@ -87,16 +87,16 @@ public class CommandDJ extends BaseCommand {
             } else {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj list roles` or `" + botPrefix + "dj list users` to show all DJs.")).queue();
             }
-        } else if (event.getArgs().get(1).equalsIgnoreCase("add")) {
-            if (event.getArgs().get(2).equalsIgnoreCase("user")) {
-                if (event.getArgs().get(3).contains("<@")) {
-                    String UserID = event.getArgs().get(3).replace("<@", "").replace(">", "");
+        } else if (event.getArgs()[1].equalsIgnoreCase("add")) {
+            if (event.getArgs()[2].equalsIgnoreCase("user")) {
+                if (event.getArgs()[3].contains("<@")) {
+                    String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Users list.")).queue();
                     DJUsers.add(UserID);
                 }
-            } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
-                if (event.getArgs().get(3).contains("<@&")) {
-                    String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
+            } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
+                if (event.getArgs()[3].contains("<@&")) {
+                    String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
                     DJRoles.add(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Roles list.")).queue();
                 }
@@ -114,16 +114,16 @@ public class CommandDJ extends BaseCommand {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (event.getArgs().get(1).equalsIgnoreCase("remove")) {
-            if (event.getArgs().get(2).equalsIgnoreCase("user")) {
-                if (event.getArgs().get(3).contains("<@")) {
-                    String UserID = event.getArgs().get(3).replace("<@", "").replace(">", "");
+        } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
+            if (event.getArgs()[2].equalsIgnoreCase("user")) {
+                if (event.getArgs()[3].contains("<@")) {
+                    String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Users list.")).queue();
                     DJUsers.remove(UserID);
                 }
-            } else if (event.getArgs().get(2).equalsIgnoreCase("role")) {
-                if (event.getArgs().get(3).contains("<@&")) {
-                    String RoleID = event.getArgs().get(3).replace("<@&", "").replace(">", "");
+            } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
+                if (event.getArgs()[3].contains("<@&")) {
+                    String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
                     DJRoles.remove(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Roles list.")).queue();
                 }

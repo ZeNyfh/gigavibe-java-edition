@@ -28,7 +28,7 @@ public class CommandHelp extends BaseCommand {
     public void execute(MessageEvent event) {
         int i = 0;
         try {
-            Arg = event.getArgs().get(1).toLowerCase();
+            Arg = event.getArgs()[1].toLowerCase();
         } catch (Exception ignored) {
             Arg = "";
         }

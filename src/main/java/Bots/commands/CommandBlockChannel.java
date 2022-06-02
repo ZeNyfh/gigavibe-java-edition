@@ -25,8 +25,8 @@ public class CommandBlockChannel extends BaseCommand {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
             return;
         }
-        if (!event.getArgs().get(1).equalsIgnoreCase("list")) {
-            if (event.getArgs().size() != 3) {
+        if (!event.getArgs()[1].equalsIgnoreCase("list")) {
+            if (event.getArgs().length != 3) {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`")).queue();
                 return;
             }
@@ -68,9 +68,9 @@ public class CommandBlockChannel extends BaseCommand {
 
         for (int i = 0; i < event.getGuild().getChannels().size(); ) {
             GuildChannel guildChannel = event.getGuild().getChannels().get(i);
-            if (event.getArgs().get(1).equalsIgnoreCase("add")) {
-                if (guildChannel.getId().equals(event.getArgs().get(2))) {
-                    blockedChannels.add(event.getArgs().get(2));
+            if (event.getArgs()[1].equalsIgnoreCase("add")) {
+                if (guildChannel.getId().equals(event.getArgs()[1])) {
+                    blockedChannels.add(event.getArgs()[1]);
                     blocked.put("BlockedChannels", blockedChannels);
                     obj.put(event.getGuild().getId(), blocked);
 
@@ -91,9 +91,9 @@ public class CommandBlockChannel extends BaseCommand {
                 } else {
                     i++;
                 }
-            } else if (event.getArgs().get(1).equalsIgnoreCase("remove")) {
-                if (guildChannel.getId().equals(event.getArgs().get(2))) {
-                    blockedChannels.remove(event.getArgs().get(2));
+            } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
+                if (guildChannel.getId().equals(event.getArgs()[1])) {
+                    blockedChannels.remove(event.getArgs()[1]);
                     blocked.put("BlockedChannels", blockedChannels);
                     obj.put(event.getGuild().getId(), blocked);
 
@@ -110,12 +110,12 @@ public class CommandBlockChannel extends BaseCommand {
                             e.printStackTrace();
                         }
                     }
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + event.getJDA().getRoleById(event.getArgs().get(2)) + Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs().get(2))).getName() + " from the list.")).queue();
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + event.getJDA().getRoleById(event.getArgs()[2]) + Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs()[2])).getName() + " from the list.")).queue();
                     return;
                 } else {
                     i++;
                 }
-            } else if (event.getArgs().get(1).equalsIgnoreCase("list")) {
+            } else if (event.getArgs()[1].equalsIgnoreCase("list")) {
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(botColour);
                 eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");

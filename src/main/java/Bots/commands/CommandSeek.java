@@ -52,10 +52,10 @@ public class CommandSeek extends BaseCommand {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
             return;
         }
-        List<String> args = event.getArgs();
-        if (args.size() > 1) {
+        String[] args = event.getArgs();
+        if (args.length > 1) {
             if (audioPlayer.getPlayingTrack().isSeekable()) {
-                String[] times = args.get(1).split(":", 3);
+                String[] times = args[1].split(":", 3);
                 for (int i = 0; i < times.length; ) {
                     if (times[i].matches("[^0-9]")) {
                         channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`")).queue();

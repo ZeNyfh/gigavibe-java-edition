@@ -22,12 +22,12 @@ public class CommandRadio extends BaseCommand {
     public void execute(MessageEvent event) throws IOException {
         String arg = "null";
         String argFinal = "";
-        if (event.getArgs().size() != 1) {
-            for (int i = 1; i < event.getArgs().size(); ) {
-                argFinal = argFinal + " " + event.getArgs().get(i);
+        if (event.getArgs().length != 1) {
+            for (int i = 1; i < event.getArgs().length; ) {
+                argFinal = argFinal + " " + event.getArgs()[i];
                 i++;
             }
-            arg = event.getArgs().get(1);
+            arg = event.getArgs()[1];
         }
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
@@ -38,7 +38,7 @@ public class CommandRadio extends BaseCommand {
         }
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         assert arg != null;
-        if (arg.equals("list") || event.getArgs().size() == 1) {
+        if (arg.equals("list") || event.getArgs().length == 1) {
             event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             eb.clear();
             return;

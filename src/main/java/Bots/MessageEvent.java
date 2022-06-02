@@ -12,16 +12,16 @@ As of now its a bit dry, but this may get expanded at some point when something 
 -9382 */
 
 public class MessageEvent extends MessageReceivedEvent {
-    final List<String> args;
+    final String[] args;
 
     public MessageEvent(MessageReceivedEvent event) {
         //Gain the previous MRE object properties.
         super(event.getJDA(), event.getResponseNumber(), event.getMessage()); //(Is this a good idea?)
         //New features on-top of MRE
-        this.args = Arrays.asList(this.getMessage().getContentRaw().split(" "));
+        this.args = this.getMessage().getContentRaw().split(" ");
     }
 
-    public List<String> getArgs() {
+    public String[] getArgs() {
         return this.args;
     }
 }
