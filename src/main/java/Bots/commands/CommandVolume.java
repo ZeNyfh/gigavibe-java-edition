@@ -28,34 +28,35 @@ public class CommandVolume extends BaseCommand {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not in the same vc as me.")).queue();
             return;
         }
-        String string = event.getMessage().getContentRaw();
-        int volume = 0;
-        if (string.matches("[^0-9]")) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Defaulted back to **100** volume.")).queue();
+        String[] args = event.getArgs();
+        if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Set volume to the default of **100**.")).queue();
             return;
         } else {
-            string = event.getArgs()[1];
-            //string = string.replaceAll("[^0-9]", ""); commented out because idk if the new solution will work
-            if (string.matches("[^0-9]")) {
-                //if (string.equals("")){
-                musicManager.audioPlayer.setVolume(round(volume));
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to: **" + volume + ".**")).queue();
+            if (args[1].matches("[^\\d.]")) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume must be an integer.")).queue();
                 return;
             }
-            volume = Integer.parseInt(string);
+            if (args[1].matches("^\\d+$")) {
+                //If entire thing is a number
+                int volume = Integer.parseInt(args[1]);
+                if (volume > 200) {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be higher than 200.")).queue();
+                    return;
+                }
+                if (volume < 0) {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be lower than 0.")).queue();
+                    return;
+                }
+                musicManager.audioPlayer.setVolume(volume);
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**.")).queue();
+            } else {
+                //More specific error if they don't get the point from the [^\\d.] error above
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can't include decimals.")).queue();
+                return;
+            }
         }
-        if (volume > 200) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Volume too high.")).queue();
-            return;
-        }
-        if (volume < 0) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Volume too low.")).queue();
-            return;
-        }
-        musicManager.audioPlayer.setVolume(round(volume));
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to: **" + volume + ".**")).queue();
-
     }
 
     @Override
