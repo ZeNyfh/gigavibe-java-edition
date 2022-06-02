@@ -36,9 +36,7 @@ public class CommandRemove extends BaseCommand {
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
-        String string = event.getMessage().getContentRaw();
-        String[] args = string.split(" ", 2);
-        string = args[1];
+        String string = event.getArgs()[1];
         if (!string.matches("^[0-9]")) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, integers only.")).queue();
             return;

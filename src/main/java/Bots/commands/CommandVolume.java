@@ -35,8 +35,7 @@ public class CommandVolume extends BaseCommand {
             musicManager.audioPlayer.setVolume(100);
             return;
         } else {
-            String[] args = string.split(" ", 2);
-            string = args[1];
+            string = event.getArgs()[1];
             //string = string.replaceAll("[^0-9]", ""); commented out because idk if the new solution will work
             if (string.matches("[^0-9]")) {
                 //if (string.equals("")){

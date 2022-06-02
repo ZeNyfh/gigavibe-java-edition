@@ -20,10 +20,8 @@ public class CommandExec extends BaseCommand {
                 return;
             }
         }
-        String string = event.getMessage().getContentRaw();
-        String[] args = string.split(" ", 2);
         try {
-            JShell.create().eval(args[1]);
+            JShell.create().eval(event.getArgs()[1]);
             event.getTextChannel().sendMessage("\uD83D\uDC4D\n\n").queue();
         } catch (Exception e) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", String.valueOf(e))).queue();

@@ -25,8 +25,6 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        String string = event.getMessage().getContentRaw();
-        String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
@@ -45,7 +43,7 @@ public class CommandPlay extends BaseCommand {
         }
         String link;
         try {
-            link = String.valueOf(args[1]);
+            link = String.valueOf(event.getArgs()[1]);
         } catch (Exception ignored) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
             return;

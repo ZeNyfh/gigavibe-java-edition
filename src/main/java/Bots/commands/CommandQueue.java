@@ -60,7 +60,7 @@ public class CommandQueue extends BaseCommand {
         }
         String string = event.getMessage().getContentRaw();
         int multiplier = 1;
-        String[] args = string.split(" ", 2);
+        String[] args = event.getArgs();
         if (args.length >= 2) {
             string = args[1];
             multiplier = Integer.parseInt(string.replaceAll("[^0-9]", ""));
