@@ -9,14 +9,29 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
-    String[] radioList = {"Hardbass", "Hardcore", "Trance", "Portugal", "Heart", "Portugal pop", "Poland", "Lithuania", "USA Country", "USA Classic Rock", "EDM", "Beats n Breaks", "Danish"};
-    String[] radioURls = {"https://server6.inetcast.nl:2015/stream", "http://cc5.beheerstream.com:8022/stream", "http://fr3.1mix.co.uk:8060/320?type=http&nocache=390123", "http://137.74.160.250:8000/;stream/1", "https://media-ssl.musicradio.com/HeartLondon", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48", "https://radio.m-1.fm/m1plius/aacp64", "https://ais-sa2.cdnstream1.com/1976_128.mp3", "https://hdradioclassicrock-rfritschka.radioca.st/stream", "http://fr1.1mix.co.uk:8060/320h", "http://83.137.145.141:14280/;", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3"};
+    public HashMap<String, String> getRadios(){
+        HashMap<String, String> radioLists = new HashMap<String, String>();
+        radioLists.put("Hardbass", "https://server6.inetcast.nl:2015/stream");
+        radioLists.put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
+        radioLists.put("Trance", "http://fr3.1mix.co.uk:8060/320?type=http&nocache=390123");
+        radioLists.put("Portugal", "http://137.74.160.250:8000/;stream/1");
+        radioLists.put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
+        radioLists.put("Portugal pop", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
+        radioLists.put("Poland", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
+        radioLists.put("Lithuania", "https://radio.m-1.fm/m1plius/aacp64");
+        radioLists.put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
+        radioLists.put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
+        radioLists.put("EDM", "http://fr1.1mix.co.uk:8060/320h");
+        radioLists.put("Beats n Breaks", "http://83.137.145.141:14280/;");
+        radioLists.put( "Danish", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        return radioLists;
+    }
+
 
     @Override
     public void execute(MessageEvent event) throws IOException {
@@ -32,10 +47,7 @@ public class CommandRadio extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
         eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
-        for (int i = 0; i < radioList.length; ) {
-            eb.appendDescription("**[" + radioList[i] + "](" + radioURls[i] + ")**\n");
-            i++;
-        }
+        getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         assert arg != null;
         if (arg.equals("list") || event.getArgs().length == 1) {
@@ -53,17 +65,19 @@ public class CommandRadio extends BaseCommand {
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         argFinal = argFinal.toLowerCase().substring(1);
         System.out.println(argFinal);
-        for (int i = 0; i < radioList.length; ) {
-            if (radioList[i].toLowerCase().equals(argFinal)) {
+        Iterator<Map.Entry<String, String>> iterator = getRadios().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> tempMap = iterator.next();
+            if (tempMap.getKey().equalsIgnoreCase(argFinal)){
                 if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
                     return;
                 }
                 audioManager.openAudioConnection(memberChannel);
-                PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), radioURls[i], false);
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + radioList[i] + "](" + radioURls[i] + ")**")).queue();
+                PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), tempMap.getValue(), false);
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**")).queue();
                 return;
             }
-            i++;
+            iterator.next();
         }
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
         event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
@@ -71,7 +85,7 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("radios");
         return list;
     }
