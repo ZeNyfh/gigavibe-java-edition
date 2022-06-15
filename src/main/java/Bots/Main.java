@@ -57,12 +57,17 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
-        Path folder = Paths.get("viddl");
+        Path folder = Paths.get("temp");
         if (!Files.exists(folder)) {
             System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
-        folder = Paths.get("auddl");
+        folder = Paths.get("temp/viddl");
+        if (!Files.exists(folder)) {
+            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
+            folder.toFile().mkdirs();
+        }
+        folder = Paths.get("temp/auddl");
         if (!Files.exists(folder)) {
             System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
