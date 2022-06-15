@@ -65,10 +65,8 @@ public class CommandRadio extends BaseCommand {
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         argFinal = argFinal.toLowerCase().substring(1);
         System.out.println(argFinal);
-        Iterator<Map.Entry<String, String>> iterator = getRadios().entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, String> tempMap = iterator.next();
-            if (tempMap.getKey().equalsIgnoreCase(argFinal)){
+        for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
+            if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
                 if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
                     return;
                 }
@@ -77,7 +75,6 @@ public class CommandRadio extends BaseCommand {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**")).queue();
                 return;
             }
-            iterator.next();
         }
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
         event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
