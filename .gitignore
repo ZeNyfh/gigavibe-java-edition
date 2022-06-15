@@ -8,3 +8,4 @@ src/main/java/META-INF/MANIFEST.MF
 out/artifacts/gigavibe_java_edition_jar/bot.jar
 /BlockedChannels.json
 /DJs.json
+Guilds.json
