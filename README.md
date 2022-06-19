@@ -5,7 +5,7 @@ dj roles.
 
 ## Prerequisites
 
-> JDK8
+> JDK16
 
 > YT-DLP (added to path)
 
