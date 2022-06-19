@@ -7,17 +7,6 @@ dj roles.
 
 > JDK16
 
-> YT-DLP (added to path)
-
-(YT-DLP can be acquired through
-"pip install yt-dlp" on all platforms
-
-or "choco install yt-dlp" on windows
-
-or "sudo snap install yt-dlp" on linux)
-
-The rest will be in the pom.xml file.
-
 ## Usage
 
 > Make sure to define a token and change any parameters you wish to change (such as the prefix)
