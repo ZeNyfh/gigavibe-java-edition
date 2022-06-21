@@ -21,16 +21,8 @@ public class CommandAudioDL extends BaseCommand {
     public static int queue = 0;
 
     public void execute(MessageEvent event) {
-<<<<<<< Updated upstream
-        String message = event.getMessage().getContentRaw();
-        String arg = message.replace(botPrefix + "dl ", "").replace(" ", "");
-        File dir = new File("temp/auddl");
-        if (arg.equals("") || arg.equals(" ")) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
-=======
         File dir = new File("auddl");
         if (Objects.equals(event.getArgs()[1], "")) {
->>>>>>> Stashed changes
             return;
         }
         final Message[] messageVar = new Message[1];
