@@ -31,15 +31,12 @@ public class CommandBotInfo extends BaseCommand {
         eb.setTitle(event.getJDA().getSelfUser().getName() + " Info", null);
         eb.setColor(botColour);
         eb.appendDescription("\uD83D\uDD27  **Ram usage:** " + memoryUsed / 1000 / 1000 + "MB\n\n");
-        //
         long finalUptime = currentTimeMillis() - Main.Uptime;
         String finalTime = toTimestamp(finalUptime);
         eb.appendDescription("⏰  **Uptime:** " + finalTime + "\n\n");
-        //
         eb.appendDescription("\uD83D\uDCE1  **Guilds:** " + event.getJDA().getGuilds().size() + "\n\n");
-        //
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
-        //
+        eb.setFooter("Version: " + botVersion);
         long time = currentTimeMillis();
         event.getTextChannel().sendMessageEmbeds(eb.build()).queue(response -> {
             eb.appendDescription("⏱️  **Ping:** " + (currentTimeMillis() - time) + "ms");

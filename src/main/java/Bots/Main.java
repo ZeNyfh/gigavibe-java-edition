@@ -50,6 +50,7 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
+    public static String botVersion = "22.06.21"; // YY.MM.DD
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -223,6 +224,22 @@ public class Main extends ListenerAdapter {
         }
         totalSet.add(finalSeconds);
         return String.join("", totalSet);
+    }
+
+    public static long fromSimpleTimestamp(String SimpleTimestamp) {
+        String[] times = SimpleTimestamp.split(":");
+        int hours = 0;
+        int minutes;
+        int seconds;
+        if (times.length == 2){
+            minutes = Integer.parseInt(times[0].replaceAll(" ", ""))*60;
+            seconds = Integer.parseInt(times[1].replaceAll(" ", ""));
+        } else {
+            hours = Integer.parseInt(times[0].replaceAll(" ", ""))*60*60;
+            minutes = Integer.parseInt(times[1].replaceAll(" ", ""))*60;
+            seconds = Integer.parseInt(times[2].replaceAll(" ", ""));
+        }
+        return hours + minutes + seconds;
     }
 
     public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {

@@ -2,92 +2,87 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.ExceptionEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.fromSimpleTimestamp;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
     public static int queue = 0;
 
     public void execute(MessageEvent event) {
+<<<<<<< Updated upstream
         String message = event.getMessage().getContentRaw();
         String arg = message.replace(botPrefix + "dl ", "").replace(" ", "");
         File dir = new File("temp/auddl");
         if (arg.equals("") || arg.equals(" ")) {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
+=======
+        File dir = new File("auddl");
+        if (Objects.equals(event.getArgs()[1], "")) {
+>>>>>>> Stashed changes
             return;
         }
-        String filesize = "8m";
-        if (event.getGuild().getBoostCount() <= 7) {
-            filesize = "50m";
-        }
-        String finalFilesize = filesize;
+        final Message[] messageVar = new Message[1];
         new Thread(() -> {
-            for (int loop = 900; loop > 0 && queue >= 1; loop--) { // queue system
-                try {
-                    Thread.sleep(2000);
-                } catch (Exception ignored) {
-                }
-                event.getTextChannel().sendTyping().queue();
-                System.out.println(queue);
-            }
-            queue++;
-            String tempfilename = event.getMember().getId() + System.currentTimeMillis();
             try {
-                Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " -f \"b\" -S \"filesize~" + finalFilesize + "\" --part -x --audio-format mp3", null, dir);
-            } catch (IOException ignored) {
-            }
-            File finalDir = new File((dir + "\\" + tempfilename + ".mp3"));
-            for (int i = 100; i > 0 && !finalDir.exists(); i--) { // download process
-                try {
-                    event.getTextChannel().sendTyping().queue();
-                    Thread.sleep(5000);
-                    if (finalDir.exists()) {
-                        i = 0;
-                        File mp4 = new File(dir + "\\" + tempfilename + ".mp4"); // check for if the file is fully written to
-                        for (int i1 = 150; i1 > 0; i1--) {
-                            Thread.sleep(2000);
-                            File part = new File("\\" + tempfilename + ".part"); // error handler for if the file fails to download
-                            if (i1 <= 130 && part.exists()) {
-                                queue--;
-                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
-                                Files.delete(Paths.get(String.valueOf(part)));
-                                return;
-                            }
-                            if (!mp4.exists()) {
-                                queue--;
-                                try {
-                                    event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
-                                } catch (Exception e) {
-                                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large.")).queue();
-                                }
-                                for (int i2 = 5; i2 > 0; i2--) {  // file deletion
-                                    try {
-                                        Thread.sleep(1000);
-                                        Files.delete(Paths.get(valueOf(finalDir)));
-                                    } catch (Exception ignored) {
-                                    }
-                                }
-                                return;
-                            }
-                        }
+                String filename = valueOf(System.currentTimeMillis());
+                Process p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format mp3 -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" " + event.getArgs()[1]);
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                int i = 0;
+                boolean embedCheck = false;
+                while ((line = input.readLine()) != null) {
+                    i++;
+                    if (i >= 8 && line.contains("ETA") && !embedCheck) {
+                        embedCheck = true;
+                        line = line + "**";
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(message -> messageVar[0] = message);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    queue--;
-                } catch (IOException ignored) {
-                    queue--;
                 }
-            }
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
-            queue--;
+                p.waitFor();
+                input.close();
+                File finalFile = new File(dir + "/" + filename + ".mp3");
+                float duration;
+                if (finalFile.length() > 8000000) { // if the file is 8mb or over
+                    messageVar[0].editMessage("File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
+                    String strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe.exe -i " + finalFile + " -show_entries format=duration -v quiet -of csv=\"p=0\"").getInputStream())).readLine();
+                    duration = Float.parseFloat(strDuration); // duration of the audio file
+                    long desiredBitRate;
+                    if (event.getGuild().getBoostCount() < 7) {
+                        desiredBitRate = (long) (Math.round(7 * 8192) / duration); // 1mb lower just in case
+                    } else {
+                        desiredBitRate = (long) (Math.round(49 * 8192) / duration); // 1mb lower just in case
+                    }
+                    if (desiredBitRate < 33) { // check for ffmpeg bitrate limit
+                        new File("auddl/" + filename + ".mp3").delete();
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
+                        return;
+                    }
+                    p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:a " + desiredBitRate + "k " + dir + "\\" + filename + "K.mp3");
+                    p.waitFor();
+                    try {
+                        event.getTextChannel().sendFile(new File("auddl/" + filename + "K.mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + "K.mp3").delete()));
+                        new File("auddl/" + filename + ".mp3").delete();
+                    } catch (Exception e) {
+                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                    }
+                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7){ // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
+                    try {
+                        event.getTextChannel().sendFile(new File("auddl/" + filename + ".mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + ".mp3").delete()));
+                    } catch (Exception e){Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());}
+                }
+            } catch (Exception e){e.printStackTrace();}
         }).start();
     }
 
