@@ -25,8 +25,6 @@ public class PlayerManager {
     private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
-
-
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
@@ -83,7 +81,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                String length;
+                String length = "Unknown";
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setColor(new Color(0, 0, 255));
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
@@ -93,21 +91,12 @@ public class PlayerManager {
                             musicManager.scheduler.queue(tracks.get(0));
                             return;
                         }
-                        if (tracks.get(0).getInfo().length > 432000000) { // 5 days
-                            length = "Unknown";
-                        } else {
+                        if (tracks.get(0).getInfo().length < 432000000) { // 5 days
                             length = toTimestamp((tracks.get(0).getInfo().length));
                         }
                         musicManager.scheduler.queue(tracks.get(0));
-                        if (tracks.get(0).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                            embed.setTitle((tracks.get(0).getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-                        } else {
-                            embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
-                            embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
-                        }
-                        if (tracks.get(0).getInfo().uri.contains("cdn.discordapp.com") || tracks.get(0).getInfo().uri.contains("media.discordapp.net")) {
-                            embed.setTitle((tracks.get(0).getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-                            embed.setThumbnail(tracks.get(0).getInfo().uri + "?format=jpeg");
+                        embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
+                        embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         }
                         String author = (tracks.get(0).getInfo().author);
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
@@ -125,19 +114,16 @@ public class PlayerManager {
                         i++;
                     }
                 }
-            }
 
             @Override
             public void noMatches() {
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No track was found.")).queue();
-                System.out.println("No track found.");
+                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No matches found for the track.")).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Track failed to load. \n\n ```" + e.getMessage() + "```")).queue();
+                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
             }
         });
     }
-
 }

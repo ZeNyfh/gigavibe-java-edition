@@ -18,7 +18,7 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandPlay extends BaseCommand {
     public static boolean playlistCheck = false;
-    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
+    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "3gp"};
 
     public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {

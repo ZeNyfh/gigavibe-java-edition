@@ -50,7 +50,7 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
-    public static String botVersion = "22.06.21"; // YY.MM.DD
+    public static String botVersion = "22.06.22"; // YY.MM.DD
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -58,17 +58,12 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
-        Path folder = Paths.get("temp");
+        Path folder = Paths.get("viddl");
         if (!Files.exists(folder)) {
             System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
-        folder = Paths.get("temp/viddl");
-        if (!Files.exists(folder)) {
-            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
-            folder.toFile().mkdirs();
-        }
-        folder = Paths.get("temp/auddl");
+        folder = Paths.get("auddl");
         if (!Files.exists(folder)) {
             System.out.println(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
@@ -100,6 +95,17 @@ public class Main extends ListenerAdapter {
             writer.flush();
             writer.close();
         }
+        String OS = System.getProperty("os.name");
+        if (OS.toLowerCase().contains("windows")) {
+            file = new File("modules/ffmpeg.exe");
+        } else if (OS.toLowerCase().contains("linux")){
+            file = new File("modules/ffmpeg");
+        } // mac support not available due to the lack of a mac device, if you want, you can fork this and add it yourself.
+        //if (!file.exists()) {
+        //    System.out.println(file.getName() + " doesn't exist, downloading now.");
+        //
+        //    file.createNewFile();
+        //}
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());

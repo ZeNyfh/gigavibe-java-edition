@@ -2,82 +2,113 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.entities.Message;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
+import static java.lang.String.valueOf;
 
 public class CommandVideoDL extends BaseCommand {
     public static int queue = 0;
 
     public void execute(MessageEvent event) {
-        String message = event.getMessage().getContentRaw();
-        String arg = message.replace(botPrefix + "videodl ", "").replace(" ", "");
-        File dir = new File("temp/viddl");
-        if (arg.equals("") || arg.equals(" ")) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument found.")).queue();
+        File dir = new File("viddl");
+        if (Objects.equals(event.getArgs()[1], "")) {
             return;
         }
-        String filesize = "-f \"[filesize<\"8m\"]\" --no-playlist"; // these parameters will be changed for file size
-        if (event.getGuild().getBoostCount() <= 7) {
-            filesize = "-f \"b\" -S \"filesize~50m\" --no-playlist"; // these parameters will be changed for file size
-        }
-        String finalFilesize = filesize;
+        final Message[] messageVar = new Message[1];
         new Thread(() -> {
-            for (int loop = 900; loop > 0 && queue >= 1; loop--) { // queue system
-                try {
-                    Thread.sleep(2000);
-                } catch (Exception ignored) {
-                }
-                event.getTextChannel().sendTyping().queue();
-            }
-            queue++;
-            String tempfilename = event.getMember().getId() + System.currentTimeMillis();
             try {
-                Runtime.getRuntime().exec("yt-dlp -o \"" + tempfilename + ".%(ext)s\" " + arg + " " + finalFilesize, null, dir); // if you can, try and make the filesize even smaller
-            } catch (IOException ignored) {
-            }
-            File finalDir = new File((dir + "\\" + tempfilename + ".mp4"));
-            for (int i = 150; i > 0 && !finalDir.exists(); i--) {
-                File part = new File("\\" + tempfilename + ".part");
-                if (i <= 130 && part.exists()) { // error handler for if the file fails to download
-                    queue--;
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The download failed to start, try again.")).queue();
-                    try {
-                        Files.delete(Paths.get(String.valueOf(part)));
-                    } catch (IOException ignored) {
+                String filename = valueOf(System.currentTimeMillis());
+                Process p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" " + event.getArgs()[1]);
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                int i = 0;
+                boolean embedCheck = false;
+                while ((line = input.readLine()) != null) {
+                    i++;
+                    if (i >= 8 && line.contains("ETA") && !embedCheck) {
+                        embedCheck = true;
+                        line = line + "**";
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(message -> messageVar[0] = message);
                     }
-                    return;
                 }
-                try {
-                    Thread.sleep(5000);  // download process
-                    event.getTextChannel().sendTyping().queue();
-                    if (finalDir.exists()) {
-                        try {
-                            event.getTextChannel().sendMessage(event.getMember().getAsMention()).addFile(finalDir).queue();
-                        } catch (Exception e) {
-                            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file was too large.")).queue();
-                        }
-                        for (int i1 = 5; i1 > 0; i1--) { // file deletion
-                            try {
-                                Thread.sleep(1000);
-                                Files.delete(Paths.get(String.valueOf(finalDir)));
-                            } catch (Exception ignored) {
+                p.waitFor();
+                input.close();
+                File finalFile = new File(dir + "/" + filename + ".mp4");
+                if (finalFile.length() > 8000000) { // if the file is 8mb or over
+                    messageVar[0].editMessage("File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
+                    long desiredBitRate;
+                    if (event.getGuild().getBoostCount() < 7) {
+                        desiredBitRate = (Math.round(7 * 8192) / (finalFile.length() / 8192)); // 1mb lower just in case
+                    } else {
+                        desiredBitRate = (Math.round(49 * 8192) / (finalFile.length() / 8192)); // 1mb lower just in case
+                    }
+                    System.out.println(desiredBitRate);
+                    if (desiredBitRate < 33) { // check for ffmpeg bitrate limit
+                        String strWidth = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -v error -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 " + finalFile).getInputStream())).readLine();
+                        long desiredWidth = Long.parseLong(strWidth)/2;
+                        messageVar[0].editMessage("File size still too large, lowering bitrate and resolution...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
+                        p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -vf \"scale= " + desiredWidth + ":-2\" " + dir + "/" + filename + "R.mp4");
+                        p.waitFor();
+                        File finalFinalFile = new File(dir + "/" + filename + "R.mp4");
+                        if (finalFinalFile.length() > 8000000) { // if the Finalfile is 8mb or over
+                            if (event.getGuild().getBoostCount() < 7) {
+                                desiredBitRate = (Math.round(7 * 8192) / (finalFinalFile.length() / 8192)); // 1mb lower just in case
+                            } else {
+                                desiredBitRate = (Math.round(49 * 8192) / (finalFinalFile.length() / 8192)); // 1mb lower just in case
                             }
+                            p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFinalFile.getAbsolutePath() + "\" -b:v " + desiredBitRate + "k " + dir + "\\" + filename + "KR.mp4");
+                            p.waitFor();
+                            File KRFile = new File(dir + "\\" + filename + "KR.mp4");
+                            p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + KRFile.getAbsolutePath() + "\" -b:a 33k " + dir + "\\" + filename + "KRF.mp4"); // they dont need good audio quality, they want video (im lazy)
+                            p.waitFor();
+                            try {
+                                event.getTextChannel().sendFile(new File("viddl/" + filename + "KRF.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "KRF.mp4").delete()));
+                                new File("viddl/" + filename + "KR.mp4").delete();
+                                new File("viddl/" + filename + "K.mp4").delete();
+                                new File("viddl/" + filename + ".mp4").delete();
+                                return;
+                            } catch (Exception e) {
+                                Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**","File could not be lowered to under 8mb")).queue();
+                            }
+                        } else {
+                            System.out.println("It would be able to send");
+                            try {
+                                event.getTextChannel().sendFile(new File("viddl/" + filename + "KR.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "R.mp4").delete()));
+                                new File("viddl/" + filename + "K.mp4").delete();
+                                new File("viddl/" + filename + ".mp4").delete();
+                            } catch (Exception ignored) {}
+                            return;
                         }
-                        queue--;
+                        new File("viddl/" + filename + ".mp4").delete();
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
                         return;
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:v " + desiredBitRate + "k " + dir + "\\" + filename + "K.mp4");
+                    p.waitFor();
+                    try {
+                        event.getTextChannel().sendFile(new File("viddl/" + filename + "K.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "K.mp4").delete()));
+                        new File("viddl/" + filename + ".mp4").delete();
+                    } catch (Exception e) {
+                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                    }
+                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7){ // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
+                    try {
+                        event.getTextChannel().sendFile(new File("viddl/" + filename + ".mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + ".mp4").delete()));
+                    } catch (Exception e){Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());}
                 }
-            }
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Timed out.")).queue();
+            } catch (Exception e){e.printStackTrace();}
         }).start();
     }
 

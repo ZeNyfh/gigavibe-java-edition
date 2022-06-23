@@ -28,10 +28,9 @@ public class CommandSkip extends BaseCommand {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc.")).queue();
             return;
         }
+        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 
-        final Member member = event.getMember();
-        final GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
-
+        assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
             return;
@@ -47,19 +46,10 @@ public class CommandSkip extends BaseCommand {
 
         if (audioPlayer.getPlayingTrack() == null) {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
-            return;
+        } else {
+            musicManager.scheduler.nextTrack();
+            channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
         }
-        String fileToDelete = null;
-        if (musicManager.audioPlayer.getPlayingTrack().getInfo().identifier.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            fileToDelete = musicManager.audioPlayer.getPlayingTrack().getInfo().identifier;
-            try {
-                assert fileToDelete != null;
-                Files.delete(Paths.get(fileToDelete));
-            } catch (IOException ignored) {
-            }
-        }
-        musicManager.scheduler.nextTrack();
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
     }
 
     public String getCategory() {

@@ -48,7 +48,7 @@ public class CommandAudioDL extends BaseCommand {
                 float duration;
                 if (finalFile.length() > 8000000) { // if the file is 8mb or over
                     messageVar[0].editMessage("File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
-                    String strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe.exe -i " + finalFile + " -show_entries format=duration -v quiet -of csv=\"p=0\"").getInputStream())).readLine();
+                    String strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -i " + finalFile + " -show_entries format=duration -v quiet -of csv=\"p=0\"").getInputStream())).readLine();
                     duration = Float.parseFloat(strDuration); // duration of the audio file
                     long desiredBitRate;
                     if (event.getGuild().getBoostCount() < 7) {
