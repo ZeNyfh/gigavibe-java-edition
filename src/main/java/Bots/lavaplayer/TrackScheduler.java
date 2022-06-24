@@ -8,8 +8,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static Bots.Main.*;
 
@@ -58,7 +61,6 @@ public class TrackScheduler extends AudioEventAdapter {
                 return;
             }
         }
-        nextTrack();
         EmbedBuilder eb = new EmbedBuilder();
         if (nextTrack == null) {
             return;
@@ -78,5 +80,18 @@ public class TrackScheduler extends AudioEventAdapter {
         eb.setColor(botColour);
         System.out.println(nextTrack.getInfo().title);
         userData.sendMessageEmbeds(eb.build()).queue();
+        if (endReason.mayStartNext) {
+            nextTrack();
+        }
+        if (endReason.name().equals("REPLACED")){
+            return;
+        }
+        onTrackStuck(nextTrack);
+    }
+
+    private void onTrackStuck(AudioTrack nextTrack) {
+        TextChannel userData = (TextChannel) nextTrack.getUserData();
+        userData.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Track got stuck, skipping.")).queue();
+        nextTrack();
     }
 }

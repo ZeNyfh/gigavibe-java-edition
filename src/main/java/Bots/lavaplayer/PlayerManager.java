@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.toTimestamp;
-import static Bots.commands.CommandPlay.playlistCheck;
 
 public class PlayerManager {
 
@@ -86,43 +85,65 @@ public class PlayerManager {
                 embed.setColor(new Color(0, 0, 255));
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    if (tracks.size() > 1 && !playlistCheck) {
+                    String author = (tracks.get(0).getInfo().author);
+                    if (tracks.get(0).getInfo().length < 432000000) { // 5 days
+                        length = toTimestamp((tracks.get(0).getInfo().length));
+                    }
+                    if (tracks.size() == 1) {
                         if (!sendEmbed) {
                             musicManager.scheduler.queue(tracks.get(0));
                             return;
                         }
-                        if (tracks.get(0).getInfo().length < 432000000) { // 5 days
-                            length = toTimestamp((tracks.get(0).getInfo().length));
-                        }
                         musicManager.scheduler.queue(tracks.get(0));
                         embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
-                        }
-                        String author = (tracks.get(0).getInfo().author);
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                         textChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
-                        for (int i = 0; i < tracks.size(); ) {
+                        for (int i = 0; i < tracks.size();) {
                             lengthSeconds = (lengthSeconds + tracks.get(i).getInfo().length);
                             musicManager.scheduler.queue(tracks.get(i));
                             i++;
                         }
+                        embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
+                        embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
+
+                        for (int i = 0; i < tracks.size();){
+                            if (i > 4 || tracks.get(i) == null){
+                                break;
+                            }
+                            if (tracks.get(i).getInfo().title == null){
+                                embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
+                            } else {
+                                embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().title + "](" + tracks.get(i).getInfo().uri + ")\n");
+                            }
+                            i++;
+                        }
+                        if (tracks.size() > 5){
+                            embed.appendDescription("...");
+                        }
+                        embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
+                        textChannel.sendMessageEmbeds(embed.build()).queue();
                     }
                     for (int i = 0; i < tracks.size(); ) {
                         tracks.get(i).setUserData(textChannel);
                         i++;
                     }
                 }
+            }
 
             @Override
             public void noMatches() {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No matches found for the track.")).queue();
+                System.out.println("No match found.");
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
+                System.out.println("track loading failed, stacktrace: ");
+                e.printStackTrace();
             }
         });
     }
