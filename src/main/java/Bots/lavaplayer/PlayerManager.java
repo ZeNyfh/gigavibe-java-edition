@@ -89,7 +89,7 @@ public class PlayerManager {
                     if (tracks.get(0).getInfo().length < 432000000) { // 5 days
                         length = toTimestamp((tracks.get(0).getInfo().length));
                     }
-                    if (tracks.size() == 1) {
+                    if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:")) {
                         if (!sendEmbed) {
                             musicManager.scheduler.queue(tracks.get(0));
                             return;

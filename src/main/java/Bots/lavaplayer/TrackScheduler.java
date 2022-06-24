@@ -80,10 +80,12 @@ public class TrackScheduler extends AudioEventAdapter {
         eb.setColor(botColour);
         System.out.println(nextTrack.getInfo().title);
         userData.sendMessageEmbeds(eb.build()).queue();
+        System.out.println(endReason);
         if (endReason.mayStartNext) {
             nextTrack();
+            return;
         }
-        if (endReason.name().equals("REPLACED")){
+        if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")){
             return;
         }
         onTrackStuck(nextTrack);

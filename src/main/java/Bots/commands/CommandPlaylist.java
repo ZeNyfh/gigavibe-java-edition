@@ -3,8 +3,10 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
+import Bots.lavaplayer.TrackScheduler;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -184,9 +186,12 @@ public class CommandPlaylist extends BaseCommand {
                 JSONArray playlist = (JSONArray) userObj.get("Playlist" + event.getArgs()[2]);
                 if (playlist.size() >= 1) {
                     assert memberState != null;
+                    TextChannel textChannel = event.getTextChannel();
+                    PlayerManager playerManagerInstance = PlayerManager.getInstance();
                     event.getGuild().getAudioManager().openAudioConnection(memberState.getChannel());
+                    List finalPlaylist = playlist.stream().toList();
                     for (int i = 0; i < playlist.size(); ) {
-                        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), (String) playlist.toArray()[i], false);
+                        playerManagerInstance.loadAndPlay(textChannel, (String) finalPlaylist.get(i), false);
                         i++;
                     }
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ Successfully queued: **playlist " + args[2] + "**.", "Playlist size: **" + playlist.size() + "**")).queue();
