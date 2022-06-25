@@ -5,16 +5,14 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandSkip extends BaseCommand {
 
@@ -48,7 +46,23 @@ public class CommandSkip extends BaseCommand {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
         } else {
             musicManager.scheduler.nextTrack();
-            channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
+            if (musicManager.audioPlayer.getPlayingTrack() == null) {
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
+                return;
+            }
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(botColour);
+            if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
+                eb.setTitle("⏩ Skipped the current track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+            } else {
+                eb.setTitle("⏩ Skipped the current track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
+            }
+            if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
+                eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
+            }
+            eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+            event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
         }
     }
 

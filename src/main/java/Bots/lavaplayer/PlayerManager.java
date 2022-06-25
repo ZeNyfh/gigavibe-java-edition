@@ -24,6 +24,7 @@ public class PlayerManager {
     private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
+
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
@@ -101,7 +102,7 @@ public class PlayerManager {
                         textChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
-                        for (int i = 0; i < tracks.size();) {
+                        for (int i = 0; i < tracks.size(); ) {
                             lengthSeconds = (lengthSeconds + tracks.get(i).getInfo().length);
                             musicManager.scheduler.queue(tracks.get(i));
                             i++;
@@ -109,18 +110,18 @@ public class PlayerManager {
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
                         embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
 
-                        for (int i = 0; i < tracks.size();){
-                            if (i > 4 || tracks.get(i) == null){
+                        for (int i = 0; i < tracks.size(); ) {
+                            if (i > 4 || tracks.get(i) == null) {
                                 break;
                             }
-                            if (tracks.get(i).getInfo().title == null){
+                            if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
                             } else {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().title + "](" + tracks.get(i).getInfo().uri + ")\n");
                             }
                             i++;
                         }
-                        if (tracks.size() > 5){
+                        if (tracks.size() > 5) {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");

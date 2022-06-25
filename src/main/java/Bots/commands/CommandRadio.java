@@ -9,12 +9,15 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
-    public HashMap<String, String> getRadios(){
+    public HashMap<String, String> getRadios() {
         HashMap<String, String> radioLists = new HashMap<String, String>();
         radioLists.put("Hardbass", "https://server6.inetcast.nl:2015/stream");
         radioLists.put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
@@ -28,7 +31,7 @@ public class CommandRadio extends BaseCommand {
         radioLists.put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
         radioLists.put("EDM", "http://fr1.1mix.co.uk:8060/320h");
         radioLists.put("Beats n Breaks", "http://83.137.145.141:14280/;");
-        radioLists.put( "Danish", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        radioLists.put("Danish", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
         return radioLists;
     }
 

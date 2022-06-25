@@ -9,9 +9,6 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -22,6 +19,7 @@ public class CommandForceSkip extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
             return;
         }
         final TextChannel channel = event.getTextChannel();

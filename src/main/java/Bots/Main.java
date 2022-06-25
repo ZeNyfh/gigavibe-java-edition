@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.BlockingQueue;
 
 import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
@@ -51,6 +52,7 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static String botVersion = "22.06.22"; // YY.MM.DD
+    public static JDA bot = null;
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -98,7 +100,7 @@ public class Main extends ListenerAdapter {
         String OS = System.getProperty("os.name");
         if (OS.toLowerCase().contains("windows")) {
             file = new File("modules/ffmpeg.exe");
-        } else if (OS.toLowerCase().contains("linux")){
+        } else if (OS.toLowerCase().contains("linux")) {
             file = new File("modules/ffmpeg");
         } // mac support not available due to the lack of a mac device, if you want, you can fork this and add it yourself.
         //if (!file.exists()) {
@@ -237,12 +239,12 @@ public class Main extends ListenerAdapter {
         int hours = 0;
         int minutes;
         int seconds;
-        if (times.length == 2){
-            minutes = Integer.parseInt(times[0].replaceAll(" ", ""))*60;
+        if (times.length == 2) {
+            minutes = Integer.parseInt(times[0].replaceAll(" ", "")) * 60;
             seconds = Integer.parseInt(times[1].replaceAll(" ", ""));
         } else {
-            hours = Integer.parseInt(times[0].replaceAll(" ", ""))*60*60;
-            minutes = Integer.parseInt(times[1].replaceAll(" ", ""))*60;
+            hours = Integer.parseInt(times[0].replaceAll(" ", "")) * 60 * 60;
+            minutes = Integer.parseInt(times[1].replaceAll(" ", "")) * 60;
             seconds = Integer.parseInt(times[2].replaceAll(" ", ""));
         }
         return hours + minutes + seconds;
@@ -326,6 +328,7 @@ public class Main extends ListenerAdapter {
         eb.setColor(botColour);
         int i = 0;
         String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
+        BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
         if (buttonID.equals("general") || (buttonID.equals("music") || (buttonID.equals("dj") || (buttonID.equals("admin"))))) {
             for (BaseCommand Command : commands) {
                 if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
@@ -333,6 +336,14 @@ public class Main extends ListenerAdapter {
                     eb.appendDescription("`" + i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
                 }
             }
+        } else if (buttonID.equals("forward")) {
+            for (int j = 0; j < Queue.size(); ) {
+                j++;
+            }
+            return;
+        } else if (buttonID.equals("backward")) {
+
+            return;
         }
         if (Objects.equals(event.getButton().getId(), "general")) {
             eb.setTitle("\uD83D\uDCD6 **General**");
@@ -419,7 +430,6 @@ public class Main extends ListenerAdapter {
         }
         return false;
     }
-
 
     @Override
     public void onShutdown(@NotNull ShutdownEvent event) {

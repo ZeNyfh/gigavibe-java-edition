@@ -19,6 +19,7 @@ public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
             return;
         }
         final TextChannel channel = event.getTextChannel();

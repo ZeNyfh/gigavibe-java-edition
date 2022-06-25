@@ -3,18 +3,14 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.ExceptionEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.fromSimpleTimestamp;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
@@ -69,12 +65,16 @@ public class CommandAudioDL extends BaseCommand {
                     } catch (Exception e) {
                         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
                     }
-                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7){ // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
+                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) { // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
                     try {
                         event.getTextChannel().sendFile(new File("auddl/" + filename + ".mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + ".mp3").delete()));
-                    } catch (Exception e){Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());}
+                    } catch (Exception e) {
+                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                    }
                 }
-            } catch (Exception e){e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 

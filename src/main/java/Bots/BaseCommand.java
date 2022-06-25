@@ -13,7 +13,8 @@ elements like getArgs() could be quite useful
 public class BaseCommand {
 
     /* Would use an interface, however that prevents optional arguments, and I want getAlias() -9382 */
-    public void execute(MessageEvent event) throws IOException {}
+    public void execute(MessageEvent event) throws IOException {
+    }
 
     public String getName() {
         return "default";

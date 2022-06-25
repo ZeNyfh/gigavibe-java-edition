@@ -6,14 +6,10 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 import static java.lang.String.valueOf;
 
@@ -56,7 +52,7 @@ public class CommandVideoDL extends BaseCommand {
                     System.out.println(desiredBitRate);
                     if (desiredBitRate < 33) { // check for ffmpeg bitrate limit
                         String strWidth = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -v error -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 " + finalFile).getInputStream())).readLine();
-                        long desiredWidth = Long.parseLong(strWidth)/2;
+                        long desiredWidth = Long.parseLong(strWidth) / 2;
                         messageVar[0].editMessage("File size still too large, lowering bitrate and resolution...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
                         p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -vf \"scale= " + desiredWidth + ":-2\" " + dir + "/" + filename + "R.mp4");
                         p.waitFor();
@@ -80,7 +76,7 @@ public class CommandVideoDL extends BaseCommand {
                                 return;
                             } catch (Exception e) {
                                 Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
-                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**","File could not be lowered to under 8mb")).queue();
+                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File could not be lowered to under 8mb")).queue();
                             }
                         } else {
                             System.out.println("It would be able to send");
@@ -88,7 +84,8 @@ public class CommandVideoDL extends BaseCommand {
                                 event.getTextChannel().sendFile(new File("viddl/" + filename + "KR.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "R.mp4").delete()));
                                 new File("viddl/" + filename + "K.mp4").delete();
                                 new File("viddl/" + filename + ".mp4").delete();
-                            } catch (Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                             return;
                         }
                         new File("viddl/" + filename + ".mp4").delete();
@@ -103,12 +100,16 @@ public class CommandVideoDL extends BaseCommand {
                     } catch (Exception e) {
                         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
                     }
-                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7){ // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
+                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) { // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
                     try {
                         event.getTextChannel().sendFile(new File("viddl/" + filename + ".mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + ".mp4").delete()));
-                    } catch (Exception e){Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());}
+                    } catch (Exception e) {
+                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                    }
                 }
-            } catch (Exception e){e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 

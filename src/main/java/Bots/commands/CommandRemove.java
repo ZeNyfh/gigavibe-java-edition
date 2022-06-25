@@ -19,6 +19,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandRemove extends BaseCommand {
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
             return;
         }
         final Member self = event.getGuild().getSelfMember();

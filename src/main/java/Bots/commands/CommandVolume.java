@@ -11,12 +11,12 @@ import java.util.Objects;
 
 import static Bots.Main.IsDJ;
 import static Bots.Main.createQuickEmbed;
-import static java.lang.Math.round;
 
 public class CommandVolume extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

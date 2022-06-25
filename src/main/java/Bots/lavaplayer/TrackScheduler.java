@@ -8,11 +8,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import static Bots.Main.*;
 
@@ -45,7 +42,6 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         TextChannel userData = (TextChannel) track.getUserData();
-        AudioTrack nextTrack = getTrackFromQueue(userData.getGuild(), 0);
         if (LoopGuilds.contains(userData.getGuild().getId())) {
             if (endReason.mayStartNext) {
                 AudioTrack loopTrack = track.makeClone();
@@ -61,31 +57,34 @@ public class TrackScheduler extends AudioEventAdapter {
                 return;
             }
         }
-        EmbedBuilder eb = new EmbedBuilder();
-        if (nextTrack == null) {
-            return;
-        } else if (!nextTrack.getInfo().title.isEmpty()) {
-            eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
-        } else {
-            eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
-        }
-        if (nextTrack.getInfo().length <= 432000000) {
-            eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
-            eb.addField("**Duration**\n", toSimpleTimestamp(nextTrack.getInfo().length), true);
-        } else {
-            eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
-            eb.addField("**Duration**\n", "Unknown", true);
-        }
-        eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
-        eb.setColor(botColour);
-        System.out.println(nextTrack.getInfo().title);
-        userData.sendMessageEmbeds(eb.build()).queue();
-        System.out.println(endReason);
+        AudioTrack nextTrack = null;
         if (endReason.mayStartNext) {
             nextTrack();
+            nextTrack = player.getPlayingTrack();
+            EmbedBuilder eb = new EmbedBuilder();
+            if (getTrackFromQueue(userData.getGuild(), 0) == null) {
+                System.out.println("nextTrack is apparently null");
+                return;
+            } else if (!nextTrack.getInfo().title.isEmpty()) {
+                eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
+            } else {
+                eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
+            }
+            if (nextTrack.getInfo().length <= 432000000) {
+                eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
+                eb.addField("**Duration**\n", toSimpleTimestamp(nextTrack.getInfo().length), true);
+            } else {
+                eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
+                eb.addField("**Duration**\n", "Unknown", true);
+            }
+            eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
+            eb.setColor(botColour);
+            System.out.println(nextTrack.getInfo().title);
+            userData.sendMessageEmbeds(eb.build()).queue();
             return;
         }
-        if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")){
+        System.out.println(endReason);
+        if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")) {
             return;
         }
         onTrackStuck(nextTrack);
