@@ -32,7 +32,7 @@ dj roles.
 > trusted sources.
 >
 > If you wish to install the requirements, unzip the files from the download links and place all of the executable files
-> in the modules folder.
+> in the modules folder BUT MAKE SURE THAT ffprobe is called "ffprobe", yt-dlp is called "yt-dlp" and ffmpeg is called "ffmpeg".
 >
 > **DISCLAIMER:** If you are on linux, be sure to give the files mentioned in the requirements the permission to run as
 > programs by using `chmod +x FILENAME`.
