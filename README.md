@@ -13,7 +13,7 @@ dj roles.
 >
 >> [FFMPEG & FFPROBE FOR LINUX](https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz)
 >
-> Keep these files how they are named, **do not rename them!**
+> Keep these files named as "ffprobe", "yt-dlp" and "ffmpeg".
 >
 > The latest version of ffmpeg and yt-dlp are recommended, be sure to download the correct version for your correct
 > system.
