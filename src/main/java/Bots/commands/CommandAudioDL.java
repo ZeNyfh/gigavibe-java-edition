@@ -102,4 +102,8 @@ public class CommandAudioDL extends BaseCommand {
     public String getParams() {
         return "<URL>";
     }
+
+    public long getTimeout() {
+        return 5000;
+    }
 }

@@ -84,4 +84,9 @@ public class CommandRemove extends BaseCommand {
     public String getDescription() {
         return "Removes a specified track from the queue.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

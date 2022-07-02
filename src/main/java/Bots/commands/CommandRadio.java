@@ -67,7 +67,7 @@ public class CommandRadio extends BaseCommand {
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         argFinal = argFinal.toLowerCase().substring(1);
-        System.out.println(argFinal);
+        printlnTime(argFinal);
         for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
             if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
                 if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
@@ -105,5 +105,9 @@ public class CommandRadio extends BaseCommand {
 
     public String getDescription() {
         return "Plays a radio station.";
+    }
+
+    public long getTimeout() {
+        return 5000;
     }
 }

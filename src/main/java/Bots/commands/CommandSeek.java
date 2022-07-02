@@ -93,20 +93,22 @@ public class CommandSeek extends BaseCommand {
     }
 
     @Override
-
     public String getCategory() {
         return "DJ";
     }
 
     @Override
-
     public String getName() {
         return "seek";
     }
 
     @Override
-
     public String getDescription() {
         return "Seeks to a certain position in the track.";
+    }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
     }
 }

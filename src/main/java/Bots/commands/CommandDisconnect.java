@@ -48,4 +48,9 @@ public class CommandDisconnect extends BaseCommand {
     public String getDescription() {
         return "Makes the bot forcefully leave the vc.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

@@ -45,4 +45,8 @@ public class CommandLoopQueue extends BaseCommand {
     public String getDescription() {
         return "Loops the current queue.";
     }
+
+    public long getTimeout() {
+        return 2500;
+    }
 }

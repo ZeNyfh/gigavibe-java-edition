@@ -29,9 +29,12 @@ public class BaseCommand {
     }
 
     public ArrayList<String> getAlias() {
-        ArrayList<String> aliases = new ArrayList<>();
         /* aliases.add("XYZ"); Example for aliases (Im aware its odd, but its just the system for now) -9382 */
-        return aliases;
+        return new ArrayList<>();
+    }
+
+    public long getTimeout() {
+        return 0;
     }
 
     //For help command

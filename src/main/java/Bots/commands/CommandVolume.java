@@ -86,4 +86,9 @@ public class CommandVolume extends BaseCommand {
     public String getParams() {
         return "<0-200>";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

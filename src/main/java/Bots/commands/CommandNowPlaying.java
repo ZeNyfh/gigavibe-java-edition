@@ -84,4 +84,8 @@ public class CommandNowPlaying extends BaseCommand {
     public String getDescription() {
         return "Shows you the track that is currently playing";
     }
+
+    public long getTimeout() {
+        return 5000;
+    }
 }

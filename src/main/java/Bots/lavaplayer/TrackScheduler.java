@@ -63,7 +63,6 @@ public class TrackScheduler extends AudioEventAdapter {
             nextTrack = player.getPlayingTrack();
             EmbedBuilder eb = new EmbedBuilder();
             if (getTrackFromQueue(userData.getGuild(), 0) == null) {
-                System.out.println("nextTrack is apparently null");
                 return;
             } else if (!nextTrack.getInfo().title.isEmpty()) {
                 eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
@@ -79,14 +78,15 @@ public class TrackScheduler extends AudioEventAdapter {
             }
             eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
             eb.setColor(botColour);
-            System.out.println(nextTrack.getInfo().title);
+            printlnTime(nextTrack.getInfo().title);
             userData.sendMessageEmbeds(eb.build()).queue();
             return;
         }
-        System.out.println(endReason);
+        printlnTime(String.valueOf(endReason));
         if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")) {
             return;
         }
+        assert false;
         onTrackStuck(nextTrack);
     }
 

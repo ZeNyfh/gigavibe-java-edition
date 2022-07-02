@@ -106,4 +106,9 @@ public class CommandQueue extends BaseCommand {
     public String getParams() {
         return "<Page>";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

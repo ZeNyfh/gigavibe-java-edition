@@ -227,4 +227,9 @@ public class CommandPlaylist extends BaseCommand {
     public String getDescription() {
         return "Plays a playlist or saves tracks to a playlist, you can have up to 3 playlists with 500 tracks each.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

@@ -75,4 +75,9 @@ public class CommandClearQueue extends BaseCommand {
     public String getDescription() {
         return "Clears the current queue.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

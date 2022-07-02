@@ -73,4 +73,8 @@ public class CommandForceSkip extends BaseCommand {
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     } // voting not yet implemented
+
+    public long getTimeout() {
+        return 1000;
+    }
 }

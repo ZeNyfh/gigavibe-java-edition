@@ -59,4 +59,9 @@ public class CommandBotInfo extends BaseCommand {
     public String getDescription() {
         return "Tells you bot info.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

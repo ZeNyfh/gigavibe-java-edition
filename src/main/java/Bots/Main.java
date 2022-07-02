@@ -4,6 +4,7 @@ import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -40,19 +41,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
-import static Bots.token.botToken;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
+
+    public static String botVersion = "22.07.02"; // YY.MM.DD
+    static Dotenv dotenv = Dotenv.load();
+    public static String botPrefix = dotenv.get("PREFIX");
+
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
-    public final static String botPrefix = "&";
     public final static Color botColour = new Color(0, 0, 255);
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
-    public static String botVersion = "22.06.22"; // YY.MM.DD
-    public static JDA bot = null;
+    static String botToken = dotenv.get("TOKEN");
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -62,17 +65,17 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
         Path folder = Paths.get("viddl");
         if (!Files.exists(folder)) {
-            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
+            printlnTime(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
         folder = Paths.get("auddl");
         if (!Files.exists(folder)) {
-            System.out.println(folder.getFileName() + " doesn't exist, creating now.");
+            printlnTime(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
         File file = new File("Users.json");
         if (!file.exists()) {
-            System.out.println(file.getName() + " doesn't exist, creating now.");
+            printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter("Users.json");
             writer.write("{}");
@@ -81,7 +84,7 @@ public class Main extends ListenerAdapter {
         }
         file = new File("BlockedChannels.json");
         if (!file.exists()) {
-            System.out.println(file.getName() + " doesn't exist, creating now.");
+            printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter("BlockedChannels.json");
             writer.write("{}");
@@ -90,24 +93,63 @@ public class Main extends ListenerAdapter {
         }
         file = new File("DJs.json");
         if (!file.exists()) {
-            System.out.println(file.getName() + " doesn't exist, creating now.");
+            printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter("DJs.json");
             writer.write("{}");
             writer.flush();
             writer.close();
         }
+        file = new File(".env");
+        if (!file.exists()) {
+            printlnTime(file.getName() + " doesn't exist, creating now.");
+            file.createNewFile();
+            FileWriter writer = new FileWriter(".env");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=");
+            writer.flush();
+            writer.close();
+        }
+        String errorMessage = "";
         String OS = System.getProperty("os.name");
         if (OS.toLowerCase().contains("windows")) {
             file = new File("modules/ffmpeg.exe");
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
+            file = new File("modules/ffprobe.exe");
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
+            file = new File("modules/yt-dlp.exe");
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
         } else if (OS.toLowerCase().contains("linux")) {
             file = new File("modules/ffmpeg");
-        } // mac support not available due to the lack of a mac device, if you want, you can fork this and add it yourself.
-        //if (!file.exists()) {
-        //    System.out.println(file.getName() + " doesn't exist, downloading now.");
-        //
-        //    file.createNewFile();
-        //}
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
+            file = new File("modules/ffprobe");
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
+            file = new File("modules/yt-dlp");
+            if (!file.exists()) {
+                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
+            }
+        }
+        if (!errorMessage.equals("")) {
+            errorMessage = errorMessage + " one or more files do not exist, please download the necessary files mentioned in the Requirements section of the readme on github: https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/README.md";
+            printlnTime(errorMessage);
+            return;
+        }
+        Dotenv dotenv = Dotenv.load();
+        if (Objects.equals(dotenv.get("TOKEN"), "") || dotenv.get("TOKEN") == null) {
+            printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
+        }
+        if (Objects.equals(dotenv.get("PREFIX"), "") || dotenv.get("PREFIX") == null) {
+            printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
+        }
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());
@@ -143,7 +185,7 @@ public class Main extends ListenerAdapter {
                 .build();
         bot.awaitReady();
 
-        System.out.println("bot is now running, have fun ig");
+        printlnTime("bot is now running, have fun ig");
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -322,6 +364,13 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    public static void printlnTime(String string) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        string = dtf.format(now) + " | " + string;
+        System.out.println(string);
+    }
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
@@ -329,21 +378,26 @@ public class Main extends ListenerAdapter {
         int i = 0;
         String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
         BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
-        if (buttonID.equals("general") || (buttonID.equals("music") || (buttonID.equals("dj") || (buttonID.equals("admin"))))) {
-            for (BaseCommand Command : commands) {
-                if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
-                    i++;
-                    eb.appendDescription("`" + i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+        switch (buttonID) {
+            case "general":
+            case "music":
+            case "dj":
+            case "admin":
+                for (BaseCommand Command : commands) {
+                    if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
+                        i++;
+                        eb.appendDescription("`" + i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+                    }
                 }
-            }
-        } else if (buttonID.equals("forward")) {
-            for (int j = 0; j < Queue.size(); ) {
-                j++;
-            }
-            return;
-        } else if (buttonID.equals("backward")) {
+                break;
+            case "forward":
+                for (int j = 0; j < Queue.size(); ) {
+                    j++;
+                }
+                return;
+            case "backward":
 
-            return;
+                return;
         }
         if (Objects.equals(event.getButton().getId(), "general")) {
             eb.setTitle("\uD83D\uDCD6 **General**");
@@ -379,9 +433,7 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onException(@NotNull ExceptionEvent event) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now));
+        printlnTime("");
         event.getCause().printStackTrace();
     }
 
@@ -420,7 +472,6 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            System.out.println("your command is: " + Command);
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {

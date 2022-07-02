@@ -49,7 +49,6 @@ public class CommandVideoDL extends BaseCommand {
                     } else {
                         desiredBitRate = (Math.round(49 * 8192) / (finalFile.length() / 8192)); // 1mb lower just in case
                     }
-                    System.out.println(desiredBitRate);
                     if (desiredBitRate < 33) { // check for ffmpeg bitrate limit
                         String strWidth = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -v error -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 " + finalFile).getInputStream())).readLine();
                         long desiredWidth = Long.parseLong(strWidth) / 2;
@@ -79,7 +78,6 @@ public class CommandVideoDL extends BaseCommand {
                                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File could not be lowered to under 8mb")).queue();
                             }
                         } else {
-                            System.out.println("It would be able to send");
                             try {
                                 event.getTextChannel().sendFile(new File("viddl/" + filename + "KR.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "R.mp4").delete()));
                                 new File("viddl/" + filename + "K.mp4").delete();
@@ -136,5 +134,9 @@ public class CommandVideoDL extends BaseCommand {
 
     public String getParams() {
         return "<URL>";
+    }
+
+    public long getTimeout() {
+        return 10000;
     }
 }

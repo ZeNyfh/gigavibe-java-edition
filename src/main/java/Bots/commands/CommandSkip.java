@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -47,15 +48,15 @@ public class CommandSkip extends BaseCommand {
         } else {
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) {
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
                 return;
             }
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
             if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
-                eb.setTitle("⏩ Skipped the current track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                eb.setTitle("⏩ Skipped the track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
             } else {
-                eb.setTitle("⏩ Skipped the current track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                eb.setTitle("⏩ Skipped the track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
                 eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
             }
             if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
@@ -70,6 +71,13 @@ public class CommandSkip extends BaseCommand {
         return "Music";
     }
 
+    @Override
+    public ArrayList<String> getAlias() {
+        ArrayList list = new ArrayList();
+        list.add("s");
+        return list;
+    }
+
     public String getName() {
         return "skip";
     }
@@ -77,4 +85,8 @@ public class CommandSkip extends BaseCommand {
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     } // voting not yet implemented
+
+    public long getTimeout() {
+        return 5000;
+    }
 }

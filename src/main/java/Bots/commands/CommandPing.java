@@ -23,4 +23,8 @@ public class CommandPing extends BaseCommand {
     public String getDescription() {
         return "Shows you the bot's ping.";
     }
+
+    public long getTimeout() {
+        return 5000;
+    }
 }

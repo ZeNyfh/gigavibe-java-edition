@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.toTimestamp;
+import static Bots.Main.*;
 
 public class PlayerManager {
 
@@ -137,13 +136,13 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No matches found for the track.")).queue();
-                System.out.println("No match found.");
+                printlnTime("No match found for the track.");
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
-                System.out.println("track loading failed, stacktrace: ");
+                printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();
             }
         });

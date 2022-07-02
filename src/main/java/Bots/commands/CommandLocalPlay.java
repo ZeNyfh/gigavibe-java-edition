@@ -58,4 +58,8 @@ public class CommandLocalPlay extends BaseCommand {
     public String getParams() {
         return "<Path>";
     }
+
+    public long getTimeout() {
+        return 5000;
+    }
 }

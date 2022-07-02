@@ -71,4 +71,9 @@ public class CommandShuffle extends BaseCommand {
     public String getDescription() {
         return "Shuffles the current queue.";
     }
+
+    @Override
+    public long getTimeout() {
+        return 5000;
+    }
 }

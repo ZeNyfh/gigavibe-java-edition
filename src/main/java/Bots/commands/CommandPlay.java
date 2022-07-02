@@ -50,6 +50,9 @@ public class CommandPlay extends BaseCommand {
             return;
         }
         if (link.contains("https://") || link.contains("http://")) {
+            if (link.contains("youtube.com/shorts/")) {
+                link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
+            }
             if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
@@ -89,5 +92,9 @@ public class CommandPlay extends BaseCommand {
 
     public String getParams() {
         return "<URL or Keywords>";
+    }
+
+    public long getTimeout() {
+        return 5000;
     }
 }
