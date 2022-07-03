@@ -13,7 +13,7 @@ dj roles.
 >
 >> [FFMPEG & FFPROBE FOR LINUX](https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz)
 >
-> Keep these files how they are named, **do not rename them!**
+> Keep these files named as "ffprobe", "yt-dlp" and "ffmpeg".
 >
 > The latest version of ffmpeg and yt-dlp are recommended, be sure to download the correct version for your correct
 > system.
@@ -32,7 +32,7 @@ dj roles.
 > trusted sources.
 >
 > If you wish to install the requirements, unzip the files from the download links and place all of the executable files
-> in the modules folder.
+> in the modules folder BUT MAKE SURE THAT ffprobe is called "ffprobe", yt-dlp is called "yt-dlp" and ffmpeg is called "ffmpeg".
 >
 > **DISCLAIMER:** If you are on linux, be sure to give the files mentioned in the requirements the permission to run as
 > programs by using `chmod +x FILENAME`.
