@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -35,27 +36,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-
+    public static String botPrefix = "";
+    public static String botToken = "";
+    public static HashMap<Long, Long[]> skips = new HashMap<Long, Long[]>();
     public static String botVersion = "22.07.02"; // YY.MM.DD
-    static Dotenv dotenv = Dotenv.load();
-    public static String botPrefix = dotenv.get("PREFIX");
-
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static Color botColour = new Color(0, 0, 255);
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
-    static String botToken = dotenv.get("TOKEN");
 
     private static void registerCommand(BaseCommand command) {
         commands.add(command);
@@ -150,6 +147,8 @@ public class Main extends ListenerAdapter {
         if (Objects.equals(dotenv.get("PREFIX"), "") || dotenv.get("PREFIX") == null) {
             printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
         }
+        botPrefix = dotenv.get("PREFIX");
+        botToken = dotenv.get("TOKEN");
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());
@@ -187,7 +186,6 @@ public class Main extends ListenerAdapter {
 
         printlnTime("bot is now running, have fun ig");
     }
-
     public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
@@ -290,6 +288,10 @@ public class Main extends ListenerAdapter {
             seconds = Integer.parseInt(times[2].replaceAll(" ", ""));
         }
         return hours + minutes + seconds;
+    }
+
+    public static void addToVote(Long guildID, Long[] memberID){
+        skips.put(guildID, memberID);
     }
 
     public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {
@@ -426,6 +428,15 @@ public class Main extends ListenerAdapter {
                 i++;
             }
             if (event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().size() - i == 0) {
+                event.getGuild().getAudioManager().closeAudioConnection();
+            }
+        }
+    }
+
+    @Override
+    public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
+        if (event.getMember().getUser() == event.getJDA().getSelfUser()){
+            if (event.getNewValue().getMembers().size() == 1){ // assuming the bot is alone there.
                 event.getGuild().getAudioManager().closeAudioConnection();
             }
         }

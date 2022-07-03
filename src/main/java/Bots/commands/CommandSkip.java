@@ -47,23 +47,23 @@ public class CommandSkip extends BaseCommand {
             channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
         } else {
             musicManager.scheduler.nextTrack();
-            if (musicManager.audioPlayer.getPlayingTrack() == null) {
+            if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
                 channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
-                return;
+            } else { // if there is something playing after the skip command
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(botColour);
+                if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
+                    eb.setTitle("⏩ Skipped the track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                } else {
+                    eb.setTitle("⏩ Skipped the track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                    eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
+                }
+                if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
+                    eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
+                }
+                eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+                event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
             }
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(botColour);
-            if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
-                eb.setTitle("⏩ Skipped the track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
-            } else {
-                eb.setTitle("⏩ Skipped the track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
-                eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
-            }
-            if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
-                eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
-            }
-            eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
-            event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
         }
     }
 
