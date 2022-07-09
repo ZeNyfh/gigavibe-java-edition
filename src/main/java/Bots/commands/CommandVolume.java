@@ -41,8 +41,8 @@ public class CommandVolume extends BaseCommand {
             if (args[1].matches("^\\d+$")) {
                 //If entire thing is a number
                 int volume = Integer.parseInt(args[1]);
-                if (volume > 200) {
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be higher than 200.")).queue();
+                if (volume > 500) {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be higher than 500.")).queue();
                     return;
                 }
                 if (volume < 0) {
@@ -50,7 +50,11 @@ public class CommandVolume extends BaseCommand {
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**.")).queue();
+                if (volume > 201) {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**.\n\nNote: I do not recommend using anything above 200")).queue();
+                } else {
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**.")).queue();
+                }
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can't include decimals.")).queue();
@@ -84,7 +88,7 @@ public class CommandVolume extends BaseCommand {
 
     @Override
     public String getParams() {
-        return "<0-200>";
+        return "<0-500>";
     }
 
     @Override

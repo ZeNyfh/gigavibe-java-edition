@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.printlnTime;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
@@ -20,6 +21,14 @@ public class CommandAudioDL extends BaseCommand {
         File dir = new File("auddl");
         if (Objects.equals(event.getArgs()[1], "")) {
             return;
+        }
+        long id = Long.parseLong("211789389401948160");
+        if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+            id = Long.parseLong("260016427900076033");
+            if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                return;
+            }
         }
         final Message[] messageVar = new Message[1];
         new Thread(() -> {
@@ -57,9 +66,10 @@ public class CommandAudioDL extends BaseCommand {
                         event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
                         return;
                     }
-                    p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:a " + desiredBitRate + "k " + dir + "\\" + filename + "K.mp3");
+                    p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:a " + desiredBitRate + "k " + dir + "\\" + filename + "K.ogg");
                     p.waitFor();
                     try {
+                        printlnTime("yes");
                         event.getTextChannel().sendFile(new File("auddl/" + filename + "K.mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + "K.mp3").delete()));
                         new File("auddl/" + filename + ".mp3").delete();
                     } catch (Exception e) {
@@ -88,7 +98,7 @@ public class CommandAudioDL extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Music";
+        return "Dev";
     }
 
     public String getName() {
