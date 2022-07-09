@@ -21,6 +21,14 @@ public class CommandVideoDL extends BaseCommand {
         if (Objects.equals(event.getArgs()[1], "")) {
             return;
         }
+        long id = Long.parseLong("211789389401948160");
+        if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+            id = Long.parseLong("260016427900076033");
+            if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                return;
+            }
+        }
         final Message[] messageVar = new Message[1];
         new Thread(() -> {
             try {
@@ -121,7 +129,7 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Music";
+        return "Dev";
     }
 
     public String getName() {

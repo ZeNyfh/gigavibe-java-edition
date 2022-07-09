@@ -102,7 +102,7 @@ public class Main extends ListenerAdapter {
             printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter(".env");
-            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFY CLIENT=\nSPOTIFY CLIENT SECRET=");
             writer.flush();
             writer.close();
         }
