@@ -85,7 +85,7 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("radios");
         return list;
     }

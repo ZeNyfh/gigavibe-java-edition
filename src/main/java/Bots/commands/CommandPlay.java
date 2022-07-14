@@ -12,24 +12,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import se.michaelthelin.spotify.SpotifyApi;
-import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistRequest;
-import se.michaelthelin.spotify.requests.data.tracks.GetTrackRequest;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static Bots.Main.*;
 
@@ -73,47 +63,7 @@ public class CommandPlay extends BaseCommand {
             if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
-            if (link.contains("open.spotify.com/")){
-                Matcher matcher = Pattern.compile("/([\\w\\d]{22})").matcher(link);
-                Process p = null;
-                if (matcher.find()) {
-                    String spotifyID = matcher.group(1);
-                    if (spotifyID == null) {
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid spotify URL.")).queue();
-                        return;
-                    }
-                    try {
-                        if (link.contains("track")) {
-                            json = spotifyApi.getTrack(spotifyID).build().getJson();
-                        } else if (link.contains("album")) {
-                            json = spotifyApi.getAlbum(spotifyID).build().getJson();
-                        } else if (link.contains("playlist")) {
-                            json = spotifyApi.getPlaylist(spotifyID).build().getJson();
-                        } else {
-                            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid spotify URL.")).queue();
-                            return;
-                        }
-                    } catch (Exception e){e.printStackTrace();}
-                    JSONParser parser = new JSONParser();
-                    JSONObject finalJSON;
-                    try {
-                        finalJSON = (JSONObject) parser.parse(json);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        EmbedBuilder builder = new EmbedBuilder();
-                        builder.setTitle("❌ **Error**");
-                        builder.setColor(botColour);
-                        builder.setDescription(e.getMessage());
-                        return;
-                    }
-                    JSONObject album = (JSONObject) finalJSON.get("album");
-                    JSONArray artistsArray = (JSONArray) album.get("artists");
-                    JSONObject artists = (JSONObject) artistsArray.get(0);
-                    String finalArtistName = (String) artists.get("name");
-                    String finalTrackName = (String) finalJSON.get("name");
-                    link = "ytsearch: " + finalArtistName + " " + finalTrackName;
-                }
-            }
+            // spotify stuff will go here later
         } else {
             link = "ytsearch: " + link;
         }
@@ -131,7 +81,7 @@ public class CommandPlay extends BaseCommand {
     }
 
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("p");
         return list;
     }

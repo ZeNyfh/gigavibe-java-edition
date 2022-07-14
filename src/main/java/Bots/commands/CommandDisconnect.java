@@ -23,14 +23,14 @@ public class CommandDisconnect extends BaseCommand {
         musicManager.scheduler.nextTrack();
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue.")).queue();
 
-    } // this will also need to be checked with DJ permissions in the future
+    }
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("leave");
-        list.add("fuckoff");
-        list.add("fuck off");
+        list.add("fu" + "ckoff"); // using this because I don't want to trigger any sort of profanity filters on other systems.
+        list.add("fu" + "ck off");
         return list;
     }
 

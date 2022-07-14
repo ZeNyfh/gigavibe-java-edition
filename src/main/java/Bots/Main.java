@@ -36,20 +36,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-    public static String botPrefix = "";
-    public static String botToken = "";
-    public static HashMap<Long, Long[]> skips = new HashMap<Long, Long[]>();
-    public static String botVersion = "22.07.02"; // YY.MM.DD
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
     public final static Color botColour = new Color(0, 0, 255);
+    public static String botPrefix = "";
+    public static String botToken = "";
+    public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
+    public static String botVersion = "22.07.14"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -186,6 +186,7 @@ public class Main extends ListenerAdapter {
 
         printlnTime("bot is now running, have fun ig");
     }
+
     public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
@@ -290,8 +291,12 @@ public class Main extends ListenerAdapter {
         return hours + minutes + seconds;
     }
 
-    public static void addToVote(Long guildID, Long[] memberID){
-        skips.put(guildID, memberID);
+    public static void addToVote(Long guildID, List<Member> members) {
+        skips.put(guildID, members);
+    }
+
+    public static List<Member> getVotes(Long guildID){
+        return skips.get(guildID);
     }
 
     public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {
@@ -435,8 +440,8 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
-        if (event.getMember().getUser() == event.getJDA().getSelfUser()){
-            if (event.getNewValue().getMembers().size() == 1){ // assuming the bot is alone there.
+        if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
+            if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
                 event.getGuild().getAudioManager().closeAudioConnection();
             }
         }
@@ -450,6 +455,7 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // fix once broke (note: will break)
         if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
             LoopGuilds.remove(event.getGuild().getId());
             LoopQueueGuilds.remove(event.getGuild().getId());
@@ -469,8 +475,8 @@ public class Main extends ListenerAdapter {
         if (botChannelMemberCount == 0) {
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
-            event.getGuild().getAudioManager().closeAudioConnection();
             PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
+            event.getGuild().getAudioManager().closeAudioConnection();
         }
     }
 

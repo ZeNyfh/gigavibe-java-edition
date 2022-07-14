@@ -90,7 +90,7 @@ public class CommandAudioDL extends BaseCommand {
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("adl");
         list.add("dl");
         list.add("audio");

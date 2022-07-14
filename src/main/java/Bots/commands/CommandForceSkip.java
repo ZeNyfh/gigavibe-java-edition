@@ -61,7 +61,7 @@ public class CommandForceSkip extends BaseCommand {
     }
 
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("fs");
         return list;
     }

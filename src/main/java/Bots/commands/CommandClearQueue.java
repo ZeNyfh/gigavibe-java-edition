@@ -47,12 +47,12 @@ public class CommandClearQueue extends BaseCommand {
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Cleared the queue successfully!")).queue(); // not an error, intended
+        channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Cleared the queue successfully!")).queue();
     }
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("queue clear");
         list.add("clearqueue");
         list.add("queueclear");

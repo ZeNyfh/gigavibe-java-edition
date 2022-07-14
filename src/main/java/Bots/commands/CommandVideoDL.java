@@ -82,6 +82,7 @@ public class CommandVideoDL extends BaseCommand {
                                 new File("viddl/" + filename + ".mp4").delete();
                                 return;
                             } catch (Exception e) {
+                                event.getJDA().getUserById("211789389401948160");
                                 Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
                                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File could not be lowered to under 8mb")).queue();
                             }
@@ -121,7 +122,7 @@ public class CommandVideoDL extends BaseCommand {
 
     @Override
     public ArrayList<String> getAlias() {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<>();
         list.add("vdl");
         list.add("video");
         list.add("viddl");
