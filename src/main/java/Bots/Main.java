@@ -495,6 +495,7 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
+            //Command matches, proceeding to execute
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {
@@ -514,18 +515,17 @@ public class Main extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
-                if (processCommand(botPrefix + Command.getName(), Command, event)) {
-                    break;
-                }
                 boolean fullyBreak = false;
-                for (String alias : Command.getAlias()) {
+                ArrayList<String> checkSet = Command.getAlias();
+                checkSet.add(Command.getName()); //Main name + all aliases
+                for (String alias : checkSet) {
                     //fullyBreak is so that we can stop checking commands after an alias works (breaks only escape the top loop) -9382
                     if (processCommand(botPrefix + alias, Command, event)) {
                         fullyBreak = true;
                         break;
                     }
                 }
-                if (fullyBreak) {
+                if (fullyBreak) { //Correct command found, exit checks
                     break;
                 }
             }
