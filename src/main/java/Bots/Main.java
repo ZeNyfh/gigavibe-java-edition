@@ -277,22 +277,6 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
-    public static long fromSimpleTimestamp(String SimpleTimestamp) {
-        String[] times = SimpleTimestamp.split(":");
-        int hours = 0;
-        int minutes;
-        int seconds;
-        if (times.length == 2) {
-            minutes = Integer.parseInt(times[0].replaceAll(" ", "")) * 60;
-            seconds = Integer.parseInt(times[1].replaceAll(" ", ""));
-        } else {
-            hours = Integer.parseInt(times[0].replaceAll(" ", "")) * 60 * 60;
-            minutes = Integer.parseInt(times[1].replaceAll(" ", "")) * 60;
-            seconds = Integer.parseInt(times[2].replaceAll(" ", ""));
-        }
-        return hours + minutes + seconds;
-    }
-
     public static void addToVote(Long guildID, List<Member> members) {
         skips.put(guildID, members);
     }
@@ -303,7 +287,6 @@ public class Main extends ListenerAdapter {
 
     public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {
         JSONParser jsonParser = new JSONParser();
-        JSONObject obj = new JSONObject();
         JSONObject blocked = new JSONObject();
         JSONObject jsonFileContents = null;
         try (FileReader reader = new FileReader("BlockedChannels.json")) {
@@ -347,6 +330,7 @@ public class Main extends ListenerAdapter {
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
+        assert jsonFileContents != null;
         JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
         JSONArray DJRoles = (JSONArray) guildObj.get("roles");
         JSONArray DJUsers = (JSONArray) guildObj.get("users");
@@ -495,7 +479,7 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            //Command matches, proceeding to execute
+            // ratelimit code here
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {

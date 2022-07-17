@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -62,9 +63,7 @@ public class TrackScheduler extends AudioEventAdapter {
             nextTrack();
             nextTrack = player.getPlayingTrack();
             EmbedBuilder eb = new EmbedBuilder();
-            if (getTrackFromQueue(userData.getGuild(), 0) == null) {
-                return;
-            } else if (!nextTrack.getInfo().title.isEmpty()) {
+            if (!nextTrack.getInfo().title.isEmpty()) {
                 eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
             } else {
                 eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
@@ -78,11 +77,9 @@ public class TrackScheduler extends AudioEventAdapter {
             }
             eb.setThumbnail("https://img.youtube.com/vi/" + nextTrack.getIdentifier() + "/0.jpg");
             eb.setColor(botColour);
-            printlnTime(nextTrack.getInfo().title);
             userData.sendMessageEmbeds(eb.build()).queue();
             return;
         }
-        printlnTime(String.valueOf(endReason));
         if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")) {
             return;
         }

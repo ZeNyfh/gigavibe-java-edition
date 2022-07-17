@@ -70,7 +70,6 @@ public class CommandBlockChannel extends BaseCommand {
             GuildChannel guildChannel = event.getGuild().getChannels().get(i);
             if (event.getArgs()[1].equalsIgnoreCase("add")) {
                 if (guildChannel.getId().equals(event.getArgs()[2])) {
-                    printlnTime("found channel");
                     if (blockedChannels.contains(guildChannel.getId())) {
                         event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is already blocked.")).queue();
                         return;
