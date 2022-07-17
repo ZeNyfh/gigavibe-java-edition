@@ -31,7 +31,7 @@ public class CommandNowPlaying extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickEmbed(" ", "No tracks are playing right now.")).queue(); // not an error, intended
+            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();

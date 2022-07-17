@@ -20,10 +20,6 @@ public class CommandDJ extends BaseCommand {
     public static JSONArray DJList = new JSONArray();
 
     public void execute(MessageEvent event) throws IOException {
-        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
-            return;
-        }
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonFileContents = null;
         try (FileReader reader = new FileReader("DJs.json")) {
@@ -60,6 +56,9 @@ public class CommandDJ extends BaseCommand {
             DJRoles = (JSONArray) GuildContents.get("roles");
         }
         if (event.getArgs()[1].equalsIgnoreCase("list")) {
+            if (event.getArgs().length == 3 || event.getArgs().length == 2) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, use \"" + botPrefix + "help\" for more info.")).queue();
+            }
             if (event.getArgs()[2].equalsIgnoreCase("users") || event.getArgs()[2].equalsIgnoreCase("roles")) {
                 String arg2 = event.getArgs()[2].toLowerCase();
                 JSONArray arg2Array = (JSONArray) GuildContents.get(arg2);
@@ -88,6 +87,10 @@ public class CommandDJ extends BaseCommand {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj list roles` or `" + botPrefix + "dj list users` to show all DJs.")).queue();
             }
         } else if (event.getArgs()[1].equalsIgnoreCase("add")) {
+            if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
+                return;
+            }
             if (event.getArgs()[2].equalsIgnoreCase("user")) {
                 if (event.getArgs()[3].contains("<@")) {
                     String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
@@ -157,6 +160,6 @@ public class CommandDJ extends BaseCommand {
     }
 
     public String getParams() {
-        return "<list> OR <add/remove> <user/role> <ID/Ping>";
+        return "<list> <users/roles> OR <add/remove> <user/role> <ID/mention>";
     }
 }

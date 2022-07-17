@@ -175,6 +175,8 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandRadio());
         registerCommand(new CommandSeek());
         registerCommand(new CommandPlaylist());
+        registerCommand(new CommandLyrics());
+        registerCommand(new CommandBug());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -295,7 +297,7 @@ public class Main extends ListenerAdapter {
         skips.put(guildID, members);
     }
 
-    public static List<Member> getVotes(Long guildID){
+    public static List<Member> getVotes(Long guildID) {
         return skips.get(guildID);
     }
 
@@ -455,8 +457,12 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // fix once broke (note: will break)
-        if (event.getMember().getId().equals(event.getJDA().getSelfUser().getId())) {
+        if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
+            List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
+            currentVotes.remove(event.getMember());
+            addToVote(event.getGuild().getIdLong(), currentVotes);
+        }
+        if (event.getMember() == event.getGuild().getSelfMember()) {
             LoopGuilds.remove(event.getGuild().getId());
             LoopQueueGuilds.remove(event.getGuild().getId());
             return;

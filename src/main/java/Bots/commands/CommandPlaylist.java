@@ -22,7 +22,15 @@ import static Bots.Main.*;
 
 public class CommandPlaylist extends BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) throws IOException { // unfinished.
+        long id = 211789389401948160L; // check for dev.
+        if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+            id = 260016427900076033L;
+            if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                return;
+            }
+        }
         String userID = event.getAuthor().getId();
         String[] args = event.getMessage().getContentRaw().split(" ", 4); // I had to fall back to this as arg 4 is a string that can contain spaces and getArgs() is not as flexible here.
         //List<String> args = event.getArgs();
@@ -220,7 +228,7 @@ public class CommandPlaylist extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Music";
+        return "Dev";
     }
 
     @Override

@@ -15,8 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
-import static Bots.Main.botColour;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandBlockChannel extends BaseCommand {
     @Override
@@ -66,14 +65,19 @@ public class CommandBlockChannel extends BaseCommand {
         } catch (Exception ignored) {
         }
 
-        for (int i = 0; i < event.getGuild().getChannels().size(); ) {
+        for (int i = 0; i < event.getGuild().getChannels().size(); i++) {
+            printlnTime(String.valueOf(i));
             GuildChannel guildChannel = event.getGuild().getChannels().get(i);
             if (event.getArgs()[1].equalsIgnoreCase("add")) {
-                if (guildChannel.getId().equals(event.getArgs()[1])) {
-                    blockedChannels.add(event.getArgs()[1]);
+                if (guildChannel.getId().equals(event.getArgs()[2])) {
+                    printlnTime("found channel");
+                    if (blockedChannels.contains(guildChannel.getId())) {
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is already blocked.")).queue();
+                        return;
+                    }
+                    blockedChannels.add(event.getArgs()[2]);
                     blocked.put("BlockedChannels", blockedChannels);
                     obj.put(event.getGuild().getId(), blocked);
-
                     try {
                         file = new FileWriter("BlockedChannels.json");
                         file.write(obj.toJSONString());
@@ -87,13 +91,16 @@ public class CommandBlockChannel extends BaseCommand {
                             e.printStackTrace();
                         }
                     }
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list.")).queue();
                     return;
-                } else {
-                    i++;
                 }
             } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
-                if (guildChannel.getId().equals(event.getArgs()[1])) {
-                    blockedChannels.remove(event.getArgs()[1]);
+                if (guildChannel.getId().equals(event.getArgs()[2])) {
+                    if (!blockedChannels.contains(guildChannel.getId())) {
+                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is not blocked.")).queue();
+                        return;
+                    }
+                    blockedChannels.remove(event.getArgs()[2]);
                     blocked.put("BlockedChannels", blockedChannels);
                     obj.put(event.getGuild().getId(), blocked);
 
@@ -110,10 +117,8 @@ public class CommandBlockChannel extends BaseCommand {
                             e.printStackTrace();
                         }
                     }
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + event.getJDA().getRoleById(event.getArgs()[2]) + Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs()[2])).getName() + " from the list.")).queue();
+                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list.")).queue();
                     return;
-                } else {
-                    i++;
                 }
             } else if (event.getArgs()[1].equalsIgnoreCase("list")) {
                 EmbedBuilder eb = new EmbedBuilder();
@@ -155,6 +160,6 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public String getParams() {
-        return "<add/remove> <ChannelID> OR <list>";
+        return "<add/remove> <channelID> OR <list>";
     }
 }
