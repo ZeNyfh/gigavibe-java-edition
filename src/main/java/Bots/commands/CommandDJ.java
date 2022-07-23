@@ -96,12 +96,16 @@ public class CommandDJ extends BaseCommand {
                     String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Users list.")).queue();
                     DJUsers.add(UserID);
+                } else {
+                    DJUsers.add(event.getArgs()[3]);
                 }
             } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
                 if (event.getArgs()[3].contains("<@&")) {
                     String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
                     DJRoles.add(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Roles list.")).queue();
+                } else {
+                    DJRoles.add(event.getArgs()[3]);
                 }
             } else {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj role add <RoleID/Ping>` or `" + botPrefix + "dj user add <UserID/Ping>`")).queue();
@@ -123,12 +127,16 @@ public class CommandDJ extends BaseCommand {
                     String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Users list.")).queue();
                     DJUsers.remove(UserID);
+                } else {
+                    DJUsers.remove(event.getArgs()[3]);
                 }
             } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
                 if (event.getArgs()[3].contains("<@&")) {
                     String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
                     DJRoles.remove(RoleID);
                     event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Roles list.")).queue();
+                } else {
+                    DJRoles.remove(event.getArgs()[3]);
                 }
             } else {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj role remove <RoleID/Ping>` or `" + botPrefix + "dj user remove <UserID/Ping>`")).queue();
@@ -160,6 +168,6 @@ public class CommandDJ extends BaseCommand {
     }
 
     public String getParams() {
-        return "<list> <users/roles> OR <add/remove> <user/role> <ID/mention>";
+        return "<list> <users/roles> || <add/remove> <user/role> <ID/mention>";
     }
 }

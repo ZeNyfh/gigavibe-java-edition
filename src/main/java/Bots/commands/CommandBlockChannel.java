@@ -139,7 +139,7 @@ public class CommandBlockChannel extends BaseCommand {
                 return;
             }
         }
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server..")).queue();
+        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server.")).queue();
     }
 
     @Override
@@ -159,6 +159,6 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public String getParams() {
-        return "<add/remove> <channelID> OR <list>";
+        return "<list> || <add/remove> <channelID>";
     }
 }

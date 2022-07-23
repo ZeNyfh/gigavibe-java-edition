@@ -11,12 +11,17 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 
 public class CommandLyrics extends BaseCommand {
 
     public void execute(MessageEvent event) {
+        if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
+            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+            return;
+        }
         final TextChannel channel = event.getTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -59,7 +64,7 @@ public class CommandLyrics extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Music";
+        return "Dev";
     }
 
     public String getName() {

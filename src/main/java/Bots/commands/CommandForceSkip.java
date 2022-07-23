@@ -12,8 +12,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Bots.Main.IsDJ;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandForceSkip extends BaseCommand {
 
@@ -53,6 +52,7 @@ public class CommandForceSkip extends BaseCommand {
             return;
         }
         musicManager.scheduler.nextTrack();
+        addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // clearing the vote
         channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
     }
 

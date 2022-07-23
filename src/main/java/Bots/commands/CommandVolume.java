@@ -57,7 +57,7 @@ public class CommandVolume extends BaseCommand {
                 }
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can't include decimals.")).queue();
+                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid value.")).queue();
                 return;
             }
         }

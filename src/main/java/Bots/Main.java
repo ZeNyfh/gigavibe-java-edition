@@ -11,6 +11,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
@@ -45,11 +48,12 @@ import static java.lang.System.currentTimeMillis;
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
-    public final static Color botColour = new Color(0, 0, 255);
+    public final static Color botColour = new Color(32, 34, 37);
     public static String botPrefix = "";
     public static String botToken = "";
+    public static int activityUpdate = 0;
     public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
-    public static String botVersion = "22.07.14"; // YY.MM.DD
+    public static String botVersion = "23.07.20"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -177,16 +181,17 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandPlaylist());
         registerCommand(new CommandLyrics());
         registerCommand(new CommandBug());
+        registerCommand(new CommandSendAnnouncement());
+        registerCommand(new CommandInvite());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
                 .addEventListeners(new Main())
-                .setActivity(Activity.playing("Beta test!"))
                 .build();
         bot.awaitReady();
-
         printlnTime("bot is now running, have fun ig");
+        bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers!"));
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -362,6 +367,17 @@ public class Main extends ListenerAdapter {
         LocalDateTime now = LocalDateTime.now();
         string = dtf.format(now) + " | " + string;
         System.out.println(string);
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers!"));
+        Objects.requireNonNull(event.getGuild().getDefaultChannel()).sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first, I recommend using `" + botPrefix + "help` to help you with the following. \n\nadd dj roles/users with the `" + botPrefix + "dj` command, this will allow some users or roles to have more control over the bots functions for example: forceskip, disconnect and shuffle.\nif you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, this will disallow some commands from being used in the blocked channels, this can be done with the `" + botPrefix + "blockchannel` command.\n\n**IF YOU ENCOUNTER ANY BUGS, ISSUES OR HAVE ANY FEATURE REQUESTS, USE** `" + botPrefix + "bug <String>` **TO REPORT THE BUG TO ME!**")).queue();
+    }
+
+    @Override
+    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers!"));
     }
 
     @Override
