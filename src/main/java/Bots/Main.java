@@ -48,10 +48,9 @@ import static java.lang.System.currentTimeMillis;
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
-    public final static Color botColour = new Color(32, 34, 37);
+    public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String botToken = "";
-    public static int activityUpdate = 0;
     public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
     public static String botVersion = "23.07.20"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
@@ -106,7 +105,7 @@ public class Main extends ListenerAdapter {
             printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter(".env");
-            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFY CLIENT=\nSPOTIFY CLIENT SECRET=");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFY CLIENT=\nSPOTIFY CLIENT SECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
             writer.flush();
             writer.close();
         }
@@ -145,14 +144,22 @@ public class Main extends ListenerAdapter {
             return;
         }
         Dotenv dotenv = Dotenv.load();
-        if (Objects.equals(dotenv.get("TOKEN"), "") || dotenv.get("TOKEN") == null) {
+        if (dotenv.get("TOKEN").isBlank()) {
             printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
         }
-        if (Objects.equals(dotenv.get("PREFIX"), "") || dotenv.get("PREFIX") == null) {
+        if (dotenv.get("PREFIX").isBlank()) {
             printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
         }
         botPrefix = dotenv.get("PREFIX");
         botToken = dotenv.get("TOKEN");
+
+        if (dotenv.get("COLOUR").isBlank()){
+            printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
+            return;
+        }
+        try {
+            botColour = Color.decode(dotenv.get("COLOUR"));
+        } catch (NumberFormatException e){printlnTime("Colour was invalid.");return;}
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());
@@ -183,6 +190,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandBug());
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInvite());
+        registerCommand(new CommandJoin());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
