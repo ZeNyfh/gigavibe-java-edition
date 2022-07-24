@@ -3,10 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import jdk.jshell.JShell;
+import jdk.jshell.SnippetEvent;
 
+import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.printlnTime;
 
 public class CommandExec extends BaseCommand {
 
@@ -23,9 +26,17 @@ public class CommandExec extends BaseCommand {
             }
         }
         try {
-            JShell.create().eval(args);
-            event.getTextChannel().sendMessage("\uD83D\uDC4D\n\n").queue();
-        } catch (Exception e) {
+            System.exit(0);
+            JShell jshell = JShell.create();
+            List<SnippetEvent> snippetEvents = jshell.eval(args);
+            jshell.eval(args).listIterator();
+            printlnTime(String.valueOf(jshell.sourceCodeAnalysis().analyzeCompletion(args).completeness().isComplete()));
+            jshell.close();
+            StringBuilder finalOutput = new StringBuilder();
+            finalOutput.append(snippetEvents.listIterator().next().toString()).append("\n");
+            event.getTextChannel().sendMessage(finalOutput).queue();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", e.getMessage())).queue();
         }
     }

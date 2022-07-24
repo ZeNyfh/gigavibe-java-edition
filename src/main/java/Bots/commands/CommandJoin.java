@@ -23,7 +23,6 @@ public class CommandJoin extends BaseCommand {
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **error**", "You are not in a vc.")).queue();
             return;
         }
-        //event.getGuild().getAudioManager().closeAudioConnection();
         event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
         event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Joined your vc.")).queue();
 

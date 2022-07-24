@@ -63,7 +63,6 @@
             <artifactId>spotify-web-api-java</artifactId>
             <version>7.1.0</version>
         </dependency>
-
     </dependencies>
 
     <repositories>

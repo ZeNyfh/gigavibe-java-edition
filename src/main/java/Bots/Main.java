@@ -291,6 +291,9 @@ public class Main extends ListenerAdapter {
     }
 
     public static void addToVote(Long guildID, List<Member> members) {
+        if (members.size() == 0){
+            skips.put(guildID, new ArrayList<>());
+        }
         skips.put(guildID, members);
     }
 
@@ -467,8 +470,10 @@ public class Main extends ListenerAdapter {
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
             List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
-            currentVotes.remove(event.getMember());
-            addToVote(event.getGuild().getIdLong(), currentVotes);
+            if (currentVotes != null) {
+                currentVotes.remove(event.getMember());
+                addToVote(event.getGuild().getIdLong(), currentVotes);
+            }
         }
         if (event.getMember() == event.getGuild().getSelfMember()) {
             LoopGuilds.remove(event.getGuild().getId());
@@ -491,6 +496,7 @@ public class Main extends ListenerAdapter {
             PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
             PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
             event.getGuild().getAudioManager().closeAudioConnection();
+            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
         }
     }
 

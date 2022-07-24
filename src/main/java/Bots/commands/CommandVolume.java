@@ -32,7 +32,6 @@ public class CommandVolume extends BaseCommand {
         if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);
             event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Set volume to the default of **100**.")).queue();
-            return;
         } else {
             if (args[1].matches("[^\\d.]")) {
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume must be an integer.")).queue();
@@ -58,7 +57,6 @@ public class CommandVolume extends BaseCommand {
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
                 event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid value.")).queue();
-                return;
             }
         }
     }

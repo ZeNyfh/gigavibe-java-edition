@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -49,32 +50,44 @@ public class CommandNowPlaying extends BaseCommand {
             return;
         }
         String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
-        if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
-        } else {
-            embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-            try {
-                embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-            } catch (Exception ignored) {
-                embed.setTitle("Unknown");
-            }
-            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```\n" + "**Channel:**\n" + audioPlayer.getPlayingTrack().getInfo().author);
+        embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+        try {
+            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+        } catch (Exception ignored) {
+            embed.setTitle("Unknown");
         }
+        embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
+        embed.addField("\uD83D\uDC64 Channel:", audioPlayer.getPlayingTrack().getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
-            if (Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                embed.addField("**Up next:**\n", Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13), true);
-            } else {
                 embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-                embed.addField("**Up next:**\n", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
-            }
+                embed.addField("▶️ Up next:", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
+        } else {
+            embed.addField(" ", " ", true);
         }
+        embed.addField(" ", " ", true);
+        if (LoopGuilds.contains(event.getGuild().getId())){
+            embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
+        } else {
+            embed.addField("\uD83D\uDD02 Track looping:", "❌ **False**", true);
+        }
+        if (LoopQueueGuilds.contains(event.getGuild().getId())){
+            embed.addField("\uD83D\uDD01 Queue looping:", "✅ **True**", true);
+        } else {
+            embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
+        }
+        embed.addField(" ", " ", true);
         embed.setColor(botColour);
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
     public String getCategory() {
         return "Music";
+    }
+
+    public ArrayList<String> getAlias() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("nowplaying");
+        return list;
     }
 
     public String getName() {
