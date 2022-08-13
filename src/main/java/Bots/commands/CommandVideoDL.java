@@ -25,7 +25,7 @@ public class CommandVideoDL extends BaseCommand {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
                 return;
             }
         }
@@ -43,7 +43,7 @@ public class CommandVideoDL extends BaseCommand {
                     if (i >= 8 && line.contains("ETA") && !embedCheck) {
                         embedCheck = true;
                         line = line + "**";
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(message -> messageVar[0] = message);
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(message -> messageVar[0] = message);
                     }
                 }
                 p.waitFor();
@@ -76,7 +76,7 @@ public class CommandVideoDL extends BaseCommand {
                             p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + KRFile.getAbsolutePath() + "\" -b:a 33k " + dir + "\\" + filename + "KRF.mp4"); // they dont need good audio quality, they want video (im lazy)
                             p.waitFor();
                             try {
-                                event.getTextChannel().sendFile(new File("viddl/" + filename + "KRF.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "KRF.mp4").delete()));
+                                event.getChannel().asTextChannel().sendFile(new File("viddl/" + filename + "KRF.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "KRF.mp4").delete()));
                                 new File("viddl/" + filename + "KR.mp4").delete();
                                 new File("viddl/" + filename + "K.mp4").delete();
                                 new File("viddl/" + filename + ".mp4").delete();
@@ -84,11 +84,11 @@ public class CommandVideoDL extends BaseCommand {
                             } catch (Exception e) {
                                 event.getJDA().getUserById("211789389401948160");
                                 Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
-                                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File could not be lowered to under 8mb")).queue();
+                                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File could not be lowered to under 8mb")).queue();
                             }
                         } else {
                             try {
-                                event.getTextChannel().sendFile(new File("viddl/" + filename + "KR.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "R.mp4").delete()));
+                                event.getChannel().asTextChannel().sendFile(new File("viddl/" + filename + "KR.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "R.mp4").delete()));
                                 new File("viddl/" + filename + "K.mp4").delete();
                                 new File("viddl/" + filename + ".mp4").delete();
                             } catch (Exception ignored) {
@@ -96,20 +96,20 @@ public class CommandVideoDL extends BaseCommand {
                             return;
                         }
                         new File("viddl/" + filename + ".mp4").delete();
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
                         return;
                     }
                     p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:v " + desiredBitRate + "k " + dir + "\\" + filename + "K.mp4");
                     p.waitFor();
                     try {
-                        event.getTextChannel().sendFile(new File("viddl/" + filename + "K.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "K.mp4").delete()));
+                        event.getChannel().asTextChannel().sendFile(new File("viddl/" + filename + "K.mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + "K.mp4").delete()));
                         new File("viddl/" + filename + ".mp4").delete();
                     } catch (Exception e) {
                         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
                     }
                 } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) { // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
                     try {
-                        event.getTextChannel().sendFile(new File("viddl/" + filename + ".mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + ".mp4").delete()));
+                        event.getChannel().asTextChannel().sendFile(new File("viddl/" + filename + ".mp4")).queue(a -> messageVar[0].delete().queue(b -> new File("viddl/" + filename + ".mp4").delete()));
                     } catch (Exception e) {
                         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
                     }

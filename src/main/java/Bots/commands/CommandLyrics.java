@@ -14,15 +14,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.printlnTime;
 
 public class CommandLyrics extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
             return;
         }
-        final TextChannel channel = event.getTextChannel();
+        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -45,14 +46,14 @@ public class CommandLyrics extends BaseCommand {
 
         try {
             String lyrics = gla.search(title.toLowerCase().replaceAll("official", "").replaceAll("music", "").replaceAll("video", "")).getHits().getFirst().fetchLyrics();
-            if (lyrics.isEmpty() || lyrics.isBlank()) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No results found.")).queue();
+            if (lyrics.isEmpty() || lyrics.isBlank() || gla.search(title).getHits().getFirst().getTitle().isBlank()) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No results found.")).queue();
                 return;
             }
             byte[] finalLyrics = lyrics.getBytes();
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", title)).addFile(finalLyrics, "lyrics.txt").queue();
+            event.getChannel().asTextChannel().sendFile(finalLyrics, "lyrics.txt").queue();
         } catch (Exception e) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No results found.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No results found.")).queue();
         }
     }
 

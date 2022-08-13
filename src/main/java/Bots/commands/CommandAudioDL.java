@@ -1,12 +1,11 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -16,70 +15,107 @@ import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
     public static int queue = 0;
+    Message[] messageVar = new Message[1];
 
     public void execute(MessageEvent event) {
         File dir = new File("auddl");
         if (Objects.equals(event.getArgs()[1], "")) {
             return;
         }
-        long id = Long.parseLong("211789389401948160");
-        if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-            id = Long.parseLong("260016427900076033");
-            if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
-                return;
-            }
-        }
-        final Message[] messageVar = new Message[1];
         new Thread(() -> {
             try {
                 String filename = valueOf(System.currentTimeMillis());
-                Process p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format mp3 -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" " + event.getArgs()[1]);
+                Process p = null;
+                if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+                    try {
+                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s " + event.getArgs()[1]);
+                    } catch (Exception e){e.printStackTrace();}
+                }
+                else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                    p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" " + event.getArgs()[1]);
+                }
+                if (p == null){
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
+                    return;
+                }
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
                 int i = 0;
-                boolean embedCheck = false;
-                while ((line = input.readLine()) != null) {
-                    i++;
-                    if (i >= 8 && line.contains("ETA") && !embedCheck) {
-                        embedCheck = true;
-                        line = line + "**";
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(message -> messageVar[0] = message);
+                try {
+                    while ((line = input.readLine()) != null) {
+                        i++;
+                        if (i >= 10 && line.contains("ETA")) {
+                            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(messageETA -> messageVar[0] = messageETA);
+                            break;
+                        }
                     }
-                }
+                } catch (Exception ignored){}
                 p.waitFor();
-                input.close();
-                File finalFile = new File(dir + "/" + filename + ".mp3");
+                File finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".ogg");
                 float duration;
-                if (finalFile.length() > 8000000) { // if the file is 8mb or over
-                    messageVar[0].editMessage("File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 8MB upload limit through boosts, sound quality may be suboptimal.").queue((message -> messageVar[0] = message));
-                    String strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -i " + finalFile + " -show_entries format=duration -v quiet -of csv=\"p=0\"").getInputStream())).readLine();
-                    duration = Float.parseFloat(strDuration); // duration of the audio file
-                    long desiredBitRate;
-                    if (event.getGuild().getBoostCount() < 7) {
-                        desiredBitRate = (long) (Math.round(7 * 8192) / duration); // 1mb lower just in case
-                    } else {
-                        desiredBitRate = (long) (Math.round(49 * 8192) / duration); // 1mb lower just in case
+                if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) {
+                    assert messageVar[0] != null;
+                    messageVar[0].delete().queue();
+                    try {
+                        event.getMessage().reply(finalFile.getAbsoluteFile()).queue();
+                    } catch (Exception e){e.printStackTrace();event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();}
+                    try {
+                        finalFile.getAbsoluteFile().delete();
+                    } catch (Exception e){e.printStackTrace();}
+                }
+                else if (finalFile.length() > 8000000) { // if the file is 8mb or over and the boost count of the guild is less than 7
+                    assert messageVar[0] != null;
+                    messageVar[0].editMessageEmbeds(createQuickEmbed(" ", "File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 50MB upload limit through boosts, sound quality may be suboptimal.")).queue();
+                    String strDuration = "";
+                    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                        strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("modules\\ffprobe -i \"" + finalFile.getAbsolutePath() + "\" -show_entries format=duration -v quiet -of csv=\"p=0\"").getInputStream())).readLine();
+                    } else if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+                        strDuration = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("ffprobe -i " + finalFile.getAbsolutePath() + " -show_entries format=duration -v quiet -of csv=p=0").getInputStream())).readLine();
                     }
-                    if (desiredBitRate < 33) { // check for ffmpeg bitrate limit
-                        new File("auddl/" + filename + ".mp3").delete();
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
+                    try {
+                        duration = Float.parseFloat(strDuration); // duration of the audio file
+                    } catch (Exception ignored){
+                        messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Failed to get duration of track, stopping the download.")).queue();
+                        finalFile.getAbsoluteFile().delete();
                         return;
                     }
-                    p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:a " + desiredBitRate + "k " + dir + "\\" + filename + "K.ogg");
+                    long desiredBitRate = 0;
+                    if (event.getGuild().getBoostCount() < 7) {
+                        desiredBitRate = (long) (Math.round(8 * 8192) / duration); // 8mb
+                    } else {
+                        desiredBitRate = (long) (Math.round(50 * 8192) / duration); // 50mb
+                    }
+                    if (desiredBitRate < 45) { // check for ffmpeg bitrate limit
+                        try {
+                            new File("auddl/" + filename + ".ogg").getAbsoluteFile().delete();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        assert messageVar[0] != null;
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
+                        finalFile.delete();
+                        return;
+                    } // if the desired bitrate is 45 or more
+                    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                        p = Runtime.getRuntime().exec("modules/ffmpeg -nostdin -loglevel error -i \"" + finalFile.getAbsolutePath() + "\" -b:a " + desiredBitRate + "k " + dir + "\\" + filename + "K.ogg");
+                    } else if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+                        p = Runtime.getRuntime().exec("ffmpeg -nostdin -loglevel error -i " + finalFile.getAbsolutePath() + " -b:a " + desiredBitRate + "k " + dir.getAbsolutePath() + "/" + filename + "K.ogg");
+                    }
                     p.waitFor();
                     try {
-                        printlnTime("yes");
-                        event.getTextChannel().sendFile(new File("auddl/" + filename + "K.mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + "K.mp3").delete()));
-                        new File("auddl/" + filename + ".mp3").delete();
+                        finalFile = new File("auddl/" + filename + "K.ogg");
+                        assert messageVar[0] != null;
+                        File finalFile1 = finalFile;
+                        event.getMessage().reply(finalFile1.getAbsoluteFile()).queue(a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()));
                     } catch (Exception e) {
-                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                        messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not send the file.")).queue();
+                        finalFile.delete();
+                        e.printStackTrace();
                     }
-                } else if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) { // if the file is not 8mb OR the file is >50MB and the server boost count greater than or equal to 7
                     try {
-                        event.getTextChannel().sendFile(new File("auddl/" + filename + ".mp3")).queue(a -> messageVar[0].delete().queue(b -> new File("auddl/" + filename + ".mp3").delete()));
+                        new File("auddl/" + filename + ".ogg").getAbsoluteFile().delete();
                     } catch (Exception e) {
-                        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage(e.getMessage()).queue());
+                        e.printStackTrace();
                     }
                 }
             } catch (Exception e) {
@@ -98,7 +134,7 @@ public class CommandAudioDL extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Dev";
+        return "Music";
     }
 
     public String getName() {

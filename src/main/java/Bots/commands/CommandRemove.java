@@ -18,8 +18,8 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandRemove extends BaseCommand {
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
+        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         final Member self = event.getGuild().getSelfMember();
@@ -27,27 +27,27 @@ public class CommandRemove extends BaseCommand {
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
             return;
         }
         assert selfVoiceState != null;
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         String string = event.getArgs()[1];
         if (!string.matches("^[0-9]")) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, integers only.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, integers only.")).queue();
             return;
         }
         if (queue.isEmpty()) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "What are you trying to remove, the queue is empty.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "What are you trying to remove, the queue is empty.")).queue();
             return;
         }
         if (queue.size() < Integer.parseInt(string) - 1) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The provided number was too large.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The provided number was too large.")).queue();
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -55,7 +55,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")).queue(); // not an error, intended
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")).queue(); // not an error, intended
     }
 
     @Override

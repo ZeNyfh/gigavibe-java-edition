@@ -20,7 +20,7 @@ import static java.lang.Math.round;
 public class CommandSkip extends BaseCommand {
 
     public void execute(MessageEvent event) {
-        final TextChannel channel = event.getTextChannel();
+        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -88,7 +88,7 @@ public class CommandSkip extends BaseCommand {
                         eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
                     }
                     eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
-                    event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
                 }
             } else {
                 channel.sendMessageEmbeds(createQuickEmbed("✅ Voted to skip the track", getVotes(event.getGuild().getIdLong()).size() + " of " + round(VCMembers.size() / 2) + " needed to skip.")).queue();

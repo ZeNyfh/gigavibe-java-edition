@@ -14,15 +14,18 @@ public class CommandSendAnnouncement extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
             return;
         }
         if (event.getArgs().length < 2){
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument given.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument given.")).queue();
             return;
         }
         for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
-            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getMessage().getContentRaw().replace(event.getArgs()[0], ""))).queue();
+            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getMessage().getContentRaw().replace(event.getArgs()[0], ""))).queue();
+            try {
+                Thread.sleep(10000);
+            } catch (Exception ignored){}
         }
     }
 

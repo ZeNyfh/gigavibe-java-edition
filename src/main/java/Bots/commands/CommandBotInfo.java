@@ -19,7 +19,7 @@ public class CommandBotInfo extends BaseCommand {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
                 return;
             }
         }
@@ -38,7 +38,7 @@ public class CommandBotInfo extends BaseCommand {
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
         eb.setFooter("Version: " + botVersion);
         long time = currentTimeMillis();
-        event.getTextChannel().sendMessageEmbeds(eb.build()).queue(response -> {
+        event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue(response -> {
             eb.appendDescription("⏱️  **Ping:** " + (currentTimeMillis() - time) + "ms");
             response.editMessageEmbeds(eb.build()).queue();
         });

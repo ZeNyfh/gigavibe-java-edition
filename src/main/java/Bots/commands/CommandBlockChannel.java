@@ -21,12 +21,12 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
             return;
         }
         if (!event.getArgs()[1].equalsIgnoreCase("list")) {
             if (event.getArgs().length != 3) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`")).queue();
                 return;
             }
         }
@@ -71,7 +71,7 @@ public class CommandBlockChannel extends BaseCommand {
             if (event.getArgs()[1].equalsIgnoreCase("add")) {
                 if (guildChannel.getId().equals(event.getArgs()[2])) {
                     if (blockedChannels.contains(guildChannel.getId())) {
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is already blocked.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is already blocked.")).queue();
                         return;
                     }
                     blockedChannels.add(event.getArgs()[2]);
@@ -90,13 +90,13 @@ public class CommandBlockChannel extends BaseCommand {
                             e.printStackTrace();
                         }
                     }
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list.")).queue();
                     return;
                 }
             } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
                 if (guildChannel.getId().equals(event.getArgs()[2])) {
                     if (!blockedChannels.contains(guildChannel.getId())) {
-                        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is not blocked.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is not blocked.")).queue();
                         return;
                     }
                     blockedChannels.remove(event.getArgs()[2]);
@@ -116,7 +116,7 @@ public class CommandBlockChannel extends BaseCommand {
                             e.printStackTrace();
                         }
                     }
-                    event.getTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list.")).queue();
                     return;
                 }
             } else if (event.getArgs()[1].equalsIgnoreCase("list")) {
@@ -125,21 +125,21 @@ public class CommandBlockChannel extends BaseCommand {
                 eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
                 if (blockedChannels.size() == 0) {
                     eb.appendDescription("**None.**");
-                    event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
                     return;
                 }
                 for (int j = 0; j < blockedChannels.size(); ) {
                     eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
                     j++;
                 }
-                event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
                 return;
             } else {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`")).queue();
                 return;
             }
         }
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server.")).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server.")).queue();
     }
 
     @Override

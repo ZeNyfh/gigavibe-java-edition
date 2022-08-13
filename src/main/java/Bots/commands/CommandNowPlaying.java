@@ -18,7 +18,7 @@ import static Bots.Main.*;
 public class CommandNowPlaying extends BaseCommand {
 
     public void execute(MessageEvent event) {
-        final TextChannel channel = event.getTextChannel();
+        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 

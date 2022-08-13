@@ -17,12 +17,12 @@ import static Bots.Main.createQuickEmbed;
 
 public class CommandLocalPlay extends BaseCommand {
     public void execute(MessageEvent event) throws IOException {
-        if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
+        if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
         }
 
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
             return;
         }
 
@@ -33,7 +33,7 @@ public class CommandLocalPlay extends BaseCommand {
             audioManager.openAudioConnection(memberChannel);
         }
         Path finalPath = Paths.get(event.getArgs()[1]);
-        PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), String.valueOf(finalPath), true);
+        PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), String.valueOf(finalPath), true);
     }
 
     @Override

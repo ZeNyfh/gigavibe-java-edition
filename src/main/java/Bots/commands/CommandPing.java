@@ -9,7 +9,7 @@ public class CommandPing extends BaseCommand {
 
     public void execute(MessageEvent event) {
         long time = currentTimeMillis();
-        event.getTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
+        event.getChannel().asTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
 
     public String getCategory() {

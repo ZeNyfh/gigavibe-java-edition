@@ -47,7 +47,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT};
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String botToken = "";
@@ -121,19 +121,6 @@ public class Main extends ListenerAdapter {
                 errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
             }
             file = new File("modules/yt-dlp.exe");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-        } else if (OS.toLowerCase().contains("linux")) {
-            file = new File("modules/ffmpeg");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-            file = new File("modules/ffprobe");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-            file = new File("modules/yt-dlp");
             if (!file.exists()) {
                 errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
             }
@@ -383,7 +370,7 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers!"));
-        Objects.requireNonNull(event.getGuild().getDefaultChannel()).sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first, I recommend using `" + botPrefix + "help` to help you with the following. \n\nadd dj roles/users with the `" + botPrefix + "dj` command, this will allow some users or roles to have more control over the bots functions for example: forceskip, disconnect and shuffle.\nif you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, this will disallow some commands from being used in the blocked channels, this can be done with the `" + botPrefix + "blockchannel` command.\n\n**IF YOU ENCOUNTER ANY BUGS, ISSUES OR HAVE ANY FEATURE REQUESTS, USE** `" + botPrefix + "bug <String>` **TO REPORT THE BUG TO ME!**")).queue();
+        Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first, I recommend using `" + botPrefix + "help` to help you with the following. \n\nadd dj roles/users with the `" + botPrefix + "dj` command, this will allow some users or roles to have more control over the bots functions for example: forceskip, disconnect and shuffle.\nif you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, this will disallow some commands from being used in the blocked channels, this can be done with the `" + botPrefix + "blockchannel` command.\n\n**IF YOU ENCOUNTER ANY BUGS, ISSUES OR HAVE ANY FEATURE REQUESTS, USE** `" + botPrefix + "bug <String>` **TO REPORT THE BUG TO ME!**")).queue();
     }
 
     @Override

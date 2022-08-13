@@ -9,7 +9,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandInvite extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("**Have fun!**", "https://discord.com/api/oauth2/authorize?client_id=920435768726532107&permissions=412689493104&scope=bot")).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Have fun!**", "https://discord.com/api/oauth2/authorize?client_id=920435768726532107&permissions=412689493104&scope=bot")).queue();
     }
 
     @Override

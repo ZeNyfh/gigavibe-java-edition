@@ -22,7 +22,7 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        final TextChannel channel = event.getTextChannel();
+        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 

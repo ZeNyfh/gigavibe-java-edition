@@ -18,11 +18,11 @@ import static Bots.Main.createQuickEmbed;
 public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
-        if (!IsDJ(event.getGuild(), event.getTextChannel(), event.getMember())) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not dj.")).queue();
+        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
-        final TextChannel channel = event.getTextChannel();
+        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -40,7 +40,7 @@ public class CommandClearQueue extends BaseCommand {
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 

@@ -14,15 +14,15 @@ public class CommandLoopQueue extends BaseCommand {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not playing anything.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not playing anything.")).queue();
             return;
         }
 
         if (LoopQueueGuilds.contains(event.getGuild().getId())) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue.")).queue();
             LoopQueueGuilds.remove(event.getGuild().getId());
         } else {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue.")).queue();
             LoopQueueGuilds.add(event.getGuild().getId());
         }
     }

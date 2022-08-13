@@ -21,7 +21,7 @@ public class CommandExec extends BaseCommand {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = 260016427900076033L;
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
                 return;
             }
         }
@@ -34,10 +34,10 @@ public class CommandExec extends BaseCommand {
             jshell.close();
             StringBuilder finalOutput = new StringBuilder();
             finalOutput.append(snippetEvents.listIterator().next().toString()).append("\n");
-            event.getTextChannel().sendMessage(finalOutput).queue();
+            event.getChannel().asTextChannel().sendMessage(finalOutput).queue();
         } catch (IllegalStateException e) {
             e.printStackTrace();
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", e.getMessage())).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", e.getMessage())).queue();
         }
     }
 

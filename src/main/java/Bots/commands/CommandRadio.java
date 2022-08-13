@@ -54,7 +54,7 @@ public class CommandRadio extends BaseCommand {
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         assert arg != null;
         if (arg.equals("list") || event.getArgs().length == 1) {
-            event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
             eb.clear();
             return;
         }
@@ -62,7 +62,7 @@ public class CommandRadio extends BaseCommand {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberState != null;
         if (!memberState.inAudioChannel()) {
-            event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
             return;
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
@@ -70,17 +70,17 @@ public class CommandRadio extends BaseCommand {
         printlnTime(argFinal);
         for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
             if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
-                if (IsChannelBlocked(event.getGuild(), event.getTextChannel())) {
+                if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
                     return;
                 }
                 audioManager.openAudioConnection(memberChannel);
-                PlayerManager.getInstance().loadAndPlay(event.getTextChannel(), tempMap.getValue(), false);
-                event.getTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**")).queue();
+                PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), tempMap.getValue(), false);
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**")).queue();
                 return;
             }
         }
-        event.getTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
-        event.getTextChannel().sendMessageEmbeds(eb.build()).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
     }
 
     @Override
