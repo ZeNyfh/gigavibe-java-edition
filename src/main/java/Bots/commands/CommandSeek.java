@@ -56,7 +56,7 @@ public class CommandSeek extends BaseCommand {
             if (audioPlayer.getPlayingTrack().isSeekable()) {
                 String[] times = args[1].split(":", 3);
                 for (int i = 0; i < times.length; ) {
-                    if (times[i].matches("[^0-9]")) {
+                    if (!times[i].matches("^\\d+$")) {
                         channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`")).queue();
                         return;
                     }
