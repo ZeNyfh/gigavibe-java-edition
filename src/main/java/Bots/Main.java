@@ -131,16 +131,16 @@ public class Main extends ListenerAdapter {
             return;
         }
         Dotenv dotenv = Dotenv.load();
-        if (dotenv.get("TOKEN").isBlank()) {
+        if (dotenv.get("TOKEN") == null) {
             printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
         }
-        if (dotenv.get("PREFIX").isBlank()) {
+        if (dotenv.get("PREFIX") == null) {
             printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
         }
         botPrefix = dotenv.get("PREFIX");
         botToken = dotenv.get("TOKEN");
 
-        if (dotenv.get("COLOUR").isBlank()){
+        if (dotenv.get("COLOUR") == null){
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
         }
