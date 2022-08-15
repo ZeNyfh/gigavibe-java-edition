@@ -18,6 +18,10 @@ public class CommandAudioDL extends BaseCommand {
     Message[] messageVar = new Message[1];
 
     public void execute(MessageEvent event) {
+        if (event.getArgs().length < 1){
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
+            return;
+        }
         File dir = new File("auddl");
         if (Objects.equals(event.getArgs()[1], "")) {
             return;
