@@ -1,6 +1,7 @@
 .idea/
 target/
-temp/
+auddl/
+viddl/
 modules/
 *.json
 src/main/java/META-INF/MANIFEST.MF
