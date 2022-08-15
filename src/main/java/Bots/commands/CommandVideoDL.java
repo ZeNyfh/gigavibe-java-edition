@@ -34,13 +34,14 @@ public class CommandVideoDL extends BaseCommand {
             try {
                 String filename = valueOf(System.currentTimeMillis());
                 Process p = null;
+                String filteredUrl = event.getArgs()[1].replace("\"","\\\"");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp --merge-output-format mp4 -o " + dir.getPath() + "/" + filename + "\".mp4\" " + event.getArgs()[1]);
+                        p = Runtime.getRuntime().exec("yt-dlp --merge-output-format mp4 -o " + dir.getPath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\"");
                     } catch (Exception e){e.printStackTrace();}
                 }
                 else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" " + event.getArgs()[1]);
+                    p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\"");
                 }
                 if (p == null){
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
