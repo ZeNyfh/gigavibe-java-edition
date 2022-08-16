@@ -5,14 +5,13 @@ import Bots.MessageEvent;
 
 import java.util.Objects;
 
-import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandBug extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        if (event.getArgs().length == 1){
+        if (event.getArgs().length == 1) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Please provide an something to report.")).queue();
             return;
         }

@@ -19,7 +19,7 @@ public class CommandJoin extends BaseCommand {
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()){
+        if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **error**", "You are not in a vc.")).queue();
             return;
         }

@@ -6,9 +6,7 @@ import Bots.MessageEvent;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Bots.Main.botPrefix;
 import static Bots.Main.createQuickEmbed;
-import static java.lang.System.currentTimeMillis;
 
 public class CommandSendAnnouncement extends BaseCommand {
 
@@ -17,7 +15,7 @@ public class CommandSendAnnouncement extends BaseCommand {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
             return;
         }
-        if (event.getArgs().length < 2){
+        if (event.getArgs().length < 2) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument given.")).queue();
             return;
         }
@@ -25,7 +23,8 @@ public class CommandSendAnnouncement extends BaseCommand {
             Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getMessage().getContentRaw().replace(event.getArgs()[0], ""))).queue();
             try {
                 Thread.sleep(10000);
-            } catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         }
     }
 

@@ -196,9 +196,8 @@ public class CommandPlaylist extends BaseCommand {
                     TextChannel textChannel = event.getChannel().asTextChannel();
                     PlayerManager playerManagerInstance = PlayerManager.getInstance();
                     event.getGuild().getAudioManager().openAudioConnection(memberState.getChannel());
-                    List finalPlaylist = playlist.stream().toList();
                     for (int i = 0; i < playlist.size(); ) {
-                        playerManagerInstance.loadAndPlay(textChannel, (String) finalPlaylist.get(i), false);
+                        playerManagerInstance.loadAndPlay(textChannel, (String) playlist.get(i), false);
                         i++;
                     }
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ Successfully queued: **playlist " + args[2] + "**.", "Playlist size: **" + playlist.size() + "**")).queue();

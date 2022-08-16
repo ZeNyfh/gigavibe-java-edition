@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
@@ -52,7 +51,7 @@ public class Main extends ListenerAdapter {
     public static String botPrefix = "";
     public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
-    public static String botVersion = "22.08.15"; // YY.MM.DD
+    public static String botVersion = "22.08.16"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -140,13 +139,16 @@ public class Main extends ListenerAdapter {
         botPrefix = dotenv.get("PREFIX");
         botToken = dotenv.get("TOKEN");
 
-        if (dotenv.get("COLOUR") == null){
+        if (dotenv.get("COLOUR") == null) {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
         }
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
-        } catch (NumberFormatException e){printlnTime("Colour was invalid.");return;}
+        } catch (NumberFormatException e) {
+            printlnTime("Colour was invalid.");
+            return;
+        }
 
         registerCommand(new CommandPing());
         registerCommand(new CommandPlay());
@@ -165,7 +167,6 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandShuffle());
         registerCommand(new CommandGithub());
         registerCommand(new CommandDJ());
-        registerCommand(new CommandExec());
         registerCommand(new CommandRemove());
         registerCommand(new CommandClearQueue());
         registerCommand(new CommandVolume());
@@ -278,7 +279,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static void addToVote(Long guildID, List<Member> members) {
-        if (members.size() == 0){
+        if (members.size() == 0) {
             skips.put(guildID, new ArrayList<>());
         }
         skips.put(guildID, members);

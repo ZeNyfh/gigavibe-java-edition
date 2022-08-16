@@ -1,16 +1,16 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.printlnTime;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
@@ -18,7 +18,7 @@ public class CommandAudioDL extends BaseCommand {
     Message[] messageVar = new Message[1];
 
     public void execute(MessageEvent event) {
-        if (event.getArgs().length < 1){
+        if (event.getArgs().length < 1) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
             return;
         }
@@ -30,16 +30,17 @@ public class CommandAudioDL extends BaseCommand {
             try {
                 String filename = valueOf(System.currentTimeMillis());
                 Process p = null;
-                String filteredUrl = event.getArgs()[1].replace("\"","\\\"");
+                String filteredUrl = event.getArgs()[1].replace("\"", "\\\"");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s \"" + filteredUrl + "\"");
-                    } catch (Exception e){e.printStackTrace();}
-                }
-                else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s \\\"" + filteredUrl + "\\\"");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                     p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" \"" + filteredUrl + "\"");
                 }
-                if (p == null){
+                if (p == null) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
                     return;
                 }
@@ -54,7 +55,8 @@ public class CommandAudioDL extends BaseCommand {
                             break;
                         }
                     }
-                } catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
                 p.waitFor();
                 input.close();
                 File finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".ogg");
@@ -64,12 +66,16 @@ public class CommandAudioDL extends BaseCommand {
                     messageVar[0].delete().queue();
                     try {
                         event.getMessage().reply(finalFile.getAbsoluteFile()).queue();
-                    } catch (Exception e){e.printStackTrace();event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();}
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();
+                    }
                     try {
                         finalFile.getAbsoluteFile().delete();
-                    } catch (Exception e){e.printStackTrace();}
-                }
-                else if (finalFile.length() > 8000000) { // if the file is 8mb or over and the boost count of the guild is less than 7
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (finalFile.length() > 8000000) { // if the file is 8mb or over and the boost count of the guild is less than 7
                     assert messageVar[0] != null;
                     messageVar[0].editMessageEmbeds(createQuickEmbed(" ", "File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 50MB upload limit through boosts, sound quality may be suboptimal.")).queue();
                     String strDuration = "";
@@ -80,7 +86,7 @@ public class CommandAudioDL extends BaseCommand {
                     }
                     try {
                         duration = Float.parseFloat(strDuration); // duration of the audio file
-                    } catch (Exception ignored){
+                    } catch (Exception ignored) {
                         messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Failed to get duration of track, stopping the download.")).queue();
                         finalFile.getAbsoluteFile().delete();
                         return;

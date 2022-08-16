@@ -59,18 +59,18 @@ public class CommandNowPlaying extends BaseCommand {
         embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         embed.addField("\uD83D\uDC64 Channel:", audioPlayer.getPlayingTrack().getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
-                embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-                embed.addField("▶️ Up next:", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
+            embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+            embed.addField("▶️ Up next:", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
-        if (LoopGuilds.contains(event.getGuild().getId())){
+        if (LoopGuilds.contains(event.getGuild().getId())) {
             embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
         } else {
             embed.addField("\uD83D\uDD02 Track looping:", "❌ **False**", true);
         }
-        if (LoopQueueGuilds.contains(event.getGuild().getId())){
+        if (LoopQueueGuilds.contains(event.getGuild().getId())) {
             embed.addField("\uD83D\uDD01 Queue looping:", "✅ **True**", true);
         } else {
             embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);

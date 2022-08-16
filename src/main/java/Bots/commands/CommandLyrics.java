@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.printlnTime;
 
 public class CommandLyrics extends BaseCommand {
 
@@ -46,7 +45,7 @@ public class CommandLyrics extends BaseCommand {
 
         try {
             String lyrics = gla.search(title.toLowerCase().replaceAll("official", "").replaceAll("music", "").replaceAll("video", "")).getHits().getFirst().fetchLyrics();
-            if (lyrics.isEmpty() || lyrics.isBlank() || gla.search(title).getHits().getFirst().getTitle().isBlank()) {
+            if (lyrics.isEmpty() || gla.search(title).getHits().getFirst().getTitle() == null) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No results found.")).queue();
                 return;
             }
