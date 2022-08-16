@@ -33,7 +33,7 @@ public class CommandAudioDL extends BaseCommand {
                 String filteredUrl = event.getArgs()[1].replace("\"", "\\\"");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s \\\"" + filteredUrl + "\\\"");
+                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s " + filteredUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

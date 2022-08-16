@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.printlnTime;
 import static java.lang.String.valueOf;
 
 public class CommandVideoDL extends BaseCommand {
@@ -35,7 +34,7 @@ public class CommandVideoDL extends BaseCommand {
                 filteredUrl = filteredUrl.replaceAll("\n", "");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getPath() + "/" + filename + ".mp4 \\\"" + filteredUrl + "\\\"");
+                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getPath() + "/" + filename + ".mp4 " + filteredUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -88,7 +87,7 @@ public class CommandVideoDL extends BaseCommand {
                 finalFile.delete();
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp -f \\\"[filesize" + desiredFileSize + "]\\\" -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 \\\"" + filteredUrl + "\\\"");
+                        p = Runtime.getRuntime().exec("yt-dlp -f \\\"[filesize" + desiredFileSize + "]\\\" -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -99,7 +98,6 @@ public class CommandVideoDL extends BaseCommand {
                 i = 0;
                 try {
                     while ((line = input.readLine()) != null) {
-                        printlnTime(line);
                         i++;
                         if (i >= 10 && line.contains("ETA")) {
                             messageVar[0].editMessageEmbeds(createQuickEmbed(" ", "Previous download was too large, retrying...\n\n**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(messageETA -> messageVar[0] = messageETA);

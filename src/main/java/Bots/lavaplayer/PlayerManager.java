@@ -67,7 +67,7 @@ public class PlayerManager {
                 } else {
                     length = toTimestamp((audioTrack.getInfo().length));
                 }
-                embed.setColor(new Color(0, 0, 255));
+                embed.setColor(botColour);
                 if (audioTrack.getInfo().title.isEmpty()) {
                     String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
                     String trackName = trackNameArray[trackNameArray.length - 1];
@@ -83,7 +83,7 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 String length = "Unknown";
                 EmbedBuilder embed = new EmbedBuilder();
-                embed.setColor(new Color(0, 0, 255));
+                embed.setColor(botColour);
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     String author = (tracks.get(0).getInfo().author);
