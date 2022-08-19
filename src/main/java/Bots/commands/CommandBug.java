@@ -12,7 +12,7 @@ public class CommandBug extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (event.getArgs().length == 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Please provide an something to report.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Please provide something to report.")).queue();
             return;
         }
         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator() + "\n\n" + event.getMessage().getContentRaw()).queue());

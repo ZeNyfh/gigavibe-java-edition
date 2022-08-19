@@ -51,7 +51,7 @@ public class Main extends ListenerAdapter {
     public static String botPrefix = "";
     public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
-    public static String botVersion = "22.08.16"; // YY.MM.DD
+    public static String botVersion = "22.08.19"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();

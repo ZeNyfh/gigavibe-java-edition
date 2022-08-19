@@ -14,7 +14,11 @@ public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ.")).queue();
+            return;
+        }
+        if (!event.getGuild().getAudioManager().isConnected()){
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not in a voice channel.")).queue();
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -31,6 +35,9 @@ public class CommandDisconnect extends BaseCommand {
         list.add("leave");
         list.add("fu" + "ckoff"); // using this because I don't want to trigger any sort of profanity filters on other systems.
         list.add("fu" + "ck off");
+        list.add("shutup");
+        list.add("dc");
+        list.add("stop");
         return list;
     }
 
