@@ -11,9 +11,9 @@ dj roles and some other cool features for you to play with.
 >
 >> [FFMPEG & FFPROBE ON WINDOWS](https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z)
 >
->> [GUIDE FOR FFMPEG & FFPROBE ON LINUX](https://www.tecmint.com/install-ffmpeg-in-linux/)
+>> GUIDE FOR YT-DLP FORK OF FFMPEG & FFPROBE ON LINUX: **see under Installation section.**
 >
->> Keep these files named as "ffprobe", "yt-dlp" and "ffmpeg".
+> > On Windows, keep these files named as "ffprobe.exe", "yt-dlp.exe" and "ffmpeg.exe".
 > > The latest version of ffmpeg and yt-dlp are recommended, be sure to download the correct version for your correct
 > > system.
 
@@ -26,6 +26,16 @@ dj roles and some other cool features for you to play with.
 
 ## Installation
 
+> > FFMPEG for linux. Be sure to have **xz-utils** installed on your system, or a way to install from tar.xz files.
+> >
+> > [FFMPEG Download for ARM Linux](https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linuxarm64-gpl.tar.xz)
+> >
+> > [FFMPEG Download for x86 | x64 Linux](https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz)
+> >
+> > Run **sudo tar -xvf {FILE_NAME.tar.xz}**
+> >
+> > Then feel free to remove the tar.xz as you are done here.
+> 
 > > JDK 8 can be acquired
 > > from [The Oracle Archive](https://www.oracle.com/java/technologies/javase/jdk8-archive-downloads.html) or from other
 > > trusted sources.

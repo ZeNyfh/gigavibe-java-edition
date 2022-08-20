@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.printlnTime;
 import static java.lang.String.valueOf;
 
 public class CommandVideoDL extends BaseCommand {
@@ -30,11 +31,10 @@ public class CommandVideoDL extends BaseCommand {
             try {
                 String filename = valueOf(System.currentTimeMillis());
                 Process p = null;
-                String filteredUrl = event.getArgs()[1].replace("\"", "\\\"");
-                filteredUrl = filteredUrl.replaceAll("\n", "");
+                String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getPath() + "/" + filename + ".mp4 " + filteredUrl);
+                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -55,7 +55,7 @@ public class CommandVideoDL extends BaseCommand {
                             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(messageETA -> messageVar[0] = messageETA);
                             break;
                         }
-                        if (i == 2 && line.contains("ETA")) {
+                        if (i < 5 && line.contains("ETA")) {
                             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(messageETA -> messageVar[0] = messageETA);
                         }
                     }
