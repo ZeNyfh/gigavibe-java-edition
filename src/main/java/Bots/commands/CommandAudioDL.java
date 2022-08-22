@@ -61,7 +61,7 @@ public class CommandAudioDL extends BaseCommand {
                 input.close();
                 File finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".ogg");
                 float duration;
-                if (finalFile.length() < 8000000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) {
+                if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
                     assert messageVar[0] != null;
                     messageVar[0].delete().queue();
                     try {
@@ -75,7 +75,7 @@ public class CommandAudioDL extends BaseCommand {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else if (finalFile.length() > 8000000) { // if the file is 8mb or over and the boost count of the guild is less than 7
+                } else if (finalFile.length() > 8192000) { // if the file is 8mb or over and the boost count of the guild is less than 7
                     assert messageVar[0] != null;
                     messageVar[0].editMessageEmbeds(createQuickEmbed(" ", "File size too large, lowering bitrate...\n\nThis server hasnt unlocked the 50MB upload limit through boosts, sound quality may be suboptimal.")).queue();
                     String strDuration = "";

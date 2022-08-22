@@ -64,7 +64,7 @@ public class CommandVideoDL extends BaseCommand {
                 p.waitFor();
                 input.close();
                 File finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".mp4");
-                if (finalFile.length() < 8192000 || finalFile.length() < 50000000 && event.getGuild().getBoostCount() >= 7) {
+                if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
                     try {
                         messageVar[0].delete().queue();
                         event.getMessage().reply(finalFile.getAbsoluteFile()).queue();
