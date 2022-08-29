@@ -51,7 +51,7 @@ public class Main extends ListenerAdapter {
     public static String botPrefix = "";
     public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
-    public static String botVersion = "22.08.19"; // YY.MM.DD
+    public static String botVersion = "22.08.29"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -104,7 +104,7 @@ public class Main extends ListenerAdapter {
             printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
             FileWriter writer = new FileWriter(".env");
-            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFY CLIENT=\nSPOTIFY CLIENT SECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
             writer.flush();
             writer.close();
         }
@@ -174,7 +174,6 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandRadio());
         registerCommand(new CommandSeek());
         registerCommand(new CommandPlaylist());
-        registerCommand(new CommandLyrics());
         registerCommand(new CommandBug());
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInvite());

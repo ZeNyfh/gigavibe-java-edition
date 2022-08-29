@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,7 +66,7 @@ public class CommandAudioDL extends BaseCommand {
                     assert messageVar[0] != null;
                     messageVar[0].delete().queue();
                     try {
-                        event.getMessage().reply(finalFile.getAbsoluteFile()).queue();
+                        event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
                     } catch (Exception e) {
                         e.printStackTrace();
                         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();
@@ -118,7 +119,7 @@ public class CommandAudioDL extends BaseCommand {
                         finalFile = new File("auddl/" + filename + "K.ogg");
                         assert messageVar[0] != null;
                         File finalFile1 = finalFile;
-                        event.getMessage().reply(finalFile1.getAbsoluteFile()).queue(a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()));
+                        event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()));
                     } catch (Exception e) {
                         messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not send the file.")).queue();
                         finalFile.delete();

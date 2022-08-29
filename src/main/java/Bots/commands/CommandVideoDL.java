@@ -3,11 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
@@ -67,7 +69,7 @@ public class CommandVideoDL extends BaseCommand {
                 if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
                     try {
                         messageVar[0].delete().queue();
-                        event.getMessage().reply(finalFile.getAbsoluteFile()).queue();
+                        event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
                     } catch (Exception e) {
                         e.printStackTrace();
                         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();
@@ -124,7 +126,7 @@ public class CommandVideoDL extends BaseCommand {
                 finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".mp4");
                 input.close();
                 File finalFile1 = finalFile;
-                event.getMessage().reply(finalFile.getAbsoluteFile()).queue(sent -> {
+                event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(sent -> {
                     try {
                         finalFile1.getAbsoluteFile().delete();
                     } catch (Exception e) {

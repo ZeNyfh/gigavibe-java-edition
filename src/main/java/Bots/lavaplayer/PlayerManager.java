@@ -1,5 +1,8 @@
 package Bots.lavaplayer;
 
+import com.github.topislavalinkplugins.topissourcemanagers.applemusic.AppleMusicSourceManager;
+import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifyConfig;
+import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -7,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -29,6 +33,14 @@ public class PlayerManager {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
 
+        SpotifyConfig spotifyConfig = new SpotifyConfig();
+        spotifyConfig.setClientId(Dotenv.load().get("SPOTIFYCLIENTID"));
+        spotifyConfig.setClientSecret(Dotenv.load().get("SPOTIFYCLIENTSECRET"));
+        spotifyConfig.setCountryCode("GB");
+
+        this.audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(null, "gb", this.audioPlayerManager));
+        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
+
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
@@ -49,6 +61,12 @@ public class PlayerManager {
     }
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
+        if (trackUrl.toLowerCase().contains("spotify")){
+            if (Dotenv.load().get("SPOTIFYCLIENTID") == null || Dotenv.load().get("SPOTIFYCLIENTSECRET") == null){
+                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "The bot owner has not set up Spotify support.")).queue();
+                return;
+            }
+        }
         final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
