@@ -9,23 +9,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Bots.Main.IsDJ;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandVolume extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not in a vc.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not in a vc.")).queue();
             return;
         }
         if (event.getGuild().getAudioManager().getConnectedChannel() != Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not in the same vc as me.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You are not in the same vc as me.")).queue();
             return;
         }
         String[] args = event.getArgs();
@@ -34,18 +32,18 @@ public class CommandVolume extends BaseCommand {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Set volume to the default of **100**.")).queue();
         } else {
             if (args[1].matches("[^\\d.]")) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume must be an integer.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The volume must be an integer.")).queue();
                 return;
             }
             if (args[1].matches("^\\d+$")) {
                 //If entire thing is a number
                 int volume = Integer.parseInt(args[1]);
                 if (volume > 500) {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be higher than 500.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The volume can not be higher than 500.")).queue();
                     return;
                 }
                 if (volume < 0) {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The volume can not be lower than 0.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The volume can not be lower than 0.")).queue();
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
@@ -56,7 +54,7 @@ public class CommandVolume extends BaseCommand {
                 }
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid value.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid value.")).queue();
             }
         }
     }

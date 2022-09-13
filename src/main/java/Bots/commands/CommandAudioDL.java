@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
@@ -20,7 +21,7 @@ public class CommandAudioDL extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (event.getArgs().length < 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
             return;
         }
         File dir = new File("auddl");
@@ -42,7 +43,7 @@ public class CommandAudioDL extends BaseCommand {
                     p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" \"" + filteredUrl + "\"");
                 }
                 if (p == null) {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
                     return;
                 }
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -69,7 +70,7 @@ public class CommandAudioDL extends BaseCommand {
                         event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be sent.")).queue();
                     }
                     try {
                         finalFile.getAbsoluteFile().delete();
@@ -88,7 +89,7 @@ public class CommandAudioDL extends BaseCommand {
                     try {
                         duration = Float.parseFloat(strDuration); // duration of the audio file
                     } catch (Exception ignored) {
-                        messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Failed to get duration of track, stopping the download.")).queue();
+                        messageVar[0].editMessageEmbeds(createQuickError("Failed to get duration of track, stopping the download.")).queue();
                         finalFile.getAbsoluteFile().delete();
                         return;
                     }
@@ -105,7 +106,7 @@ public class CommandAudioDL extends BaseCommand {
                             e.printStackTrace();
                         }
                         assert messageVar[0] != null;
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("File cannot be resized to 8MB or lower.")).queue(a -> messageVar[0].delete().queue());
                         finalFile.delete();
                         return;
                     } // if the desired bitrate is 45 or more
@@ -121,7 +122,7 @@ public class CommandAudioDL extends BaseCommand {
                         File finalFile1 = finalFile;
                         event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()));
                     } catch (Exception e) {
-                        messageVar[0].editMessageEmbeds(createQuickEmbed("❌ **Error**", "Could not send the file.")).queue();
+                        messageVar[0].editMessageEmbeds(createQuickError("Could not send the file.")).queue();
                         finalFile.delete();
                         e.printStackTrace();
                     }

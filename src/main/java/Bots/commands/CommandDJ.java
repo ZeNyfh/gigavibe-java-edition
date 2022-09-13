@@ -3,7 +3,6 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,137 +20,158 @@ public class CommandDJ extends BaseCommand {
 
     public void execute(MessageEvent event) throws IOException {
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonFileContents = null;
+        JSONObject json = new JSONObject();
+
         try (FileReader reader = new FileReader("DJs.json")) {
-            jsonFileContents = (JSONObject) jsonParser.parse(reader);
+            json = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        JSONObject json = jsonFileContents;
-        JSONArray DJUsers = new JSONArray();
-        JSONArray DJRoles = new JSONArray();
-        JSONObject check = new JSONObject();
         JSONObject GuildContents = (JSONObject) json.get(event.getGuild().getId());
-        if (json.get(event.getGuild().getId()) == null) {
-            check.put("users", DJUsers);
-            check.put("roles", DJRoles);
-            json.putIfAbsent(event.getGuild().getId(), check);
-            FileWriter file = new FileWriter("DJs.json");
-            file.write(json.toJSONString());
+
+        if (json.get(event.getGuild().getId()) == null) { // adding values if they are missing.
+            GuildContents.put("roles", new JSONArray());
+            GuildContents.put("users", new JSONArray());
+            json.put(event.getGuild().getId(), GuildContents);
             try {
-                file.flush();
-                file.close();
+                FileWriter writer = new FileWriter("DJs.json");
+                writer.write(json.toJSONString());
+                writer.flush();
+                writer.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            try (FileReader reader = new FileReader("DJs.json")) {
-                jsonFileContents = (JSONObject) jsonParser.parse(reader);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            json = jsonFileContents;
-            GuildContents = (JSONObject) json.get(event.getGuild().getId());
-        } else {
-            DJUsers = (JSONArray) GuildContents.get("users");
-            DJRoles = (JSONArray) GuildContents.get("roles");
         }
-        if (event.getArgs()[1].equalsIgnoreCase("list")) {
-            if (event.getArgs().length == 3 || event.getArgs().length == 2) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments, use \"" + botPrefix + "help\" for more info.")).queue();
-            }
-            if (event.getArgs()[2].equalsIgnoreCase("users") || event.getArgs()[2].equalsIgnoreCase("roles")) {
-                String arg2 = event.getArgs()[2].toLowerCase();
-                JSONArray arg2Array = (JSONArray) GuildContents.get(arg2);
-                EmbedBuilder eb = new EmbedBuilder();
-                eb.setTitle("** DJ " + event.getArgs()[2] + "** for " + event.getGuild().getName());
-                eb.setColor(botColour);
-                if (arg2Array.size() == 0) {
-                    eb.setDescription("None.");
-                    event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
-                    return;
-                }
-                if (event.getArgs()[2].equalsIgnoreCase("roles")) {
-                    for (int i = 0; i < arg2Array.size(); ) {
-                        eb.appendDescription(arg2Array.get(i) + " - **" + Objects.requireNonNull(event.getJDA().getRoleById((String) arg2Array.get(i))).getName() + "**\n");
-                        i++;
-                    }
-                }
-                if (event.getArgs()[2].equalsIgnoreCase("users")) {
-                    for (int i = 0; i < arg2Array.size(); ) {
-                        eb.appendDescription(arg2Array.get(i) + " - **" + Objects.requireNonNull(event.getJDA().getUserById((String) arg2Array.get(i))).getName() + "**\n");
-                        i++;
-                    }
-                }
-                event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+
+        JSONArray DJRoles = (JSONArray) GuildContents.get("roles");
+        JSONArray DJUsers = (JSONArray) GuildContents.get("users");
+
+        if (event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
+            EmbedBuilder eb = new EmbedBuilder();
+            StringBuilder builder = new StringBuilder();
+            builder.append("**Roles:**\n"); // list DJ roles in embed
+            if (DJRoles.size() == 0) {
+                builder.append("None.");
             } else {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj list roles` or `" + botPrefix + "dj list users` to show all DJs.")).queue();
+                for (int i = 0; i < DJRoles.size() - 1; i++) {
+                    builder.append(event.getJDA().getRoleById((String) DJRoles.get(i)).getAsMention() + ", ");
+                }
             }
-        } else if (event.getArgs()[1].equalsIgnoreCase("add")) {
-            if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
+            builder.append("\n\n**Users:**\n"); // list DJ users in embed
+            if (DJUsers.size() == 0) {
+                builder.append("None.");
+            } else {
+                for (int i = 0; i < DJUsers.size() - 1; i++) {
+                    builder.append(event.getJDA().getUserById((String) DJUsers.get(i)).getAsMention() + ", ");
+                }
+            }
+            eb.setColor(botColour);
+            eb.setTitle("DJs for " + event.getGuild().getName());
+            eb.appendDescription(builder);
+            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+
+        } else if (event.getArgs()[1].equalsIgnoreCase("add")) { // adding djs
+            if (event.getArgs()[2] == null) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
                 return;
             }
-            if (event.getArgs()[2].equalsIgnoreCase("user")) {
-                if (event.getArgs()[3].contains("<@")) {
-                    String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Users list.")).queue();
-                    DJUsers.add(UserID);
-                } else {
-                    DJUsers.add(event.getArgs()[3]);
-                }
-            } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
-                if (event.getArgs()[3].contains("<@&")) {
-                    String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
-                    DJRoles.add(RoleID);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added to DJ Roles list.")).queue();
-                } else {
-                    DJRoles.add(event.getArgs()[3]);
-                }
-            } else {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj role add <RoleID/Ping>` or `" + botPrefix + "dj user add <UserID/Ping>`")).queue();
+            String member = null;
+            String role = null;
+            try { // check to see if its a role or member or mention of a role or member
+                member = Objects.requireNonNull(event.getJDA().getUserById(event.getArgs()[2])).getId(); // check for userid
+            } catch (Exception ignored1) {
             }
-            GuildContents.put("users", DJUsers);
-            GuildContents.put("roles", DJRoles);
-            json.put(event.getGuild().getId(), GuildContents);
-            FileWriter file = new FileWriter("DJs.json");
-            file.write(json.toJSONString());
             try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                role = Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs()[2])).getId(); // check for roleid
+            } catch (Exception ignored2) {
             }
-        } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
-            if (event.getArgs()[2].equalsIgnoreCase("user")) {
-                if (event.getArgs()[3].contains("<@")) {
-                    String UserID = event.getArgs()[3].replace("<@", "").replace(">", "");
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Users list.")).queue();
-                    DJUsers.remove(UserID);
-                } else {
-                    DJUsers.remove(event.getArgs()[3]);
-                }
-            } else if (event.getArgs()[2].equalsIgnoreCase("role")) {
-                if (event.getArgs()[3].contains("<@&")) {
-                    String RoleID = event.getArgs()[3].replace("<@&", "").replace(">", "");
-                    DJRoles.remove(RoleID);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed from DJ Roles list.")).queue();
-                } else {
-                    DJRoles.remove(event.getArgs()[3]);
-                }
-            } else {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Incorrect arguments, use `" + botPrefix + "dj role remove <RoleID/Ping>` or `" + botPrefix + "dj user remove <UserID/Ping>`")).queue();
-            }
-            GuildContents.put("users", DJUsers);
-            GuildContents.put("roles", DJRoles);
-            json.put(event.getGuild().getId(), GuildContents);
-            FileWriter file = new FileWriter("DJs.json");
-            file.write(json.toJSONString());
             try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                if (event.getMessage().getMentions().getRoles().size() != 0) { // check if the message contains a mentioned role
+                    role = event.getMessage().getMentions().getRoles().get(0).getId();
+                } else if (event.getMessage().getMentions().getMembers().size() != 0) { // check if the message contains a mentioned member
+                    member = event.getMessage().getMentions().getMembers().get(0).getId();
+                }
+            } catch (Exception ignored3) {
             }
+            if (member == null && role == null || Objects.equals(member, event.getGuild().getId()) || Objects.equals(role, event.getGuild().getId())) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No valid user or role was given.")).queue();
+                return;
+            }
+            if (role == null) {
+                if (((JSONArray) GuildContents.get("users")).contains(member)) {
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This member is already in the DJ list!")).queue();
+                    return;
+                }
+                DJUsers.add(member);
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ members.")).queue();
+                ((JSONArray) GuildContents.get("users")).add(member);
+            }
+            if (member == null) {
+                if (((JSONArray) GuildContents.get("roles")).contains(role)) {
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
+                    return;
+                }
+                DJRoles.add(role);
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ roles.")).queue();
+                ((JSONArray) GuildContents.get("roles")).add(role);
+            }
+            json.put(event.getGuild().getId(), GuildContents);
+            try {
+                FileWriter writer = new FileWriter("DJs.json");
+                writer.write(json.toJSONString());
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (event.getArgs()[1].equalsIgnoreCase("remove")) { // removing djs
+            if (event.getArgs()[2] == null) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
+                return;
+            }
+            String member = null;
+            String role = null;
+            try { // check to see if its a role or member or mention of a role or member
+                member = Objects.requireNonNull(event.getJDA().getUserById(event.getArgs()[2])).getId(); // check for userid
+            } catch (Exception ignored1) {
+            }
+            try {
+                role = Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs()[2])).getId(); // check for roleid
+            } catch (Exception ignored2) {
+            }
+            try {
+                if (event.getMessage().getMentions().getRoles().size() != 0) { // check if the message contains a mentioned role
+                    role = event.getMessage().getMentions().getRoles().get(0).getId();
+                } else if (event.getMessage().getMentions().getMembers().size() != 0) { // check if the message contains a mentioned member
+                    member = event.getMessage().getMentions().getMembers().get(0).getId();
+                }
+            } catch (Exception ignored3) {
+            }
+            if (member == null && role == null || Objects.equals(member, event.getGuild().getId()) || Objects.equals(role, event.getGuild().getId())) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No valid user or role was given.")).queue();
+                return;
+            }
+            if (role == null) {
+                DJUsers.remove(member);
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + event.getArgs()[2] + " from the list of DJ members.")).queue();
+                ((JSONArray) GuildContents.get("users")).remove(member);
+            }
+            if (member == null) {
+                DJRoles.remove(role);
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + event.getArgs()[2] + " from the list of DJ roles.")).queue();
+                ((JSONArray) GuildContents.get("roles")).remove(role);
+            }
+            json.put(event.getGuild().getId(), GuildContents);
+            try {
+                FileWriter writer = new FileWriter("DJs.json");
+                writer.write(json.toJSONString());
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments.")).queue();
         }
     }
 
@@ -168,6 +188,6 @@ public class CommandDJ extends BaseCommand {
     }
 
     public String getParams() {
-        return "<list> <users/roles> || <add/remove> <user/role> <ID/mention>";
+        return "<list> || <add/remove> <ID/Mention>";
     }
 }

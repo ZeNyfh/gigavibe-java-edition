@@ -91,7 +91,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private void onTrackStuck(AudioTrack nextTrack) {
         TextChannel userData = (TextChannel) nextTrack.getUserData();
         addToVote(userData.getGuild().getIdLong(), new ArrayList<>()); // clearing the vote
-        userData.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Track got stuck, skipping.")).queue();
+        userData.sendMessageEmbeds(createQuickError("Track got stuck, skipping.")).queue();
         nextTrack();
     }
 }

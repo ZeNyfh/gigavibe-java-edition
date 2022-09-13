@@ -60,9 +60,7 @@ public class CommandHelp extends BaseCommand {
             embed.appendDescription("**Admin**\n" + getCommands("Admin"));
             embed.setFooter("Click the buttons to get more information on a group.");
         }
-        event.getChannel().asTextChannel().sendMessageEmbeds(embed.build()).queue(a -> {
-            a.editMessageComponents().setActionRow(net.dv8tion.jda.api.interactions.components.buttons.Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("DJ", "DJ"), Button.secondary("admin", "Admin️")).queue();
-        });
+        event.getChannel().asTextChannel().sendMessageEmbeds(embed.build()).queue(a -> a.editMessageComponents().setActionRow(Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("DJ", "DJ"), Button.secondary("admin", "Admin️")).queue());
         embed.clear();
     }
 

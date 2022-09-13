@@ -9,11 +9,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.printlnTime;
+import static Bots.Main.createQuickError;
 import static java.lang.String.valueOf;
 
 public class CommandVideoDL extends BaseCommand {
@@ -22,7 +21,7 @@ public class CommandVideoDL extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (event.getArgs().length < 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
             return;
         }
         File dir = new File("viddl");
@@ -44,7 +43,7 @@ public class CommandVideoDL extends BaseCommand {
                     p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\"");
                 }
                 if (p == null) {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
                     return;
                 }
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -72,7 +71,7 @@ public class CommandVideoDL extends BaseCommand {
                         event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The file could not be sent.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be sent.")).queue();
                     }
                     try {
                         finalFile.getAbsoluteFile().delete();
@@ -112,7 +111,7 @@ public class CommandVideoDL extends BaseCommand {
                     if (input.readLine() == null) {
                         messageVar[0].delete().queue();
                         input.close();
-                        event.getMessage().replyEmbeds(createQuickEmbed("❌ **Error** ", "The file could not be downloaded at all.")).queue();
+                        event.getMessage().replyEmbeds(createQuickError("The file could not be downloaded at all.")).queue();
                         try {
                             finalFile.getAbsoluteFile().delete();
                         } catch (Exception e) {
@@ -149,7 +148,7 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Dev";
+        return "Music";
     }
 
     public String getName() {

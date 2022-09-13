@@ -17,7 +17,6 @@ public class CommandSeek extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         long position = 0;
@@ -27,7 +26,7 @@ public class CommandSeek extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
 
@@ -35,12 +34,12 @@ public class CommandSeek extends BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 
@@ -48,7 +47,7 @@ public class CommandSeek extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
+            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
             return;
         }
         String[] args = event.getArgs();
@@ -57,7 +56,7 @@ public class CommandSeek extends BaseCommand {
                 String[] times = args[1].split(":", 3);
                 for (int i = 0; i < times.length; ) {
                     if (!times[i].matches("^\\d+$")) {
-                        channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`")).queue();
+                        channel.sendMessageEmbeds(createQuickError("Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`")).queue();
                         return;
                     }
                     i++;
@@ -73,17 +72,17 @@ public class CommandSeek extends BaseCommand {
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Argument is lower than or equal to 0.")).queue();
+                    channel.sendMessageEmbeds(createQuickError("Argument is lower than or equal to 0.")).queue();
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
                 channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Set the position of the track to: **" + toSimpleTimestamp(position) + ".**")).queue();
 
             } else {
-                channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You cannot seek with this track.")).queue();
+                channel.sendMessageEmbeds(createQuickError("You cannot seek with this track.")).queue();
             }
         } else {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument given.")).queue();
+            channel.sendMessageEmbeds(createQuickError("No argument given.")).queue();
         }
     }
 

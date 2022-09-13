@@ -6,15 +6,14 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.ArrayList;
 
-import static Bots.Main.LoopQueueGuilds;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandLoopQueue extends BaseCommand {
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not playing anything.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not playing anything.")).queue();
             return;
         }
 

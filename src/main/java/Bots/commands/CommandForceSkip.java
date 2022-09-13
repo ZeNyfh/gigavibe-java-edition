@@ -18,7 +18,6 @@ public class CommandForceSkip extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         final TextChannel channel = event.getChannel().asTextChannel();
@@ -27,7 +26,7 @@ public class CommandForceSkip extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
 
@@ -35,12 +34,12 @@ public class CommandForceSkip extends BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 
@@ -48,7 +47,7 @@ public class CommandForceSkip extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
+            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
             return;
         }
         musicManager.scheduler.nextTrack();

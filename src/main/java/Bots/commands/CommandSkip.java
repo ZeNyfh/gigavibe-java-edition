@@ -26,19 +26,19 @@ public class CommandSkip extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 
@@ -46,7 +46,7 @@ public class CommandSkip extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
+            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
         } else {
             ArrayList<Member> VCMembers = new ArrayList<>(); // the current members of the voice channel.
             for (int i = 0; i < Objects.requireNonNull(selfVoiceState.getChannel()).getMembers().size(); ) {
@@ -57,7 +57,7 @@ public class CommandSkip extends BaseCommand {
             }
             try {
                 if (getVotes(event.getGuild().getIdLong()).contains(event.getMember()) && getVotes(event.getGuild().getIdLong()).size() < VCMembers.size() / 2) {
-                    channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You have already voted to skip.")).queue();
+                    channel.sendMessageEmbeds(createQuickError("You have already voted to skip.")).queue();
                     return;
                 }
             } catch (Exception ignored) {

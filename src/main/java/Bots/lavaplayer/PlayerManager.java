@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,9 +60,9 @@ public class PlayerManager {
     }
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
-        if (trackUrl.toLowerCase().contains("spotify")){
-            if (Dotenv.load().get("SPOTIFYCLIENTID") == null || Dotenv.load().get("SPOTIFYCLIENTSECRET") == null){
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **error**", "The bot owner has not set up Spotify support.")).queue();
+        if (trackUrl.toLowerCase().contains("spotify")) {
+            if (Dotenv.load().get("SPOTIFYCLIENTID") == null || Dotenv.load().get("SPOTIFYCLIENTSECRET") == null) {
+                textChannel.sendMessageEmbeds(createQuickError("The bot owner has not set up Spotify support.")).queue();
                 return;
             }
         }
@@ -154,14 +153,14 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No matches found for the track.")).queue();
+                textChannel.sendMessageEmbeds(createQuickError("No matches found for the track.")).queue();
                 printlnTime("No match found for the track.");
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
                 addToVote(textChannel.getGuild().getIdLong(), new ArrayList<>()); // clearing the votes
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
+                textChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();
             }

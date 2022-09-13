@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static Bots.Main.IsChannelBlocked;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandPlay extends BaseCommand {
-    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus"};
+    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
 
     public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
@@ -32,7 +32,7 @@ public class CommandPlay extends BaseCommand {
         assert memberState != null;
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (!memberState.inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc.")).queue();
             return;
         }
 
@@ -46,7 +46,7 @@ public class CommandPlay extends BaseCommand {
         try {
             link = String.valueOf(args[1]);
         } catch (Exception ignored) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No arguments given.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
             return;
         }
         if (link.contains("https://") || link.contains("http://")) {
@@ -56,20 +56,19 @@ public class CommandPlay extends BaseCommand {
             if (link.contains("youtu.be/")) {
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             }
-            // spotify stuff will go here later
         } else {
             link = "ytsearch: " + link;
         }
         if (!selfState.inAudioChannel()) {
             audioManager.openAudioConnection(memberChannel);
         } else if (memberState.getChannel() != selfState.getChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in the same vc.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in the same vc.")).queue();
             return;
         }
         try {
             PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link, true);
         } catch (FriendlyException ignored) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
         }
     }
 

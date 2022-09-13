@@ -19,7 +19,7 @@ public class CommandBotInfo extends BaseCommand {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
                 return;
             }
         }

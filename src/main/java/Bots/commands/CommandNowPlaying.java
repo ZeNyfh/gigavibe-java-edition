@@ -24,7 +24,7 @@ public class CommandNowPlaying extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
 
@@ -32,7 +32,7 @@ public class CommandNowPlaying extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing right now.")).queue();
+            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -46,7 +46,7 @@ public class CommandNowPlaying extends BaseCommand {
         }
         int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
         if (trackLocation > 20 || trackLocation < 0) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The track duration is broken")).queue();
+            channel.sendMessageEmbeds(createQuickError("The track duration is broken")).queue();
             return;
         }
         String barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");

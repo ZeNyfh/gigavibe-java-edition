@@ -12,14 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static Bots.Main.IsDJ;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         final TextChannel channel = event.getChannel().asTextChannel();
@@ -29,18 +27,18 @@ public class CommandClearQueue extends BaseCommand {
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
             return;
         }
 
@@ -58,6 +56,7 @@ public class CommandClearQueue extends BaseCommand {
         list.add("queueclear");
         list.add("clearq");
         list.add("qclear");
+        list.add("cleara");
         return list;
     }
 

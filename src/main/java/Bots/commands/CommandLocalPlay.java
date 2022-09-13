@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.IsChannelBlocked;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandLocalPlay extends BaseCommand {
     public void execute(MessageEvent event) throws IOException {
@@ -22,7 +22,7 @@ public class CommandLocalPlay extends BaseCommand {
         }
 
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc cunt")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc cunt")).queue();
             return;
         }
 

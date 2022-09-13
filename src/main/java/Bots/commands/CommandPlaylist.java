@@ -15,7 +15,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -27,7 +26,7 @@ public class CommandPlaylist extends BaseCommand {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = 260016427900076033L;
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
                 return;
             }
         }
@@ -81,7 +80,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist1Array.add(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 1.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 1 [**String/url**] to add a track to the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 1 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
             }
@@ -94,7 +93,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist2Array.add(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 2.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 2 [**String/url**] to add a track to the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 2 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
             }
@@ -107,7 +106,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist3Array.add(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Added " + currentTrack.getInfo().title + " to playlist 3.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 3 [**String/url**] to add a track to the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist add 3 [**String/url**] to add a track to the playlist.")).queue();
                     return;
                 }
             }
@@ -134,7 +133,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist1Array.remove(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 1.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 1 [**String/url**] to remove a track from the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 1 [**String/url**] to remove a track from the playlist.")).queue();
                     return;
                 }
             }
@@ -147,7 +146,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist2Array.remove(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 2.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 2 [**String/url**] to remove a track from the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 2 [**String/url**] to remove a track from the playlist.")).queue();
                     return;
                 }
             }
@@ -160,7 +159,7 @@ public class CommandPlaylist extends BaseCommand {
                     playlist3Array.remove(currentTrack.getInfo().uri);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "Removed " + currentTrack.getInfo().title + " from playlist 3.")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 3 [**String/url**] to remove a track from the playlist.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No tracks are playing, right now. \n\n You can use **" + botPrefix + "playlist remove 3 [**String/url**] to remove a track from the playlist.")).queue();
                     return;
                 }
             }
@@ -185,7 +184,7 @@ public class CommandPlaylist extends BaseCommand {
             if (selfVoiceState.getChannel() != null) {
                 assert memberState != null;
                 if (!Objects.equals(memberState.getChannel(), selfVoiceState.getChannel())) {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in the same voice channel to use this command with these arguments.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command with these arguments.")).queue();
                     return;
                 }
             }
@@ -202,7 +201,7 @@ public class CommandPlaylist extends BaseCommand {
                     }
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ Successfully queued: **playlist " + args[2] + "**.", "Playlist size: **" + playlist.size() + "**")).queue();
                 } else {
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This playlist is empty, try adding some tracks to it first!")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This playlist is empty, try adding some tracks to it first!")).queue();
                 }
             }
         }
@@ -227,7 +226,7 @@ public class CommandPlaylist extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Dev";
+        return "dev";
     }
 
     @Override

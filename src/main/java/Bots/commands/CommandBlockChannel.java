@@ -71,7 +71,7 @@ public class CommandBlockChannel extends BaseCommand {
             if (event.getArgs()[1].equalsIgnoreCase("add")) {
                 if (guildChannel.getId().equals(event.getArgs()[2])) {
                     if (blockedChannels.contains(guildChannel.getId())) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is already blocked.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This channel is already blocked.")).queue();
                         return;
                     }
                     blockedChannels.add(event.getArgs()[2]);
@@ -96,7 +96,7 @@ public class CommandBlockChannel extends BaseCommand {
             } else if (event.getArgs()[1].equalsIgnoreCase("remove")) {
                 if (guildChannel.getId().equals(event.getArgs()[2])) {
                     if (!blockedChannels.contains(guildChannel.getId())) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel is not blocked.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This channel is not blocked.")).queue();
                         return;
                     }
                     blockedChannels.remove(event.getArgs()[2]);
@@ -135,11 +135,11 @@ public class CommandBlockChannel extends BaseCommand {
                 event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
                 return;
             } else {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`")).queue();
                 return;
             }
         }
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "This channel was not found in this discord server.")).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This channel was not found in this discord server.")).queue();
     }
 
     @Override

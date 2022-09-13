@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class CommandQueue extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -36,18 +37,11 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "The queue is empty.")).queue();
+            channel.sendMessageEmbeds(createQuickError("The queue is empty.")).queue();
             embed.clear();
             return;
         }
-        try {
-            if (audioPlayer.getPlayingTrack().getInfo().uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().uri.replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13));
-            } else {
-                embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
-            }
-        } catch (Exception ignored) {
-        }
+        embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (int x = 0; x < queueLength; ) {
@@ -58,26 +52,25 @@ public class CommandQueue extends BaseCommand {
             queueTimeLength = queueTimeLength + queue.get(x).getInfo().length;
             x++;
         }
-        String string = event.getMessage().getContentRaw();
-        int multiplier = 1;
+        queuePages.put(event.getGuild().getIdLong(), 1);
         String[] args = event.getArgs();
-        if (args.length >= 2) {
-            string = args[1];
-            multiplier = Integer.parseInt(string.replaceAll("[^0-9]", ""));
+        if (event.getArgs().length == 2) {
+            if (!args[1].matches("^\\d+$")) {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`")).queue();
+                return;
+            }
+            queuePages.put(event.getGuild().getIdLong(), Integer.parseInt(args[1]));
         }
+        int multiplier = queuePages.get(event.getGuild().getIdLong());
         for (int i = 5 * multiplier - 5; i < 5 * multiplier && i < queueLength; ) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
-            if (trackInfo.uri.contains(System.getProperty("user.dir") + "\\temp\\music\\")) {
-                embed.appendDescription(i + 1 + ". " + (trackInfo.uri).replace(System.getProperty("user.dir") + "\\temp\\music\\", "").substring(13) + "\n");
-            } else {
-                embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
-            }
+            embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
             i++;
         }
         embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
-        channel.sendMessageEmbeds(embed.build()).queue();
+        channel.sendMessageEmbeds(embed.build()).queue(message -> message.editMessageComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue());
     }
 
     @Override

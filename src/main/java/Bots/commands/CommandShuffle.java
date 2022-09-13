@@ -15,14 +15,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static Bots.Main.IsDJ;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandShuffle extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ..")).queue();
             return;
         }
         final TextChannel channel = event.getChannel().asTextChannel();
@@ -32,7 +30,7 @@ public class CommandShuffle extends BaseCommand {
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Im not in a vc.")).queue();
+            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
             return;
         }
 
@@ -40,12 +38,12 @@ public class CommandShuffle extends BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You need to be in a voice channel to use this command.")).queue();
+            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
             return;
         }
 
         if (queue.size() == 0) {
-            channel.sendMessageEmbeds(createQuickEmbed("❌ **Error**", "There is nothing in the queue.")).queue();
+            channel.sendMessageEmbeds(createQuickError("There is nothing in the queue.")).queue();
             return;
         }
 

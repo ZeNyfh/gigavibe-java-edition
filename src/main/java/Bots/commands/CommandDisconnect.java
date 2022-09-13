@@ -7,18 +7,16 @@ import Bots.lavaplayer.PlayerManager;
 
 import java.util.ArrayList;
 
-import static Bots.Main.IsDJ;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You are not a DJ.")).queue();
             return;
         }
-        if (!event.getGuild().getAudioManager().isConnected()){
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not in a voice channel.")).queue();
+        if (!event.getGuild().getAudioManager().isConnected()) {
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not in a voice channel.")).queue();
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

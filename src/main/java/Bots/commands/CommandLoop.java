@@ -4,8 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import static Bots.Main.LoopGuilds;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
 public class CommandLoop extends BaseCommand {
 
@@ -15,7 +14,7 @@ public class CommandLoop extends BaseCommand {
             return;
         }
         if (!audioManager.isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "I am not playing anything.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not playing anything.")).queue();
             return;
         }
 

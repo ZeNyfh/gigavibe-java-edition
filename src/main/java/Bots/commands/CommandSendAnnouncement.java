@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandSendAnnouncement extends BaseCommand {
 
     public void execute(MessageEvent event) {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "You dont have the permission to run this command.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
             return;
         }
         if (event.getArgs().length < 2) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "No argument given.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No argument given.")).queue();
             return;
         }
         for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
@@ -29,7 +30,7 @@ public class CommandSendAnnouncement extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Dev";
+        return "dev";
     }
 
     public String getName() {

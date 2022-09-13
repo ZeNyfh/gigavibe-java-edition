@@ -4,6 +4,7 @@ import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
+import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -50,7 +52,8 @@ public class Main extends ListenerAdapter {
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String botToken = "";
-    public static HashMap<Long, List<Member>> skips = new HashMap<Long, List<Member>>();
+    public static HashMap<Long, List<Member>> skips = new HashMap<>();
+    public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static String botVersion = "22.08.29"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
@@ -178,6 +181,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInvite());
         registerCommand(new CommandJoin());
+        registerCommand(new CommandInsert());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
@@ -186,12 +190,23 @@ public class Main extends ListenerAdapter {
                 .build();
         bot.awaitReady();
         printlnTime("bot is now running, have fun ig");
-        bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers!"));
+        bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | ?help"));
+        for (Guild guild : bot.getGuilds()) {
+            queuePages.put(guild.getIdLong(), 1);
+        }
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title, null);
+        eb.setColor(botColour);
+        eb.setDescription(description);
+        return eb.build();
+    }
+
+    public static MessageEmbed createQuickError(String description) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setTitle("❌ **Error**");
         eb.setColor(botColour);
         eb.setDescription(description);
         return eb.build();
@@ -369,13 +384,13 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers!"));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first, I recommend using `" + botPrefix + "help` to help you with the following. \n\nadd dj roles/users with the `" + botPrefix + "dj` command, this will allow some users or roles to have more control over the bots functions for example: forceskip, disconnect and shuffle.\nif you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, this will disallow some commands from being used in the blocked channels, this can be done with the `" + botPrefix + "blockchannel` command.\n\n**IF YOU ENCOUNTER ANY BUGS, ISSUES OR HAVE ANY FEATURE REQUESTS, USE** `" + botPrefix + "bug <String>` **TO REPORT THE BUG TO ME!**")).queue();
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers!"));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
     }
 
     @Override
@@ -398,13 +413,45 @@ public class Main extends ListenerAdapter {
                 }
                 break;
             case "forward":
-                for (int j = 0; j < Queue.size(); ) {
-                    j++;
-                }
-                return;
             case "backward":
-
-                return;
+        }
+        if (Objects.equals(event.getButton().getId(), "forward")) {
+            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
+            long queueTimeLength = 0;
+            for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
+                if (track.getInfo().length < 432000000) {
+                    queueTimeLength = queueTimeLength + track.getInfo().length;
+                }
+            }
+            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size(); ) {
+                AudioTrackInfo trackInfo = getTrackFromQueue(event.getGuild(), j).getInfo();
+                eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+                j++;
+            }
+            eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
+            eb.setFooter(PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() + " songs queued. | " + round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+            eb.setColor(botColour);
+            eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
+        }
+        if (Objects.equals(event.getButton().getId(), "backward")) {
+            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
+            long queueTimeLength = 0;
+            for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
+                if (track.getInfo().length < 432000000) {
+                    queueTimeLength = queueTimeLength + track.getInfo().length;
+                }
+            }
+            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size(); ) {
+                AudioTrackInfo trackInfo = getTrackFromQueue(event.getGuild(), j).getInfo();
+                eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+                j++;
+            }
+            eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
+            eb.setFooter(PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() + " songs queued. | " + round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+            eb.setColor(botColour);
+            eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "general")) {
             eb.setTitle("\uD83D\uDCD6 **General**");
@@ -479,9 +526,7 @@ public class Main extends ListenerAdapter {
             i++;
         }
         if (botChannelMemberCount == 0) {
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
             event.getGuild().getAudioManager().closeAudioConnection();
             addToVote(event.getGuild().getIdLong(), new ArrayList<>());
         }

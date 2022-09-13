@@ -1,7 +1,7 @@
 # Gigavibe
 
-Discord bot written in java using JDA and lavaplayer for audio functionality. Has youtube music, custom (user defined)
-dj roles and some other cool features for you to play with.
+Discord bot written in java using JDA and lavaplayer for audio functionality. Has various site support, custom (user defined)
+dj users or roles and some other cool features for you to play with once you [invite](https://discord.com/api/oauth2/authorize?client_id=920435768726532107&permissions=412689493104&scope=bot) or self-host the bot.
 
 ## Requirements
 
@@ -35,18 +35,17 @@ dj roles and some other cool features for you to play with.
 > > Run **sudo tar -xvf {FILE_NAME.tar.xz}**
 > >
 > > Then feel free to remove the tar.xz as you are done here.
-> 
-> > JDK 8 can be acquired
-> > from [The Oracle Archive](https://www.oracle.com/java/technologies/javase/jdk8-archive-downloads.html) or from other
+>
+> > JDK 16 can be acquired
+> > from [The Oracle Archive](https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html) or from other
 > > trusted sources.
 >
->> Here is how to install the latest version of yt-dlp
+> > Here is how to install the latest version of yt-dlp
 > > sudo wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
 > > sudo chmod a+rx /usr/local/bin/yt-dlp
 >
->> If you wish to install the requirements, place the files from the download links in the modules folder, if this
-> > folder doesnt exist, make it where the .jar file is BUT MAKE SURE THAT ffprobe is called "ffprobe", yt-dlp is called "
-> > yt-dlp" and ffmpeg is called "ffmpeg".
+> > If you wish to install the requirements, place the files from the download links in the modules folder. 
+> > If this folder doesnt exist, make it where the .jar file is BUT MAKE SURE THAT ffprobe is called "ffprobe", yt-dlp is called "yt-dlp" and ffmpeg is called "ffmpeg".
 
 ## **DISCLAIMERs:**
 

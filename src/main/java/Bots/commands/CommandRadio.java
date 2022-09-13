@@ -62,7 +62,7 @@ public class CommandRadio extends BaseCommand {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberState != null;
         if (!memberState.inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "you arent in a vc.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc.")).queue();
             return;
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
@@ -79,7 +79,7 @@ public class CommandRadio extends BaseCommand {
                 return;
             }
         }
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Error**", "Not a valid radio station, heres a list of the valid radio stations.")).queue();
+        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Not a valid radio station, heres a list of the valid radio stations.")).queue();
         event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
     }
 
