@@ -54,7 +54,7 @@ public class Main extends ListenerAdapter {
     public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
-    public static String botVersion = "22.08.29"; // YY.MM.DD
+    public static String botVersion = "22.09.14"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -192,7 +192,7 @@ public class Main extends ListenerAdapter {
         printlnTime("bot is now running, have fun ig");
         bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | ?help"));
         for (Guild guild : bot.getGuilds()) {
-            queuePages.put(guild.getIdLong(), 1);
+            queuePages.put(guild.getIdLong(), 0);
         }
     }
 
@@ -417,6 +417,9 @@ public class Main extends ListenerAdapter {
         }
         if (Objects.equals(event.getButton().getId(), "forward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
+            if (queuePages.get(event.getGuild().getIdLong()) >= round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1)){
+                queuePages.put(event.getGuild().getIdLong(), 1);
+            }
             long queueTimeLength = 0;
             for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
                 if (track.getInfo().length < 432000000) {
@@ -436,6 +439,9 @@ public class Main extends ListenerAdapter {
         }
         if (Objects.equals(event.getButton().getId(), "backward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
+            if (queuePages.get(event.getGuild().getIdLong()) <= 0){
+                queuePages.put(event.getGuild().getIdLong(), round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1));
+            }
             long queueTimeLength = 0;
             for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
                 if (track.getInfo().length < 432000000) {
