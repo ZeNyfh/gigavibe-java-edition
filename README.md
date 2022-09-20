@@ -1,7 +1,7 @@
 # Gigavibe
 
 Discord bot written in java using JDA and lavaplayer for audio functionality. Has various site support, custom (user defined)
-dj users or roles and some other cool features for you to play with once you [invite](https://discord.com/api/oauth2/authorize?client_id=920435768726532107&permissions=412689493104&scope=bot) or self-host the bot.
+dj users or roles and some other cool features for you to play with once you [invite](http://www.zenyfh.co.uk/) or self-host the bot.
 
 ## Requirements
 
