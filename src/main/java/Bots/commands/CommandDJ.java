@@ -27,21 +27,19 @@ public class CommandDJ extends BaseCommand {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        JSONObject GuildContents = (JSONObject) json.get(event.getGuild().getId());
-
-        if (json.get(event.getGuild().getId()) == null) { // adding values if they are missing.
-            GuildContents.put("roles", new JSONArray());
-            GuildContents.put("users", new JSONArray());
-            json.put(event.getGuild().getId(), GuildContents);
-            try {
-                FileWriter writer = new FileWriter("DJs.json");
-                writer.write(json.toJSONString());
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        JSONObject GuildContents = new JSONObject();
+        GuildContents.putIfAbsent("roles", new JSONArray());
+        GuildContents.putIfAbsent("users", new JSONArray());
+        json.putIfAbsent(event.getGuild().getId(), GuildContents);
+        try {
+            FileWriter writer = new FileWriter("DJs.json");
+            writer.write(json.toJSONString());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        GuildContents = (JSONObject) json.get(event.getGuild().getId());
 
         JSONArray DJRoles = (JSONArray) GuildContents.get("roles");
         JSONArray DJUsers = (JSONArray) GuildContents.get("users");

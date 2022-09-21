@@ -52,7 +52,7 @@ public class CommandClearQueue extends BaseCommand {
     public ArrayList<String> getAlias() {
         ArrayList<String> list = new ArrayList<>();
         list.add("queue clear");
-        list.add("clearqueue");
+        list.add("clear queue");
         list.add("queueclear");
         list.add("clearq");
         list.add("qclear");
@@ -62,7 +62,7 @@ public class CommandClearQueue extends BaseCommand {
 
     @Override
     public String getName() {
-        return "clear queue";
+        return "clearqueue";
     }
 
     @Override
