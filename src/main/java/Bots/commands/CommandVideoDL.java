@@ -35,12 +35,12 @@ public class CommandVideoDL extends BaseCommand {
                 String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl);
+                        p = Runtime.getRuntime().exec("yt-dlp --remux-video mp4 -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl +  "--match-filter \"duration < 3600\" --no-playlist");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\"");
+                    p = Runtime.getRuntime().exec("modules/yt-dlp --merge-output-format mp4 --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\" --match-filter \"duration < 3600\" --no-playlist");
                 }
                 if (p == null) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
@@ -88,12 +88,12 @@ public class CommandVideoDL extends BaseCommand {
                 finalFile.delete();
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp -f \\\"[filesize" + desiredFileSize + "]\\\" -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl);
+                        p = Runtime.getRuntime().exec("yt-dlp -f \\\"[filesize" + desiredFileSize + "]\\\" -o " + dir.getAbsolutePath() + "/" + filename + ".mp4 " + filteredUrl + " --match-filter \"duration < 3600\" --no-playlist");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    p = Runtime.getRuntime().exec("modules/yt-dlp -f \"[filesize" + desiredFileSize + "]\" -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\"");
+                    p = Runtime.getRuntime().exec("modules/yt-dlp -f \"[filesize" + desiredFileSize + "]\" -o " + dir.getAbsolutePath() + "/" + filename + "\".mp4\" \"" + filteredUrl + "\" --match-filter \"duration < 3600\" --no-playlist");
                 }
                 input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 i = 0;

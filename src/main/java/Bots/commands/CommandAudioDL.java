@@ -35,12 +35,12 @@ public class CommandAudioDL extends BaseCommand {
                 String filteredUrl = event.getArgs()[1].replace("\"", "\\\"");
                 if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                     try {
-                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s " + filteredUrl);
+                        p = Runtime.getRuntime().exec("yt-dlp -x --audio-format vorbis -o " + dir.getPath() + "/" + filename + ".%(ext)s " + filteredUrl + "--match-filter \"duration < 3600\" --no-playlist");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" \"" + filteredUrl + "\"");
+                    p = Runtime.getRuntime().exec("modules/yt-dlp -x --audio-format vorbis -o " + dir.getAbsolutePath() + "/" + filename + "\".%(ext)s\" \"" + filteredUrl + "\" --match-filter \"duration < 3600\" --no-playlist");
                 }
                 if (p == null) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded because the bot is running on an unsupported operating system.")).queue();
