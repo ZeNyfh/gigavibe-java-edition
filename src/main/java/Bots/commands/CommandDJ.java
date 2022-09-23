@@ -113,7 +113,7 @@ public class CommandDJ extends BaseCommand {
                 } else {
                     ((JSONArray) GuildContents.get("users")).add(member);
                 }
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ members.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " to the list of DJ members.")).queue();
             }
             if (member == null) {
                 if (((JSONArray) GuildContents.get("roles")).contains(role)) {
@@ -121,7 +121,7 @@ public class CommandDJ extends BaseCommand {
                 } else {
                     ((JSONArray) GuildContents.get("roles")).add(role);
                 }
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ roles.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(role)).getAsMention() + " to the list of DJ roles.")).queue();
             }
             json.put(event.getGuild().getId(), GuildContents);
             try {
@@ -161,12 +161,12 @@ public class CommandDJ extends BaseCommand {
             }
             if (role == null) {
                 DJUsers.remove(member);
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + event.getArgs()[2] + " from the list of DJ members.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " from the list of DJ members.")).queue();
                 ((JSONArray) GuildContents.get("users")).remove(member);
             }
             if (member == null) {
                 DJRoles.remove(role);
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + event.getArgs()[2] + " from the list of DJ roles.")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + Objects.requireNonNull(event.getJDA().getUserById(role)).getAsMention() + " from the list of DJ roles.")).queue();
                 ((JSONArray) GuildContents.get("roles")).remove(role);
             }
             json.put(event.getGuild().getId(), GuildContents);
