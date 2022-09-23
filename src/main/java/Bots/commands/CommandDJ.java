@@ -48,19 +48,31 @@ public class CommandDJ extends BaseCommand {
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
             builder.append("**Roles:**\n"); // list DJ roles in embed
+            int i = 0;
             if (DJRoles.size() == 0) {
                 builder.append("None.");
             } else {
-                for (int i = 0; i < DJRoles.size() - 1; i++) {
-                    builder.append(event.getJDA().getRoleById((String) DJRoles.get(i)).getAsMention() + ", ");
+                for (Object role : DJRoles) {
+                    i++;
+                    if (i == DJRoles.size()){
+                        builder.append(event.getJDA().getRoleById((String) role).getAsMention());
+                    } else {
+                        builder.append(event.getJDA().getRoleById((String) role).getAsMention() + ", ");
+                    }
                 }
             }
             builder.append("\n\n**Users:**\n"); // list DJ users in embed
+            i = 0;
             if (DJUsers.size() == 0) {
                 builder.append("None.");
             } else {
-                for (int i = 0; i < DJUsers.size() - 1; i++) {
-                    builder.append(event.getJDA().getUserById((String) DJUsers.get(i)).getAsMention() + ", ");
+                for (Object user : DJUsers) {
+                    i++;
+                    if (i == DJUsers.size()){
+                        builder.append(event.getJDA().getUserById((String) user).getAsMention());
+                    } else {
+                        builder.append(event.getJDA().getUserById((String) user).getAsMention() + ", ");
+                    }
                 }
             }
             eb.setColor(botColour);
@@ -98,20 +110,18 @@ public class CommandDJ extends BaseCommand {
             if (role == null) {
                 if (((JSONArray) GuildContents.get("users")).contains(member)) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This member is already in the DJ list!")).queue();
-                    return;
+                } else {
+                    ((JSONArray) GuildContents.get("users")).add(member);
                 }
-                DJUsers.add(member);
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ members.")).queue();
-                ((JSONArray) GuildContents.get("users")).add(member);
             }
             if (member == null) {
                 if (((JSONArray) GuildContents.get("roles")).contains(role)) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
-                    return;
+                } else {
+                    ((JSONArray) GuildContents.get("roles")).add(role);
                 }
-                DJRoles.add(role);
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + event.getArgs()[2] + " to the list of DJ roles.")).queue();
-                ((JSONArray) GuildContents.get("roles")).add(role);
             }
             json.put(event.getGuild().getId(), GuildContents);
             try {
