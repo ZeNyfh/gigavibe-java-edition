@@ -24,7 +24,7 @@ public class CommandDisconnect extends BaseCommand {
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue.")).queue();
-
+        addToVote(event.getGuild().getIdLong(), new ArrayList<>());
     }
 
     @Override

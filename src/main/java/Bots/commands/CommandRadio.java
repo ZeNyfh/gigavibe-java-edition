@@ -19,19 +19,19 @@ import static Bots.Main.*;
 public class CommandRadio extends BaseCommand {
     public HashMap<String, String> getRadios() {
         HashMap<String, String> radioLists = new HashMap<String, String>();
-        radioLists.put("Hardbass", "https://server6.inetcast.nl:2015/stream");
-        radioLists.put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
-        radioLists.put("Trance", "http://fr3.1mix.co.uk:8060/320?type=http&nocache=390123");
-        radioLists.put("Portugal", "http://137.74.160.250:8000/;stream/1");
         radioLists.put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
-        radioLists.put("Portugal pop", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
-        radioLists.put("Poland", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
-        radioLists.put("Lithuania", "https://radio.m-1.fm/m1plius/aacp64");
+        radioLists.put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320?type=http&nocache=390123");
+        radioLists.put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
+        radioLists.put("Estilo Leblon", "https://us4.internet-radio.com/proxy/radioestiloleblon?mp=/stream;");
+        radioLists.put("Beats n Breaks", "http://83.137.145.141:14280/;");
+        radioLists.put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
         radioLists.put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
         radioLists.put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
-        radioLists.put("EDM", "http://fr1.1mix.co.uk:8060/320h");
-        radioLists.put("Beats n Breaks", "http://83.137.145.141:14280/;");
-        radioLists.put("Danish", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        radioLists.put("Nova DK", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        radioLists.put("Pro FM", "https://player.profm.nl/proxy/profm?mp=/stream");
+        radioLists.put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
+        radioLists.put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
+        radioLists.put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
         return radioLists;
     }
 
@@ -67,7 +67,6 @@ public class CommandRadio extends BaseCommand {
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         argFinal = argFinal.toLowerCase().substring(1);
-        printlnTime(argFinal);
         for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
             if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
                 if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {

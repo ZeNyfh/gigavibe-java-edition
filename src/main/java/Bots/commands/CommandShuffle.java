@@ -52,7 +52,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Shuffled the queue successfully!")).queue();
+        channel.sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Shuffled the queue!")).queue();
     }
 
     @Override

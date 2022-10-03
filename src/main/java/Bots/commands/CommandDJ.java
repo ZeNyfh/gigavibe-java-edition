@@ -55,9 +55,13 @@ public class CommandDJ extends BaseCommand {
                 for (Object role : DJRoles) {
                     i++;
                     if (i == DJRoles.size()){
-                        builder.append(event.getJDA().getRoleById((String) role).getAsMention());
+                        try {
+                            builder.append(event.getJDA().getRoleById((String) role).getAsMention());
+                        } catch (Exception ignored){}
                     } else {
-                        builder.append(event.getJDA().getRoleById((String) role).getAsMention() + ", ");
+                        try {
+                            builder.append(event.getJDA().getRoleById((String) role).getAsMention() + ", ");
+                        } catch (Exception ignored){}
                     }
                 }
             }
@@ -112,16 +116,16 @@ public class CommandDJ extends BaseCommand {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This member is already in the DJ list!")).queue();
                 } else {
                     ((JSONArray) GuildContents.get("users")).add(member);
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " to the list of DJ members.")).queue();
                 }
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " to the list of DJ members.")).queue();
             }
-            if (member == null) {
+            else if (member == null) {
                 if (((JSONArray) GuildContents.get("roles")).contains(role)) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
                 } else {
                     ((JSONArray) GuildContents.get("roles")).add(role);
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(role)).getAsMention() + " to the list of DJ roles.")).queue();
                 }
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(role)).getAsMention() + " to the list of DJ roles.")).queue();
             }
             json.put(event.getGuild().getId(), GuildContents);
             try {

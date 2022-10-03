@@ -41,7 +41,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.*;
 
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
@@ -54,12 +54,13 @@ public class Main extends ListenerAdapter {
     public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
-    public static String botVersion = "22.09.14"; // YY.MM.DD
+    public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
+    public static String botVersion = "22.10.03"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
 
-    private static void registerCommand(BaseCommand command) {
+    public static void registerCommand(BaseCommand command) {
         commands.add(command);
         //Possibly other uses idk yet -9382
     }
@@ -193,7 +194,40 @@ public class Main extends ListenerAdapter {
         bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | ?help"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
+//            guildTimeouts.put(guild.getIdLong(), 0);
         }
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() { // 5 minute bot leave timeout
+//            @Override
+//            public void run() {
+//                int i = 0;
+//                for (Guild guild : bot.getGuilds()) {
+//                    if (guild.getAudioManager().isConnected()) {
+//                        try {
+//                            if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
+//                                for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
+//                                    if (!member.getUser().isBot() || !member.getUser().isSystem()) {
+//                                        i++;
+//                                    }
+//                                }
+//                            }
+//                        } catch (Exception ignored) {
+//                            guildTimeouts.put(guild.getIdLong(), 0);
+//                        }
+//                        if (i == 0) {
+//                            guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
+//                            if (guildTimeouts.get(guild.getIdLong()) >= 60) {
+//                                guild.getAudioManager().closeAudioConnection();
+//                                PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
+//                                guildTimeouts.put(guild.getIdLong(), 0);
+//                            }
+//                        } else {
+//                            guildTimeouts.put(guild.getIdLong(), 0);
+//                        }
+//                    }
+//                }
+//            }
+//        },0, 1000);
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -384,6 +418,8 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        queuePages.put(event.getGuild().getIdLong(), 0);
+        guildTimeouts.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first, I recommend using `" + botPrefix + "help` to help you with the following. \n\nadd dj roles/users with the `" + botPrefix + "dj` command, this will allow some users or roles to have more control over the bots functions for example: forceskip, disconnect and shuffle.\nif you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, this will disallow some commands from being used in the blocked channels, this can be done with the `" + botPrefix + "blockchannel` command.\n\n**IF YOU ENCOUNTER ANY BUGS, ISSUES OR HAVE ANY FEATURE REQUESTS, USE** `" + botPrefix + "bug <String>` **TO REPORT THE BUG TO ME!**")).queue();
     }
@@ -391,6 +427,8 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
+        queuePages.remove(event.getGuild().getIdLong());
+        guildTimeouts.remove(event.getGuild().getIdLong());
     }
 
     @Override
@@ -427,7 +465,7 @@ public class Main extends ListenerAdapter {
                 }
             }
             for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size(); ) {
-                AudioTrackInfo trackInfo = getTrackFromQueue(event.getGuild(), j).getInfo();
+                AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
                 eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
                 j++;
             }
@@ -486,7 +524,8 @@ public class Main extends ListenerAdapter {
                 i++;
             }
             if (event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().size() - i == 0) {
-                event.getGuild().getAudioManager().closeAudioConnection();
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
             }
         }
     }
@@ -495,15 +534,15 @@ public class Main extends ListenerAdapter {
     public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
         if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
             if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
-                event.getGuild().getAudioManager().closeAudioConnection();
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
             }
         }
     }
 
     @Override
     public void onException(@NotNull ExceptionEvent event) {
-        printlnTime("");
-        event.getCause().printStackTrace();
+        printlnTime(Arrays.toString(event.getCause().getStackTrace()));
     }
 
     @Override
@@ -525,17 +564,16 @@ public class Main extends ListenerAdapter {
             return;
         }
         int botChannelMemberCount = 0;
-        for (int i = 0; i < botChannel.getMembers().size(); ) {
-            if (!botChannel.getMembers().get(i).getUser().isBot()) {
-                botChannelMemberCount = botChannelMemberCount + 1;
+        for (Member member : botChannel.getMembers()) {
+            if (!member.getUser().isBot()) {
+                botChannelMemberCount++;
             }
-            i++;
         }
-        if (botChannelMemberCount == 0) {
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-            event.getGuild().getAudioManager().closeAudioConnection();
-            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
-        }
+//        if (botChannelMemberCount == 0) {
+//            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+//            event.getGuild().getAudioManager().closeAudioConnection();
+//            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+//        }
     }
 
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
