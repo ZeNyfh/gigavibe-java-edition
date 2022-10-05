@@ -30,10 +30,10 @@ import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
@@ -55,7 +57,7 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
-    public static String botVersion = "22.10.03"; // YY.MM.DD
+    public static String botVersion = "22.10.06"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -194,40 +196,42 @@ public class Main extends ListenerAdapter {
         bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | ?help"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
-//            guildTimeouts.put(guild.getIdLong(), 0);
+            guildTimeouts.put(guild.getIdLong(), 0);
         }
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() { // 5 minute bot leave timeout
-//            @Override
-//            public void run() {
-//                int i = 0;
-//                for (Guild guild : bot.getGuilds()) {
-//                    if (guild.getAudioManager().isConnected()) {
-//                        try {
-//                            if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
-//                                for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
-//                                    if (!member.getUser().isBot() || !member.getUser().isSystem()) {
-//                                        i++;
-//                                    }
-//                                }
-//                            }
-//                        } catch (Exception ignored) {
-//                            guildTimeouts.put(guild.getIdLong(), 0);
-//                        }
-//                        if (i == 0) {
-//                            guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
-//                            if (guildTimeouts.get(guild.getIdLong()) >= 60) {
-//                                guild.getAudioManager().closeAudioConnection();
-//                                PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
-//                                guildTimeouts.put(guild.getIdLong(), 0);
-//                            }
-//                        } else {
-//                            guildTimeouts.put(guild.getIdLong(), 0);
-//                        }
-//                    }
-//                }
-//            }
-//        },0, 1000);
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                int i = 0;
+                for (Guild guild : bot.getGuilds()) {
+                    if (guild.getAudioManager().isConnected()) {
+                        try {
+                            if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
+                                for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
+                                    if (!member.getUser().isBot() || !member.getUser().isSystem()) {
+                                        i++;
+                                    }
+                                }
+                            }
+                        } catch (Exception ignored) {
+                            guildTimeouts.put(guild.getIdLong(), 0);
+                        }
+                        if (i == 0) {
+                            guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
+                            if (guildTimeouts.get(guild.getIdLong()) >= 60) {
+                                guild.getAudioManager().closeAudioConnection();
+                                PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
+                                guildTimeouts.put(guild.getIdLong(), 0);
+                            }
+                        } else {
+                            guildTimeouts.put(guild.getIdLong(), 0);
+                        }
+                    }
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(task,0,1000);{}
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -455,7 +459,7 @@ public class Main extends ListenerAdapter {
         }
         if (Objects.equals(event.getButton().getId(), "forward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
-            if (queuePages.get(event.getGuild().getIdLong()) >= round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1)){
+            if (queuePages.get(event.getGuild().getIdLong()) >= round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1)) {
                 queuePages.put(event.getGuild().getIdLong(), 1);
             }
             long queueTimeLength = 0;
@@ -477,7 +481,7 @@ public class Main extends ListenerAdapter {
         }
         if (Objects.equals(event.getButton().getId(), "backward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
-            if (queuePages.get(event.getGuild().getIdLong()) <= 0){
+            if (queuePages.get(event.getGuild().getIdLong()) <= 0) {
                 queuePages.put(event.getGuild().getIdLong(), round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5) + 1));
             }
             long queueTimeLength = 0;
@@ -574,6 +578,29 @@ public class Main extends ListenerAdapter {
 //            event.getGuild().getAudioManager().closeAudioConnection();
 //            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
 //        }
+    }
+
+    public static String getRadio(String search) throws IOException {
+        URL url = null;
+        try {
+            url = new URL("https://www.internet-radio.com/search/?radio=" + search);
+        } catch (Exception e){e.printStackTrace();}
+        assert url != null;
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+            for (String line; (line = reader.readLine()) != null;) {
+                builder.append(line);
+            }
+        } catch (Exception e){e.printStackTrace();}
+        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+        Matcher matcher = pattern.matcher(builder.toString());
+        if (matcher.find()) {
+            return(matcher.group(1));
+        } else {
+            return "None";
+        }
     }
 
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {

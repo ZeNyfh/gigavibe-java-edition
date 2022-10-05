@@ -54,14 +54,16 @@ public class CommandDJ extends BaseCommand {
             } else {
                 for (Object role : DJRoles) {
                     i++;
-                    if (i == DJRoles.size()){
+                    if (i == DJRoles.size()) {
                         try {
                             builder.append(event.getJDA().getRoleById((String) role).getAsMention());
-                        } catch (Exception ignored){}
+                        } catch (Exception ignored) {
+                        }
                     } else {
                         try {
                             builder.append(event.getJDA().getRoleById((String) role).getAsMention() + ", ");
-                        } catch (Exception ignored){}
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
             }
@@ -72,7 +74,7 @@ public class CommandDJ extends BaseCommand {
             } else {
                 for (Object user : DJUsers) {
                     i++;
-                    if (i == DJUsers.size()){
+                    if (i == DJUsers.size()) {
                         builder.append(event.getJDA().getUserById((String) user).getAsMention());
                     } else {
                         builder.append(event.getJDA().getUserById((String) user).getAsMention() + ", ");
@@ -118,8 +120,7 @@ public class CommandDJ extends BaseCommand {
                     ((JSONArray) GuildContents.get("users")).add(member);
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " to the list of DJ members.")).queue();
                 }
-            }
-            else if (member == null) {
+            } else if (member == null) {
                 if (((JSONArray) GuildContents.get("roles")).contains(role)) {
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
                 } else {
