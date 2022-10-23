@@ -124,6 +124,7 @@ public class CommandSkip extends BaseCommand {
     public String getParams() {
         return "[Integer]";
     }
+
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     }

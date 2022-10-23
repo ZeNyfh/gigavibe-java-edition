@@ -66,7 +66,7 @@ public class CommandForceSkip extends BaseCommand {
                 addToVote(event.getGuild().getIdLong(), new ArrayList<>());
                 return;
             } else {
-                for (int i = 0; i < Integer.parseInt(event.getArgs()[1])-1; i++) {
+                for (int i = 0; i < Integer.parseInt(event.getArgs()[1]) - 1; i++) {
                     musicManager.scheduler.queue.remove();
                 }
                 musicManager.scheduler.nextTrack();

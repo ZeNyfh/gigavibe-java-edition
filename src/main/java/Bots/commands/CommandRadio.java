@@ -54,10 +54,11 @@ public class CommandRadio extends BaseCommand {
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         String radioURL = null;
         try {
-            if (event.getArgs()[1] == null){
+            if (event.getArgs()[1] == null) {
                 arg = new StringBuilder();
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         assert event.getArgs()[1] != null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             assert event.getArgs()[2] != null;

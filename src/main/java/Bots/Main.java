@@ -558,11 +558,11 @@ public class Main extends ListenerAdapter {
                 botChannelMemberCount++;
             }
         }
-//        if (botChannelMemberCount == 0) {
-//            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-//            event.getGuild().getAudioManager().closeAudioConnection();
-//            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
-//        }
+        if (botChannelMemberCount == 0) {
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+            event.getGuild().getAudioManager().closeAudioConnection();
+            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+        }
     }
 
     public static String getRadio(String search) throws IOException {
