@@ -9,10 +9,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static Bots.Main.*;
 
@@ -63,13 +60,21 @@ public class CommandRadio extends BaseCommand {
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             assert event.getArgs()[2] != null;
             if (!event.getArgs()[2].isBlank()) {
-                for (int i = 2; i < event.getArgs().length; i++) {
-                    if (event.getArgs().length != i) {
-                        arg.append(event.getArgs()[i]).append("+");
+                arg = new StringBuilder();
+                List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
+                otherArgs.remove(0);
+                otherArgs.remove(0);
+                int i = 0;
+                for (String string : otherArgs){
+                    printlnTime(string);
+                    i++;
+                    if (otherArgs.size() > i) {
+                        arg.append(string).append("+");
                     } else {
-                        arg.append(event.getArgs()[i]);
+                        arg.append(string);
                     }
                 }
+                printlnTime(arg.toString());
                 radioURL = getRadio(arg.toString());
             }
         }
