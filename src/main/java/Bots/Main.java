@@ -32,7 +32,6 @@ import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
