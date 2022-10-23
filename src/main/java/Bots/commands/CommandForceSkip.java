@@ -50,9 +50,38 @@ public class CommandForceSkip extends BaseCommand {
             channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
             return;
         }
-        musicManager.scheduler.nextTrack();
-        addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // clearing the vote
-        channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track.")).queue();
+        if (event.getArgs().length == 1) {
+            if (musicManager.scheduler.queue.size() >= 1) {
+                musicManager.scheduler.nextTrack();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+            } else {
+                musicManager.scheduler.nextTrack();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track")).queue();
+            }
+        } else if (event.getArgs()[1].matches("^\\d+$")) {
+            if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
+                musicManager.scheduler.queue.clear();
+                musicManager.scheduler.nextTrack();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue")).queue();
+                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+                return;
+            } else {
+                for (int i = 0; i < Integer.parseInt(event.getArgs()[1])-1; i++) {
+                    musicManager.scheduler.queue.remove();
+                }
+                musicManager.scheduler.nextTrack();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+            }
+        } else {
+            if (musicManager.scheduler.queue.size() >= 1) {
+                musicManager.scheduler.nextTrack();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+            } else {
+                musicManager.scheduler.nextTrack();
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track")).queue();
+            }
+        }
+        addToVote(event.getGuild().getIdLong(), new ArrayList<>());
     }
 
     public String getCategory() {
@@ -71,7 +100,7 @@ public class CommandForceSkip extends BaseCommand {
 
     public String getDescription() {
         return "Casts a vote or skips the current song.";
-    } // voting not yet implemented
+    }
 
     public long getTimeout() {
         return 1000;

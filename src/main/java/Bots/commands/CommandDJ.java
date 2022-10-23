@@ -3,6 +3,8 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -85,7 +87,6 @@ public class CommandDJ extends BaseCommand {
             eb.setTitle("DJs for " + event.getGuild().getName());
             eb.appendDescription(builder);
             event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
-
         } else if (event.getArgs()[1].equalsIgnoreCase("add")) { // adding djs
             if (event.getArgs()[2] == null) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();

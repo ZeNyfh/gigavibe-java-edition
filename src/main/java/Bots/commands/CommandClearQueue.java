@@ -57,6 +57,7 @@ public class CommandClearQueue extends BaseCommand {
         list.add("clearq");
         list.add("qclear");
         list.add("cleara");
+        list.add("clear");
         return list;
     }
 
