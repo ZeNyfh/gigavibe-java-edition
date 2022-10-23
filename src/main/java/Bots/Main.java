@@ -78,34 +78,19 @@ public class Main extends ListenerAdapter {
             printlnTime(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
-        File file = new File("Users.json");
-        if (!file.exists()) {
-            printlnTime(file.getName() + " doesn't exist, creating now.");
-            file.createNewFile();
-            FileWriter writer = new FileWriter("Users.json");
-            writer.write("{}");
-            writer.flush();
-            writer.close();
+        for (String JSONName : new String[]{"Users","BlockedChannels","DJs"}) {
+            JSONName = JSONName + ".json";
+            File file = new File(JSONName);
+            if (!file.exists()) {
+                printlnTime(file.getName() + " doesn't exist, creating now.");
+                file.createNewFile();
+                FileWriter writer = new FileWriter(JSONName);
+                writer.write("{}");
+                writer.flush();
+                writer.close();
+            }
         }
-        file = new File("BlockedChannels.json");
-        if (!file.exists()) {
-            printlnTime(file.getName() + " doesn't exist, creating now.");
-            file.createNewFile();
-            FileWriter writer = new FileWriter("BlockedChannels.json");
-            writer.write("{}");
-            writer.flush();
-            writer.close();
-        }
-        file = new File("DJs.json");
-        if (!file.exists()) {
-            printlnTime(file.getName() + " doesn't exist, creating now.");
-            file.createNewFile();
-            FileWriter writer = new FileWriter("DJs.json");
-            writer.write("{}");
-            writer.flush();
-            writer.close();
-        }
-        file = new File(".env");
+        File file = new File(".env");
         if (!file.exists()) {
             printlnTime(file.getName() + " doesn't exist, creating now.");
             file.createNewFile();
