@@ -163,7 +163,6 @@ public class Main extends ListenerAdapter {
 
         //Dev
         registerCommand(new CommandLocalPlay());
-        registerCommand(new CommandPlaylist());
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInsert());
 
