@@ -25,7 +25,7 @@ public class CommandAudioDL extends BaseCommand {
             return;
         }
         File dir = new File("auddl");
-        if (Objects.equals(event.getArgs()[1], "")) {
+        if (event.getArgs().length < 2 || Objects.equals(event.getArgs()[1], "")) {
             return;
         }
         new Thread(() -> {
