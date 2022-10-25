@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
@@ -19,6 +18,7 @@ public class CommandVideoDL extends BaseCommand {
     public static int queue = 0;
     Message[] messageVar = new Message[1];
 
+    @Override
     public void execute(MessageEvent event) {
         if (event.getArgs().length < 1) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
@@ -139,30 +139,26 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("vdl");
-        list.add("video");
-        list.add("viddl");
-        return list;
+    public String[] getNames() {
+        return new String[]{"videodl","vdl","video","viddl"};
     }
 
+    @Override
     public String getCategory() {
         return "Music";
     }
 
-    public String getName() {
-        return "videodl";
-    }
-
+    @Override
     public String getDescription() {
         return "Downloads a video from a compatible URL.";
     }
 
+    @Override
     public String getParams() {
         return "<URL>";
     }
 
+    @Override
     public long getTimeout() {
         return 10000;
     }

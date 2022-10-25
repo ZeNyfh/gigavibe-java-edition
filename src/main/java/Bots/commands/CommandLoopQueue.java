@@ -4,11 +4,10 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.util.ArrayList;
-
 import static Bots.Main.*;
 
 public class CommandLoopQueue extends BaseCommand {
+    @Override
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
@@ -27,24 +26,21 @@ public class CommandLoopQueue extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("loopq");
-        return list;
+    public String[] getNames() {
+        return new String[]{"loopqueue","loopq"};
     }
 
-    public String getName() {
-        return "loopqueue";
-    }
-
+    @Override
     public String getCategory() {
         return "Music";
     }
 
+    @Override
     public String getDescription() {
         return "Loops the current queue.";
     }
 
+    @Override
     public long getTimeout() {
         return 2500;
     }

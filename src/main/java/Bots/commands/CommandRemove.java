@@ -14,8 +14,8 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-
 public class CommandRemove extends BaseCommand {
+    @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
@@ -61,13 +61,6 @@ public class CommandRemove extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("rem");
-        return list;
-    }
-
-    @Override
     public String getParams() {
         return "<Number>";
     }
@@ -78,8 +71,8 @@ public class CommandRemove extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "remove";
+    public String[] getNames() {
+        return new String[]{"remove","rem"};
     }
 
     @Override

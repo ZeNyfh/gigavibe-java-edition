@@ -3,7 +3,6 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
@@ -11,6 +10,7 @@ import static Bots.Main.createQuickError;
 
 public class CommandSendAnnouncement extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
@@ -29,30 +29,27 @@ public class CommandSendAnnouncement extends BaseCommand {
         }
     }
 
+    @Override
     public String getCategory() {
         return "dev";
     }
 
-    public String getName() {
-        return "sendannouncement";
+    @Override
+    public String[] getNames() {
+        return new String[]{"sendannouncement","announcement","announce"};
     }
 
+    @Override
     public String getParams() {
         return "<String>";
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("announcement");
-        list.add("announce");
-        return list;
-    }
-
     public String getDescription() {
         return "sends an announcement globally.";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

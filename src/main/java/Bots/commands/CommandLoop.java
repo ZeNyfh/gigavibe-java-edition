@@ -8,6 +8,7 @@ import static Bots.Main.*;
 
 public class CommandLoop extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
         if (event.getMessage().getContentRaw().contains("loopqueue")) {
@@ -27,18 +28,22 @@ public class CommandLoop extends BaseCommand {
         }
     }
 
+    @Override
     public String getCategory() {
         return "Music";
     }
 
-    public String getName() {
-        return "loop";
+    @Override
+    public String[] getNames() {
+        return new String[]{"loop"};
     }
 
+    @Override
     public String getDescription() {
         return "Loops the current track.";
     }
 
+    @Override
     public long getTimeout() {
         return 2500;
     }

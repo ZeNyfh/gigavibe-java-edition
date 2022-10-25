@@ -19,6 +19,7 @@ import static java.lang.Math.round;
 
 public class CommandSkip extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
@@ -104,31 +105,27 @@ public class CommandSkip extends BaseCommand {
         }
     }
 
+    @Override
+    public String[] getNames() {
+        return new String[]{"skip","s","voteskip","vs"};
+    }
+
+    @Override
     public String getCategory() {
         return "Music";
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("s");
-        list.add("voteskip");
-        list.add("vs");
-        return list;
-    }
-
-    public String getName() {
-        return "skip";
-    }
-
     public String getParams() {
         return "[Integer]";
     }
 
+    @Override
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

@@ -143,8 +143,8 @@ public class CommandBlockChannel extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "blockchannel";
+    public String[] getNames() {
+        return new String[]{"blockchannel"};
     }
 
     @Override

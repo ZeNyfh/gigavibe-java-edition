@@ -28,20 +28,8 @@ public class CommandDisconnect extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("leave");
-        list.add("fu" + "ckoff"); // using this because I don't want to trigger any sort of profanity filters on other systems.
-        list.add("fu" + "ck off");
-        list.add("shutup");
-        list.add("dc");
-        list.add("stop");
-        return list;
-    }
-
-    @Override
-    public String getName() {
-        return "disconnect";
+    public String[] getNames() {
+        return new String[]{"disconnect","fu"+"ckoff","fu"+"ck off","shutup","dc","stop"};
     }
 
     @Override

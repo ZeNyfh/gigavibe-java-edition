@@ -10,13 +10,13 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandNowPlaying extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
@@ -80,24 +80,22 @@ public class CommandNowPlaying extends BaseCommand {
         channel.sendMessageEmbeds(embed.build()).queue();
     }
 
+    @Override
     public String getCategory() {
         return "Music";
     }
 
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("nowplaying");
-        return list;
+    @Override
+    public String[] getNames() {
+        return new String[]{"np","nowplaying"};
     }
 
-    public String getName() {
-        return "np";
-    }
-
+    @Override
     public String getDescription() {
         return "Shows you the track that is currently playing";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

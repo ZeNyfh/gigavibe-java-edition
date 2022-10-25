@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -19,6 +18,7 @@ import static Bots.Main.createQuickError;
 public class CommandPlay extends BaseCommand {
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
 
+    @Override
     public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
@@ -72,28 +72,27 @@ public class CommandPlay extends BaseCommand {
         }
     }
 
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("p");
-        return list;
-    }
-
+    @Override
     public String getCategory() {
         return "Music";
     }
 
-    public String getName() {
-        return "play";
+    @Override
+    public String[] getNames() {
+        return new String[]{"play","p"};
     }
 
+    @Override
     public String getDescription() {
         return "Plays songs or playlists from: youtube, soundcloud, bandcamp, twitch, vimeo, spotify, apple music, http urls and discord attachments.";
     }
 
+    @Override
     public String getParams() {
         return "<URL or Keywords>";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

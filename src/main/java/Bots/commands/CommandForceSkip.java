@@ -16,6 +16,7 @@ import static Bots.Main.*;
 
 public class CommandForceSkip extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
@@ -84,24 +85,22 @@ public class CommandForceSkip extends BaseCommand {
         addToVote(event.getGuild().getIdLong(), new ArrayList<>());
     }
 
+    @Override
     public String getCategory() {
         return "DJ";
     }
 
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("fs");
-        return list;
+    @Override
+    public String[] getNames() {
+        return new String[]{"forceskip","fs"};
     }
 
-    public String getName() {
-        return "forceskip";
-    }
-
+    @Override
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     }
 
+    @Override
     public long getTimeout() {
         return 1000;
     }

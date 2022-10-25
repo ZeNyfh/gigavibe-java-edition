@@ -15,7 +15,7 @@ public class CommandHelp extends BaseCommand {
         String Commands = "";
         for (BaseCommand Command : commands) {
             if (Command.getCategory().equals(category)) {
-                Commands = (Commands + " `" + Command.getName() + "`");
+                Commands = (Commands + " `" + Command.getNames()[0] + "`");
             }
         }
         if (Commands.equals("")) {
@@ -25,6 +25,7 @@ public class CommandHelp extends BaseCommand {
         }
     }
 
+    @Override
     public void execute(MessageEvent event) {
         int i = 0;
         try {
@@ -38,7 +39,7 @@ public class CommandHelp extends BaseCommand {
         for (BaseCommand Command : commands) {
             if (Command.getCategory().toLowerCase().equals(Arg)) {
                 i++;
-                embed.appendDescription("`" + i + ")` **" + Command.getName() + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
             }
         }
         if ("general".equals(Arg)) {
@@ -64,18 +65,22 @@ public class CommandHelp extends BaseCommand {
         embed.clear();
     }
 
+    @Override
     public String getCategory() {
         return "General";
     }
 
-    public String getName() {
-        return "help";
+    @Override
+    public String[] getNames() {
+        return new String[]{"help"};
     }
 
+    @Override
     public String getDescription() {
         return "Shows you a list of commands.";
     }
 
+    @Override
     public String getParams() {
         return "[Category]";
     }

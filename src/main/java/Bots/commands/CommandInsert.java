@@ -14,6 +14,7 @@ import java.util.List;
 import static Bots.Main.*;
 
 public class CommandInsert extends BaseCommand {
+    @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
@@ -70,19 +71,22 @@ public class CommandInsert extends BaseCommand {
         return "<Integer> <URL/SearchTerm>";
     }
 
+    @Override
     public String getCategory() {
-        return "dev";
-        //return "DJ";
+        return "dev"; //DJ
     }
 
-    public String getName() {
-        return "insert";
+    @Override
+    public String[] getNames() {
+        return new String[]{"insert"};
     }
 
+    @Override
     public String getDescription() {
         return "Inserts a track into the queue.";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

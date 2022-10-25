@@ -32,7 +32,6 @@ public class CommandRadio extends BaseCommand {
         return radioLists;
     }
 
-
     @Override
     public void execute(MessageEvent event) throws IOException {
         StringBuilder arg = new StringBuilder("null");
@@ -121,29 +120,26 @@ public class CommandRadio extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("radios");
-        return list;
-    }
-
-    @Override
     public String getParams() {
         return "<List>/<Radio Name>/search <Name>";
     }
 
+    @Override
     public String getCategory() {
         return "Music";
     }
 
-    public String getName() {
-        return "radio";
+    @Override
+    public String[] getNames() {
+        return new String[]{"radio","radios"};
     }
 
+    @Override
     public String getDescription() {
         return "Plays a radio station.";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

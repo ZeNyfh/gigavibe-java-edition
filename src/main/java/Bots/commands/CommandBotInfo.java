@@ -46,8 +46,8 @@ public class CommandBotInfo extends BaseCommand {
 
 
     @Override
-    public String getName() {
-        return "info";
+    public String[] getNames() {
+        return new String[]{"info"};
     }
 
     @Override

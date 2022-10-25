@@ -5,7 +5,6 @@ import Bots.MessageEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-
 public class CommandInvite extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
@@ -18,8 +17,8 @@ public class CommandInvite extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "invite";
+    public String[] getNames() {
+        return new String[]{"invite"};
     }
 
     @Override

@@ -19,18 +19,22 @@ public class CommandBug extends BaseCommand {
         event.getChannel().asTextChannel().sendMessage("Thanks for sending in a bug report!\nYou may receive a friend request or a DM from the developer. Otherwise, a github issue will be made or your bug report was ignored.").queue();
     }
 
-    public String getName() {
-        return "bug";
+    @Override
+    public String[] getNames() {
+        return new String[]{"bug"};
     }
 
+    @Override
     public String getCategory() {
         return "General";
     }
 
+    @Override
     public String getDescription() {
         return "Sends a bug report to the developer.";
     }
 
+    @Override
     public long getTimeout() {
         return 60000;
     }

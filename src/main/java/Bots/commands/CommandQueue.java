@@ -74,15 +74,8 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("q");
-        return list;
-    }
-
-    @Override
-    public String getName() {
-        return "queue";
+    public String[] getNames() {
+        return new String[]{"queue","q"};
     }
 
     @Override

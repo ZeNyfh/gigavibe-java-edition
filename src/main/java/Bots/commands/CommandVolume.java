@@ -6,7 +6,6 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -60,16 +59,8 @@ public class CommandVolume extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("vol");
-        list.add("v");
-        return list;
-    }
-
-    @Override
-    public String getName() {
-        return "volume";
+    public String[] getNames() {
+        return new String[]{"volume","vol","v"};
     }
 
     @Override

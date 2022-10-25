@@ -5,7 +5,6 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -27,15 +26,8 @@ public class CommandJoin extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("join");
-        return list;
-    }
-
-    @Override
-    public String getName() {
-        return "connect";
+    public String[] getNames() {
+        return new String[]{"connect","join"};
     }
 
     @Override

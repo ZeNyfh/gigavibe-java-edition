@@ -14,7 +14,6 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -213,15 +212,8 @@ public class CommandPlaylist extends BaseCommand {
     }
 
     @Override
-    public ArrayList<String> getAlias() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("pl");
-        return list;
-    }
-
-    @Override
-    public String getName() {
-        return "playlist";
+    public String[] getNames() {
+        return new String[]{"playlist","pl"};
     }
 
     @Override

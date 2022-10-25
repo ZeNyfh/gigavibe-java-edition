@@ -56,8 +56,8 @@ public class CommandShuffle extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "shuffle";
+    public String[] getNames() {
+        return new String[]{"shuffle"};
     }
 
     @Override

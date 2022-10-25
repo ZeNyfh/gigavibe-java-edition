@@ -5,7 +5,6 @@ import Bots.MessageEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-
 public class CommandGithub extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
@@ -18,8 +17,8 @@ public class CommandGithub extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "github";
+    public String[] getNames() {
+        return new String[]{"github"};
     }
 
     @Override

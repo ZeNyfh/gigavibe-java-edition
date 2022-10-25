@@ -97,8 +97,8 @@ public class CommandSeek extends BaseCommand {
     }
 
     @Override
-    public String getName() {
-        return "seek";
+    public String[] getNames() {
+        return new String[]{"seek"};
     }
 
     @Override

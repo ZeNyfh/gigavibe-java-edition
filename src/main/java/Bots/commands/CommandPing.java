@@ -7,23 +7,28 @@ import static java.lang.System.currentTimeMillis;
 
 public class CommandPing extends BaseCommand {
 
+    @Override
     public void execute(MessageEvent event) {
         long time = currentTimeMillis();
         event.getChannel().asTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
 
+    @Override
     public String getCategory() {
         return "General";
     }
 
-    public String getName() {
-        return "ping";
+    @Override
+    public String[] getNames() {
+        return new String[]{"ping"};
     }
 
+    @Override
     public String getDescription() {
         return "Shows you the bot's ping.";
     }
 
+    @Override
     public long getTimeout() {
         return 5000;
     }

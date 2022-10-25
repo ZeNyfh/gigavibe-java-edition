@@ -18,6 +18,7 @@ import static Bots.Main.*;
 public class CommandDJ extends BaseCommand {
     public static JSONArray DJList = new JSONArray();
 
+    @Override
     public void execute(MessageEvent event) throws IOException {
         JSONParser jsonParser = new JSONParser();
         JSONObject json = new JSONObject();
@@ -187,18 +188,22 @@ public class CommandDJ extends BaseCommand {
         }
     }
 
+    @Override
     public String getCategory() {
         return "Admin";
     }
 
-    public String getName() {
-        return "dj";
+    @Override
+    public String[] getNames() {
+        return new String[]{"dj"};
     }
 
+    @Override
     public String getDescription() {
         return "Adds or removes a user or role from the DJ list. Alternatively, shows you the DJ roles/users.";
     }
 
+    @Override
     public String getParams() {
         return "<list> || <add/remove> <ID/Mention>";
     }
