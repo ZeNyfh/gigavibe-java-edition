@@ -33,7 +33,6 @@ public class ConfigManager {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                printlnTime("Saving configs...");
                 SaveConfigs();
             }
         };
