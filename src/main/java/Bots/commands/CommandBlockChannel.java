@@ -7,11 +7,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -30,40 +26,8 @@ public class CommandBlockChannel extends BaseCommand {
                 return;
             }
         }
-        JSONObject obj = new JSONObject();
-        JSONObject blocked = new JSONObject();
-        JSONParser jsonParser = new JSONParser();
-
-        JSONObject jsonFileContents = null;
-        try (FileReader reader = new FileReader("BlockedChannels.json")) {
-            jsonFileContents = (JSONObject) jsonParser.parse(reader);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        JSONObject json = jsonFileContents;
-        blocked.put("BlockedChannels", new JSONArray());
-        json.putIfAbsent(event.getGuild().getId(), blocked);
-        FileWriter file = new FileWriter("BlockedChannels.json");
-        try {
-            file.write(json.toJSONString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        JSONObject guildObj = (JSONObject) json.get(event.getGuild().getId());
-        JSONArray blockedChannels = new JSONArray();
-        try {
-            blockedChannels = (JSONArray) guildObj.get("BlockedChannels"); // getting the values from the file
-        } catch (Exception ignored) {
-        }
+        JSONObject config = event.getConfig();
+        JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
 
         for (int i = 0; i < event.getGuild().getChannels().size(); i++) {
             printlnTime(String.valueOf(i));
@@ -75,21 +39,6 @@ public class CommandBlockChannel extends BaseCommand {
                         return;
                     }
                     blockedChannels.add(event.getArgs()[2]);
-                    blocked.put("BlockedChannels", blockedChannels);
-                    obj.put(event.getGuild().getId(), blocked);
-                    try {
-                        file = new FileWriter("BlockedChannels.json");
-                        file.write(obj.toJSONString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            file.flush();
-                            file.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list.")).queue();
                     return;
                 }
@@ -100,22 +49,6 @@ public class CommandBlockChannel extends BaseCommand {
                         return;
                     }
                     blockedChannels.remove(event.getArgs()[2]);
-                    blocked.put("BlockedChannels", blockedChannels);
-                    obj.put(event.getGuild().getId(), blocked);
-
-                    try {
-                        file = new FileWriter("BlockedChannels.json");
-                        file.write(obj.toJSONString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            file.flush();
-                            file.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list.")).queue();
                     return;
                 }

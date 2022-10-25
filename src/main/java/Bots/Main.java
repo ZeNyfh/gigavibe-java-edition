@@ -77,18 +77,6 @@ public class Main extends ListenerAdapter {
             printlnTime(folder.getFileName() + " doesn't exist, creating now.");
             folder.toFile().mkdirs();
         }
-        for (String JSONName : new String[]{"Users","BlockedChannels","DJs"}) {
-            JSONName = JSONName + ".json";
-            File file = new File(JSONName);
-            if (!file.exists()) {
-                printlnTime(file.getName() + " doesn't exist, creating now.");
-                file.createNewFile();
-                FileWriter writer = new FileWriter(JSONName);
-                writer.write("{}");
-                writer.flush();
-                writer.close();
-            }
-        }
         File file = new File(".env");
         if (!file.exists()) {
             printlnTime(file.getName() + " doesn't exist, creating now.");
@@ -179,6 +167,8 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInsert());
 
+        ConfigManager.Init();
+
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
@@ -224,7 +214,7 @@ public class Main extends ListenerAdapter {
             }
         };
 
-        timer.scheduleAtFixedRate(task,0,1000);{}
+        timer.scheduleAtFixedRate(task,0,1000);
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -330,34 +320,9 @@ public class Main extends ListenerAdapter {
         return skips.get(guildID);
     }
 
-    public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) throws IOException {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject blocked = new JSONObject();
-        JSONObject jsonFileContents = null;
-        try (FileReader reader = new FileReader("BlockedChannels.json")) {
-            jsonFileContents = (JSONObject) jsonParser.parse(reader);
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-            return false; //Default to allowed
-        }
-        JSONObject json = jsonFileContents;
-        blocked.put("BlockedChannels", new JSONArray());
-        json.putIfAbsent(guild.getId(), blocked);
-        FileWriter file = new FileWriter("BlockedChannels.json");
-        try {
-            file.write(json.toJSONString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
-        JSONArray blockedChannels = (JSONArray) guildObj.get("BlockedChannels");
+    public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) {
+        JSONObject config = ConfigManager.GetConfig(guild.getIdLong());
+        JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (int i = 0; i < blockedChannels.size(); ) {
             if (textChannel.getId().equals(blockedChannels.get(i))) {
                 textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
@@ -369,17 +334,9 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonFileContents = null;
-        try (FileReader reader = new FileReader("DJs.json")) {
-            jsonFileContents = (JSONObject) jsonParser.parse(reader);
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-        assert jsonFileContents != null;
-        JSONObject guildObj = (JSONObject) jsonFileContents.get(guild.getId());
-        JSONArray DJRoles = (JSONArray) guildObj.get("roles");
-        JSONArray DJUsers = (JSONArray) guildObj.get("users");
+        JSONObject config = ConfigManager.GetConfig(guild.getIdLong());
+        JSONArray DJRoles = (JSONArray) config.get("DJRoles");
+        JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;
         for (int i = 0; i < DJRoles.size(); ) {
             if (member.getRoles().contains(guild.getJDA().getRoleById((String) DJRoles.get(i)))) {
