@@ -63,7 +63,7 @@ public class Main extends ListenerAdapter {
 
     public static void registerCommand(BaseCommand command) {
         commands.add(command);
-        //Possibly other uses idk yet -9382
+        //Possibly other uses idk yet
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
@@ -236,11 +236,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static MessageEmbed createQuickError(String description) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("❌ **Error**");
-        eb.setColor(botColour);
-        eb.setDescription(description);
-        return eb.build();
+        return createQuickEmbed("❌ **Error**", description);
     }
 
     public static AudioTrack getTrackFromQueue(Guild guild, int queuePos) {
@@ -342,6 +338,7 @@ public class Main extends ListenerAdapter {
             jsonFileContents = (JSONObject) jsonParser.parse(reader);
         } catch (ParseException | IOException e) {
             e.printStackTrace();
+            return false; //Default to allowed
         }
         JSONObject json = jsonFileContents;
         blocked.put("BlockedChannels", new JSONArray());
@@ -514,13 +511,15 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGenericGuildVoice(@NotNull GenericGuildVoiceEvent event) {
-        if (Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel() != null) {
-            int i = 1;
-            List<Member> a = event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers();
-            if (a.listIterator().next().getUser().isBot()) {
-                i++;
+        //Checks if the bot is now alone
+        GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
+        if (voiceState.getChannel() != null) {
+            int members = 0;
+            List<Member> a = voiceState.getChannel().getMembers();
+            if (!a.listIterator().next().getUser().isBot()) { //Bots arent members
+                members++;
             }
-            if (event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().size() - i == 0) {
+            if (members == 0) { //If alone
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
                 addToVote(event.getGuild().getIdLong(), new ArrayList<>());
             }
@@ -599,9 +598,9 @@ public class Main extends ListenerAdapter {
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
-            if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting -9382
+            if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
-                if (!afterChar.equals(" ") && !afterChar.equals("\n")) {
+                if (!afterChar.equals(" ") && !afterChar.equals("\n")) { //Ensure theres whitespace afterwards
                     return false;
                 }
             }

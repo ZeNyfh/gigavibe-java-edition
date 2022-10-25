@@ -2,7 +2,9 @@ package Bots;
 
 import java.io.IOException;
 
-// Custom command class used by all commands
+/**
+ * Custom base command class used by all commands
+ */
 public class BaseCommand {
 
     public void execute(MessageEvent event) throws IOException {
