@@ -24,9 +24,8 @@ public class ConfigManager {
     public static HashMap<Long, JSONObject> Configs = new HashMap<>();
 
     public static void Init() {
-        Path folder = Paths.get(configFolder);
-        boolean newConfig = folder.toFile().mkdir();
-        if (newConfig) {
+        boolean madeNewConfig = Paths.get(configFolder).toFile().mkdir();
+        if (madeNewConfig) {
             printlnTime("Created new config folder");
         }
         Timer timer = new Timer();
