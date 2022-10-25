@@ -85,7 +85,7 @@ public class CommandForceSkip extends BaseCommand {
     }
 
     public String getCategory() {
-        return "Music";
+        return "DJ";
     }
 
     public ArrayList<String> getAlias() {

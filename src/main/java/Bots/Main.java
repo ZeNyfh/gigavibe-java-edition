@@ -140,34 +140,43 @@ public class Main extends ListenerAdapter {
             return;
         }
 
+        //General
         registerCommand(new CommandPing());
+        registerCommand(new CommandHelp());
+        registerCommand(new CommandGithub());
+        registerCommand(new CommandBug());
+        registerCommand(new CommandInvite());
+
+        //Music
         registerCommand(new CommandPlay());
         registerCommand(new CommandLoopQueue());
         registerCommand(new CommandLoop());
         registerCommand(new CommandSkip());
-        registerCommand(new CommandLocalPlay());
         registerCommand(new CommandNowPlaying());
-        registerCommand(new CommandHelp());
         registerCommand(new CommandVideoDL());
         registerCommand(new CommandAudioDL());
-        registerCommand(new CommandDisconnect());
-        registerCommand(new CommandBlockChannel());
         registerCommand(new CommandQueue());
-        registerCommand(new CommandBotInfo());
+        registerCommand(new CommandRadio());
+
+        //DJ
+        registerCommand(new CommandDisconnect());
         registerCommand(new CommandShuffle());
-        registerCommand(new CommandGithub());
-        registerCommand(new CommandDJ());
+        registerCommand(new CommandForceSkip());
         registerCommand(new CommandRemove());
         registerCommand(new CommandClearQueue());
         registerCommand(new CommandVolume());
-        registerCommand(new CommandForceSkip());
-        registerCommand(new CommandRadio());
         registerCommand(new CommandSeek());
-        registerCommand(new CommandPlaylist());
-        registerCommand(new CommandBug());
-        registerCommand(new CommandSendAnnouncement());
-        registerCommand(new CommandInvite());
         registerCommand(new CommandJoin());
+
+        //Admin
+        registerCommand(new CommandBlockChannel());
+        registerCommand(new CommandBotInfo());
+        registerCommand(new CommandDJ());
+
+        //Dev
+        registerCommand(new CommandLocalPlay());
+        registerCommand(new CommandPlaylist());
+        registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInsert());
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
