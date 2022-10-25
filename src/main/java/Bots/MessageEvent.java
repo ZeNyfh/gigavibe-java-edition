@@ -2,12 +2,9 @@ package Bots;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-/*
-This class is an extension of the MessageRecievedEvent that provides generally useful attributes for commands.
-
-As of now its a bit dry, but this may get expanded at some point when something else could be seen as useful
--9382 */
-
+/**
+ * An extension of the MessageRecievedEvent that provides generally useful attributes for commands.
+ */
 public class MessageEvent extends MessageReceivedEvent {
     final String[] args;
 
