@@ -91,6 +91,12 @@ public class ConfigManager {
                 }
             }
         }
+        for (Object key : config.keySet()) {
+            if (!baseConfig.containsKey(key)) {
+                printlnTime("Config " + GuildID + " has unrecognised key " + key);
+                config.remove(key); //Remove
+            }
+        }
 
         //Done, store and send away
         Configs.put(GuildID,config);
