@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
 /**
- * An extension of the MessageRecievedEvent that provides generally useful attributes for commands.
+ * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
  */
 public class MessageEvent extends MessageReceivedEvent {
     final String[] args;

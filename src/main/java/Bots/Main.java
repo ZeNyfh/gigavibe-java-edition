@@ -25,8 +25,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
@@ -180,6 +178,9 @@ public class Main extends ListenerAdapter {
             queuePages.put(guild.getIdLong(), 0);
             guildTimeouts.put(guild.getIdLong(), 0);
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
+
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -338,14 +339,14 @@ public class Main extends ListenerAdapter {
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;
         for (int i = 0; i < DJRoles.size(); ) {
-            if (member.getRoles().contains(guild.getJDA().getRoleById((String) DJRoles.get(i)))) {
+            if (member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRoles.get(i)))) {
                 check = true;
             }
             i++;
         }
         if (!check) {
             for (int i = 0; i < DJUsers.size(); ) {
-                if (DJUsers.get(i).equals(member.getId())) {
+                if (DJUsers.get(i).equals(member.getIdLong())) {
                     check = true;
                 }
                 i++;

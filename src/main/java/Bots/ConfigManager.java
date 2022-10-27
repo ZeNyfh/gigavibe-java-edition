@@ -41,10 +41,9 @@ public class ConfigManager {
 
     private static JSONObject CreateConfigObject() { //Useful base-plate config
         JSONObject defaultConfig = new JSONObject();
-        defaultConfig.put("BlockedChannels",new JSONObject());
+        defaultConfig.put("BlockedChannels",new JSONArray());
         defaultConfig.put("DJRoles",new JSONArray());
         defaultConfig.put("DJUsers",new JSONArray());
-        defaultConfig.put("Users",new JSONObject());
         return defaultConfig;
     }
 
@@ -92,12 +91,6 @@ public class ConfigManager {
                 }
             }
         }
-        for (Object key : config.keySet()) {
-            if (!baseConfig.containsKey(key)) {
-                printlnTime("Config " + GuildID + " has unrecognised key " + key);
-                //Purely informational - don't take automatic action
-            }
-        }
 
         //Done, store and send away
         Configs.put(GuildID,config);
@@ -114,13 +107,13 @@ public class ConfigManager {
                 try {
                     return ReadConfig(GuildID);
                 } catch (IOException exception) {
-                    exception.printStackTrace();
+                    printlnTime(exception.toString());
                 }
             } else { //It doesn't exist
                 try {
                     return CreateConfig(GuildID);
                 } catch (IOException exception) {
-                    exception.printStackTrace();
+                    printlnTime(exception.toString());
                 }
             }
         }

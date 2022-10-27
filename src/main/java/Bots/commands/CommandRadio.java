@@ -34,6 +34,18 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) throws IOException {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(botColour);
+        eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
+        getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
+        eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
+        eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
+        if (event.getArgs().length == 1){
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+            eb.clear();
+            return;
+        }
         StringBuilder arg = new StringBuilder("null");
         String argFinal = "";
         if (event.getArgs().length != 1) {
@@ -43,11 +55,6 @@ public class CommandRadio extends BaseCommand {
             }
             arg = new StringBuilder(event.getArgs()[1]);
         }
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(botColour);
-        eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
-        getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
-        eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         String radioURL = null;
         try {
             if (event.getArgs()[1] == null) {
@@ -57,28 +64,26 @@ public class CommandRadio extends BaseCommand {
         }
         assert event.getArgs()[1] != null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
-            assert event.getArgs()[2] != null;
-            if (!event.getArgs()[2].isBlank()) {
-                arg = new StringBuilder();
-                List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
-                otherArgs.remove(0);
-                otherArgs.remove(0);
-                int i = 0;
-                for (String string : otherArgs){
-                    printlnTime(string);
-                    i++;
-                    if (otherArgs.size() > i) {
-                        arg.append(string).append("+");
-                    } else {
-                        arg.append(string);
-                    }
-                }
-                printlnTime(arg.toString());
-                radioURL = getRadio(arg.toString());
+            if (event.getArgs().length == 2){
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No search term given.")).queue();
+                return;
             }
+            arg = new StringBuilder();
+            List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
+            otherArgs.remove(0);
+            otherArgs.remove(0);
+            int i = 0;
+            for (String string : otherArgs){
+                i++;
+                if (otherArgs.size() > i) {
+                    arg.append(string).append("+");
+                } else {
+                    arg.append(string);
+                }
+            }
+            radioURL = getRadio(arg.toString());
         }
         if (arg.toString().equalsIgnoreCase("list") || event.getArgs().length == 1) {
-            eb.appendDescription("\n*Or use `" + botPrefix + "radio search <URL>`*");
             event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
             eb.clear();
             return;
@@ -95,14 +100,6 @@ public class CommandRadio extends BaseCommand {
         if (radioURL != null) {
             audioManager.openAudioConnection(memberChannel);
             PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), radioURL, true);
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Disclaimer!**", "Some radio stations may not be available as these results are from [here](https://www.internet-radio.com/)")).queue(a -> {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                a.delete().queue();
-            });
         } else {
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
@@ -116,12 +113,20 @@ public class CommandRadio extends BaseCommand {
                 }
             }
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Not a valid radio station.")).queue();
+            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Disclaimer!**", "Some radio stations may not be available as these results are from [here](https://www.internet-radio.com/)")).queue(a -> {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                a.delete().queue();
+            });
         }
     }
 
     @Override
     public String getParams() {
-        return "<List>/<Radio Name>/search <Name>";
+        return "<List>/<Radio Name>/<search> <Name>";
     }
 
     @Override
