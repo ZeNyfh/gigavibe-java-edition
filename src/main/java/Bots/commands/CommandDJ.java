@@ -50,9 +50,9 @@ public class CommandDJ extends BaseCommand {
                 for (Object user : DJUsers) {
                     i++;
                     if (i == DJUsers.size()) {
-                        builder.append(event.getJDA().getUserById((long) user).getAsMention());
+                        builder.append(Objects.requireNonNull(event.getJDA().getUserById((Long) user)).getAsMention());
                     } else {
-                        builder.append(event.getJDA().getUserById((long) user).getAsMention() + ", ");
+                        builder.append(Objects.requireNonNull(event.getJDA().getUserById((Long) user)).getAsMention()).append(", ");
                     }
                 }
             }
