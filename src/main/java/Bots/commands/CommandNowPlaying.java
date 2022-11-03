@@ -87,7 +87,7 @@ public class CommandNowPlaying extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"np","nowplaying"};
+        return new String[]{"np", "nowplaying"};
     }
 
     @Override

@@ -72,7 +72,7 @@ public class CommandRemove extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"remove","rem"};
+        return new String[]{"remove", "rem"};
     }
 
     @Override

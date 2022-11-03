@@ -151,7 +151,7 @@ public class CommandVideoDL extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"videodl","vdl","video","viddl"};
+        return new String[]{"videodl", "vdl", "video", "viddl"};
     }
 
     @Override

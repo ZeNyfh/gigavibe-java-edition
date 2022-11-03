@@ -79,7 +79,7 @@ public class CommandPlay extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"play","p"};
+        return new String[]{"play", "p"};
     }
 
     @Override

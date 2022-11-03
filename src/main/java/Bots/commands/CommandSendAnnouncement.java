@@ -36,7 +36,7 @@ public class CommandSendAnnouncement extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"sendannouncement","announcement","announce"};
+        return new String[]{"sendannouncement", "announcement", "announce"};
     }
 
     @Override

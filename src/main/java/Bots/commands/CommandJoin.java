@@ -27,7 +27,7 @@ public class CommandJoin extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"connect","join"};
+        return new String[]{"connect", "join"};
     }
 
     @Override

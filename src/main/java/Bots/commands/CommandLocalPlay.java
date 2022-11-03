@@ -43,7 +43,7 @@ public class CommandLocalPlay extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"playfile","pf"};
+        return new String[]{"playfile", "pf"};
     }
 
     @Override
