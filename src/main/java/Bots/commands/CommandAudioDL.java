@@ -8,10 +8,12 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL extends BaseCommand {
@@ -136,6 +138,15 @@ public class CommandAudioDL extends BaseCommand {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Override
+    public void Init() {
+        Path folder = Paths.get("auddl");
+        if (!Files.exists(folder)) {
+            printlnTime(folder.getFileName() + " doesn't exist, creating now.");
+            folder.toFile().mkdirs();
+        }
     }
 
     @Override

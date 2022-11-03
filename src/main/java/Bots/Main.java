@@ -29,9 +29,6 @@ import org.json.simple.JSONObject;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -56,21 +53,11 @@ public class Main extends ListenerAdapter {
     public static List<BaseCommand> commands = new ArrayList<>();
 
     public static void registerCommand(BaseCommand command) {
+        command.Init();
         commands.add(command);
-        //Possibly other uses idk yet
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
-        Path folder = Paths.get("viddl");
-        if (!Files.exists(folder)) {
-            printlnTime(folder.getFileName() + " doesn't exist, creating now.");
-            folder.toFile().mkdirs();
-        }
-        folder = Paths.get("auddl");
-        if (!Files.exists(folder)) {
-            printlnTime(folder.getFileName() + " doesn't exist, creating now.");
-            folder.toFile().mkdirs();
-        }
         File file = new File(".env");
         if (!file.exists()) {
             printlnTime(file.getName() + " doesn't exist, creating now.");
@@ -209,7 +196,6 @@ public class Main extends ListenerAdapter {
                 }
             }
         };
-
         timer.scheduleAtFixedRate(task,0,1000);
     }
 

@@ -11,6 +11,9 @@ public class BaseCommand {
         System.out.println("Default command..?");
     }
 
+    public void Init() { //Optional initialisation stuff if something is required on start but doesn't have to be in main
+    }
+
     public String[] getNames() { //The first name in the list is treated as the primary name by cmds
         return new String[]{"default"};
     }
