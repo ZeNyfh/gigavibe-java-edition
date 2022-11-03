@@ -528,7 +528,7 @@ public class Main extends ListenerAdapter {
             if (curTime - lastRatelimit < ratelimit) {
                 float timeLeft = (ratelimit - (curTime - lastRatelimit))/1000F;
                 event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue();
-                return false; //We should really inform the user of this
+                return false;
             } else {
                 ratelimitTracker.put(event.getAuthor().getIdLong(),curTime);
             }
