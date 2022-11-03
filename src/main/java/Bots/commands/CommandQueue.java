@@ -67,7 +67,7 @@ public class CommandQueue extends BaseCommand {
             embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
             i++;
         }
-        embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+        embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
         channel.sendMessageEmbeds(embed.build()).queue(message -> message.editMessageComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue());
@@ -75,8 +75,7 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"queue","q"};
-    }
+        return new String[]{"queue","q"};}
 
     @Override
     public String getCategory() {
