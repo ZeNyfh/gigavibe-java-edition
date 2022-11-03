@@ -388,22 +388,22 @@ public class Main extends ListenerAdapter {
         }
         if (Objects.equals(event.getButton().getId(), "forward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
-            if (queuePages.get(event.getGuild().getIdLong()) >= round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5F) + 1)) {
+            if (queuePages.get(event.getGuild().getIdLong()) >= round((Queue.size() / 5F) + 1)) {
                 queuePages.put(event.getGuild().getIdLong(), 1);
             }
             long queueTimeLength = 0;
-            for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
+            for (AudioTrack track : Queue) {
                 if (track.getInfo().length < 432000000) {
                     queueTimeLength = queueTimeLength + track.getInfo().length;
                 }
             }
-            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size(); ) {
+            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < Queue.size(); ) {
                 AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
                 eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
                 j++;
             }
             eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
-            eb.setFooter(PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() + " songs queued. | " + round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+            eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
             eb.setColor(botColour);
             eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
@@ -411,21 +411,21 @@ public class Main extends ListenerAdapter {
         if (Objects.equals(event.getButton().getId(), "backward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
             if (queuePages.get(event.getGuild().getIdLong()) <= 0) {
-                queuePages.put(event.getGuild().getIdLong(), round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5F) + 1));
+                queuePages.put(event.getGuild().getIdLong(), round((Queue.size() / 5F) + 1));
             }
             long queueTimeLength = 0;
-            for (AudioTrack track : PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue) {
+            for (AudioTrack track : Queue) {
                 if (track.getInfo().length < 432000000) {
                     queueTimeLength = queueTimeLength + track.getInfo().length;
                 }
             }
-            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size(); ) {
+            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < Queue.size(); ) {
                 AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
                 eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
                 j++;
             }
             eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
-            eb.setFooter(PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() + " songs queued. | " + round((PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+            eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
             eb.setColor(botColour);
             eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
