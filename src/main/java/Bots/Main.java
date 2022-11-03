@@ -539,7 +539,7 @@ public class Main extends ListenerAdapter {
             long ratelimit = Command.getRatelimit();
             long lastRatelimit = ratelimitTracker.getOrDefault(event.getAuthor().getIdLong(),0L);
             long curTime = System.currentTimeMillis();
-            if (curTime - lastRatelimit > ratelimit) {
+            if (curTime - lastRatelimit < ratelimit) {
                 return false; //We should really inform the user of this
             } else {
                 ratelimitTracker.put(event.getAuthor().getIdLong(),curTime);
