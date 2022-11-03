@@ -215,7 +215,7 @@ public class Main extends ListenerAdapter {
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(title, null);
+        eb.setTitle(title);
         eb.setColor(botColour);
         eb.setDescription(description);
         return eb.build();
