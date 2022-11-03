@@ -20,6 +20,33 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
+    public static String getRadio(String search) throws IOException {
+        URL url = null;
+        try {
+            url = new URL("https://www.internet-radio.com/search/?radio=" + search);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assert url != null;
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            for (String line; (line = reader.readLine()) != null; ) {
+                builder.append(line);
+            }
+        } catch (Exception ignored) {
+            return "None";
+        }
+        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+        Matcher matcher = pattern.matcher(builder.toString());
+        if (matcher.find()) {
+            return (matcher.group(1));
+        } else {
+            return "None";
+        }
+    }
+
     public HashMap<String, String> getRadios() {
         HashMap<String, String> radioLists = new HashMap<String, String>();
         radioLists.put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
@@ -46,7 +73,7 @@ public class CommandRadio extends BaseCommand {
         getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
         eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
-        if (event.getArgs().length == 1){
+        if (event.getArgs().length == 1) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:")).queue();
             event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
             eb.clear();
@@ -70,7 +97,7 @@ public class CommandRadio extends BaseCommand {
         }
         assert event.getArgs()[1] != null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
-            if (event.getArgs().length == 2){
+            if (event.getArgs().length == 2) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No search term given.")).queue();
                 return;
             }
@@ -79,7 +106,7 @@ public class CommandRadio extends BaseCommand {
             otherArgs.remove(0);
             otherArgs.remove(0);
             int i = 0;
-            for (String string : otherArgs){
+            for (String string : otherArgs) {
                 i++;
                 if (otherArgs.size() > i) {
                     arg.append(string).append("+");
@@ -130,28 +157,6 @@ public class CommandRadio extends BaseCommand {
         }
     }
 
-    public static String getRadio(String search) throws IOException {
-        URL url = null;
-        try {
-            url = new URL("https://www.internet-radio.com/search/?radio=" + search);
-        } catch (Exception e){e.printStackTrace();}
-        assert url != null;
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
-            for (String line; (line = reader.readLine()) != null;) {
-                builder.append(line);
-            }
-        } catch (Exception ignored){return "None";}
-        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
-        Matcher matcher = pattern.matcher(builder.toString());
-        if (matcher.find()) {
-            return(matcher.group(1));
-        } else {
-            return "None";
-        }
-    }
     @Override
     public String getParams() {
         return "<List>/<Radio Name>/<search> <Name>";
@@ -164,7 +169,7 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"radio","radios"};
+        return new String[]{"radio", "radios"};
     }
 
     @Override

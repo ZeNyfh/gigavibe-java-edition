@@ -107,7 +107,7 @@ public class CommandSkip extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"skip","s","voteskip","vs"};
+        return new String[]{"skip", "s", "voteskip", "vs"};
     }
 
     @Override

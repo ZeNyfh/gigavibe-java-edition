@@ -60,7 +60,7 @@ public class CommandVolume extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"volume","vol","v"};
+        return new String[]{"volume", "vol", "v"};
     }
 
     @Override

@@ -75,7 +75,8 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"queue","q"};}
+        return new String[]{"queue", "q"};
+    }
 
     @Override
     public String getCategory() {

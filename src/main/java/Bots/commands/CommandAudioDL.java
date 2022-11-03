@@ -145,7 +145,7 @@ public class CommandAudioDL extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"audiodl","adl","dl","audio"};
+        return new String[]{"audiodl", "adl", "dl", "audio"};
     }
 
     @Override

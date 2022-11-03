@@ -92,7 +92,7 @@ public class CommandForceSkip extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"forceskip","fs"};
+        return new String[]{"forceskip", "fs"};
     }
 
     @Override

@@ -27,7 +27,7 @@ public class CommandLoopQueue extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"loopqueue","loopq"};
+        return new String[]{"loopqueue", "loopq"};
     }
 
     @Override
