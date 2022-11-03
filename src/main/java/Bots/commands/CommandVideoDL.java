@@ -159,7 +159,7 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     @Override
-    public long getTimeout() {
+    public long getRatelimit() {
         return 10000;
     }
 }

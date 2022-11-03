@@ -41,7 +41,7 @@ public class CommandLoopQueue extends BaseCommand {
     }
 
     @Override
-    public long getTimeout() {
+    public long getRatelimit() {
         return 2500;
     }
 }

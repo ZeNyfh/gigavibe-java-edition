@@ -29,8 +29,6 @@ import org.json.simple.JSONObject;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,8 +37,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
@@ -529,6 +525,7 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    private static HashMap<Long,Long> ratelimitTracker = new HashMap<>();
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
@@ -538,7 +535,16 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            // ratelimit code to go here
+            //ratelimit code. ratelimit is per-user across all guilds
+            long ratelimit = Command.getRatelimit();
+            long lastRatelimit = ratelimitTracker.getOrDefault(event.getAuthor().getIdLong(),0L);
+            long curTime = System.currentTimeMillis();
+            if (curTime - lastRatelimit > ratelimit) {
+                return false; //We should really inform the user of this
+            } else {
+                ratelimitTracker.put(event.getAuthor().getIdLong(),curTime);
+            }
+            //run command
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {

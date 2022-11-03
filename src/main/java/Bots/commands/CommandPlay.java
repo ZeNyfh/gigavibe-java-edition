@@ -93,7 +93,7 @@ public class CommandPlay extends BaseCommand {
     }
 
     @Override
-    public long getTimeout() {
+    public long getRatelimit() {
         return 5000;
     }
 }

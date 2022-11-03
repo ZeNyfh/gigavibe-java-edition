@@ -35,7 +35,7 @@ public class CommandBug extends BaseCommand {
     }
 
     @Override
-    public long getTimeout() {
+    public long getRatelimit() {
         return 60000;
     }
 }

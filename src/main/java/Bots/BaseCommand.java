@@ -7,27 +7,27 @@ import java.io.IOException;
  */
 public class BaseCommand {
 
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) throws IOException { //Execution code ran for users
+        System.out.println("Default command..?");
     }
 
-    public String[] getNames() {
+    public String[] getNames() { //The first name in the list is treated as the primary name by cmds
         return new String[]{"default"};
-    } //The first name in the list is treated as the primary name
+    }
 
-    public String getCategory() {
+    public String getCategory() { //The category, used by cmds
         return "default";
     }
 
-    public String getDescription() {
+    public String getDescription() { //The description, used by cmds
         return "default";
     }
 
-    public long getTimeout() {
+    public long getRatelimit() { //Ratelimit in milliseconds
         return 0;
     }
 
-    public String getParams() {
+    public String getParams() { //E.g. "<url> [format]". Used by cmds
         return "";
-    } //E.g. "<url> [format]"
-
+    }
 }
