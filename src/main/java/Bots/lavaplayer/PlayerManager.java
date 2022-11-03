@@ -96,6 +96,7 @@ public class PlayerManager {
                 textChannel.sendMessageEmbeds(embed.build()).queue();
             }
 
+
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 String length = "Unknown";
@@ -165,5 +166,14 @@ public class PlayerManager {
                 e.printStackTrace();
             }
         });
+        float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception ignored) {
+        }
+        if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
+            loadAndPlay(textChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
+            musicManager.scheduler.nextTrack();
+        }
     }
 }
