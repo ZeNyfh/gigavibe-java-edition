@@ -511,7 +511,7 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    private static HashMap<Long,Long> ratelimitTracker = new HashMap<>();
+    private static final HashMap<Long,Long> ratelimitTracker = new HashMap<>();
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
