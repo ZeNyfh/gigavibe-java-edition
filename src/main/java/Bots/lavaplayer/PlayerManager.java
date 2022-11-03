@@ -166,14 +166,13 @@ public class PlayerManager {
                 e.printStackTrace();
             }
         });
-        float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
         try {
-            Thread.sleep(1000);
-        } catch (Exception ignored) {
-        }
-        if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
-            loadAndPlay(textChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
-            musicManager.scheduler.nextTrack();
-        }
+            float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
+            Thread.sleep(500);
+            if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
+                loadAndPlay(textChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
+                musicManager.scheduler.nextTrack();
+            }
+        } catch (Exception ignored){}
     }
 }

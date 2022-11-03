@@ -8,8 +8,14 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
@@ -124,6 +130,28 @@ public class CommandRadio extends BaseCommand {
         }
     }
 
+    public static String getRadio(String search) throws IOException {
+        URL url = null;
+        try {
+            url = new URL("https://www.internet-radio.com/search/?radio=" + search);
+        } catch (Exception e){e.printStackTrace();}
+        assert url != null;
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+            for (String line; (line = reader.readLine()) != null;) {
+                builder.append(line);
+            }
+        } catch (Exception ignored){return "None";}
+        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+        Matcher matcher = pattern.matcher(builder.toString());
+        if (matcher.find()) {
+            return(matcher.group(1));
+        } else {
+            return "None";
+        }
+    }
     @Override
     public String getParams() {
         return "<List>/<Radio Name>/<search> <Name>";

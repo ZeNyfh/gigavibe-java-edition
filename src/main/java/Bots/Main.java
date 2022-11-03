@@ -529,29 +529,6 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static String getRadio(String search) throws IOException {
-        URL url = null;
-        try {
-            url = new URL("https://www.internet-radio.com/search/?radio=" + search);
-        } catch (Exception e){e.printStackTrace();}
-        assert url != null;
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
-            for (String line; (line = reader.readLine()) != null;) {
-                builder.append(line);
-            }
-        } catch (Exception e){e.printStackTrace();}
-        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
-        Matcher matcher = pattern.matcher(builder.toString());
-        if (matcher.find()) {
-            return(matcher.group(1));
-        } else {
-            return "None";
-        }
-    }
-
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
