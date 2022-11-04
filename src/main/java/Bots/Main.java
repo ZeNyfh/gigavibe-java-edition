@@ -368,6 +368,7 @@ public class Main extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
+        eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
         int i = 0;
         String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
         BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
@@ -379,7 +380,25 @@ public class Main extends ListenerAdapter {
                 for (BaseCommand Command : commands) {
                     if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
                         i++;
-                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+                        StringBuilder builder = new StringBuilder();
+                        if (Command.getNames().length == 2){
+                            builder.append("\n`Alias:` ");
+                        } else if (Command.getNames().length > 2) {
+                            builder.append("\n`Aliases:` ");
+                        }
+                        int j = 0;
+                        for (String name : Command.getNames()){
+                            j++;
+                            if (Command.getNames().length == 1 || j == 1){
+                                continue;
+                            }
+                            if (j != Command.getNames().length) {
+                                builder.append("**(").append(name).append(")**, ");
+                            } else {
+                                builder.append("**(").append(name).append(")**");
+                            }
+                        }
+                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + builder + "\n\n");
                     }
                 }
                 break;
@@ -454,13 +473,14 @@ public class Main extends ListenerAdapter {
         GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (voiceState.getChannel() != null) {
             int members = 0;
-            List<Member> a = voiceState.getChannel().getMembers();
-            if (!a.listIterator().next().getUser().isBot()) { //Bots arent members
-                members++;
-            }
-            if (members == 0) { //If alone
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+            for (Member member : voiceState.getChannel().getMembers()) {
+                if (!member.getUser().isBot()) {
+                    members++;
+                }
+                if (members == 0) { //If alone
+                    PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                    addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+                }
             }
         }
     }

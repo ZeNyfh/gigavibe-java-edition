@@ -5,6 +5,8 @@ import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.util.Arrays;
+
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 
@@ -34,12 +36,31 @@ public class CommandHelp extends BaseCommand {
             Arg = "";
         }
         EmbedBuilder embed = new EmbedBuilder();
+        StringBuilder builder = new StringBuilder();
         embed.setColor(botColour);
-        embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument.");
+        embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
         for (BaseCommand Command : commands) {
             if (Command.getCategory().toLowerCase().equals(Arg)) {
                 i++;
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + "\n");
+                builder = new StringBuilder();
+                if (Command.getNames().length == 2){
+                    builder.append("\n`Alias:` ");
+                } else if (Command.getNames().length > 2) {
+                    builder.append("\n`Aliases:` ");
+                }
+                int j = 0;
+                for (String name : Command.getNames()){
+                    j++;
+                    if (Command.getNames().length == 1 || j == 1){
+                        continue;
+                    }
+                    if (j != Command.getNames().length) {
+                        builder.append("**(").append(name).append(")**, ");
+                    } else {
+                        builder.append("**(").append(name).append(")**");
+                    }
+                }
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + builder + "\n\n");
             }
         }
         if ("general".equals(Arg)) {
