@@ -67,6 +67,7 @@ public class CommandNowPlaying extends BaseCommand {
         embed.addField(" ", " ", true);
         if (LoopGuilds.contains(event.getGuild().getId())) {
             embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
+            embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
             embed.addField("\uD83D\uDD02 Track looping:", "❌ **False**", true);
         }

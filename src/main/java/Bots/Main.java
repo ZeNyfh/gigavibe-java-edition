@@ -51,6 +51,8 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
+    public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
@@ -160,6 +162,7 @@ public class Main extends ListenerAdapter {
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             guildTimeouts.put(guild.getIdLong(), 0);
+            trackLoops.put(guild.getIdLong(), 0);
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));

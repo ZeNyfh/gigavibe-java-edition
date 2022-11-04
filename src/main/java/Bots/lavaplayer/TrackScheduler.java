@@ -1,5 +1,6 @@
 package Bots.lavaplayer;
 
+import Bots.Main;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,7 +25,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
     public TrackEndEvent event;
-
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
@@ -48,6 +49,8 @@ public class TrackScheduler extends AudioEventAdapter {
             if (endReason.mayStartNext) {
                 AudioTrack loopTrack = track.makeClone();
                 this.player.startTrack(loopTrack, false);
+                int value = trackLoops.get(userData.getGuild().getIdLong()) + 1; // it had to be a variable, it hated me just adding 1 in the put
+                trackLoops.put(userData.getGuild().getIdLong(), value);
                 return;
             }
         }
@@ -59,6 +62,7 @@ public class TrackScheduler extends AudioEventAdapter {
                 return;
             }
         }
+        trackLoops.put(userData.getGuild().getIdLong(), 0);
         AudioTrack nextTrack = null;
         if (endReason.mayStartNext) {
             nextTrack();
