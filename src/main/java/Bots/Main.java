@@ -308,7 +308,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) {
-        JSONObject config = ConfigManager.GetConfig(guild.getIdLong());
+        JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (int i = 0; i < blockedChannels.size(); ) {
             if (textChannel.getId().equals(blockedChannels.get(i))) {
@@ -321,7 +321,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
-        JSONObject config = ConfigManager.GetConfig(guild.getIdLong());
+        JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;

@@ -21,7 +21,7 @@ import static Bots.Main.printlnTime;
  */
 public class ConfigManager {
     public static String configFolder = "config";
-    public static HashMap<Long, JSONObject> Configs = new HashMap<>();
+    public static HashMap<Object, JSONObject> Configs = new HashMap<>();
 
     public static void Init() {
         boolean madeNewConfig = Paths.get(configFolder).toFile().mkdir();
@@ -39,7 +39,7 @@ public class ConfigManager {
         printlnTime("Loaded config manager");
     }
 
-    private static JSONObject CreateConfigObject() { //Useful base-plate config
+    private static JSONObject CreateGuildObject() { //Useful base-plate config
         JSONObject defaultConfig = new JSONObject();
         defaultConfig.put("BlockedChannels",new JSONArray());
         defaultConfig.put("DJRoles",new JSONArray());
@@ -47,25 +47,44 @@ public class ConfigManager {
         return defaultConfig;
     }
 
-    private static void WriteConfig(long GuildID, JSONObject config) throws IOException { //So I don't have to write it multiple times
-        String filePath = configFolder+"/"+GuildID+".json";
+    private static void WriteConfig(Object Filename, JSONObject config) throws IOException { //So I don't have to write it multiple times
+        String filePath = configFolder+"/"+Filename+".json";
         FileWriter writer = new FileWriter(filePath);
         writer.write(config.toString());
         writer.close();
     }
 
-    private static JSONObject CreateConfig(long GuildID) throws IOException { //Helper to GetConfig, defaults a guild's config
-        String filePath = configFolder+"/"+GuildID+".json";
+    private static JSONObject CreateConfig(String Filename, JSONObject Content) throws IOException { //Creates the actual file behind a config
+        String filePath = configFolder+"/"+Filename+".json";
         boolean madeFile = Paths.get(filePath).toFile().createNewFile();
         if (!madeFile) {
-            printlnTime("Warning: Potentially overwriting an existing config ("+GuildID+")");
+            printlnTime("Warning: Potentially overwriting an existing config ("+Filename+")");
         }
-        JSONObject defaultConfig = CreateConfigObject();
-        WriteConfig(GuildID,defaultConfig);
-        return defaultConfig;
+        WriteConfig(Filename,Content);
+        return Content;
+    }
+    private static JSONObject CreateConfig(String Filename) throws IOException {
+        return CreateConfig(Filename,new JSONObject());
+    }
+    private static JSONObject CreateGuildConfig(long GuildID) throws IOException { //Guild-based config, ensures it has the normal guild content
+        return CreateConfig(String.valueOf(GuildID),CreateGuildObject());
     }
 
-    private static JSONObject ReadConfig(long GuildID) throws IOException { //Helper to GetConfig, safely fetches a guild's config
+    private static JSONObject ReadConfig(String Filename) throws IOException { //Helper to GetConfig, safely fetches a guild's config
+        String filePath = configFolder+"/"+Filename+".json";
+        JSONParser parser = new JSONParser();
+        FileReader reader = new FileReader(filePath);
+        JSONObject config;
+        try {
+            config = (JSONObject) parser.parse(reader);
+        } catch (ParseException exception) { //Useless config, just discard it and start fresh
+            printlnTime("Usurping config for "+Filename+" with a generic one due to bad formatting");
+            return CreateConfig(Filename);
+        }
+        Configs.put(Filename,config);
+        return config;
+    }
+    private static JSONObject ReadGuildConfig(long GuildID) throws IOException { //Helper to GetConfig, safely fetches a guild's config
         //Get the config
         String filePath = configFolder+"/"+GuildID+".json";
         JSONParser parser = new JSONParser();
@@ -75,11 +94,11 @@ public class ConfigManager {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
             printlnTime("Usurping config for "+GuildID+" with a generic one due to bad formatting");
-            return CreateConfig(GuildID);
+            return CreateGuildConfig(GuildID);
         }
 
         //Check the config to ensure it follows the format of any changes
-        JSONObject baseConfig = CreateConfigObject();
+        JSONObject baseConfig = CreateGuildObject();
         for (Object key : baseConfig.keySet()) {
             if (!config.containsKey(key)) {
                 printlnTime("Config " + GuildID + " missing key " + key);
@@ -103,7 +122,29 @@ public class ConfigManager {
         return config;
     }
 
-    public static JSONObject GetConfig(long GuildID) { //Gets the config for the requested GuildID
+    public static JSONObject GetConfig(String Filename) { //Gets the config for the requested GuildID
+        if (Configs.containsKey(Filename)) { //Already loaded
+            return Configs.get(Filename);
+        } else { //Need to load it
+            String filePath = configFolder+"/"+Filename+".json";
+            Path existingConfig = Paths.get(filePath);
+            if (existingConfig.toFile().exists()) { //It exists
+                try {
+                    return ReadConfig(Filename);
+                } catch (IOException exception) {
+                    printlnTime(exception.toString());
+                }
+            } else { //It doesn't exist
+                try {
+                    return CreateConfig(Filename);
+                } catch (IOException exception) {
+                    printlnTime(exception.toString());
+                }
+            }
+        }
+        throw new NullPointerException(); // I guess?
+    }
+    public static JSONObject GetGuildConfig(long GuildID) { //Gets the config for the requested GuildID
         if (Configs.containsKey(GuildID)) { //Already loaded
             return Configs.get(GuildID);
         } else { //Need to load it
@@ -111,13 +152,13 @@ public class ConfigManager {
             Path existingConfig = Paths.get(filePath);
             if (existingConfig.toFile().exists()) { //It exists
                 try {
-                    return ReadConfig(GuildID);
+                    return ReadGuildConfig(GuildID);
                 } catch (IOException exception) {
                     printlnTime(exception.toString());
                 }
             } else { //It doesn't exist
                 try {
-                    return CreateConfig(GuildID);
+                    return CreateGuildConfig(GuildID);
                 } catch (IOException exception) {
                     printlnTime(exception.toString());
                 }
@@ -127,13 +168,13 @@ public class ConfigManager {
     }
 
     public static void SaveConfigs() { //Saves all configs. Should ideally be run just before shutdown
-        for (long GuildID : Configs.keySet()) {
-            JSONObject config = Configs.get(GuildID);
-            //printlnTime(GuildID+" - "+config);
+        for (Object Filename : Configs.keySet()) {
+            JSONObject config = Configs.get(Filename);
+            //printlnTime(Filename+" - "+config);
             try {
-                WriteConfig(GuildID, config);
+                WriteConfig(Filename, config);
             } catch (IOException exception) {
-                printlnTime("Unable to save config for Guild "+GuildID);
+                printlnTime("Unable to save config for Config "+Filename);
                 exception.printStackTrace();
             }
         }
