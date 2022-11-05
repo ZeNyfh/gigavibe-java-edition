@@ -52,10 +52,12 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    private static final HashMap<BaseCommand,HashMap<Long,Long>> ratelimitTracker = new HashMap<>();
 
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
+        ratelimitTracker.put(command,new HashMap<>());
         commands.add(command);
     }
 
@@ -534,7 +536,6 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    private static final HashMap<Long,Long> ratelimitTracker = new HashMap<>();
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
@@ -546,14 +547,14 @@ public class Main extends ListenerAdapter {
             }
             //ratelimit code. ratelimit is per-user across all guilds
             long ratelimit = Command.getRatelimit();
-            long lastRatelimit = ratelimitTracker.getOrDefault(event.getAuthor().getIdLong(),0L);
+            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(event.getAuthor().getIdLong(),0L);
             long curTime = System.currentTimeMillis();
             if (curTime - lastRatelimit < ratelimit) {
                 float timeLeft = (ratelimit - (curTime - lastRatelimit))/1000F;
                 event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue();
                 return false;
             } else {
-                ratelimitTracker.put(event.getAuthor().getIdLong(),curTime);
+                ratelimitTracker.get(Command).put(event.getAuthor().getIdLong(),curTime);
             }
             //run command
             try {
