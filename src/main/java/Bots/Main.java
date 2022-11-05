@@ -348,11 +348,11 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static void printlnTime(String string) {
+    public static void printlnTime(Object message) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        string = dtf.format(now) + " | " + string;
-        System.out.println(string);
+        message = dtf.format(now) + " | " + message;
+        System.out.println(message);
     }
 
     @Override
