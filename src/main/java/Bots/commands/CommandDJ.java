@@ -3,11 +3,15 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
@@ -63,28 +67,29 @@ public class CommandDJ extends BaseCommand {
             eb.setTitle("DJs for " + event.getGuild().getName());
             eb.appendDescription(builder);
             event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
-        } else if (isAdding || isRemoving) { // adding or removing djs. Shares similar code so merge em together
-            if (event.getArgs()[2] == null) {
+        } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar code so we merge them initially
+            if (event.getArgs().length < 3) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
                 return;
             }
             long member = 0;
             long role = 0;
-            try { // check to see if its a role or member or mention of a role or member
-                member = Objects.requireNonNull(event.getJDA().getUserById(event.getArgs()[2])).getIdLong(); // check for userid
-            } catch (Exception ignored) {
+            long suspectedID;
+            Pattern pattern = Pattern.compile("(<@&?)?(\\d+)>?"); //matches <@USER-ID>, <@&ROLE-ID>, and AMBIGUOUS-ID
+            Matcher matcher = pattern.matcher(event.getArgs()[2]);
+            if (matcher.find()) {
+                suspectedID = Long.parseLong(matcher.group(2));
+            } else {
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
+                return;
             }
-            try {
-                role = Objects.requireNonNull(event.getJDA().getRoleById(event.getArgs()[2])).getIdLong(); // check for roleid
-            } catch (Exception ignored) {
+            User suspectedUser = event.getJDA().getUserById(suspectedID);
+            if (suspectedUser != null) {
+                member = suspectedUser.getIdLong(); // check for userid
             }
-            try {
-                if (event.getMessage().getMentions().getRoles().size() != 0) { // check if the message contains a mentioned role
-                    role = event.getMessage().getMentions().getRoles().get(0).getIdLong();
-                } else if (event.getMessage().getMentions().getMembers().size() != 0) { // check if the message contains a mentioned member
-                    member = event.getMessage().getMentions().getMembers().get(0).getIdLong();
-                }
-            } catch (Exception ignored) {
+            Role suspectedRole = event.getJDA().getRoleById(suspectedID);
+            if (suspectedRole != null) {
+                role = suspectedRole.getIdLong(); // check for userid
             }
             if (member == 0 && role == 0) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No valid user or role was given.")).queue();
@@ -96,25 +101,23 @@ public class CommandDJ extends BaseCommand {
                         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This member is already in the DJ list!")).queue();
                     } else {
                         DJUsers.add(member);
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " to the list of DJ members.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedUser.getAsMention() + " to the list of DJ members.")).queue();
                     }
-                }
-                if (role != 0) {
+                } else {
                     if (DJRoles.contains(role)) {
                         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
                     } else {
                         DJRoles.add(role);
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + Objects.requireNonNull(event.getJDA().getRoleById(role)).getAsMention() + " to the list of DJ roles.")).queue();
+                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedRole.getAsMention() + " to the list of DJ roles.")).queue();
                     }
                 }
             } else { //Removing
                 if (member != 0) {
                     DJUsers.remove(member);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + Objects.requireNonNull(event.getJDA().getUserById(member)).getAsMention() + " from the list of DJ members.")).queue();
-                }
-                if (role != 0) {
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedUser.getAsMention() + " from the list of DJ members.")).queue();
+                } else {
                     DJRoles.remove(role);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + Objects.requireNonNull(event.getJDA().getRoleById(role)).getAsMention() + " from the list of DJ roles.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedRole.getAsMention() + " from the list of DJ roles.")).queue();
                 }
             }
         } else {
