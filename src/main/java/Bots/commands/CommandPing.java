@@ -27,9 +27,4 @@ public class CommandPing extends BaseCommand {
     public String getDescription() {
         return "Shows you the bot's ping.";
     }
-
-    @Override
-    public long getRatelimit() {
-        return 0;
-    }
 }

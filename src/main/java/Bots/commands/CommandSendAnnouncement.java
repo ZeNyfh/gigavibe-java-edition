@@ -48,9 +48,4 @@ public class CommandSendAnnouncement extends BaseCommand {
     public String getDescription() {
         return "sends an announcement globally.";
     }
-
-    @Override
-    public long getRatelimit() {
-        return 0;
-    }
 }
