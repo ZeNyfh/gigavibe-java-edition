@@ -105,4 +105,9 @@ public class CommandHelp extends BaseCommand {
     public String getParams() {
         return "[Category]";
     }
+
+    @Override
+    public long getRatelimit() {
+        return 1000;
+    }
 }

@@ -108,6 +108,6 @@ public class CommandSeek extends BaseCommand {
 
     @Override
     public long getRatelimit() {
-        return 5000;
+        return 1000;
     }
 }

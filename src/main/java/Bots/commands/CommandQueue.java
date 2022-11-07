@@ -95,6 +95,6 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public long getRatelimit() {
-        return 5000;
+        return 2500;
     }
 }

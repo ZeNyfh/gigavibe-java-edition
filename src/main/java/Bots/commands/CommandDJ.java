@@ -162,4 +162,9 @@ public class CommandDJ extends BaseCommand {
     public String getParams() {
         return "<list> || <add/remove> <ID/Mention>";
     }
+
+    @Override
+    public long getRatelimit() {
+        return 1000;
+    }
 }

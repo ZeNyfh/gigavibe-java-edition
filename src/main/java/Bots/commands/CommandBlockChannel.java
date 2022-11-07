@@ -94,4 +94,9 @@ public class CommandBlockChannel extends BaseCommand {
     public String getParams() {
         return "<list> || <add/remove> <channelID>";
     }
+
+    @Override
+    public long getRatelimit() {
+        return 1000;
+    }
 }

@@ -484,6 +484,7 @@ public class Main extends ListenerAdapter {
                     members++;
                 }
                 if (members == 0) { //If alone
+                    PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
                     PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
                     addToVote(event.getGuild().getIdLong(), new ArrayList<>());
                 }
@@ -552,7 +553,14 @@ public class Main extends ListenerAdapter {
             long curTime = System.currentTimeMillis();
             if (curTime - lastRatelimit < ratelimit) {
                 float timeLeft = (ratelimit - (curTime - lastRatelimit))/1000F;
-                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue();
+                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue(message -> {
+                    try {
+                        Thread.sleep((long) timeLeft*1000);
+                        message.delete().queue();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                 return false;
             } else {
                 ratelimitTracker.get(Command).put(event.getAuthor().getIdLong(),curTime);
