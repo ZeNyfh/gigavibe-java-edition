@@ -153,6 +153,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandInsert());
 
         ConfigManager.Init();
+        PlayerManager.getInstance();
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)

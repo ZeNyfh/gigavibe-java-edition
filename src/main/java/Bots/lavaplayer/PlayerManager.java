@@ -27,6 +27,7 @@ public class PlayerManager {
     private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
+    private static boolean hasSpotify = false;
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -38,7 +39,13 @@ public class PlayerManager {
         spotifyConfig.setCountryCode("GB");
 
         this.audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(null, "gb", this.audioPlayerManager));
-        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
+        try {
+            this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
+            hasSpotify = true;
+        } catch (Exception exception) {
+            printlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: "+exception);
+            hasSpotify = false;
+        }
 
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
@@ -61,8 +68,8 @@ public class PlayerManager {
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
         if (trackUrl.toLowerCase().contains("spotify")) {
-            if (Dotenv.load().get("SPOTIFYCLIENTID") == null || Dotenv.load().get("SPOTIFYCLIENTSECRET") == null) {
-                textChannel.sendMessageEmbeds(createQuickError("The bot owner has not set up Spotify support.")).queue();
+            if (!hasSpotify) {
+                textChannel.sendMessageEmbeds(createQuickError("The bot does not currently support Spotify.")).queue();
                 return;
             }
         }
