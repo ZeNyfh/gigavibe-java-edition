@@ -54,7 +54,7 @@ public class CommandQueue extends BaseCommand {
         }
         queuePages.put(event.getGuild().getIdLong(), 1);
         String[] args = event.getArgs();
-        if (event.getArgs().length == 2) {
+        if (args.length == 2) {
             if (!args[1].matches("^\\d+$")) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`")).queue();
                 return;

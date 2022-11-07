@@ -79,23 +79,13 @@ public class CommandRadio extends BaseCommand {
             eb.clear();
             return;
         }
-        StringBuilder arg = new StringBuilder("null");
         String argFinal = "";
-        if (event.getArgs().length != 1) {
-            for (int i = 1; i < event.getArgs().length; ) {
-                argFinal = argFinal + " " + event.getArgs()[i];
-                i++;
-            }
-            arg = new StringBuilder(event.getArgs()[1]);
+        for (int i = 1; i < event.getArgs().length; ) {
+            argFinal = argFinal + " " + event.getArgs()[i];
+            i++;
         }
+        StringBuilder arg = new StringBuilder(event.getArgs()[1]);
         String radioURL = null;
-        try {
-            if (event.getArgs()[1] == null) {
-                arg = new StringBuilder();
-            }
-        } catch (Exception ignored) {
-        }
-        assert event.getArgs()[1] != null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             if (event.getArgs().length == 2) {
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No search term given.")).queue();
@@ -116,7 +106,7 @@ public class CommandRadio extends BaseCommand {
             }
             radioURL = getRadio(arg.toString());
         }
-        if (arg.toString().equalsIgnoreCase("list") || event.getArgs().length == 1) {
+        if (arg.toString().equalsIgnoreCase("list")) {
             event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
             eb.clear();
             return;
