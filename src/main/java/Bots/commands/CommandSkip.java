@@ -73,15 +73,7 @@ public class CommandSkip extends BaseCommand {
             addToVote(event.getGuild().getIdLong(), currentVotes); // add the member to the votes
             if (getVotes(event.getGuild().getIdLong()).size() >= VCMembers.size() / 2) {
                 addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // clearing the votes
-//                assert event.getArgs()[1] != null; //This assert makes no sense in its current position and the below being commented out - disabled for now
-//                if (event.getArgs()[1].matches("^\\d+$")){
-//                    for (int i = 0; i < Integer.parseInt(event.getArgs()[1]); i++) {
-//                        musicManager.scheduler.nextTrack();
-//                        //event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("","⏩ Skipped " + event.getArgs()[1] + " tracks.")).queue();
-//                    }
-//                } else {
                 musicManager.scheduler.nextTrack();
-                //}
                 if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
                     channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
                 } else { // if there is something playing after the skip command
