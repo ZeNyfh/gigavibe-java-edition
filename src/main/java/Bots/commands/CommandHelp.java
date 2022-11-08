@@ -41,15 +41,15 @@ public class CommandHelp extends BaseCommand {
             if (Command.getCategory().toLowerCase().equals(Arg)) {
                 i++;
                 builder = new StringBuilder();
-                if (Command.getNames().length == 2){
+                if (Command.getNames().length == 2) {
                     builder.append("\n`Alias:` ");
                 } else if (Command.getNames().length > 2) {
                     builder.append("\n`Aliases:` ");
                 }
                 int j = 0;
-                for (String name : Command.getNames()){
+                for (String name : Command.getNames()) {
                     j++;
-                    if (Command.getNames().length == 1 || j == 1){
+                    if (Command.getNames().length == 1 || j == 1) {
                         continue;
                     }
                     if (j != Command.getNames().length) {

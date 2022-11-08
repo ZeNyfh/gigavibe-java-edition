@@ -21,8 +21,9 @@ public class MessageEvent extends MessageReceivedEvent {
     public String[] getArgs() {
         return this.args;
     }
+
     public String[] getArgs(int Limit) { //Incase last input could be a wild string. Not pre-calculated
-        return this.getMessage().getContentRaw().split(" ",Limit);
+        return this.getMessage().getContentRaw().split(" ", Limit);
     }
 
     public JSONObject getConfig() {

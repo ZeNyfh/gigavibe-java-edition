@@ -54,13 +54,13 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    private static final HashMap<BaseCommand,HashMap<Long,Long>> ratelimitTracker = new HashMap<>();
+    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final JSONObject commandUsageTracker = ConfigManager.GetConfig("usage-stats");
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
-        ratelimitTracker.put(command,new HashMap<>());
-        commandUsageTracker.putIfAbsent(command.getNames()[0],0);
+        ratelimitTracker.put(command, new HashMap<>());
+        commandUsageTracker.putIfAbsent(command.getNames()[0], 0);
         commands.add(command);
     }
 
@@ -205,7 +205,7 @@ public class Main extends ListenerAdapter {
                 }
             }
         };
-        timer.scheduleAtFixedRate(task,0,1000);
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
@@ -388,15 +388,15 @@ public class Main extends ListenerAdapter {
                     if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
                         i++;
                         StringBuilder builder = new StringBuilder();
-                        if (Command.getNames().length == 2){
+                        if (Command.getNames().length == 2) {
                             builder.append("\n`Alias:` ");
                         } else if (Command.getNames().length > 2) {
                             builder.append("\n`Aliases:` ");
                         }
                         int j = 0;
-                        for (String name : Command.getNames()){
+                        for (String name : Command.getNames()) {
                             j++;
-                            if (Command.getNames().length == 1 || j == 1){
+                            if (Command.getNames().length == 1 || j == 1) {
                                 continue;
                             }
                             if (j != Command.getNames().length) {
@@ -550,13 +550,13 @@ public class Main extends ListenerAdapter {
             }
             //ratelimit code. ratelimit is per-user across all guilds
             long ratelimit = Command.getRatelimit();
-            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(event.getAuthor().getIdLong(),0L);
+            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(event.getAuthor().getIdLong(), 0L);
             long curTime = System.currentTimeMillis();
             if (curTime - lastRatelimit < ratelimit) {
-                float timeLeft = (ratelimit - (curTime - lastRatelimit))/1000F;
+                float timeLeft = (ratelimit - (curTime - lastRatelimit)) / 1000F;
                 event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue(message -> {
                     try {
-                        Thread.sleep((long) timeLeft*1000);
+                        Thread.sleep((long) timeLeft * 1000);
                         message.delete().queue();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
@@ -564,11 +564,11 @@ public class Main extends ListenerAdapter {
                 });
                 return false;
             } else {
-                ratelimitTracker.get(Command).put(event.getAuthor().getIdLong(),curTime);
+                ratelimitTracker.get(Command).put(event.getAuthor().getIdLong(), curTime);
             }
             //run command
             String primaryName = Command.getNames()[0];
-            commandUsageTracker.put(primaryName,Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName)))+1); //Nightmarish type conversion but I'm not seeing better
+            commandUsageTracker.put(primaryName, Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {

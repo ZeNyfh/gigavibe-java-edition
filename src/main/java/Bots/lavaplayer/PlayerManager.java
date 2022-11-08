@@ -42,7 +42,7 @@ public class PlayerManager {
             this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
             hasSpotify = true;
         } catch (Exception exception) {
-            printlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: "+exception);
+            printlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
             hasSpotify = false;
         }
 
@@ -179,6 +179,7 @@ public class PlayerManager {
                 loadAndPlay(textChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
                 musicManager.scheduler.nextTrack();
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 }
