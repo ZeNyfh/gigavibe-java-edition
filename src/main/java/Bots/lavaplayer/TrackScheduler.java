@@ -44,7 +44,7 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         TextChannel userData = (TextChannel) track.getUserData();
-        addToVote(userData.getGuild().getIdLong(), new ArrayList<>()); // clearing the vote
+        clearVotes(userData.getGuild().getIdLong());
         if (LoopGuilds.contains(userData.getGuild().getId())) {
             if (endReason.mayStartNext) {
                 AudioTrack loopTrack = track.makeClone();
@@ -94,7 +94,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private void onTrackStuck(AudioTrack nextTrack) {
         TextChannel userData = (TextChannel) nextTrack.getUserData();
-        addToVote(userData.getGuild().getIdLong(), new ArrayList<>()); // clearing the vote
+        clearVotes(userData.getGuild().getIdLong());
         userData.sendMessageEmbeds(createQuickError("Track got stuck, skipping.")).queue();
         nextTrack();
     }

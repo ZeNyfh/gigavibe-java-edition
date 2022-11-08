@@ -41,7 +41,7 @@ public class CommandClearQueue extends BaseCommand {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
             return;
         }
-        addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+        clearVotes(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();

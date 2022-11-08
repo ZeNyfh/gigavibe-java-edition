@@ -167,7 +167,7 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                addToVote(textChannel.getGuild().getIdLong(), new ArrayList<>()); // clearing the votes
+                clearVotes(textChannel.getGuild().getIdLong());
                 textChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();

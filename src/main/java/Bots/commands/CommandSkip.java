@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
-import static java.lang.Math.round;
 
 public class CommandSkip extends BaseCommand {
 
@@ -45,55 +44,47 @@ public class CommandSkip extends BaseCommand {
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-
         if (audioPlayer.getPlayingTrack() == null) {
             channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
+            return;
+        }
+
+        List<Member> VCMembers = new ArrayList<>(); //Filter to remove bots
+        List<Member> UnfilteredMembers = Objects.requireNonNull(selfVoiceState.getChannel()).getMembers();
+        for (int i = 0; i < UnfilteredMembers.size(); ) {
+            if (!UnfilteredMembers.get(i).getUser().isBot()) {
+                VCMembers.add(UnfilteredMembers.get(i));
+            }
+            i++;
+        }
+        List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
+        if (currentVotes.contains(event.getMember())) {
+            channel.sendMessageEmbeds(createQuickError("You have already voted to skip.")).queue();
+            return;
+        }
+        currentVotes.add(event.getMember());
+        if (currentVotes.size() >= VCMembers.size() / 2) {
+            clearVotes(event.getGuild().getIdLong());
+            musicManager.scheduler.nextTrack();
+            if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
+                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
+            } else { // if there is something playing after the skip command
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(botColour);
+                if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
+                    eb.setTitle("⏩ Skipped the track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                } else {
+                    eb.setTitle("⏩ Skipped the track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                    eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
+                }
+                if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
+                    eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
+                }
+                eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+                event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+            }
         } else {
-            ArrayList<Member> VCMembers = new ArrayList<>(); // the current members of the voice channel.
-            for (int i = 0; i < Objects.requireNonNull(selfVoiceState.getChannel()).getMembers().size(); ) {
-                if (!selfVoiceState.getChannel().getMembers().get(i).getUser().isBot()) {
-                    VCMembers.add(selfVoiceState.getChannel().getMembers().get(i));
-                }
-                i++;
-            }
-            try {
-                if (getVotes(event.getGuild().getIdLong()).contains(event.getMember()) && getVotes(event.getGuild().getIdLong()).size() < VCMembers.size() / 2) {
-                    channel.sendMessageEmbeds(createQuickError("You have already voted to skip.")).queue();
-                    return;
-                }
-            } catch (Exception ignored) {
-            }
-            List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
-            if (getVotes(event.getGuild().getIdLong()) != null) {
-                currentVotes.add(event.getMember());
-            } else {
-                currentVotes = new ArrayList<>();
-                currentVotes.add(event.getMember());
-            }
-            addToVote(event.getGuild().getIdLong(), currentVotes); // add the member to the votes
-            if (getVotes(event.getGuild().getIdLong()).size() >= VCMembers.size() / 2) {
-                addToVote(event.getGuild().getIdLong(), new ArrayList<>()); // clearing the votes
-                musicManager.scheduler.nextTrack();
-                if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
-                    channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
-                } else { // if there is something playing after the skip command
-                    EmbedBuilder eb = new EmbedBuilder();
-                    eb.setColor(botColour);
-                    if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
-                        eb.setTitle("⏩ Skipped the track to __**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
-                    } else {
-                        eb.setTitle("⏩ Skipped the track to __**Unknown Title**__", musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
-                        eb.appendDescription("**Now playing:**" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n");
-                    }
-                    if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
-                        eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
-                    }
-                    eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
-                    event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
-                }
-            } else {
-                channel.sendMessageEmbeds(createQuickEmbed("✅ Voted to skip the track", getVotes(event.getGuild().getIdLong()).size() + " of " + round(VCMembers.size() / 2) + " needed to skip.")).queue();
-            }
+            channel.sendMessageEmbeds(createQuickEmbed("✅ Voted to skip the track", currentVotes.size() + " of " + VCMembers.size() / 2 + " needed to skip.")).queue();
         }
     }
 

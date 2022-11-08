@@ -298,14 +298,12 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
-    public static void addToVote(Long guildID, List<Member> members) {
-        if (members.size() == 0) {
-            skips.put(guildID, new ArrayList<>());
-        }
-        skips.put(guildID, members);
+    public static void clearVotes(Long guildID) {
+        skips.put(guildID, new ArrayList<>());
     }
 
     public static List<Member> getVotes(Long guildID) {
+        skips.putIfAbsent(guildID, new ArrayList<>());
         return skips.get(guildID);
     }
 
@@ -487,7 +485,7 @@ public class Main extends ListenerAdapter {
                 if (members == 0) { //If alone
                     PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
                     PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                    addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+                    clearVotes(event.getGuild().getIdLong());
                 }
             }
         }
@@ -498,7 +496,7 @@ public class Main extends ListenerAdapter {
         if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
             if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+                clearVotes(event.getGuild().getIdLong());
             }
         }
     }
@@ -514,7 +512,7 @@ public class Main extends ListenerAdapter {
             List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
             if (currentVotes != null) {
                 currentVotes.remove(event.getMember());
-                addToVote(event.getGuild().getIdLong(), currentVotes);
+                clearVotes(event.getGuild().getIdLong());
             }
         }
         if (event.getMember() == event.getGuild().getSelfMember()) {
@@ -535,7 +533,7 @@ public class Main extends ListenerAdapter {
         if (botChannelMemberCount == 0) {
             PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
             event.getGuild().getAudioManager().closeAudioConnection();
-            addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+            clearVotes(event.getGuild().getIdLong());
         }
     }
 

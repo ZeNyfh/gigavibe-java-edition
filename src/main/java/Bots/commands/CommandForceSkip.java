@@ -64,7 +64,7 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
                 channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue")).queue();
-                addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+                clearVotes(event.getGuild().getIdLong());
                 return;
             } else {
                 for (int i = 0; i < Integer.parseInt(event.getArgs()[1]) - 1; i++) {
@@ -82,7 +82,7 @@ public class CommandForceSkip extends BaseCommand {
                 channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track")).queue();
             }
         }
-        addToVote(event.getGuild().getIdLong(), new ArrayList<>());
+        clearVotes(event.getGuild().getIdLong());
     }
 
     @Override
