@@ -5,8 +5,6 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import java.util.ArrayList;
-
 import static Bots.Main.*;
 
 public class CommandDisconnect extends BaseCommand {

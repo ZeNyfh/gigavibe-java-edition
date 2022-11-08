@@ -1,6 +1,5 @@
 package Bots.lavaplayer;
 
-import Bots.Main;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
@@ -9,16 +8,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static Bots.Main.*;
-
-//import static Bots.Main.LoopGuilds;
-//import static Bots.commands.CommandLoop.loop;
-//import static Bots.commands.CommandLoopQueue.loopQueue;
 
 public class TrackScheduler extends AudioEventAdapter {
 

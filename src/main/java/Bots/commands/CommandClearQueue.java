@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static Bots.Main.*;
