@@ -6,10 +6,13 @@ import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.IsChannelBlocked;
@@ -84,7 +87,7 @@ public class CommandPlay extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Plays songs or playlists from: youtube, soundcloud, bandcamp, twitch, vimeo, spotify, apple music, http urls and discord attachments.";
+        return "Plays songs or playlists from many sources including yt, soundcloud spotify and discord/http urls.";
     }
 
     @Override

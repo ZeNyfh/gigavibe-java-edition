@@ -14,12 +14,17 @@ import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +67,7 @@ public class Main extends ListenerAdapter {
         ratelimitTracker.put(command, new HashMap<>());
         commandUsageTracker.putIfAbsent(command.getNames()[0], 0);
         commands.add(command);
+
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException {
@@ -539,6 +545,38 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
+        if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
+            long ratelimit = Command.getRatelimit();
+            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(Objects.requireNonNull(event.getInteraction().getMember()).getIdLong(), 0L);
+            long curTime = System.currentTimeMillis();
+            if (curTime - lastRatelimit < ratelimit) {
+                float timeLeft = (ratelimit - (curTime - lastRatelimit)) / 1000F;
+                event.getInteraction().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue(message -> {
+                    try {
+                        Thread.sleep((long) timeLeft * 1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                printlnTime("1");
+                return false;
+            } else {
+                ratelimitTracker.get(Command).put(event.getInteraction().getMember().getIdLong(), curTime);
+            }
+            //run command
+            String primaryName = Command.getNames()[0];
+            commandUsageTracker.put(primaryName, Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+            try {
+                Command.executeSlash(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
+    }
+
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         if (commandLower.startsWith(matchTerm)) {
@@ -583,6 +621,27 @@ public class Main extends ListenerAdapter {
     public void onShutdown(@NotNull ShutdownEvent event) {
         event.getJDA().getAudioManagers().clear();
     }
+
+    @Override
+    public void onGuildReady(@NotNull GuildReadyEvent event) {
+        List<CommandData> data = new ArrayList<>();
+        for (BaseCommand Command : commands){
+            data.add(Commands.slash(Command.getNames()[0], Command.getDescription())
+                    );
+        }
+        event.getGuild().updateCommands().addCommands(data).queue();
+    }
+
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        for (BaseCommand Command : commands) {
+            if (processSlashCommand(Command, event)) {
+                return;
+            }
+        }
+    }
+
+
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {

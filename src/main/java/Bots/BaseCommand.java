@@ -1,5 +1,6 @@
 package Bots;
 
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import java.io.IOException;
 
 /**
@@ -9,6 +10,10 @@ public class BaseCommand {
 
     public void execute(MessageEvent event) throws IOException { //Execution code ran for users
         System.out.println("Default command..?");
+    }
+
+    public void executeSlash(SlashCommandInteractionEvent slashEvent) throws IOException {
+        System.out.println("Default slash command..?");
     }
 
     public void Init() { //Optional initialisation stuff if something is required on start but doesn't have to be in main

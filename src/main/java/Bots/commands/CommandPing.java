@@ -2,6 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -11,6 +12,12 @@ public class CommandPing extends BaseCommand {
     public void execute(MessageEvent event) {
         long time = currentTimeMillis();
         event.getChannel().asTextChannel().sendMessage(".").queue(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time).queue());
+    }
+
+    @Override
+    public void executeSlash(SlashCommandInteractionEvent event) {
+        long time = currentTimeMillis();
+        event.reply(".").queue(response -> response.editOriginalFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
 
     @Override
