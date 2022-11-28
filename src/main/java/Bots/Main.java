@@ -22,7 +22,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -625,9 +624,8 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
-        for (BaseCommand Command : commands){
-            data.add(Commands.slash(Command.getNames()[0], Command.getDescription())
-                    );
+        for (BaseCommand Command : commands) {
+            data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
         }
         event.getGuild().updateCommands().addCommands(data).queue();
     }
@@ -640,8 +638,6 @@ public class Main extends ListenerAdapter {
             }
         }
     }
-
-
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
