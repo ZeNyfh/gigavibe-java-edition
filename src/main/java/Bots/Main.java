@@ -547,24 +547,32 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    private float handleRateLimit(BaseCommand Command, Member member) {
+        long ratelimit = Command.getRatelimit();
+        long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(member.getIdLong(), 0L);
+        long curTime = System.currentTimeMillis();
+        float timeLeft = (ratelimit - (curTime - lastRatelimit)) / 1000F;
+        if (timeLeft > 0f) {
+            return timeLeft;
+        } else {
+            ratelimitTracker.get(Command).put(member.getIdLong(), curTime);
+            return -1F;
+        }
+    }
+
     private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
-            long ratelimit = Command.getRatelimit();
-            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(Objects.requireNonNull(event.getInteraction().getMember()).getIdLong(), 0L);
-            long curTime = System.currentTimeMillis();
-            if (curTime - lastRatelimit < ratelimit) {
-                float timeLeft = (ratelimit - (curTime - lastRatelimit)) / 1000F;
-                event.getInteraction().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue(message -> {
+            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
+            if (ratelimitTime > 0) {
+                event.getInteraction().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> {
                     try {
-                        Thread.sleep((long) timeLeft * 1000);
+                        Thread.sleep((long) ratelimitTime * 1000);
+                        message.deleteOriginal().queue();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 });
-                printlnTime("1");
                 return false;
-            } else {
-                ratelimitTracker.get(Command).put(event.getInteraction().getMember().getIdLong(), curTime);
             }
             //run command
             String primaryName = Command.getNames()[0];
@@ -589,22 +597,17 @@ public class Main extends ListenerAdapter {
                 }
             }
             //ratelimit code. ratelimit is per-user across all guilds
-            long ratelimit = Command.getRatelimit();
-            long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(event.getAuthor().getIdLong(), 0L);
-            long curTime = System.currentTimeMillis();
-            if (curTime - lastRatelimit < ratelimit) {
-                float timeLeft = (ratelimit - (curTime - lastRatelimit)) / 1000F;
-                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + timeLeft + " seconds.")).queue(message -> {
+            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
+            if (ratelimitTime > 0) {
+                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> {
                     try {
-                        Thread.sleep((long) timeLeft * 1000);
+                        Thread.sleep((long) ratelimitTime * 1000);
                         message.delete().queue();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 });
                 return false;
-            } else {
-                ratelimitTracker.get(Command).put(event.getAuthor().getIdLong(), curTime);
             }
             //run command
             String primaryName = Command.getNames()[0];
