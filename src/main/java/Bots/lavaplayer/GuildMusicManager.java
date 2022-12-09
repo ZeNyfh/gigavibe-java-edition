@@ -2,14 +2,11 @@ package Bots.lavaplayer;
 
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
-import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class GuildMusicManager extends AudioEventAdapter {
@@ -31,6 +28,7 @@ public class GuildMusicManager extends AudioEventAdapter {
     public AudioPlayerSendHandler getSendHandler() {
         return sendHandler;
     }
+
     public void applyFilters() {
         audioPlayer.setFilterFactory(
                 (track, format, output) -> {
