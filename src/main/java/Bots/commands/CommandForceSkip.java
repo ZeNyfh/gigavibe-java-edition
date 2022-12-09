@@ -5,10 +5,13 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -66,10 +69,9 @@ public class CommandForceSkip extends BaseCommand {
                 clearVotes(event.getGuild().getIdLong());
                 return;
             } else {
-                for (int i = 0; i < Integer.parseInt(event.getArgs()[1]) - 1; i++) {
-                    musicManager.scheduler.queue.remove();
-                }
-                musicManager.scheduler.nextTrack();
+                List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
+                musicManager.scheduler.queue.clear();
+                musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
                 event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
             }
         } else {

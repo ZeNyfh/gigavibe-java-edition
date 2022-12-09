@@ -68,12 +68,11 @@ public class PlayerManager {
     public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                textChannel.sendMessageEmbeds(createQuickError("The bot does not currently support Spotify.")).queue();
+                textChannel.sendMessageEmbeds(createQuickError("There was an error and the spotify track could not load.")).queue();
                 return;
             }
         }
         final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
-
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {

@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -142,6 +143,7 @@ public class ConfigManager {
                     return CreateConfig(Filename);
                 } catch (IOException exception) {
                     printlnTime(exception.toString());
+                    exception.printStackTrace();
                 }
             }
         }

@@ -114,10 +114,12 @@ public class Main extends ListenerAdapter {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
         }
+        printlnTime(dotenv.get("COLOUR"));
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
             printlnTime("Colour was invalid.");
+            e.printStackTrace();
             return;
         }
 
@@ -158,6 +160,7 @@ public class Main extends ListenerAdapter {
         registerCommand(new CommandLocalPlay());
         registerCommand(new CommandSendAnnouncement());
         registerCommand(new CommandInsert());
+        registerCommand(new CommandPitch());
 
         ConfigManager.Init();
         PlayerManager.getInstance();
