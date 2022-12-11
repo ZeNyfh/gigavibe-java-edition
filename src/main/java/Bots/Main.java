@@ -1,5 +1,6 @@
 package Bots;
 
+import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -121,7 +122,7 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return;
         }
-
+        
         List<Class<?>> classes = new ArrayList<>();
         Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
         while (resources.hasMoreElements()) {
@@ -134,8 +135,8 @@ public class Main extends ListenerAdapter {
                     if (classFile.getName().endsWith(".class")) {
                         classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
                     }
-                    break;
                 }
+                break;
             } catch (Exception ignored){}
         }
 
