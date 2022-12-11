@@ -1,6 +1,5 @@
 package Bots;
 
-import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -35,6 +34,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -66,10 +67,9 @@ public class Main extends ListenerAdapter {
         ratelimitTracker.put(command, new HashMap<>());
         commandUsageTracker.putIfAbsent(command.getNames()[0], 0);
         commands.add(command);
-
     }
 
-    public static void main(String[] args) throws InterruptedException, LoginException, IOException {
+    public static void main(String[] args) throws InterruptedException, LoginException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         File file = new File(".env");
         if (!file.exists()) {
             printlnTime(file.getName() + " doesn't exist, creating now.");
@@ -114,7 +114,6 @@ public class Main extends ListenerAdapter {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
         }
-        printlnTime(dotenv.get("COLOUR"));
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
@@ -123,44 +122,27 @@ public class Main extends ListenerAdapter {
             return;
         }
 
-        //General
-        registerCommand(new CommandPing());
-        registerCommand(new CommandHelp());
-        registerCommand(new CommandGithub());
-        registerCommand(new CommandBug());
-        registerCommand(new CommandInvite());
+        List<Class<?>> classes = new ArrayList<>();
+        Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
+        while (resources.hasMoreElements()) {
+            URL url = resources.nextElement();
+            if (url.getPath().contains("classes")){
+                url = new URL("file:" + url.getPath() + "Bots/commands/");
+            }
+            try {
+                for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
+                    if (classFile.getName().endsWith(".class")) {
+                        classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                    }
+                    break;
+                }
+            } catch (Exception ignored){}
+        }
 
-        //Music
-        registerCommand(new CommandPlay());
-        registerCommand(new CommandLoopQueue());
-        registerCommand(new CommandLoop());
-        registerCommand(new CommandSkip());
-        registerCommand(new CommandNowPlaying());
-        registerCommand(new CommandVideoDL());
-        registerCommand(new CommandAudioDL());
-        registerCommand(new CommandQueue());
-        registerCommand(new CommandRadio());
-
-        //DJ
-        registerCommand(new CommandDisconnect());
-        registerCommand(new CommandShuffle());
-        registerCommand(new CommandForceSkip());
-        registerCommand(new CommandRemove());
-        registerCommand(new CommandClearQueue());
-        registerCommand(new CommandVolume());
-        registerCommand(new CommandSeek());
-        registerCommand(new CommandJoin());
-
-        //Admin
-        registerCommand(new CommandBlockChannel());
-        registerCommand(new CommandBotInfo());
-        registerCommand(new CommandDJ());
-
-        //Dev
-        registerCommand(new CommandLocalPlay());
-        registerCommand(new CommandSendAnnouncement());
-        registerCommand(new CommandInsert());
-        registerCommand(new CommandPitch());
+        // registering all the commands
+        for (Class<?> commandClass : classes) {
+            registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
+        }
 
         ConfigManager.Init();
         PlayerManager.getInstance();
