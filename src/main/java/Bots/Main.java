@@ -645,7 +645,9 @@ public class Main extends ListenerAdapter {
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
         for (BaseCommand Command : commands) {
-            data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
+            if (Command.registerSlash()) {
+                data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
+            }
         }
         event.getGuild().updateCommands().addCommands(data).queue();
     }
