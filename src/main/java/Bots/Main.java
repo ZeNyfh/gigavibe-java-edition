@@ -365,11 +365,13 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static void printlnTime(Object message) {
+    public static void printlnTime(Object... message) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        message = dtf.format(now) + " | " + message;
-        System.out.println(message);
+        String finalMessage = dtf.format(LocalDateTime.now()) + " |";
+        for (Object segment : message) {
+            finalMessage = finalMessage + " " + segment;
+        }
+        System.out.println(finalMessage);
     }
 
     @Override
