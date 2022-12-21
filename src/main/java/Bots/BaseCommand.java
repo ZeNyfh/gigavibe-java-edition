@@ -6,6 +6,7 @@ import java.io.IOException;
 
 /**
  * Custom base command class used by all commands
+ *
  * @author 9382
  * @version 1.1
  */

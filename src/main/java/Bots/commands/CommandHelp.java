@@ -106,7 +106,7 @@ public class CommandHelp implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"category","Subcategory of commands to get information on")
+                new OptionData(OptionType.STRING, "category", "Subcategory of commands to get information on")
         };
     }
 

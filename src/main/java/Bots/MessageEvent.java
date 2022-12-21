@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 /**
  * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
  * Can take either a SlashCommandInteractionEvent or MessageReceivedEvent as the input
+ *
  * @author 9382
  * @version 2
  */
@@ -62,7 +63,7 @@ public class MessageEvent {
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
-        args.add("/"+event.getCommandPath());
+        args.add("/" + event.getCommandPath());
         List<Message.Attachment> Attachments = new ArrayList<>();
         int i = 0;
         for (OptionMapping option : options) {
@@ -75,7 +76,7 @@ public class MessageEvent {
         this.args = args.toArray(new String[0]);
         this.options = options.toArray(new OptionMapping[0]);
         this.attachments = Attachments;
-        this.rawContent = String.join(" ",args);
+        this.rawContent = String.join(" ", args);
 
         if (event.getGuild() != null) {
             this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());

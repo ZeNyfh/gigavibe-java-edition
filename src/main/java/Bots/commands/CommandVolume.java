@@ -78,7 +78,7 @@ public class CommandVolume implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.INTEGER,"volume","The volume to set (0-500)",true)
+                new OptionData(OptionType.INTEGER, "volume", "The volume to set (0-500)", true)
         };
     }
 

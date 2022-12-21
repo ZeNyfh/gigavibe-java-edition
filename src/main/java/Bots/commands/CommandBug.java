@@ -39,7 +39,7 @@ public class CommandBug implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"message","The bug report",true)
+                new OptionData(OptionType.STRING, "message", "The bug report", true)
         };
     }
 

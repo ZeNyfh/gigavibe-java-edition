@@ -70,7 +70,7 @@ public class CommandPitch implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.NUMBER,"pitch","The pitch to set (0-5)",true)
+                new OptionData(OptionType.NUMBER, "pitch", "The pitch to set (0-5)", true)
         };
     }
 

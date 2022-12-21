@@ -152,7 +152,7 @@ public class CommandRadio implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"what-are-optional-args","IDK tbh, just guess")
+                new OptionData(OptionType.STRING, "what-are-optional-args", "IDK tbh, just guess")
         };
     }
 

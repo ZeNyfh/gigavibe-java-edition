@@ -44,7 +44,7 @@ public class CommandSendAnnouncement implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"message","The announcement to send",true)
+                new OptionData(OptionType.STRING, "message", "The announcement to send", true)
         };
     }
 

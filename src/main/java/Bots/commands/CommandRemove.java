@@ -65,7 +65,7 @@ public class CommandRemove implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.INTEGER,"count","The amount of tracks to remove",true)
+                new OptionData(OptionType.INTEGER, "count", "The amount of tracks to remove", true)
         };
     }
 

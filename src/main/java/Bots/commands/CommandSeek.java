@@ -91,7 +91,7 @@ public class CommandSeek implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"timestamp","Timestamp to seek to, E.g. 1:54",true)
+                new OptionData(OptionType.STRING, "timestamp", "Timestamp to seek to, E.g. 1:54", true)
         };
     }
 

@@ -93,7 +93,7 @@ public class CommandQueue implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.INTEGER,"page-number","Page number of the queue")
+                new OptionData(OptionType.INTEGER, "page-number", "Page number of the queue")
         };
     }
 

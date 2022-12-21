@@ -509,7 +509,8 @@ public class Main extends ListenerAdapter {
                         PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
                         clearVotes(event.getGuild().getIdLong());
                         event.getGuild().getAudioManager().closeAudioConnection();
-                    } catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }

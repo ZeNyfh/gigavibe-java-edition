@@ -92,8 +92,8 @@ public class CommandPlay implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.ATTACHMENT,"file","The file to play"),
-                new OptionData(OptionType.STRING,"track","The track to play if no file is provided")
+                new OptionData(OptionType.ATTACHMENT, "file", "The file to play"),
+                new OptionData(OptionType.STRING, "track", "The track to play if no file is provided")
         };
     }
 

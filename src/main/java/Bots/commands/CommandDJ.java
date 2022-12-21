@@ -145,7 +145,7 @@ public class CommandDJ implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING,"what-are-optional-args","IDK man")
+                new OptionData(OptionType.STRING, "what-are-optional-args", "IDK man")
         };
     }
 
