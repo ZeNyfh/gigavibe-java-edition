@@ -1,6 +1,5 @@
 package Bots;
 
-import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -15,9 +14,9 @@ import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -38,7 +37,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -53,6 +51,8 @@ import static java.lang.System.currentTimeMillis;
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT};
+    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
+    private static final JSONObject commandUsageTracker = ConfigManager.GetConfig("usage-stats");
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String botToken = "";
@@ -64,8 +64,6 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
-    private static final JSONObject commandUsageTracker = ConfigManager.GetConfig("usage-stats");
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
@@ -134,12 +132,12 @@ public class Main extends ListenerAdapter {
             boolean jarFileCheck = false;
             try {
                 jarFile = new JarFile(tempJarPath.substring(5));
-            }catch (FileNotFoundException ignored){
+            } catch (FileNotFoundException ignored) {
                 printlnTime("detected process in IDE, registering commands in a different way...");
                 Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
                 while (resources.hasMoreElements()) {
                     URL url = resources.nextElement();
-                    if (url.getPath().contains("classes")){
+                    if (url.getPath().contains("classes")) {
                         url = new URL("file:" + url.getPath() + "Bots/commands/");
                     }
                     try {
@@ -149,7 +147,8 @@ public class Main extends ListenerAdapter {
                             }
                         }
                         break;
-                    } catch (Exception ignored1){}
+                    } catch (Exception ignored1) {
+                    }
                 }
                 jarFileCheck = true;
             }
@@ -169,7 +168,9 @@ public class Main extends ListenerAdapter {
                 registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
                 printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
             }
-        } catch (Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ConfigManager.Init();
         PlayerManager.getInstance();
 
@@ -493,7 +494,7 @@ public class Main extends ListenerAdapter {
     }
 
     @Override
-    public void onGenericGuildVoice(@NotNull GenericGuildVoiceEvent event) {
+    public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
         //Checks if the bot is now alone
         GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (voiceState.getChannel() != null) {
@@ -503,9 +504,12 @@ public class Main extends ListenerAdapter {
                     members++;
                 }
                 if (members == 0) { //If alone
-                    PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-                    PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                    clearVotes(event.getGuild().getIdLong());
+                    try {
+                        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
+                        PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                        clearVotes(event.getGuild().getIdLong());
+                        event.getGuild().getAudioManager().closeAudioConnection();
+                    } catch (Exception ignored){}
                 }
             }
         }

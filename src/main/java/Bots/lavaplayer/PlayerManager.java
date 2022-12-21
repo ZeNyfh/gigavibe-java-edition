@@ -24,9 +24,9 @@ import static Bots.Main.*;
 public class PlayerManager {
 
     private static PlayerManager INSTANCE;
+    private static boolean hasSpotify = false;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
-    private static boolean hasSpotify = false;
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();

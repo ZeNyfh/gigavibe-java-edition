@@ -1,11 +1,10 @@
 package Bots.lavaplayer;
 
 public class GuildMusicParameters {
-    private double bass = 1d;
-    private double speed = 1d;
     public double pitch = 1d;
     public double depth = 1d;
-
+    private double bass = 1d;
+    private double speed = 1d;
 
     public double getBass() {
         return bass;

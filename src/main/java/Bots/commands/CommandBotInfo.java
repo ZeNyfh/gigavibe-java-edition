@@ -30,7 +30,7 @@ public class CommandBotInfo extends BaseCommand {
         for (BaseCommand ignored : commands) {
             CommandCount++;
         }
-        for (Guild guild : event.getJDA().getGuilds()){
+        for (Guild guild : event.getJDA().getGuilds()) {
             if (Objects.requireNonNull(guild.getSelfMember().getVoiceState()).inAudioChannel()) {
                 vcCount++;
             }
