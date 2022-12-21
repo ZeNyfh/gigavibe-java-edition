@@ -27,7 +27,7 @@ public class CommandDisconnect extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"disconnect", "fu" + "ckoff", "fu" + "ck off", "shutup", "dc", "stop"};
+        return new String[]{"disconnect", "fu" + "ckoff", "fu" + "ck off", "shutup", "dc", "stop", "leave"};
     }
 
     @Override

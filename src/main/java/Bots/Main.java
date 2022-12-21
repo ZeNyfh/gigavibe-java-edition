@@ -33,15 +33,19 @@ import org.json.simple.JSONObject;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
@@ -55,7 +59,7 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
-    public static String botVersion = "03.11.06"; // YY.MM.DD
+    public static String botVersion = "22.12.21"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -122,29 +126,50 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return;
         }
-        
-        List<Class<?>> classes = new ArrayList<>();
-        Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
-        while (resources.hasMoreElements()) {
-            URL url = resources.nextElement();
-            if (url.getPath().contains("classes")){
-                url = new URL("file:" + url.getPath() + "Bots/commands/");
-            }
+        try {
+            List<Class<?>> classes = new ArrayList<>();
+            String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            printlnTime(tempJarPath);
+            JarFile jarFile = null;
+            boolean jarFileCheck = false;
             try {
-                for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
-                    if (classFile.getName().endsWith(".class")) {
-                        classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                jarFile = new JarFile(tempJarPath.substring(5));
+            }catch (FileNotFoundException ignored){
+                printlnTime("detected process in IDE, registering commands in a different way...");
+                Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
+                while (resources.hasMoreElements()) {
+                    URL url = resources.nextElement();
+                    if (url.getPath().contains("classes")){
+                        url = new URL("file:" + url.getPath() + "Bots/commands/");
+                    }
+                    try {
+                        for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
+                            if (classFile.getName().endsWith(".class")) {
+                                classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                            }
+                        }
+                        break;
+                    } catch (Exception ignored1){}
+                }
+                jarFileCheck = true;
+            }
+            if (!jarFileCheck) {
+                Enumeration<JarEntry> resources = jarFile.entries();
+                while (resources.hasMoreElements()) {
+                    JarEntry url = resources.nextElement();
+                    if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command")) {
+                        classes.add(ClassLoader.getSystemClassLoader().loadClass(url.getName().substring(0, url.getName().length() - 6).replaceAll("/", ".")));
                     }
                 }
-                break;
-            } catch (Exception ignored){}
-        }
+                jarFile.close();
+            }
 
-        // registering all the commands
-        for (Class<?> commandClass : classes) {
-            registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-        }
-
+            // registering all the commands
+            for (Class<?> commandClass : classes) {
+                registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
+                printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+            }
+        } catch (Exception e){e.printStackTrace();}
         ConfigManager.Init();
         PlayerManager.getInstance();
 
