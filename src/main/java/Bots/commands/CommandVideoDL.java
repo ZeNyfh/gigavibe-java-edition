@@ -26,7 +26,7 @@ public class CommandVideoDL extends BaseCommand {
         }
         final String ytdlp;
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-            ytdlp = "modules/yt-dlp_linux";
+            ytdlp = "yt-dlp";
         } else {
             ytdlp = "modules/yt-dlp.exe";
         }
@@ -37,10 +37,9 @@ public class CommandVideoDL extends BaseCommand {
             Process p = null;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
-                p = Runtime.getRuntime().exec(String.format(
-                        "%s --merge-output-format mp4 --audio-format vorbis -o \"%s\" \"%s\" --match-filter \"duration < 3600\" --no-playlist",
-                        ytdlp, filename, filteredUrl
-                ));
+                p = Runtime.getRuntime().exec(new String[]{
+                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", filename, "--match-filter", "duration < 3600", "--no-playlist", filteredUrl
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
