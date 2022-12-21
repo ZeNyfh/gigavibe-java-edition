@@ -19,6 +19,10 @@ public class CommandPing extends BaseCommand {
         long time = currentTimeMillis();
         event.reply(".").queue(response -> response.editOriginalFormat("ping: %dms", currentTimeMillis() - time).queue());
     }
+    @Override
+    public boolean registerSlash() {
+        return true;
+    }
 
     @Override
     public String getCategory() {

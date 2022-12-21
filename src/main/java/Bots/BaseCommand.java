@@ -16,6 +16,9 @@ public class BaseCommand {
     public void executeSlash(SlashCommandInteractionEvent slashEvent) throws IOException {
         System.out.println("Default slash command..?");
     }
+    public boolean registerSlash() {
+        return false;
+    }
 
     public void Init() { //Optional initialisation stuff if something is required on start but doesn't have to be in main
     }

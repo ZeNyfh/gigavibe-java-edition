@@ -1,6 +1,5 @@
 package Bots;
 
-import Bots.commands.*;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -38,7 +37,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -641,7 +639,9 @@ public class Main extends ListenerAdapter {
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
         for (BaseCommand Command : commands) {
-            data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
+            if (Command.registerSlash()) {
+                data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
+            }
         }
         event.getGuild().updateCommands().addCommands(data).queue();
     }
