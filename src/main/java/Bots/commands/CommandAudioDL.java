@@ -3,6 +3,8 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
@@ -16,7 +18,7 @@ import java.util.Objects;
 import static Bots.Main.*;
 import static java.lang.String.valueOf;
 
-public class CommandAudioDL extends BaseCommand {
+public class CommandAudioDL implements BaseCommand {
     public static int queue = 0;
     Message[] messageVar = new Message[1];
 
@@ -69,7 +71,7 @@ public class CommandAudioDL extends BaseCommand {
                     assert messageVar[0] != null;
                     messageVar[0].delete().queue();
                     try {
-                        event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
+                        event.replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
                     } catch (Exception e) {
                         e.printStackTrace();
                         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be sent.")).queue();
@@ -122,7 +124,10 @@ public class CommandAudioDL extends BaseCommand {
                         finalFile = new File("auddl/" + filename + "K.ogg");
                         assert messageVar[0] != null;
                         File finalFile1 = finalFile;
-                        event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()));
+                        event.replyFiles(
+                                a -> messageVar[0].delete().queue(b -> finalFile1.getAbsoluteFile().delete()),
+                                FileUpload.fromData(finalFile.getAbsoluteFile())
+                        );
                     } catch (Exception e) {
                         messageVar[0].editMessageEmbeds(createQuickError("Could not send the file.")).queue();
                         finalFile.delete();
@@ -165,8 +170,10 @@ public class CommandAudioDL extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<URL>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"url","URL of the audio to download",true)
+        };
     }
 
     @Override

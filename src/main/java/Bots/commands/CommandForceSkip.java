@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandForceSkip extends BaseCommand {
+public class CommandForceSkip implements BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {

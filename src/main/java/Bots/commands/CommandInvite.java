@@ -5,7 +5,7 @@ import Bots.MessageEvent;
 
 import static Bots.Main.createQuickEmbed;
 
-public class CommandInvite extends BaseCommand {
+public class CommandInvite implements BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Have fun!**", "http://bot.zenyfh.co.uk/")).queue();

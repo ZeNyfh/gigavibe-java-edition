@@ -3,6 +3,9 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
@@ -15,13 +18,13 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandVideoDL extends BaseCommand {
+public class CommandVideoDL implements BaseCommand {
     public static int queue = 0;
 
     @Override
     public void execute(MessageEvent event) {
         if (event.getArgs().length < 2 || Objects.equals(event.getArgs()[1], "")) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
+            event.replyEmbeds(createQuickError("No arguments given."));
             return;
         }
         final String ytdlp;
@@ -67,13 +70,13 @@ public class CommandVideoDL extends BaseCommand {
             }
             File finalFile = new File(filename);
             if (!finalFile.exists()) {
-                event.getMessage().replyEmbeds(createQuickError("No file was downloaded")).queue();
+                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No file was downloaded")).queue();
                 return;
             }
             if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
                 try {
                     activeNotice[0].delete().queue();
-                    event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
+                    event.getChannel().asTextChannel().sendFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
                     event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be sent.")).queue();
@@ -114,7 +117,7 @@ public class CommandVideoDL extends BaseCommand {
                 if (input.readLine() == null) {
                     activeNotice[0].delete().queue();
                     input.close();
-                    event.getMessage().replyEmbeds(createQuickError("The file could not be downloaded at all.")).queue();
+                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded at all.")).queue();
                     try {
                         finalFile.getAbsoluteFile().delete();
                     } catch (Exception e) {
@@ -132,7 +135,7 @@ public class CommandVideoDL extends BaseCommand {
             }
             finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".mp4");
             File finalFile1 = finalFile;
-            event.getMessage().replyFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(sent -> {
+            event.getChannel().asTextChannel().sendFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(sent -> {
                 try {
                     finalFile1.getAbsoluteFile().delete();
                 } catch (Exception e) {
@@ -167,8 +170,10 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<URL>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"url","URL of the video to download",true)
+        };
     }
 
     @Override

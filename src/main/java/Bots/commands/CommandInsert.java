@@ -6,6 +6,8 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
 
 import static Bots.Main.*;
 
-public class CommandInsert extends BaseCommand {
+public class CommandInsert implements BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -22,7 +24,7 @@ public class CommandInsert extends BaseCommand {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
         }
-        String[] args = event.getMessage().getContentRaw().split(" ", 3);
+        String[] args = event.getContentRaw().split(" ", 3);
         if (!args[1].matches("^\\d+$")) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`")).queue();
             return;
@@ -67,8 +69,11 @@ public class CommandInsert extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<Integer> <URL/SearchTerm>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.INTEGER,"position","Position to insert the track",true),
+                new OptionData(OptionType.STRING,"track","The track to insert",true)
+        };
     }
 
     @Override

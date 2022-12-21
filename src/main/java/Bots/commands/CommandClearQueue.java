@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandClearQueue extends BaseCommand {
+public class CommandClearQueue implements BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {

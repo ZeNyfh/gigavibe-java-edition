@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandJoin extends BaseCommand {
+public class CommandJoin implements BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {

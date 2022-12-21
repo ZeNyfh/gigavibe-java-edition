@@ -4,13 +4,15 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandPitch extends BaseCommand {
+public class CommandPitch implements BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -66,8 +68,10 @@ public class CommandPitch extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<0-5>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.NUMBER,"pitch","The pitch to set (0-5)",true)
+        };
     }
 
     @Override

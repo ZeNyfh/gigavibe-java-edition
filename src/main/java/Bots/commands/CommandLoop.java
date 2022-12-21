@@ -6,12 +6,12 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.*;
 
-public class CommandLoop extends BaseCommand {
+public class CommandLoop implements BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
-        if (event.getMessage().getContentRaw().contains("loopqueue")) {
+        if (event.getContentRaw().contains("loopqueue")) {
             return;
         }
         if (!audioManager.isConnected()) {

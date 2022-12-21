@@ -4,6 +4,8 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
@@ -14,7 +16,7 @@ import java.util.Objects;
 import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickError;
 
-public class CommandLocalPlay extends BaseCommand {
+public class CommandLocalPlay implements BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
@@ -52,8 +54,10 @@ public class CommandLocalPlay extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<Path>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"path","Path of the local file",true)
+        };
     }
 
     @Override

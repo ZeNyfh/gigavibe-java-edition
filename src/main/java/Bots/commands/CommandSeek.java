@@ -8,12 +8,14 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandSeek extends BaseCommand {
+public class CommandSeek implements BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -87,8 +89,10 @@ public class CommandSeek extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "[hours]:[minutes]:<seconds>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"timestamp","Timestamp to seek to, E.g. 1:54",true)
+        };
     }
 
     @Override

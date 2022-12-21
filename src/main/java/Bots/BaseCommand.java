@@ -1,45 +1,32 @@
 package Bots;
 
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.io.IOException;
 
 /**
  * Custom base command class used by all commands
+ * @author 9382
+ * @version 1.1
  */
-public class BaseCommand {
+public interface BaseCommand {
 
-    public void execute(MessageEvent event) throws IOException { //Execution code ran for users
-        System.out.println("Default command..?");
+    void execute(MessageEvent event) throws IOException; //The main event loop
+
+    default void Init() { //Optional initialisation stuff if something is required on start for a command
     }
 
-    public void executeSlash(SlashCommandInteractionEvent slashEvent) throws IOException {
-        System.out.println("Default slash command..?");
-    }
-    public boolean registerSlash() {
-        return false;
-    }
+    String[] getNames(); //The first name in the list is treated as the primary name by cmds
 
-    public void Init() { //Optional initialisation stuff if something is required on start but doesn't have to be in main
-    }
+    String getCategory(); //The category, used by cmds
 
-    public String[] getNames() { //The first name in the list is treated as the primary name by cmds
-        return new String[]{"default"};
-    }
+    String getDescription(); //The description, used by cmds
 
-    public String getCategory() { //The category, used by cmds
-        return "default";
-    }
-
-    public String getDescription() { //The description, used by cmds
-        return "default";
-    }
-
-    public long getRatelimit() { //Ratelimit in milliseconds
+    default long getRatelimit() { //Ratelimit in milliseconds
         return 0;
     }
 
-    public String getParams() { //E.g. "<url> [format]". Used by cmds
-        return "";
+    default OptionData[] getOptions() { //Options of the command
+        return new OptionData[]{};
     }
 }

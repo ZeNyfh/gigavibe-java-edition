@@ -7,14 +7,14 @@ import Bots.lavaplayer.PlayerManager;
 
 import static Bots.Main.*;
 
-public class CommandDisconnect extends BaseCommand {
+public class CommandDisconnect implements BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not in a voice channel.")).queue();
+            event.replyEmbeds(createQuickError("I am not in a voice channel."));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

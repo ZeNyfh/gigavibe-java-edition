@@ -5,6 +5,8 @@ import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,7 +15,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandBlockChannel extends BaseCommand {
+public class CommandBlockChannel implements BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
@@ -91,8 +93,10 @@ public class CommandBlockChannel extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<list> || <add/remove> <channelID>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"what-are-optional-args","IDK man")
+        };
     }
 
     @Override

@@ -6,6 +6,8 @@ import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
@@ -15,7 +17,7 @@ import java.util.Objects;
 import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickError;
 
-public class CommandPlay extends BaseCommand {
+public class CommandPlay implements BaseCommand {
     public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
 
     @Override
@@ -24,7 +26,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        String string = event.getMessage().getContentRaw();
+        String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
@@ -36,8 +38,8 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        if (!event.getMessage().getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getMessage().getAttachments().get(0).getFileExtension()))) {
-            String link = event.getMessage().getAttachments().get(0).getUrl();
+        if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()))) {
+            String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
             PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link, true);
             return;
@@ -62,13 +64,13 @@ public class CommandPlay extends BaseCommand {
         if (!selfState.inAudioChannel()) {
             audioManager.openAudioConnection(memberChannel);
         } else if (memberState.getChannel() != selfState.getChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in the same vc.")).queue();
+            event.replyEmbeds(createQuickError("you arent in the same vc."));
             return;
         }
         try {
             PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link, true);
         } catch (FriendlyException ignored) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
+            event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
         }
     }
 
@@ -88,8 +90,11 @@ public class CommandPlay extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<URL or Keywords>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.ATTACHMENT,"file","The file to play"),
+                new OptionData(OptionType.STRING,"track","The track to play if no file is provided")
+        };
     }
 
     @Override

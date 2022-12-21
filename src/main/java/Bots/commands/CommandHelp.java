@@ -3,12 +3,16 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+
+import java.util.Arrays;
 
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 
-public class CommandHelp extends BaseCommand {
+public class CommandHelp implements BaseCommand {
     String Arg = "";
 
     public String getCommands(String category) {
@@ -58,7 +62,7 @@ public class CommandHelp extends BaseCommand {
                         builder.append("**(").append(name).append(")**");
                     }
                 }
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + builder + "\n\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Arrays.toString(Command.getOptions()) + "** - " + Command.getDescription() + builder + "\n\n");
             }
         }
         if ("general".equals(Arg)) {
@@ -100,8 +104,10 @@ public class CommandHelp extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "[Category]";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"category","Subcategory of commands to get information on")
+        };
     }
 
     @Override

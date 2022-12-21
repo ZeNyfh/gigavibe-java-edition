@@ -2,13 +2,15 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
 
-public class CommandSendAnnouncement extends BaseCommand {
+public class CommandSendAnnouncement implements BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
@@ -21,7 +23,7 @@ public class CommandSendAnnouncement extends BaseCommand {
             return;
         }
         for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
-            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getMessage().getContentRaw().replace(event.getArgs()[0], ""))).queue();
+            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getContentRaw().replace(event.getArgs()[0], ""))).queue();
             try {
                 Thread.sleep(10000);
             } catch (Exception ignored) {
@@ -40,8 +42,10 @@ public class CommandSendAnnouncement extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<String>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"message","The announcement to send",true)
+        };
     }
 
     @Override

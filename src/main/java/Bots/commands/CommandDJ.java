@@ -5,6 +5,8 @@ import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -15,7 +17,7 @@ import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
-public class CommandDJ extends BaseCommand {
+public class CommandDJ implements BaseCommand {
 
     @Override
     public void execute(MessageEvent event) throws IOException {
@@ -141,8 +143,10 @@ public class CommandDJ extends BaseCommand {
     }
 
     @Override
-    public String getParams() {
-        return "<list> || <add/remove> <ID/Mention>";
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.STRING,"what-are-optional-args","IDK man")
+        };
     }
 
     @Override

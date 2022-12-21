@@ -424,7 +424,7 @@ public class Main extends ListenerAdapter {
                                 builder.append("**(").append(name).append(")**");
                             }
                         }
-                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getParams() + "** - " + Command.getDescription() + builder + "\n\n");
+                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Arrays.toString(Command.getOptions()) + "** - " + Command.getDescription() + builder + "\n\n");
                     }
                 }
                 break;
@@ -592,7 +592,7 @@ public class Main extends ListenerAdapter {
             String primaryName = Command.getNames()[0];
             commandUsageTracker.put(primaryName, Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
-                Command.executeSlash(event);
+                Command.execute(new MessageEvent(event));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -645,9 +645,7 @@ public class Main extends ListenerAdapter {
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
         for (BaseCommand Command : commands) {
-            if (Command.registerSlash()) {
-                data.add(Commands.slash(Command.getNames()[0], Command.getDescription()));
-            }
+            data.add(Commands.slash(Command.getNames()[0], Command.getDescription()).addOptions(Command.getOptions()));
         }
         event.getGuild().updateCommands().addCommands(data).queue();
     }
