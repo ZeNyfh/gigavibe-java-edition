@@ -5,9 +5,7 @@ import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -15,10 +13,9 @@ import static java.lang.System.currentTimeMillis;
 
 public class CommandBotInfo implements BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         int CommandCount = 0;
         int vcCount = 0;
-        GuildVoiceState selfState = null;
         long id = Long.parseLong("211789389401948160");
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");

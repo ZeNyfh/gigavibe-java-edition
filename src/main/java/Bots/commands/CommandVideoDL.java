@@ -18,7 +18,6 @@ import java.util.Objects;
 import static Bots.Main.*;
 
 public class CommandVideoDL implements BaseCommand {
-    public static int queue = 0;
 
     @Override
     public void execute(MessageEvent event) {
@@ -36,7 +35,7 @@ public class CommandVideoDL implements BaseCommand {
         new Thread(() -> {
             Message[] activeNotice = new Message[1];
             String filename = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".mp4";
-            Process p = null;
+            Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 p = Runtime.getRuntime().exec(new String[]{
@@ -44,6 +43,7 @@ public class CommandVideoDL implements BaseCommand {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
+                return;
             }
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;

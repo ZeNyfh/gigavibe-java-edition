@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -18,10 +17,10 @@ import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickError;
 
 public class CommandPlay implements BaseCommand {
-    public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
+    final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
         }

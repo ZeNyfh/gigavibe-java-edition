@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +19,7 @@ import static Bots.Main.*;
 public class CommandDJ implements BaseCommand {
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         JSONObject config = event.getConfig();
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
@@ -38,14 +37,15 @@ public class CommandDJ implements BaseCommand {
             } else {
                 for (Object role : DJRoles) {
                     i++;
+                    String mention = Objects.requireNonNull(event.getJDA().getRoleById((long) role)).getAsMention();
                     if (i == DJRoles.size()) {
                         try {
-                            builder.append(event.getJDA().getRoleById((long) role).getAsMention());
+                            builder.append(mention);
                         } catch (Exception ignored) {
                         }
                     } else {
                         try {
-                            builder.append(event.getJDA().getRoleById((long) role).getAsMention() + ", ");
+                            builder.append(mention).append(", ");
                         } catch (Exception ignored) {
                         }
                     }

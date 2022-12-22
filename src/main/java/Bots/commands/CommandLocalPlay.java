@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -18,7 +17,7 @@ import static Bots.Main.createQuickError;
 
 public class CommandLocalPlay implements BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
         }

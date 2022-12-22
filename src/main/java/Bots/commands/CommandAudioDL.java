@@ -19,8 +19,7 @@ import static Bots.Main.*;
 import static java.lang.String.valueOf;
 
 public class CommandAudioDL implements BaseCommand {
-    public static int queue = 0;
-    Message[] messageVar = new Message[1];
+    final Message[] messageVar = new Message[1];
 
     @Override
     public void execute(MessageEvent event) {
@@ -97,7 +96,7 @@ public class CommandAudioDL implements BaseCommand {
                         finalFile.getAbsoluteFile().delete();
                         return;
                     }
-                    long desiredBitRate = 0;
+                    long desiredBitRate;
                     if (event.getGuild().getBoostCount() < 7) {
                         desiredBitRate = (long) (Math.round(8 * 8192) / duration); // 8mb
                     } else {

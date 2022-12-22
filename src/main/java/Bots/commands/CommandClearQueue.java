@@ -8,14 +8,13 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandClearQueue implements BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }

@@ -7,14 +7,13 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandPitch implements BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }

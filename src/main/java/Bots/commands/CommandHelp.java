@@ -38,7 +38,7 @@ public class CommandHelp implements BaseCommand {
             Arg = "";
         }
         EmbedBuilder embed = new EmbedBuilder();
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder;
         embed.setColor(botColour);
         embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
         for (BaseCommand Command : commands) {

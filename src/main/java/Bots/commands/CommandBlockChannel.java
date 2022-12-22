@@ -10,14 +10,13 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandBlockChannel implements BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(MessageEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command.")).queue();
             return;

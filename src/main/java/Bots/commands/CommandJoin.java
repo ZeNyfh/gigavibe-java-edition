@@ -2,8 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import Bots.lavaplayer.GuildMusicManager;
-import Bots.lavaplayer.PlayerManager;
 
 import java.util.Objects;
 
@@ -15,7 +13,6 @@ public class CommandJoin implements BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
             event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You are not in a vc.")).queue();
             return;
