@@ -70,8 +70,8 @@ public class CommandInsert implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.INTEGER, "position", "Position to insert the track", true),
-                new OptionData(OptionType.STRING, "track", "The track to insert", true)
+                new OptionData(OptionType.INTEGER, "position", "Position to insert the track.", true),
+                new OptionData(OptionType.STRING, "track", "The track to insert.", true)
         };
     }
 

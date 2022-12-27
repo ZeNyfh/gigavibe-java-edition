@@ -6,6 +6,7 @@ import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -91,8 +92,10 @@ public class CommandPlay implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.ATTACHMENT, "file", "The file to play"),
-                new OptionData(OptionType.STRING, "track", "The track to play if no file is provided")
+                new OptionData(OptionType.SUB_COMMAND_GROUP, "sub-command", "Choices to pick from", true)
+                        .addChoice("file","The file to play.")
+                        .addChoice("track","The url or search term to play.")
+                // cannot continue work until @9382 fixes stuff in MessageEvent.java - ZeNyfh
         };
     }
 

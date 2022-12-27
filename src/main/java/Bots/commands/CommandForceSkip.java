@@ -9,6 +9,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,12 @@ public class CommandForceSkip implements BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }
-        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
 
@@ -37,12 +38,12 @@ public class CommandForceSkip implements BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
 
@@ -50,37 +51,37 @@ public class CommandForceSkip implements BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
+            event.replyEmbeds(createQuickError("No tracks are playing right now."));
             return;
         }
         if (event.getArgs().length == 1) {
             if (musicManager.scheduler.queue.size() >= 1) {
                 musicManager.scheduler.nextTrack();
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             } else {
                 musicManager.scheduler.nextTrack();
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track"));
             }
         } else if (event.getArgs()[1].matches("^\\d+$")) {
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue"));
                 clearVotes(event.getGuild().getIdLong());
                 return;
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             }
         } else {
             if (musicManager.scheduler.queue.size() >= 1) {
                 musicManager.scheduler.nextTrack();
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             } else {
                 musicManager.scheduler.nextTrack();
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track"));
             }
         }
         clearVotes(event.getGuild().getIdLong());
@@ -97,8 +98,15 @@ public class CommandForceSkip implements BaseCommand {
     }
 
     @Override
+    public OptionData[] getOptions() {
+        return new OptionData[]{
+                new OptionData(OptionType.INTEGER, "amount", "Amount of tracks to skip from the queue.", false)
+        };
+    }
+
+    @Override
     public String getDescription() {
-        return "Casts a vote or skips the current song.";
+        return "Casts skips the song forcefully.";
     }
 
     @Override

@@ -6,6 +6,7 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -76,8 +77,8 @@ public class CommandRadio implements BaseCommand {
         eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         if (event.getArgs().length == 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:")).queue();
-            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+            event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"));
+            event.replyEmbeds(eb.build());
             eb.clear();
             return;
         }
@@ -90,7 +91,7 @@ public class CommandRadio implements BaseCommand {
         String radioURL = null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             if (event.getArgs().length == 2) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No search term given.")).queue();
+                event.replyEmbeds(createQuickError("No search term given."));
                 return;
             }
             arg = new StringBuilder();
@@ -109,7 +110,7 @@ public class CommandRadio implements BaseCommand {
             radioURL = getRadio(arg.toString());
         }
         if (arg.toString().equalsIgnoreCase("list")) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+            event.replyEmbeds(eb.build());
             eb.clear();
             return;
         }
@@ -117,7 +118,7 @@ public class CommandRadio implements BaseCommand {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberState != null;
         if (!memberState.inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc.")).queue();
+            event.replyEmbeds(createQuickError("you arent in a vc."));
             return;
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
@@ -133,26 +134,23 @@ public class CommandRadio implements BaseCommand {
                     }
                     audioManager.openAudioConnection(memberChannel);
                     PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), tempMap.getValue(), false);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**")).queue();
+                    event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }
             }
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Not a valid radio station.")).queue();
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Disclaimer!**", "Some radio stations may not be available as these results are from [here](https://www.internet-radio.com/)")).queue(a -> {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                a.delete().queue();
-            });
+            event.replyEmbeds(createQuickError("Not a valid radio station."));
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING, "what-are-optional-args", "IDK tbh, just guess")
+                new OptionData(OptionType.STRING, "search", "Searches for a radio station or lists a couple if blank.", false)
         };
     }
 

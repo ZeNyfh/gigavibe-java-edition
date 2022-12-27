@@ -23,7 +23,7 @@ public class CommandInvite implements BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Sends an invite for the bot.";
+        return "Sends an invite to the bot.";
     }
 
     @Override

@@ -55,7 +55,7 @@ public class CommandLocalPlay implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING, "path", "Path of the local file", true)
+                new OptionData(OptionType.STRING, "path", "Path of the local file.", true)
         };
     }
 

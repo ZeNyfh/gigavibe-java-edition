@@ -8,7 +8,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandGithub implements BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "❕ Use this for bug reports and feature requests ONLY.\n\n❕ When making an issue, make sure to specify what the bug is and how to recreate it.\n\nhttps://github.com/ZeNyfh/gigavibe-java-edition")).queue();
+        event.replyEmbeds(createQuickEmbed(" ", "❕ Use this for bug reports and feature requests ONLY.\n\n❕ When making an issue, make sure to specify what the bug is and how to recreate it.\n\nhttps://github.com/ZeNyfh/gigavibe-java-edition"));
     }
 
     @Override

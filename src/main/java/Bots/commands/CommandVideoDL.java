@@ -171,7 +171,7 @@ public class CommandVideoDL implements BaseCommand {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[]{
-                new OptionData(OptionType.STRING, "url", "URL of the video to download", true)
+                new OptionData(OptionType.STRING, "url", "URL of the video to download.", true)
         };
     }
 

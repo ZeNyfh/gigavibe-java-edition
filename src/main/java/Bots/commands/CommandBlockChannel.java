@@ -95,6 +95,7 @@ public class CommandBlockChannel implements BaseCommand {
     public OptionData[] getOptions() {
         return new OptionData[]{
                 new OptionData(OptionType.STRING, "what-are-optional-args", "IDK man")
+                // will need to look into this further, cannot add as of now. - ZeNyfh
         };
     }
 
