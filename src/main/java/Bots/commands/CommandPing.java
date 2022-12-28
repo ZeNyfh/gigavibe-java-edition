@@ -12,6 +12,7 @@ public class CommandPing extends BaseCommand {
     public void execute(MessageEvent event) {
         long time = currentTimeMillis();
         event.reply(response -> ((Message) response).editMessageFormat("ping: %dms", currentTimeMillis() - time).queue(), ".");
+        //TODO: Lambda does NOT work in slash commands (the class is actually a "InteractionHookImpl" which has less-than-convenient functions). -9382
     }
 
     @Override
