@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandShuffle implements BaseCommand {
+public class CommandShuffle extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {

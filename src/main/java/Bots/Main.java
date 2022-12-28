@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
@@ -424,7 +425,7 @@ public class Main extends ListenerAdapter {
                                 builder.append("**(").append(name).append(")**");
                             }
                         }
-                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Arrays.toString(Command.getOptions()) + "** - " + Command.getDescription() + builder + "\n\n");
+                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + /*Arrays.toString(Command.getOptions())*/"This needs implementing" + "** - " + Command.getDescription() + builder + "\n\n");
                     }
                 }
                 break;
@@ -579,7 +580,7 @@ public class Main extends ListenerAdapter {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
             if (ratelimitTime > 0) {
-                event.getInteraction().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> {
+                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> {
                     try {
                         Thread.sleep((long) ratelimitTime * 1000);
                         message.deleteOriginal().queue();
@@ -646,7 +647,14 @@ public class Main extends ListenerAdapter {
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
         for (BaseCommand Command : commands) {
-            data.add(Commands.slash(Command.getNames()[0], Command.getDescription()).addOptions(Command.getOptions()));
+            if (Command.slashCommand != null) {
+                data.add(Command.slashCommand);
+            } else {
+                SlashCommandData slashCommand = Commands.slash(Command.getNames()[0], Command.getDescription());
+                Command.ProvideOptions(slashCommand);
+                Command.slashCommand = slashCommand;
+                data.add(slashCommand);
+            }
         }
         event.getGuild().updateCommands().addCommands(data).queue();
     }

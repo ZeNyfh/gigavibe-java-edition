@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.*;
 
-public class CommandLoop implements BaseCommand {
+public class CommandLoop extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {

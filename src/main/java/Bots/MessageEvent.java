@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * Can take either a SlashCommandInteractionEvent or MessageReceivedEvent as the input
  *
  * @author 9382
- * @version 2
+ * @version 2.0
  */
 public class MessageEvent {
     final Object coreEvent;
@@ -65,7 +65,6 @@ public class MessageEvent {
         List<String> args = new ArrayList<>();
         args.add("/" + event.getCommandPath());
         List<Message.Attachment> Attachments = new ArrayList<>();
-        int i = 0;
         for (OptionMapping option : options) {
             if (option.getType() == OptionType.ATTACHMENT) {
                 Attachments.add(option.getAsAttachment());

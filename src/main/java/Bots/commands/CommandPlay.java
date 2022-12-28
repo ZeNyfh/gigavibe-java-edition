@@ -6,9 +6,10 @@ import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.Objects;
 import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickError;
 
-public class CommandPlay implements BaseCommand {
+public class CommandPlay extends BaseCommand {
     final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
 
     @Override
@@ -90,13 +91,16 @@ public class CommandPlay implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.SUB_COMMAND_GROUP, "sub-command", "Choices to pick from", true)
-                        .addChoice("file","The file to play.")
-                        .addChoice("track","The url or search term to play.")
-                // cannot continue work until @9382 fixes stuff in MessageEvent.java - ZeNyfh
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addSubcommands(
+                new SubcommandData("file", "Plays an uploaded file").addOptions(
+                        new OptionData(OptionType.ATTACHMENT, "file", "The file to play", true)
+                ),
+                new SubcommandData("track", "Plays the given url or track").addOptions(
+                        new OptionData(OptionType.STRING, "track", "The track to play", true)
+                )
+        );
+        //TODO: System can now handle sub-commands. This was roughly adjusted but the command itself needs to be able to handle the new options. -9382
     }
 
     @Override

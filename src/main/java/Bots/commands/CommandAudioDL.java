@@ -4,7 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
@@ -18,7 +18,7 @@ import java.util.Objects;
 import static Bots.Main.*;
 import static java.lang.String.valueOf;
 
-public class CommandAudioDL implements BaseCommand {
+public class CommandAudioDL extends BaseCommand {
     final Message[] messageVar = new Message[1];
 
     @Override
@@ -169,10 +169,9 @@ public class CommandAudioDL implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "url", "URL of the audio to download", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "url", "URL of the audio to download", true);
+        //TODO: System can now handle sub-commands, so this needs to be adjusted. -9382
     }
 
     @Override

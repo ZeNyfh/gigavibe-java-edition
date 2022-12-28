@@ -5,13 +5,13 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandVolume implements BaseCommand {
+public class CommandVolume extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -75,10 +75,8 @@ public class CommandVolume implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.INTEGER, "volume", "The volume to set (0-500), 100 by default.", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.INTEGER, "volume", "The volume to set (0-500), 100 by default.", true);
     }
 
     @Override

@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandBlockChannel implements BaseCommand {
+public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
@@ -92,11 +94,17 @@ public class CommandBlockChannel implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "what-are-optional-args", "IDK man")
-                // will need to look into this further, cannot add as of now. - ZeNyfh
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addSubcommands(
+                new SubcommandData("list", "Lists the blocked channels"),
+                new SubcommandData("add", "Add a channel to the blocklist").addOptions(
+                        new OptionData(OptionType.CHANNEL, "channel-id", "The channel for the command", true)
+                ),
+                new SubcommandData("remove", "Remove a channel from the blocklist").addOptions(
+                        new OptionData(OptionType.CHANNEL, "channel-id", "The channel for the command", true)
+                )
+        );
+        //TODO: System can now handle sub-commands. This was roughly adjusted but the command itself needs to be able to handle the new options. -9382
     }
 
     @Override

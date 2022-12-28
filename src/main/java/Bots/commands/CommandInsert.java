@@ -8,13 +8,14 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static Bots.Main.*;
 
-public class CommandInsert implements BaseCommand {
+public class CommandInsert extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -68,11 +69,11 @@ public class CommandInsert implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOptions(
                 new OptionData(OptionType.INTEGER, "position", "Position to insert the track.", true),
                 new OptionData(OptionType.STRING, "track", "The track to insert.", true)
-        };
+        );
     }
 
     @Override

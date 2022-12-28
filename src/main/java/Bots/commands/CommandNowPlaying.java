@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandNowPlaying implements BaseCommand {
+public class CommandNowPlaying extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {

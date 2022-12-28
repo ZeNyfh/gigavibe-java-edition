@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 
 import static java.lang.System.currentTimeMillis;
 
-public class CommandPing implements BaseCommand {
+public class CommandPing extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {

@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandRemove implements BaseCommand {
+public class CommandRemove extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
@@ -63,10 +63,8 @@ public class CommandRemove implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.INTEGER, "count", "The track to remove from the position in the queue.", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.INTEGER, "count", "The track to remove from the position in the queue.", true);
     }
 
     @Override

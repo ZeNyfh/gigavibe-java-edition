@@ -4,15 +4,13 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-
-import java.util.Arrays;
 
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 
-public class CommandHelp implements BaseCommand {
+public class CommandHelp extends BaseCommand {
     String Arg = "";
 
     public String getCommands(String category) {
@@ -62,7 +60,7 @@ public class CommandHelp implements BaseCommand {
                         builder.append("**(").append(name).append(")**");
                     }
                 }
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Arrays.toString(Command.getOptions()) + "** - " + Command.getDescription() + builder + "\n\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + /*Arrays.toString(Command.getOptions())*/"This needs implementing" + "** - " + Command.getDescription() + builder + "\n\n");
             }
         }
         if ("general".equals(Arg)) {
@@ -104,10 +102,8 @@ public class CommandHelp implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "category", "Subcategory of commands to get information on", false)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "category", "Subcategory of commands to get information on", false);
     }
 
     @Override

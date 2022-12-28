@@ -3,14 +3,14 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
 
-public class CommandSendAnnouncement implements BaseCommand {
+public class CommandSendAnnouncement extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
@@ -42,10 +42,8 @@ public class CommandSendAnnouncement implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "message", "The announcement to send.", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "message", "The announcement to send.", true);
     }
 
     @Override

@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 import static Bots.Main.*;
 import static java.lang.Math.round;
 
-public class CommandQueue implements BaseCommand {
+public class CommandQueue extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
@@ -91,10 +91,8 @@ public class CommandQueue implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.INTEGER, "page-number", "Page number of the queue")
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.INTEGER, "page-number", "Page number of the queue");
     }
 
     @Override

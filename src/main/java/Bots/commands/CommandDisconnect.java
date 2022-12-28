@@ -7,7 +7,7 @@ import Bots.lavaplayer.PlayerManager;
 
 import static Bots.Main.*;
 
-public class CommandDisconnect implements BaseCommand {
+public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {

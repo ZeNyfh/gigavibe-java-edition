@@ -9,8 +9,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandSkip implements BaseCommand {
+public class CommandSkip extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {

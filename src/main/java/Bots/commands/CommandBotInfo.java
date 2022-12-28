@@ -11,7 +11,7 @@ import java.util.Objects;
 import static Bots.Main.*;
 import static java.lang.System.currentTimeMillis;
 
-public class CommandBotInfo implements BaseCommand {
+public class CommandBotInfo extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         int CommandCount = 0;

@@ -3,13 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
 
-public class CommandBug implements BaseCommand {
+public class CommandBug extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
@@ -37,10 +37,8 @@ public class CommandBug implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "message", "The bug report", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "message", "The bug report", true);
     }
 
     @Override

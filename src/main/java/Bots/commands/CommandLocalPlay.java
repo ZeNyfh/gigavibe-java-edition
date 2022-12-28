@@ -5,7 +5,7 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import static Bots.Main.IsChannelBlocked;
 import static Bots.Main.createQuickError;
 
-public class CommandLocalPlay implements BaseCommand {
+public class CommandLocalPlay extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
@@ -53,10 +53,8 @@ public class CommandLocalPlay implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "path", "Path of the local file.", true)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "path", "Path of the local file.", true);
     }
 
     @Override

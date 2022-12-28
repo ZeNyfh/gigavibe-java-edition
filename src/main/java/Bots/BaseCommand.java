@@ -1,6 +1,6 @@
 package Bots;
 
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.io.IOException;
 
@@ -8,26 +8,33 @@ import java.io.IOException;
  * Custom base command class used by all commands
  *
  * @author 9382
- * @version 1.1
+ * @version 1.2
  */
-public interface BaseCommand {
+public class BaseCommand {
+    SlashCommandData slashCommand;
 
-    void execute(MessageEvent event) throws IOException; //The main event loop
-
-    default void Init() { //Optional initialisation stuff if something is required on start for a command
+    public void execute(MessageEvent event) throws IOException { //The main event loop
     }
 
-    String[] getNames(); //The first name in the list is treated as the primary name by cmds
+    public void Init() { //Optional initialisation stuff if something is required on start for a command
+    }
 
-    String getCategory(); //The category, used by cmds
+    public void ProvideOptions(SlashCommandData slashCommand) { //Provides options for a slash command
+    }
 
-    String getDescription(); //The description, used by cmds
+    public String[] getNames() {
+        return new String[]{"<unset>"};
+    } //The first name in the list is treated as the primary name by cmds
 
-    default long getRatelimit() { //Ratelimit in milliseconds
+    public String getCategory() {//The category, used by cmds
+        return "<unset>";
+    }
+
+    public String getDescription() {//The description, used by cmds
+        return "<unset>";
+    }
+
+    public long getRatelimit() { //Ratelimit in milliseconds
         return 0;
-    }
-
-    default OptionData[] getOptions() { //Options of the command
-        return new OptionData[]{};
     }
 }

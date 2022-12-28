@@ -6,9 +6,8 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.BufferedReader;
@@ -22,7 +21,7 @@ import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
-public class CommandRadio implements BaseCommand {
+public class CommandRadio extends BaseCommand {
     public static String getRadio(String search) throws IOException {
         URL url = null;
         try {
@@ -148,10 +147,8 @@ public class CommandRadio implements BaseCommand {
     }
 
     @Override
-    public OptionData[] getOptions() {
-        return new OptionData[]{
-                new OptionData(OptionType.STRING, "search", "Searches for a radio station or lists a couple if blank.", false)
-        };
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "search", "Searches for a radio station or lists a couple if blank.", false);
     }
 
     @Override
