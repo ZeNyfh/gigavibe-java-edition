@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import net.dv8tion.jda.api.entities.Message;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -11,8 +10,7 @@ public class CommandPing extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         long time = currentTimeMillis();
-        event.reply(response -> ((Message) response).editMessageFormat("ping: %dms", currentTimeMillis() - time).queue(), ".");
-        //TODO: Lambda does NOT work in slash commands (the class is actually a "InteractionHookImpl" which has less-than-convenient functions). -9382
+        event.reply(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time),".");
     }
 
     @Override

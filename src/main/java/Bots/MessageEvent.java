@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.function.Consumer;
  * Can take either a SlashCommandInteractionEvent or MessageReceivedEvent as the input
  *
  * @author 9382
- * @version 2.0
+ * @version 2.1
  */
 public class MessageEvent {
     final Object coreEvent;
@@ -120,19 +121,67 @@ public class MessageEvent {
         return this.rawContent;
     }
 
+    public static class Response {
+        //Bad type conversion practices, the sequel
+        final Object coreObject;
+
+        public boolean isSlash() {
+            return this.coreObject.getClass() == InteractionHookImpl.class;
+        }
+
+        public Response(InteractionHookImpl interaction) {
+            this.coreObject = interaction;
+        }
+        public Response(Message message) {
+            this.coreObject = message;
+        }
+
+        public void delete() {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).deleteOriginal().queue();
+            } else {
+                ((Message) this.coreObject).delete().queue();
+            }
+        }
+
+        public void editMessage(String s) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginal(s).queue();
+            } else {
+                ((Message) this.coreObject).editMessage(s).queue();
+            }
+        }
+
+        public void editMessageFormat(String s, Object... objects) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalFormat(s, objects).queue();
+            } else {
+                ((Message) this.coreObject).editMessageFormat(s, objects).queue();
+            }
+        }
+
+        public void editMessageEmbeds(MessageEmbed... embeds) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalEmbeds(embeds).queue();
+            } else {
+                ((Message) this.coreObject).editMessageEmbeds(embeds).queue();
+            }
+        }
+    }
+
     public void reply(String s) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).getInteraction().reply(s).queue();
+            ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue();
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue();
         }
     }
 
-    public void reply(Consumer<Object> lambda, String s) {
+    public void reply(Consumer<MessageEvent.Response> lambda, String s) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).getInteraction().reply(s).queue(lambda);
+            ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue(x -> lambda.accept((MessageEvent.Response) x));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(lambda);
+            ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept((MessageEvent.Response) x));
         }
     }
 
@@ -144,11 +193,11 @@ public class MessageEvent {
         }
     }
 
-    public void replyEmbeds(Consumer<Object> lambda, MessageEmbed embed, MessageEmbed... embeds) {
+    public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(lambda);
+            ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(x -> lambda.accept((MessageEvent.Response) x));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(lambda);
+            ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept((MessageEvent.Response) x));
         }
     }
 
@@ -160,11 +209,11 @@ public class MessageEvent {
         }
     }
 
-    public void replyFiles(Consumer<Object> lambda, FileUpload... files) {
+    public void replyFiles(Consumer<MessageEvent.Response> lambda, FileUpload... files) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue(lambda);
+            ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue(x -> lambda.accept((MessageEvent.Response) x));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(lambda);
+            ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept((MessageEvent.Response) x));
         }
     }
 
