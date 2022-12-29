@@ -173,6 +173,14 @@ public class MessageEvent {
                 ((Message) this.coreObject).editMessageEmbeds(embeds).queue();
             }
         }
+
+        public void editMessageFiles(FileUpload... files) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalAttachments(files).queue();
+            } else {
+                ((Message) this.coreObject).editMessageAttachments(files).queue();
+            }
+        }
     }
 
     public void reply(String s) {

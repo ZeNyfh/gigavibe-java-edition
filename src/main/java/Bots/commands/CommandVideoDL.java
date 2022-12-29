@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -33,7 +32,9 @@ public class CommandVideoDL extends BaseCommand {
         }
         File dir = new File("viddl");
         new Thread(() -> {
-            Message[] activeNotice = new Message[1];
+            final MessageEvent.Response[] message = new MessageEvent.Response[1];
+            event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
+
             String filename = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".mp4";
             Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
@@ -43,6 +44,7 @@ public class CommandVideoDL extends BaseCommand {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
+                message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong..."));
                 return;
             }
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -51,12 +53,9 @@ public class CommandVideoDL extends BaseCommand {
             try {
                 while ((line = input.readLine()) != null) {
                     i++;
-                    if (i >= 10 && line.contains("ETA")) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(m -> activeNotice[0] = m);
+                    if (line.contains("ETA") && i >= 10) {
+                        message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
                         break;
-                    }
-                    if (i < 5 && line.contains("ETA")) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(m -> activeNotice[0] = m);
                     }
                 }
             } catch (Exception e) {
@@ -69,16 +68,18 @@ public class CommandVideoDL extends BaseCommand {
             }
             File finalFile = new File(filename);
             if (!finalFile.exists()) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No file was downloaded")).queue();
+                message[0].editMessageEmbeds(createQuickError("No file was downloaded"));
                 return;
             }
+            //Beyond this point, we assume that activeNotice[0] just has to exist and continue on as such
             if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
                 try {
-                    activeNotice[0].delete().queue();
-                    event.getChannel().asTextChannel().sendFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue();
+                    message[0].editMessageFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
+                    message[0].editMessageEmbeds(); //Remove embeds
                 } catch (Exception e) {
                     e.printStackTrace();
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be sent.")).queue();
+                    message[0].editMessageEmbeds(createQuickError("The file could not be sent."));
+                    return;
                 }
                 try {
                     finalFile.getAbsoluteFile().delete();
@@ -99,6 +100,7 @@ public class CommandVideoDL extends BaseCommand {
                 ));
             } catch (Exception e) {
                 e.printStackTrace();
+                return;
             }
             input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             i = 0;
@@ -106,17 +108,13 @@ public class CommandVideoDL extends BaseCommand {
                 while ((line = input.readLine()) != null) {
                     i++;
                     if (i >= 10 && line.contains("ETA")) {
-                        activeNotice[0].editMessageEmbeds(createQuickEmbed(" ", "Previous download was too large, retrying...\n\n**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(m -> activeNotice[0] = m);
+                        message[0].editMessageEmbeds(createQuickEmbed(" ", "Previous download was too large, retrying...\n\n**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
                         break;
-                    }
-                    if (i == 2 && line.contains("ETA")) {
-                        activeNotice[0].editMessageEmbeds(createQuickEmbed(" ", "Previous download was too large, retrying...\n\n**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**"))).queue(m -> activeNotice[0] = m);
                     }
                 }
                 if (input.readLine() == null) {
-                    activeNotice[0].delete().queue();
                     input.close();
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The file could not be downloaded at all.")).queue();
+                    message[0].editMessageEmbeds(createQuickError("The file could not be downloaded at all."));
                     try {
                         finalFile.getAbsoluteFile().delete();
                     } catch (Exception e) {
@@ -134,13 +132,13 @@ public class CommandVideoDL extends BaseCommand {
             }
             finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".mp4");
             File finalFile1 = finalFile;
-            event.getChannel().asTextChannel().sendFiles(FileUpload.fromData(finalFile.getAbsoluteFile())).queue(sent -> {
-                try {
-                    finalFile1.getAbsoluteFile().delete();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            message[0].editMessageFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
+            message[0].editMessageEmbeds(); //Remove embeds
+            try {
+                finalFile1.getAbsoluteFile().delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 
