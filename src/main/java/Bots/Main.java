@@ -46,6 +46,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static Bots.ConfigManager.GetConfig;
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
 
@@ -53,7 +54,7 @@ public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT};
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
-    private static final JSONObject commandUsageTracker = ConfigManager.GetConfig("usage-stats");
+    private static final JSONObject commandUsageTracker = GetConfig("usage-stats");
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String botToken = "";
@@ -195,6 +196,7 @@ public class Main extends ListenerAdapter {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                // timeouts
                 int i = 0;
                 for (Guild guild : bot.getGuilds()) {
                     if (guild.getAudioManager().isConnected()) {
@@ -220,6 +222,27 @@ public class Main extends ListenerAdapter {
                             guildTimeouts.put(guild.getIdLong(), 0);
                         }
                     }
+                }
+
+                // reminders
+                JSONObject reminders = GetConfig("reminders");
+                Iterator<Object> iterator = reminders.keySet().iterator();
+                while (iterator.hasNext()) {
+                    Object key = iterator.next();
+                    String object = reminders.get(key).toString().replaceAll("\"", "");
+                    object = object.substring(1, object.length() - 1);
+                    List<String> list = List.of(object.split(","));
+                    if (currentTimeMillis() < Long.parseLong(list.get(0))) {
+                        continue;
+                    }
+                    iterator.remove();
+                    EmbedBuilder builder = new EmbedBuilder();
+                    builder.setTitle("**Reminder!**");
+                    builder.appendDescription(" "); // required because it complains about the description being nothing
+                    if (list.size() == 4) {
+                        builder.appendDescription("\n" + list.get(3)); // adding the optional reason
+                    }
+                    Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
                 }
             }
         };

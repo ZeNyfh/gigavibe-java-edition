@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.FileUpload;

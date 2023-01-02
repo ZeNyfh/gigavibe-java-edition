@@ -37,10 +37,6 @@ public class MessageEvent {
     final List<Message.Attachment> attachments;
     final JSONObject config;
 
-    public boolean isSlash() {
-        return this.coreEvent.getClass() == SlashCommandInteractionEvent.class;
-    }
-
     public MessageEvent(MessageReceivedEvent event) {
         this.coreEvent = event;
         this.JDA = event.getJDA();
@@ -86,6 +82,10 @@ public class MessageEvent {
         }
     }
 
+    public boolean isSlash() {
+        return this.coreEvent.getClass() == SlashCommandInteractionEvent.class;
+    }
+
     public JDA getJDA() {
         return this.JDA;
     }
@@ -124,63 +124,6 @@ public class MessageEvent {
 
     public boolean isAcknowledged() {
         return isSlash() && ((SlashCommandInteractionEvent) this.coreEvent).isAcknowledged();
-    }
-
-    public static class Response {
-        //Bad type conversion practices, the sequel
-        final Object coreObject;
-
-        public boolean isSlash() {
-            return this.coreObject.getClass() == InteractionHookImpl.class;
-        }
-
-        public Response(InteractionHook interaction) {
-            this.coreObject = interaction;
-        }
-
-        public Response(Message message) {
-            this.coreObject = message;
-        }
-
-        public void delete() {
-            if (isSlash()) {
-                ((InteractionHookImpl) this.coreObject).deleteOriginal().queue();
-            } else {
-                ((Message) this.coreObject).delete().queue();
-            }
-        }
-
-        public void editMessage(String s) {
-            if (isSlash()) {
-                ((InteractionHookImpl) this.coreObject).editOriginal(s).queue();
-            } else {
-                ((Message) this.coreObject).editMessage(s).queue();
-            }
-        }
-
-        public void editMessageFormat(String s, Object... objects) {
-            if (isSlash()) {
-                ((InteractionHookImpl) this.coreObject).editOriginalFormat(s, objects).queue();
-            } else {
-                ((Message) this.coreObject).editMessageFormat(s, objects).queue();
-            }
-        }
-
-        public void editMessageEmbeds(MessageEmbed... embeds) {
-            if (isSlash()) {
-                ((InteractionHookImpl) this.coreObject).editOriginalEmbeds(embeds).queue();
-            } else {
-                ((Message) this.coreObject).editMessageEmbeds(embeds).queue();
-            }
-        }
-
-        public void editMessageFiles(FileUpload... files) {
-            if (isSlash()) {
-                ((InteractionHookImpl) this.coreObject).editOriginalAttachments(files).queue();
-            } else {
-                ((Message) this.coreObject).editMessageAttachments(files).queue();
-            }
-        }
     }
 
     public void reply(String s) {
@@ -233,5 +176,62 @@ public class MessageEvent {
 
     public JSONObject getConfig() {
         return this.config;
+    }
+
+    public static class Response {
+        //Bad type conversion practices, the sequel
+        final Object coreObject;
+
+        public Response(InteractionHook interaction) {
+            this.coreObject = interaction;
+        }
+
+        public Response(Message message) {
+            this.coreObject = message;
+        }
+
+        public boolean isSlash() {
+            return this.coreObject.getClass() == InteractionHookImpl.class;
+        }
+
+        public void delete() {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).deleteOriginal().queue();
+            } else {
+                ((Message) this.coreObject).delete().queue();
+            }
+        }
+
+        public void editMessage(String s) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginal(s).queue();
+            } else {
+                ((Message) this.coreObject).editMessage(s).queue();
+            }
+        }
+
+        public void editMessageFormat(String s, Object... objects) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalFormat(s, objects).queue();
+            } else {
+                ((Message) this.coreObject).editMessageFormat(s, objects).queue();
+            }
+        }
+
+        public void editMessageEmbeds(MessageEmbed... embeds) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalEmbeds(embeds).queue();
+            } else {
+                ((Message) this.coreObject).editMessageEmbeds(embeds).queue();
+            }
+        }
+
+        public void editMessageFiles(FileUpload... files) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalAttachments(files).queue();
+            } else {
+                ((Message) this.coreObject).editMessageAttachments(files).queue();
+            }
+        }
     }
 }
