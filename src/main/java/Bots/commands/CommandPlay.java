@@ -35,7 +35,7 @@ public class CommandPlay extends BaseCommand {
         assert memberState != null;
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (!memberState.inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc.")).queue();
+            event.replyEmbeds(createQuickError("you arent in a vc."));
             return;
         }
 
@@ -49,7 +49,7 @@ public class CommandPlay extends BaseCommand {
         try {
             link = String.valueOf(args[1]);
         } catch (Exception ignored) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No arguments given.")).queue();
+            event.replyEmbeds(createQuickError("No arguments given."));
             return;
         }
         if (link.contains("https://") || link.contains("http://")) {

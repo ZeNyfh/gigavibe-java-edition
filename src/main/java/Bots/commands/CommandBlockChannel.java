@@ -26,7 +26,6 @@ public class CommandBlockChannel extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command."));
             return;
         }
-        printlnTime(Arrays.toString(event.getArgs()));
         List<String> args = new ArrayList<>(List.of(event.getArgs()[0].substring(1).split("/")));
         if (event.getArgs().length > 1) {
             args.add(event.getArgs()[1]);
