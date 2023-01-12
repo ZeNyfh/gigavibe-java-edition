@@ -567,6 +567,7 @@ public class Main extends ListenerAdapter {
         if (event.getMember() == event.getGuild().getSelfMember()) {
             LoopGuilds.remove(event.getGuild().getId());
             LoopQueueGuilds.remove(event.getGuild().getId());
+            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
             return;
         }
         AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
