@@ -50,20 +50,12 @@ public class CommandInsert extends BaseCommand {
         } else {
             try {
                 musicManager.scheduler.queue.clear();
-                List<AudioTrack> newQueue = new ArrayList<>();
-                for (int i = 0; i < Integer.parseInt(args[1]); i++) {
-                    newQueue.add((AudioTrack) queue.toArray()[i]);
-                    musicManager.scheduler.queue.add((AudioTrack) queue.toArray()[i]);
-                }
-                for (int i = 0; i < newQueue.size() - 1; i++) {
-                    queue.remove(newQueue.get(i));
-                }
+                musicManager.scheduler.queue.addAll(queue.subList(0, Integer.parseInt(args[1])-1));
                 PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), args[2], true);
-                for (int i = 0; i < Integer.parseInt(args[1]); i++) {
-                    musicManager.scheduler.queue.add((AudioTrack) queue.toArray()[i]);
-                }
+                musicManager.scheduler.queue.addAll(queue.subList(Integer.parseInt(args[1]), queue.size()));
+                event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
             } catch (Exception e) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError(e.getMessage())).queue();
+                throw new RuntimeException(e);
             }
         }
     }
