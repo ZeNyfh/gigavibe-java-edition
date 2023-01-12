@@ -529,8 +529,10 @@ public class Main extends ListenerAdapter {
                 }
                 if (members == 0) { //If alone
                     try {
-                        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.clear();
-                        PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                        GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+                        musicManager.scheduler.queue.clear();
+                        musicManager.audioPlayer.destroy();
+                        musicManager.audioPlayer.setPaused(false);
                         clearVotes(event.getGuild().getIdLong());
                         event.getGuild().getAudioManager().closeAudioConnection();
                     } catch (Exception ignored) {
