@@ -23,6 +23,7 @@ public class CommandPlay extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
+        event.deferReply();
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
             return;
         }
@@ -88,6 +89,11 @@ public class CommandPlay extends BaseCommand {
     @Override
     public String getDescription() {
         return "Plays songs or playlists from many sources including yt, soundcloud spotify and discord/http urls.";
+    }
+
+    @Override
+    public String getOptions() {
+        return "<file OR track>";
     }
 
     @Override

@@ -65,6 +65,11 @@ public class CommandVolume extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "<0 TO 500>";
+    }
+
+    @Override
     public String getCategory() {
         return "DJ";
     }

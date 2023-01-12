@@ -26,26 +26,26 @@ public class CommandSkip extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
+            event.replyEmbeds(createQuickError("No tracks are playing right now."));
             return;
         }
 
@@ -59,7 +59,7 @@ public class CommandSkip extends BaseCommand {
         }
         List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
         if (currentVotes.contains(event.getMember())) {
-            channel.sendMessageEmbeds(createQuickError("You have already voted to skip.")).queue();
+            event.replyEmbeds(createQuickError("You have already voted to skip."));
             return;
         }
         currentVotes.add(event.getMember());
@@ -67,7 +67,7 @@ public class CommandSkip extends BaseCommand {
             clearVotes(event.getGuild().getIdLong());
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "⏩ Skipped the track.")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the track."));
             } else { // if there is something playing after the skip command
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(botColour);
@@ -84,7 +84,7 @@ public class CommandSkip extends BaseCommand {
                 event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
             }
         } else {
-            channel.sendMessageEmbeds(createQuickEmbed("✅ Voted to skip the track", currentVotes.size() + " of " + VCMembers.size() / 2 + " needed to skip.")).queue();
+            event.replyEmbeds(createQuickEmbed("✅ Voted to skip the track", currentVotes.size() + " of " + VCMembers.size() / 2 + " needed to skip."));
         }
     }
 
@@ -96,6 +96,11 @@ public class CommandSkip extends BaseCommand {
     @Override
     public String getCategory() {
         return "Music";
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

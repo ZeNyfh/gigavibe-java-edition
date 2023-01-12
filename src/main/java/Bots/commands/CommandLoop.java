@@ -15,15 +15,15 @@ public class CommandLoop extends BaseCommand {
             return;
         }
         if (!audioManager.isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not playing anything.")).queue();
+            event.replyEmbeds(createQuickError("I am not playing anything."));
             return;
         }
 
         if (LoopGuilds.contains(event.getGuild().getId())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track.")).queue();
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track."));
             LoopGuilds.remove(event.getGuild().getId());
         } else {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track.")).queue();
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track."));
             LoopGuilds.add(event.getGuild().getId());
         }
     }
@@ -33,6 +33,10 @@ public class CommandLoop extends BaseCommand {
         return "Music";
     }
 
+    @Override
+    public String getOptions() {
+        return "";
+    }
     @Override
     public String[] getNames() {
         return new String[]{"loop"};

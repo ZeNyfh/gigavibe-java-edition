@@ -164,6 +164,11 @@ public class CommandAudioDL extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "<URL>";
+    }
+
+    @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOption(OptionType.STRING, "url", "URL of the audio to download", true);
         //TODO: System can now handle sub-commands, so this needs to be adjusted. -9382

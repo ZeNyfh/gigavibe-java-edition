@@ -14,17 +14,22 @@ public class CommandJoin extends BaseCommand {
             return;
         }
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You are not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("You are not in a vc."));
             return;
         }
         event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Joined your vc.")).queue();
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Joined your vc."));
 
     }
 
     @Override
     public String[] getNames() {
         return new String[]{"connect", "join"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

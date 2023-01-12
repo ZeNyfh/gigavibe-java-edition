@@ -102,8 +102,13 @@ public class CommandForceSkip extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "[Integer]";
+    }
+
+    @Override
     public String getDescription() {
-        return "Casts skips the song forcefully.";
+        return "Skips the song forcefully.";
     }
 
     @Override

@@ -8,7 +8,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandInvite extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("**Have fun!**", "http://bot.zenyfh.co.uk/")).queue();
+        event.replyEmbeds(createQuickEmbed("**Have fun!**", "http://bot.zenyfh.co.uk/"));
     }
 
     @Override
@@ -19,6 +19,11 @@ public class CommandInvite extends BaseCommand {
     @Override
     public String[] getNames() {
         return new String[]{"invite"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

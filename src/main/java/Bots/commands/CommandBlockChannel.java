@@ -101,6 +101,11 @@ public class CommandBlockChannel extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "<list> | <add OR remove> <channel>";
+    }
+
+    @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addSubcommands(
                 new SubcommandData("list", "Lists the blocked channels"),

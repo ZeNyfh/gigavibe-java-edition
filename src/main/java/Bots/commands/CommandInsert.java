@@ -26,7 +26,7 @@ public class CommandInsert extends BaseCommand {
         }
         String[] args = event.getContentRaw().split(" ", 3);
         if (!args[1].matches("^\\d+$")) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`")).queue();
+            event.replyEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`"));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -45,7 +45,7 @@ public class CommandInsert extends BaseCommand {
             try {
                 PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), args[2], true);
             } catch (FriendlyException ignored) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388")).queue();
+                event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
             }
         } else {
             try {
@@ -71,6 +71,11 @@ public class CommandInsert extends BaseCommand {
     @Override
     public String getCategory() {
         return "dev"; //DJ
+    }
+
+    @Override
+    public String getOptions() {
+        return "<position> <track>";
     }
 
     @Override

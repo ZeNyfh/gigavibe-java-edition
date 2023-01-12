@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
@@ -124,6 +125,12 @@ public class MessageEvent {
 
     public boolean isAcknowledged() {
         return isSlash() && ((SlashCommandInteractionEvent) this.coreEvent).isAcknowledged();
+    }
+
+    public void deferReply() {
+        if (isSlash()) {
+            ((SlashCommandInteractionEvent) this.coreEvent).deferReply().queue();
+        }
     }
 
     public void reply(String s) {

@@ -157,6 +157,11 @@ public class CommandRadio extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "<list OR name> OR <search> <radioName>";
+    }
+
+    @Override
     public String[] getNames() {
         return new String[]{"radio", "radios"};
     }

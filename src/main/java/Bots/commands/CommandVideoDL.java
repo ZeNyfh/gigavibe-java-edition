@@ -162,6 +162,11 @@ public class CommandVideoDL extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "url";
+    }
+
+    @Override
     public String getDescription() {
         return "Downloads a video from a compatible URL.";
     }

@@ -21,18 +21,23 @@ public class CommandDisconnect extends BaseCommand {
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue.")).queue();
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue."));
         clearVotes(event.getGuild().getIdLong());
     }
 
     @Override
     public String[] getNames() {
-        return new String[]{"disconnect", "fu" + "ckoff", "fu" + "ck off", "shutup", "dc", "stop", "leave"};
+        return new String[]{"disconnect", "fu" + "ckoff", "fu" + "ck off", "shutup", "dc", "leave"};
     }
 
     @Override
     public String getCategory() {
         return "DJ";
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

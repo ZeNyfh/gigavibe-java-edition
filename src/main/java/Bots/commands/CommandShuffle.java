@@ -22,14 +22,13 @@ public class CommandShuffle extends BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
             return;
         }
-        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds((createQuickError("Im not in a vc.")));
             return;
         }
 
@@ -37,12 +36,12 @@ public class CommandShuffle extends BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds((createQuickError("You need to be in a voice channel to use this command.")));
             return;
         }
 
         if (queue.size() == 0) {
-            channel.sendMessageEmbeds(createQuickError("There is nothing in the queue.")).queue();
+            event.replyEmbeds(createQuickError("There is nothing in the queue."));
             return;
         }
 
@@ -51,7 +50,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        channel.sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Shuffled the queue!")).queue();
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Shuffled the queue!"));
     }
 
     @Override
@@ -62,6 +61,11 @@ public class CommandShuffle extends BaseCommand {
     @Override
     public String getCategory() {
         return "DJ";
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

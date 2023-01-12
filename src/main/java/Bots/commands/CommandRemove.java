@@ -27,31 +27,31 @@ public class CommandRemove extends BaseCommand {
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
         assert selfVoiceState != null;
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         String string = event.getArgs()[1];
         if (string.matches("")) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, provide an integer.")).queue();
+            event.replyEmbeds(createQuickError("Invalid arguments, provide an integer."));
             return;
         }
         if (!string.matches("^\\d+$")) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only.")).queue();
+            event.replyEmbeds(createQuickError("Invalid arguments, integers only."));
             return;
         }
         if (queue.isEmpty()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("What are you trying to remove, the queue is empty.")).queue();
+            event.replyEmbeds(createQuickError("What are you trying to remove, the queue is empty."));
             return;
         }
         if (queue.size() < Integer.parseInt(string) - 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("The provided number was too large.")).queue();
+            event.replyEmbeds(createQuickError("The provided number was too large."));
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -59,17 +59,22 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")).queue(); // not an error, intended
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")); // not an error, intended
     }
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.INTEGER, "count", "The track to remove from the position in the queue.", true);
+        slashCommand.addOption(OptionType.INTEGER, "position", "The track to remove from the position in the queue.", true);
     }
 
     @Override
     public String getCategory() {
         return "DJ";
+    }
+
+    @Override
+    public String getOptions() {
+        return "<queue_position>";
     }
 
     @Override

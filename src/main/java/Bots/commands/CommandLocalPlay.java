@@ -23,7 +23,7 @@ public class CommandLocalPlay extends BaseCommand {
         }
 
         if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("you arent in a vc cunt")).queue();
+            event.replyEmbeds(createQuickError("you arent in a vc cunt"));
             return;
         }
 
@@ -45,6 +45,11 @@ public class CommandLocalPlay extends BaseCommand {
     @Override
     public String[] getNames() {
         return new String[]{"playfile", "pf"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "<path>";
     }
 
     @Override

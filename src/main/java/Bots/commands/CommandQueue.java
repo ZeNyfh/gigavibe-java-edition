@@ -31,7 +31,7 @@ public class CommandQueue extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -39,7 +39,7 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            channel.sendMessageEmbeds(createQuickError("The queue is empty.")).queue();
+            event.replyEmbeds(createQuickError("The queue is empty."));
             embed.clear();
             return;
         }
@@ -58,7 +58,7 @@ public class CommandQueue extends BaseCommand {
         String[] args = event.getArgs();
         if (args.length == 2) {
             if (!args[1].matches("^\\d+$")) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`")).queue();
+                event.replyEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`"));
                 return;
             }
             queuePages.put(event.getGuild().getIdLong(), Integer.parseInt(args[1]));
@@ -83,6 +83,11 @@ public class CommandQueue extends BaseCommand {
     @Override
     public String getCategory() {
         return "Music";
+    }
+
+    @Override
+    public String getOptions() {
+        return "[page]";
     }
 
     @Override

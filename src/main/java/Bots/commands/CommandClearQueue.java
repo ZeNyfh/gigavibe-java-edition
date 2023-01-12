@@ -25,25 +25,25 @@ public class CommandClearQueue extends BaseCommand {
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
         clearVotes(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        channel.sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Cleared the queue!")).queue();
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Cleared the queue!"));
     }
 
     @Override
@@ -54,6 +54,11 @@ public class CommandClearQueue extends BaseCommand {
     @Override
     public String getCategory() {
         return "DJ";
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

@@ -94,6 +94,11 @@ public class CommandRemind extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "[DD:][HH:][MM:]<SS> [MESSAGE]";
+    }
+
+    @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOption(OptionType.STRING, "timestamp", "[DD:][HH:][MM:]<SS> (brackets should be omitted)", true);
         slashCommand.addOption(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false);

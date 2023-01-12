@@ -10,7 +10,7 @@ import java.io.IOException;
  * @author 9382
  * @version 1.2
  */
-public class BaseCommand {
+public abstract class BaseCommand {
     SlashCommandData slashCommand;
 
     public void execute(MessageEvent event) throws IOException { //The main event loop
@@ -18,6 +18,8 @@ public class BaseCommand {
 
     public void Init() { //Optional initialisation stuff if something is required on start for a command
     }
+
+    public abstract String getOptions();
 
     public void ProvideOptions(SlashCommandData slashCommand) { //Provides options for a slash command
     }

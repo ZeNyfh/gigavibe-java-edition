@@ -14,13 +14,14 @@ import static java.lang.System.currentTimeMillis;
 public class CommandBotInfo extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
+        event.deferReply();
         int CommandCount = 0;
         int vcCount = 0;
         long id = Long.parseLong("211789389401948160");
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
             if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
+                event.replyEmbeds(createQuickError("You dont have the permission to run this command."));
                 return;
             }
         }
@@ -55,6 +56,11 @@ public class CommandBotInfo extends BaseCommand {
     @Override
     public String[] getNames() {
         return new String[]{"info"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

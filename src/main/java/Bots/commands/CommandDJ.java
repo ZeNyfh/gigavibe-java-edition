@@ -6,7 +6,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -68,10 +70,10 @@ public class CommandDJ extends BaseCommand {
             eb.setColor(botColour);
             eb.setTitle("DJs for " + event.getGuild().getName());
             eb.appendDescription(builder);
-            event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+            event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar code so we merge them initially
             if (event.getArgs().length < 3) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
+                event.replyEmbeds(createQuickError("No user or role were specified."));
                 return;
             }
             long member = 0;
@@ -82,7 +84,7 @@ public class CommandDJ extends BaseCommand {
             if (matcher.find()) {
                 suspectedID = Long.parseLong(matcher.group(2));
             } else {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No user or role were specified.")).queue();
+                event.replyEmbeds(createQuickError("No user or role were specified."));
                 return;
             }
             User suspectedUser = event.getJDA().getUserById(suspectedID);
@@ -94,36 +96,36 @@ public class CommandDJ extends BaseCommand {
                 role = suspectedRole.getIdLong(); // check for userid
             }
             if (member == 0 && role == 0) {
-                event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No valid user or role was given.")).queue();
+                event.replyEmbeds(createQuickError("No valid user or role was given."));
                 return;
             }
             if (isAdding) { //Adding
                 if (member != 0) {
                     if (DJUsers.contains(member)) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This member is already in the DJ list!")).queue();
+                        event.replyEmbeds(createQuickError("This member is already in the DJ list!"));
                     } else {
                         DJUsers.add(member);
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedUser.getAsMention() + " to the list of DJ members.")).queue();
+                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedUser.getAsMention() + " to the list of DJ members."));
                     }
                 } else {
                     if (DJRoles.contains(role)) {
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("This role is already in the DJ list!")).queue();
+                        event.replyEmbeds(createQuickError("This role is already in the DJ list!"));
                     } else {
                         DJRoles.add(role);
-                        event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedRole.getAsMention() + " to the list of DJ roles.")).queue();
+                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Added " + suspectedRole.getAsMention() + " to the list of DJ roles."));
                     }
                 }
             } else { //Removing
                 if (member != 0) {
                     DJUsers.remove(member);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedUser.getAsMention() + " from the list of DJ members.")).queue();
+                    event.replyEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedUser.getAsMention() + " from the list of DJ members."));
                 } else {
                     DJRoles.remove(role);
-                    event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedRole.getAsMention() + " from the list of DJ roles.")).queue();
+                    event.replyEmbeds(createQuickEmbed("✅ **Success**", "Removed " + suspectedRole.getAsMention() + " from the list of DJ roles."));
                 }
             }
         } else {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Invalid arguments.")).queue();
+            event.replyEmbeds(createQuickError("Invalid arguments."));
         }
     }
 
@@ -143,9 +145,22 @@ public class CommandDJ extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "";
+    }
+
+    @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.STRING, "what-are-optional-args", "IDK man");
-        //TODO: System can now handle sub-commands, so this needs to be adjusted. -9382
+        slashCommand.addSubcommands(
+                new SubcommandData("add", "Adds someone/a role from DJ.").addOptions(
+                        new OptionData(OptionType.USER, "user", "Gives DJ to the user.", false),
+                        new OptionData(OptionType.ROLE, "role", "Gives DJ to the role.", false)
+                ),
+                new SubcommandData("remove", "Removes someone/a role from DJ.").addOptions(
+                        new OptionData(OptionType.USER, "user", "Removes DJ from the user.", false),
+                        new OptionData(OptionType.ROLE, "role", "Removes DJ from the role.", false)
+                )
+        );
     }
 
     @Override

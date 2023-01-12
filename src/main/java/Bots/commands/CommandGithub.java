@@ -22,6 +22,11 @@ public class CommandGithub extends BaseCommand {
     }
 
     @Override
+    public String getOptions() {
+        return "";
+    }
+
+    @Override
     public String getDescription() {
         return "Sends github URL and some info.";
     }

@@ -14,7 +14,7 @@ public class CommandBug extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (event.getArgs().length == 1) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("Please provide something to report.")).queue();
+            event.replyEmbeds(createQuickError("Please provide something to report."));
             return;
         }
         Objects.requireNonNull(event.getJDA().getTextChannelById(1055224772092506163L)).sendMessage("------------------------------\n" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n\n" + event.getContentRaw()).queue();
@@ -34,6 +34,11 @@ public class CommandBug extends BaseCommand {
     @Override
     public String getDescription() {
         return "Sends a bug report to the developer.";
+    }
+
+    @Override
+    public String getOptions() {
+        return "<Message>";
     }
 
     @Override

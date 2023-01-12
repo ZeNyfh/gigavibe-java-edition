@@ -15,11 +15,11 @@ public class CommandSendAnnouncement extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (Objects.requireNonNull(event.getMember()).getIdLong() != 211789389401948160L) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("You dont have the permission to run this command.")).queue();
+            event.replyEmbeds(createQuickError("You dont have the permission to run this command."));
             return;
         }
         if (event.getArgs().length < 2) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("No argument given.")).queue();
+            event.replyEmbeds(createQuickError("No argument given."));
             return;
         }
         for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
@@ -39,6 +39,11 @@ public class CommandSendAnnouncement extends BaseCommand {
     @Override
     public String[] getNames() {
         return new String[]{"sendannouncement", "announcement", "announce"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "Message";
     }
 
     @Override

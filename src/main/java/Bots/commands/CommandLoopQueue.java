@@ -12,15 +12,15 @@ public class CommandLoopQueue extends BaseCommand {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickError("I am not playing anything.")).queue();
+            event.replyEmbeds(createQuickError("I am not playing anything."));
             return;
         }
 
         if (LoopQueueGuilds.contains(event.getGuild().getId())) {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue.")).queue();
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue."));
             LoopQueueGuilds.remove(event.getGuild().getId());
         } else {
-            event.getChannel().asTextChannel().sendMessageEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue.")).queue();
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue."));
             LoopQueueGuilds.add(event.getGuild().getId());
         }
     }
@@ -28,6 +28,11 @@ public class CommandLoopQueue extends BaseCommand {
     @Override
     public String[] getNames() {
         return new String[]{"loopqueue", "loopq"};
+    }
+
+    @Override
+    public String getOptions() {
+        return "";
     }
 
     @Override

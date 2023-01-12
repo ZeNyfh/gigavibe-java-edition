@@ -28,7 +28,7 @@ public class CommandSeek extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("Im not in a vc.")).queue();
+            event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
 
@@ -36,12 +36,12 @@ public class CommandSeek extends BaseCommand {
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in a voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
 
         if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            channel.sendMessageEmbeds(createQuickError("You need to be in the same voice channel to use this command.")).queue();
+            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
 
@@ -49,7 +49,7 @@ public class CommandSeek extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
-            channel.sendMessageEmbeds(createQuickError("No tracks are playing right now.")).queue();
+            event.replyEmbeds(createQuickError("No tracks are playing right now."));
             return;
         }
         String[] args = event.getArgs();
@@ -58,7 +58,7 @@ public class CommandSeek extends BaseCommand {
                 String[] times = args[1].split(":", 3);
                 for (int i = 0; i < times.length; ) {
                     if (!times[i].matches("^\\d+$")) {
-                        channel.sendMessageEmbeds(createQuickError("Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`")).queue();
+                        event.replyEmbeds(createQuickError("Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`"));
                         return;
                     }
                     i++;
@@ -74,17 +74,17 @@ public class CommandSeek extends BaseCommand {
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    channel.sendMessageEmbeds(createQuickError("Argument is lower than or equal to 0.")).queue();
+                    event.replyEmbeds(createQuickError("Argument is lower than or equal to 0."));
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
-                channel.sendMessageEmbeds(createQuickEmbed(" ", "✅ Set the position of the track to: **" + toSimpleTimestamp(position) + ".**")).queue();
+                event.replyEmbeds(createQuickEmbed(" ", "✅ Set the position of the track to: **" + toSimpleTimestamp(position) + ".**"));
 
             } else {
-                channel.sendMessageEmbeds(createQuickError("You cannot seek with this track.")).queue();
+                event.replyEmbeds(createQuickError("You cannot seek with this track."));
             }
         } else {
-            channel.sendMessageEmbeds(createQuickError("No argument given.")).queue();
+            event.replyEmbeds(createQuickError("No argument given."));
         }
     }
 
@@ -98,6 +98,11 @@ public class CommandSeek extends BaseCommand {
         return "DJ";
     }
 
+
+    @Override
+    public String getOptions() {
+        return "[HH:][MM:]<SS>";
+    }
     @Override
     public String[] getNames() {
         return new String[]{"seek"};

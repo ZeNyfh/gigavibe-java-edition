@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.util.Arrays;
+
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 
@@ -29,6 +31,7 @@ public class CommandHelp extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
+        event.deferReply();
         int i = 0;
         try {
             Arg = event.getArgs()[1].toLowerCase();
@@ -60,7 +63,7 @@ public class CommandHelp extends BaseCommand {
                         builder.append("**(").append(name).append(")**");
                     }
                 }
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + /*Arrays.toString(Command.getOptions())*/"This needs implementing" + "** - " + Command.getDescription() + builder + "\n\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + builder + "\n\n");
             }
         }
         if ("general".equals(Arg)) {
@@ -99,6 +102,11 @@ public class CommandHelp extends BaseCommand {
     @Override
     public String getDescription() {
         return "Shows you a list of commands.";
+    }
+
+    @Override
+    public String getOptions() {
+        return "[category]";
     }
 
     @Override
