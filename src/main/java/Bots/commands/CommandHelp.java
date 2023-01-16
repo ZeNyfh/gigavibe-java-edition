@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.util.Arrays;
-
 import static Bots.Main.botColour;
 import static Bots.Main.commands;
 

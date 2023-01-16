@@ -103,6 +103,7 @@ public class CommandSeek extends BaseCommand {
     public String getOptions() {
         return "[HH:][MM:]<SS>";
     }
+
     @Override
     public String[] getNames() {
         return new String[]{"seek"};

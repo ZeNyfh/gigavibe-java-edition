@@ -3,7 +3,7 @@ package Bots.lavaplayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-public class GuildMusicManager{
+public class GuildMusicManager {
 
     public final AudioPlayer audioPlayer;
     public final TrackScheduler scheduler;

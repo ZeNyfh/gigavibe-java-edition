@@ -50,7 +50,7 @@ public class CommandInsert extends BaseCommand {
         } else {
             try {
                 musicManager.scheduler.queue.clear();
-                musicManager.scheduler.queue.addAll(queue.subList(0, Integer.parseInt(args[1])-1));
+                musicManager.scheduler.queue.addAll(queue.subList(0, Integer.parseInt(args[1]) - 1));
                 PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), args[2], true);
                 musicManager.scheduler.queue.addAll(queue.subList(Integer.parseInt(args[1]), queue.size()));
                 event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
