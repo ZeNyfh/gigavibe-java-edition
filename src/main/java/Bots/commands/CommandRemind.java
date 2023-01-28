@@ -97,7 +97,7 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"remind", "reminder", "r", "alarm" ,"timer", "schedule"};
+        return new String[]{"remind", "reminder", "r", "alarm", "timer", "schedule"};
     }
 
     @Override
