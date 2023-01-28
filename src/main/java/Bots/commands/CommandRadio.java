@@ -64,6 +64,7 @@ public class CommandRadio extends BaseCommand {
         radioLists.put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
         radioLists.put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
         radioLists.put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
+        radioLists.put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
         return radioLists;
     }
 

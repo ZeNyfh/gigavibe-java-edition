@@ -2,17 +2,20 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static Bots.ConfigManager.GetConfig;
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 public class CommandRemind extends BaseCommand {
     public static long convertToMillis(Long unixMillis, List<Integer> time) {
@@ -34,6 +37,19 @@ public class CommandRemind extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         JSONObject reminders = GetConfig("reminders");
+        StringBuilder builder = new StringBuilder();
+        if (event.getArgs()[1].equalsIgnoreCase("list")) {
+            for (Object reminder : reminders.keySet()) {
+                String[] finalReminders = reminders.get(reminder).toString().substring(0,reminders.get(reminder).toString().length()-1).substring(1).replaceAll("\"","").split(",");
+                builder.append("<t:").append(Long.parseLong(finalReminders[0])/1000).append(":f>");
+                if (finalReminders.length == 4){
+                    builder.append(" | ").append(finalReminders[3]);
+                }
+                builder.append("\n");
+            }
+            event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
+            return;
+        }
         Long timeNow = System.currentTimeMillis();
         Long reminderTime = timeNow;
         JSONArray finalArrayList = new JSONArray();
@@ -49,18 +65,19 @@ public class CommandRemind extends BaseCommand {
             values = List.of(event.getArgs()[1]);
         }
         for (String value : values) {
-            if (value.matches("[^\\d.]")) {
+            if (!value.matches("^\\d+$")) {
                 event.replyEmbeds(createQuickError("Invalid Arguments, was the time given correctly formatted? **`[DD:][HH:][MM:]<SS>`**"));
                 return;
+            } else {
+                intValues.add(Integer.parseInt(value));
             }
-            intValues.add(Integer.parseInt(value));
         }
         reminderTime = convertToMillis(reminderTime, intValues);
         finalArrayList.add(String.valueOf(reminderTime));
         finalArrayList.add(event.getChannel().asTextChannel().getId());
         finalArrayList.add(event.getMember().getUser().getId());
         if (event.getArgs().length > 2) {
-            StringBuilder builder = new StringBuilder();
+            builder = new StringBuilder();
             int i = 0;
             for (String arg : event.getArgs()) {
                 if (i == event.getArgs().length - 1) {
@@ -100,8 +117,13 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.STRING, "timestamp", "[DD:][HH:][MM:]<SS> (brackets should be omitted)", true);
-        slashCommand.addOption(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false);
+        slashCommand.addSubcommands(
+                new SubcommandData("add", "Adds a reminder.").addOptions(
+                        new OptionData(OptionType.STRING, "timestamp", "[DD:][HH:][MM:]<SS> (brackets should be omitted)", true),
+                        new OptionData(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false)
+                ),
+                new SubcommandData("list", "Lists your reminders.").addOptions()
+        );
     }
 
     @Override
