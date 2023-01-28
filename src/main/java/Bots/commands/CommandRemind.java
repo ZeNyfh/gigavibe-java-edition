@@ -40,7 +40,6 @@ public class CommandRemind extends BaseCommand {
         try {
             JSONObject reminders = GetConfig("reminders");
             StringBuilder builder = new StringBuilder();
-            printlnTime(Arrays.toString(event.getArgs()));
             event.getArgs()[0] = event.getArgs()[0].replaceAll("/([^/]+)/", "");
             try {
                 if (event.getArgs()[0].contains("list") || event.getArgs()[1].equalsIgnoreCase("list")) {
