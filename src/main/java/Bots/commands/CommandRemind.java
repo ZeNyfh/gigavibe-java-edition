@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static Bots.ConfigManager.GetConfig;
 import static Bots.Main.*;
@@ -36,63 +37,72 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        JSONObject reminders = GetConfig("reminders");
-        StringBuilder builder = new StringBuilder();
-        if (event.getArgs()[1].equalsIgnoreCase("list")) {
-            for (Object reminder : reminders.keySet()) {
-                String[] finalReminders = reminders.get(reminder).toString().substring(0,reminders.get(reminder).toString().length()-1).substring(1).replaceAll("\"","").split(",");
-                builder.append("<t:").append(Long.parseLong(finalReminders[0])/1000).append(":f>");
-                if (finalReminders.length == 4){
-                    builder.append(" | ").append(finalReminders[3]);
+        try {
+            JSONObject reminders = GetConfig("reminders");
+            StringBuilder builder = new StringBuilder();
+            printlnTime(Arrays.toString(event.getArgs()));
+            event.getArgs()[0] = event.getArgs()[0].replaceAll("/([^/]+)/", "");
+            try {
+                if (event.getArgs()[0].contains("list") || event.getArgs()[1].equalsIgnoreCase("list")) {
+                    for (Object reminder : reminders.keySet()) {
+                        String[] finalReminders = reminders.get(reminder).toString().substring(0, reminders.get(reminder).toString().length() - 1).substring(1).replaceAll("\"", "").split(",");
+                        if (!Objects.equals(finalReminders[2], event.getMember().getId())) {
+                            continue;
+                        }
+                        builder.append("<t:").append(Long.parseLong(finalReminders[0]) / 1000).append(":f>");
+                        if (finalReminders.length == 4) {
+                            builder.append(" | ").append(finalReminders[3]);
+                        }
+                        builder.append("\n");
+                    }
+                    event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
+                    return;
                 }
-                builder.append("\n");
-            }
-            event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
-            return;
-        }
-        Long timeNow = System.currentTimeMillis();
-        Long reminderTime = timeNow;
-        JSONArray finalArrayList = new JSONArray();
-        if (event.getArgs().length <= 1) {
-            event.replyEmbeds(createQuickError("Invalid Arguments."));
-            return;
-        }
-        List<Integer> intValues = new ArrayList<>();
-        List<String> values;
-        if (event.getArgs()[1].contains(":")) {
-            values = List.of(event.getArgs()[1].split(":"));
-        } else {
-            values = List.of(event.getArgs()[1]);
-        }
-        for (String value : values) {
-            if (!value.matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError("Invalid Arguments, was the time given correctly formatted? **`[DD:][HH:][MM:]<SS>`**"));
+            } catch (Exception ignored){}
+            Long timeNow = System.currentTimeMillis();
+            Long reminderTime = timeNow;
+            JSONArray finalArrayList = new JSONArray();
+            if (event.getArgs().length <= 1) {
+                event.replyEmbeds(createQuickError("Invalid Arguments."));
                 return;
+            }
+            List<Integer> intValues = new ArrayList<>();
+            List<String> values;
+            if (event.getArgs()[1].contains(":")) {
+                values = List.of(event.getArgs()[1].split(":"));
             } else {
-                intValues.add(Integer.parseInt(value));
+                values = List.of(event.getArgs()[1]);
             }
-        }
-        reminderTime = convertToMillis(reminderTime, intValues);
-        finalArrayList.add(String.valueOf(reminderTime));
-        finalArrayList.add(event.getChannel().asTextChannel().getId());
-        finalArrayList.add(event.getMember().getUser().getId());
-        if (event.getArgs().length > 2) {
-            builder = new StringBuilder();
-            int i = 0;
-            for (String arg : event.getArgs()) {
-                if (i == event.getArgs().length - 1) {
-                    builder.append(arg);
-                    break;
+            for (String value : values) {
+                if (!value.matches("^\\d+$")) {
+                    event.replyEmbeds(createQuickError("Invalid Arguments, was the time given correctly formatted? **`[DD:][HH:][MM:]<SS>`**"));
+                    return;
+                } else {
+                    intValues.add(Integer.parseInt(value));
                 }
-                if (i > 1) {
-                    builder.append(arg).append(" ");
-                }
-                i++;
             }
-            finalArrayList.add(String.valueOf(builder));
-        }
-        reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID, [reminderMessage]}
-        event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
+            reminderTime = convertToMillis(reminderTime, intValues);
+            finalArrayList.add(String.valueOf(reminderTime));
+            finalArrayList.add(event.getChannel().asTextChannel().getId());
+            finalArrayList.add(event.getMember().getUser().getId());
+            if (event.getArgs().length > 2) {
+                builder = new StringBuilder();
+                int i = 0;
+                for (String arg : event.getArgs()) {
+                    if (i == event.getArgs().length - 1) {
+                        builder.append(arg);
+                        break;
+                    }
+                    if (i > 1) {
+                        builder.append(arg).append(" ");
+                    }
+                    i++;
+                }
+                finalArrayList.add(String.valueOf(builder));
+            }
+            reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID, [reminderMessage]}
+            event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
+        } catch (Exception e){event.replyEmbeds(createQuickError(e.getMessage()));e.printStackTrace();}
     }
 
     @Override
@@ -122,7 +132,7 @@ public class CommandRemind extends BaseCommand {
                         new OptionData(OptionType.STRING, "timestamp", "[DD:][HH:][MM:]<SS> (brackets should be omitted)", true),
                         new OptionData(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false)
                 ),
-                new SubcommandData("list", "Lists your reminders.").addOptions()
+                new SubcommandData("list", "Lists your reminders.")
         );
     }
 
