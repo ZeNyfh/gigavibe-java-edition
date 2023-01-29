@@ -226,15 +226,17 @@ public class Main extends ListenerAdapter {
 
                 // reminders
                 JSONObject reminders = GetConfig("reminders");
-                Iterator<Object> iterator = reminders.keySet().iterator();
+                Iterator iterator = reminders.keySet().iterator();
                 while (iterator.hasNext()) {
                     Object key = iterator.next();
                     String object = reminders.get(key).toString().replaceAll("\"", "");
                     object = object.substring(1, object.length() - 1);
                     List<String> list = List.of(object.split(","));
-                    if (currentTimeMillis() < Long.parseLong(list.get(0))) {
-                        continue;
-                    }
+                    try {
+                        if (currentTimeMillis() < Long.parseLong(list.get(0))) {
+                            continue;
+                        }
+                    } catch (Exception ignored){}
                     iterator.remove();
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle("**Reminder!**");
@@ -242,7 +244,9 @@ public class Main extends ListenerAdapter {
                     if (list.size() == 4) {
                         builder.appendDescription("\n" + list.get(3)); // adding the optional reason
                     }
-                    Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
+                    try {
+                        Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
+                    } catch (Exception ignored){}
                 }
             }
         };
