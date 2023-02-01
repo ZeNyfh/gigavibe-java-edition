@@ -149,11 +149,12 @@ public class CommandRemind extends BaseCommand {
             builder = new StringBuilder();
             int i = 0;
             for (String arg : args) {
+                printlnTime(arg);
                 if (i == args.size() - 1) {
                     builder.append(arg);
                     break;
                 }
-                if (i > 1) {
+                if (i > 2) {
                     builder.append(arg).append(" ");
                 }
                 i++;
@@ -183,7 +184,7 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "[DD:][HH:][MM:]<SS> [MESSAGE]";
+        return "<add> [DD:][HH:][MM:]<SS> [MESSAGE] | <remove> <INDEX> | <list>";
     }
 
     @Override
