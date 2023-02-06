@@ -74,7 +74,7 @@ public class CommandDJ extends BaseCommand {
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar code so we merge them initially
             if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command."));
+                event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have the permission to use this command."));
                 return;
             }
             if (event.getArgs().length < 3) {
