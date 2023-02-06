@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -72,6 +73,10 @@ public class CommandDJ extends BaseCommand {
             eb.appendDescription(builder);
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar code so we merge them initially
+            if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
+                event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command."));
+                return;
+            }
             if (event.getArgs().length < 3) {
                 event.replyEmbeds(createQuickError("No user or role were specified."));
                 return;
