@@ -531,16 +531,16 @@ public class Main extends ListenerAdapter {
                 if (!member.getUser().isBot()) {
                     members++;
                 }
-                if (members == 0) { //If alone
-                    try {
-                        GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-                        musicManager.scheduler.queue.clear();
-                        musicManager.audioPlayer.destroy();
-                        musicManager.audioPlayer.setPaused(false);
-                        clearVotes(event.getGuild().getIdLong());
-                        event.getGuild().getAudioManager().closeAudioConnection();
-                    } catch (Exception ignored) {
-                    }
+            }
+            if (members == 0) { //If alone
+                try {
+                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+                    musicManager.scheduler.queue.clear();
+                    musicManager.audioPlayer.destroy();
+                    musicManager.audioPlayer.setPaused(false);
+                    clearVotes(event.getGuild().getIdLong());
+                    event.getGuild().getAudioManager().closeAudioConnection();
+                } catch (Exception ignored) {
                 }
             }
         }
