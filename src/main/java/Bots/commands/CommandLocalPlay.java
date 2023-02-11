@@ -49,7 +49,7 @@ public class CommandLocalPlay extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<path>";
+        return "<Local_Path>";
     }
 
     @Override

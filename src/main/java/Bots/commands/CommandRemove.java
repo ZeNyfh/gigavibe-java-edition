@@ -74,7 +74,7 @@ public class CommandRemove extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<queue_position>";
+        return "<Queue_Position>";
     }
 
     @Override

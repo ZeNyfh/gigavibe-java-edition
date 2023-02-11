@@ -101,7 +101,7 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<list> | <add OR remove> <channel>";
+        return "list | add OR remove <Channel>";
     }
 
     @Override

@@ -103,7 +103,7 @@ public class CommandForceSkip extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "[Integer]";
+        return "[Number]";
     }
 
     @Override

@@ -151,7 +151,7 @@ public class CommandDJ extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "";
+        return "add <User/Role> | remove <User/Role>";
     }
 
     @Override

@@ -75,7 +75,7 @@ public class CommandInsert extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<position> <track>";
+        return "<Queue_Position> <Track>";
     }
 
     @Override

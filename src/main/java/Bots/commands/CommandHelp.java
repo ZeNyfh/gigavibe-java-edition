@@ -104,7 +104,7 @@ public class CommandHelp extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "[category]";
+        return "[Category]";
     }
 
     @Override

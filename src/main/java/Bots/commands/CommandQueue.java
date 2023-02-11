@@ -87,7 +87,7 @@ public class CommandQueue extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "[page]";
+        return "[Page]";
     }
 
     @Override

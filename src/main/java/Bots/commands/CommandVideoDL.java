@@ -163,7 +163,7 @@ public class CommandVideoDL extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "url";
+        return "<Url>";
     }
 
     @Override

@@ -184,7 +184,7 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<add> [DD:][HH:][MM:]<SS> [MESSAGE] | <remove> <INDEX> | <list>";
+        return "reminder add [DD:][HH:][MM:]<SS> [Message] | remove <Index> | list\n";
     }
 
     @Override
