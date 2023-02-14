@@ -61,7 +61,7 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
-    public static String botVersion = "27.01.12"; // YY.MM.DD
+    public static String botVersion = "23.02.14"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
@@ -368,6 +368,15 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
+        int people = 0;
+        for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
+            if (!vcMember.getUser().isBot()){
+                people++;
+            }
+        }
+        if (people == 1) {
+            return true;
+        }
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
