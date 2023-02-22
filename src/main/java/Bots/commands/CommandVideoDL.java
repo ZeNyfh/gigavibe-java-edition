@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,120 +26,111 @@ public class CommandVideoDL extends BaseCommand {
             return;
         }
         final String ytdlp;
+
+        final String ffprobeString;
+        final String ffmpegString;
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
             ytdlp = "yt-dlp";
+            ffprobeString = "ffprobe";
+            ffmpegString = "ffmpeg";
         } else {
             ytdlp = "modules/yt-dlp.exe";
+            ffprobeString = "modules/ffprobe";
+            ffmpegString = "modules/ffmpeg";
         }
         File dir = new File("viddl");
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
             event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
 
-            String filename = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".mp4";
+            String inputFile = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".mp4";
+            String outputFile = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + "K.mp4";
+
             Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", filename, "--match-filter", "duration < 3600", "--no-playlist", filteredUrl
+                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile, "--no-playlist", filteredUrl
                 });
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                int i = 0;
+                try {
+                    while ((line = input.readLine()) != null) {
+                        i++;
+                        if (i >= 10 && line.contains("ETA")) {
+                            message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
+                            break;
+                        }
+                    }
+                } catch (Exception ignored) {}
+                p.waitFor();
             } catch (Exception e) {
                 e.printStackTrace();
                 message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong..."));
                 return;
             }
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            int i = 0;
-            try {
-                while ((line = input.readLine()) != null) {
-                    i++;
-                    if (line.contains("ETA") && i >= 10) {
-                        message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            int fileSize = 8192000;
+            if (event.getGuild().getBoostCount() >= 7) {
+                fileSize = 51200000;
             }
-            try {
-                p.waitFor();
-                input.close();
-            } catch (Exception ignored) {
-            }
-            File finalFile = new File(filename);
-            if (!finalFile.exists()) {
-                message[0].editMessageEmbeds(createQuickError("No file was downloaded"));
-                return;
-            }
-            //Beyond this point, we assume that activeNotice[0] just has to exist and continue on as such
-            if (finalFile.length() < 8192000 || finalFile.length() < 51200000 && event.getGuild().getBoostCount() >= 7) {
+
+            if (new File(inputFile).length() <= fileSize){
+                event.replyFiles(FileUpload.fromData(new File(inputFile)));
                 try {
-                    message[0].editMessageFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
-                    message[0].editMessageEmbeds(); //Remove embeds
+                    Thread.sleep(5000);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    message[0].editMessageEmbeds(createQuickError("The file could not be sent."));
-                    return;
-                }
-                try {
-                    finalFile.getAbsoluteFile().delete();
-                    return;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            String desiredFileSize = "<8M";
-            if (event.getGuild().getBoostCount() > 7) {
-                desiredFileSize = "<50M";
-            }
-            finalFile.delete();
-            try {
-                p = Runtime.getRuntime().exec(String.format(
-                        "%s -f \"[filesize%s]\" -o \"%s\" \"%s\" --match-filter \"duration < 3600\" --noplaylist",
-                        ytdlp, desiredFileSize, filename, filteredUrl
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
+                 }
+                new File(inputFile).delete();
                 return;
             }
-            input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            i = 0;
+
+            int crf = 20;
+            int bitrate = 1024;
+            int attempt = 0;
+
             try {
-                while ((line = input.readLine()) != null) {
-                    i++;
-                    if (i >= 10 && line.contains("ETA")) {
-                        message[0].editMessageEmbeds(createQuickEmbed(" ", "Previous download was too large, retrying...\n\n**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
-                        break;
+                // ffprobe to get res
+                String ffprobeCommand = ffprobeString + " -v error -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 " + inputFile;
+                Process ffprobe = Runtime.getRuntime().exec(ffprobeCommand);
+                BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(ffprobe.getInputStream()));
+                String videoWidth = ffprobeInput.readLine();
+                String videoHeight = ffprobeInput.readLine();
+
+                // change res to half
+                int scaleWidth = Integer.parseInt(videoWidth);
+                int scaleHeight = Integer.parseInt(videoHeight);
+                String scale = scaleWidth/4 + ":" + scaleHeight/4;
+                // compression
+                int numThreads = Runtime.getRuntime().availableProcessors() / 2;
+                String command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 33k -c:a libopus -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
+                long time = System.currentTimeMillis();
+
+                // check filesize
+                File output = new File(inputFile);
+                while (output.length() > fileSize) {
+                    attempt++;
+                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " + output.length()/1000000 + "MB\nAiming for <= " + fileSize/1000000 + "MB"));
+                    if (attempt > 10) {
+                        message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
+                        output.delete();
+                        new File(inputFile).delete();
+                        return;
                     }
+                    crf += 4;
+                    bitrate -= 128;
+                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 33k -c:a libopus -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
+                    p = Runtime.getRuntime().exec(command);
+                    p.waitFor();
+                    output = new File(outputFile);
                 }
-                if (input.readLine() == null) {
-                    input.close();
-                    message[0].editMessageEmbeds(createQuickError("The file could not be downloaded at all."));
-                    try {
-                        finalFile.getAbsoluteFile().delete();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                p.waitFor();
-                input.close();
-            } catch (Exception ignored) {
-            }
-            finalFile = new File(dir.getAbsolutePath() + "/" + filename + ".mp4");
-            File finalFile1 = finalFile;
-            message[0].editMessageFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
-            message[0].editMessageEmbeds(); //Remove embeds
-            try {
-                finalFile1.getAbsoluteFile().delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", "Resizing took " + (System.currentTimeMillis()-time)/1000 + " seconds."));
+                message[0].editMessageFiles(FileUpload.fromData(output));
+                Thread.sleep(5000);
+                output.delete();
+                new File(inputFile).delete();
+            } catch (Exception e) {e.printStackTrace();}
         }).start();
     }
 

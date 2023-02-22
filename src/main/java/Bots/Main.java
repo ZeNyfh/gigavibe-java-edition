@@ -236,7 +236,8 @@ public class Main extends ListenerAdapter {
                         if (currentTimeMillis() < Long.parseLong(list.get(0))) {
                             continue;
                         }
-                    } catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
                     iterator.remove();
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle("**Reminder!**");
@@ -246,7 +247,8 @@ public class Main extends ListenerAdapter {
                     }
                     try {
                         Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
-                    } catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         };
@@ -370,7 +372,7 @@ public class Main extends ListenerAdapter {
     public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
         int people = 0;
         for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
-            if (!vcMember.getUser().isBot()){
+            if (!vcMember.getUser().isBot()) {
                 people++;
             }
         }

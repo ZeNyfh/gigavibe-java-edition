@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -11,7 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,14 +49,14 @@ public class CommandRemind extends BaseCommand {
         if (event.getArgs().length > 1) {
             int i = 0;
             for (String string : event.getArgs()) {
-                if (i == 0){
+                if (i == 0) {
                     i++;
                     continue;
                 }
                 args.add(string);
             }
         }
-        if (args.size() == 1){
+        if (args.size() == 1) {
             event.replyEmbeds(createQuickError("No arguments were given."));
             return;
         }
@@ -79,17 +77,18 @@ public class CommandRemind extends BaseCommand {
                     }
                     builder.append("\n");
                 }
-                if (i == 0){
+                if (i == 0) {
                     builder.append("You have no reminders.");
                 }
                 event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
                 return;
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         Long timeNow = System.currentTimeMillis();
 
         // remove
-        if (args.get(1).equalsIgnoreCase("remove")){
+        if (args.get(1).equalsIgnoreCase("remove")) {
             ArrayList<String[]> finalReminders = new ArrayList<>();
             ArrayList<Object> toRemove = new ArrayList<>();
             for (Object reminder : reminders.keySet()) {
@@ -104,7 +103,7 @@ public class CommandRemind extends BaseCommand {
                 finalReminders.add(userReminders);
                 toRemove.add(reminder);
             }
-            if (Integer.parseInt(args.get(2)) > finalReminders.size() || Integer.parseInt(args.get(2)) <= 0){
+            if (Integer.parseInt(args.get(2)) > finalReminders.size() || Integer.parseInt(args.get(2)) <= 0) {
                 event.replyEmbeds(createQuickError("Invalid Arguments, the index was invalid."));
                 return;
             }
@@ -112,7 +111,7 @@ public class CommandRemind extends BaseCommand {
             builder = new StringBuilder();
             long reminderTime = Long.parseLong(finalReminder[0]) / 1000;
             builder.append("<t:").append(reminderTime).append(":f>");
-            if (finalReminder.length >= 4){
+            if (finalReminder.length >= 4) {
                 builder.append(" | ").append(finalReminder[3]);
             }
             event.replyEmbeds(createQuickEmbed("**Removed reminder number " + args.get(2) + "**", String.valueOf(builder)));
@@ -195,7 +194,7 @@ public class CommandRemind extends BaseCommand {
                         new OptionData(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false)
                 ),
                 new SubcommandData("remove", "removes a reminder based on list index.").addOptions(
-                        new OptionData(OptionType.INTEGER, "index","Use \"/reminder list\" to see indexes.")
+                        new OptionData(OptionType.INTEGER, "index", "Use \"/reminder list\" to see indexes.")
                 ),
                 new SubcommandData("list", "Lists your reminders.")
         );
