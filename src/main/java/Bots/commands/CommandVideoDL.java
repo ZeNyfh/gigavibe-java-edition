@@ -120,7 +120,7 @@ public class CommandVideoDL extends BaseCommand {
                     }
                     crf += 4;
                     bitrate -= 128;
-                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 33k -c:a libopus -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
+                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 45k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
                     p = Runtime.getRuntime().exec(command);
                     p.waitFor();
                     output = new File(outputFile);
