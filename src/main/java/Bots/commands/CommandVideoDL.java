@@ -39,6 +39,16 @@ public class CommandVideoDL extends BaseCommand {
             ffmpegString = "modules/ffmpeg";
         }
         File dir = new File("viddl");
+        float fileSize = 8192000;
+        if (event.getGuild().getBoostCount() >= 7) {
+            fileSize = 51200000;
+        }
+        if (event.getArgs().length == 3) {
+            if (event.getArgs()[2].toLowerCase().contains("true")) {
+                fileSize = 8192000;
+            }
+        }
+        float finalFileSize = fileSize;
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
             event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
@@ -50,7 +60,7 @@ public class CommandVideoDL extends BaseCommand {
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile, "--no-playlist", filteredUrl
+                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile,"--match-filter","\"duration", "<", "7200\"", "--no-playlist", filteredUrl
                 });
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
@@ -65,24 +75,19 @@ public class CommandVideoDL extends BaseCommand {
                     }
                 } catch (Exception ignored) {}
                 p.waitFor();
+                if (new File(inputFile).length() <= finalFileSize){
+                    event.replyFiles(FileUpload.fromData(new File(inputFile)));
+                    try {
+                        Thread.sleep(5000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    new File(inputFile).delete();
+                    return;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong..."));
-                return;
-            }
-            int fileSize = 8192000;
-            if (event.getGuild().getBoostCount() >= 7) {
-                fileSize = 51200000;
-            }
-
-            if (new File(inputFile).length() <= fileSize){
-                event.replyFiles(FileUpload.fromData(new File(inputFile)));
-                try {
-                    Thread.sleep(5000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                 }
-                new File(inputFile).delete();
                 return;
             }
 
@@ -109,9 +114,9 @@ public class CommandVideoDL extends BaseCommand {
 
                 // check filesize
                 File output = new File(inputFile);
-                while (output.length() > fileSize) {
+                while (output.length() > finalFileSize) {
                     attempt++;
-                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " + output.length()/1000000 + "MB\nAiming for <= " + fileSize/1000000 + "MB"));
+                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " +  String.format("%.3f", (double)output.length()/1000000) + "MB\nAiming for <= " + finalFileSize /1000000 + "MB"));
                     if (attempt > 10) {
                         message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
                         output.delete();
@@ -120,7 +125,7 @@ public class CommandVideoDL extends BaseCommand {
                     }
                     crf += 4;
                     bitrate -= 128;
-                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 45k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
+                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 55k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
                     p = Runtime.getRuntime().exec(command);
                     p.waitFor();
                     output = new File(outputFile);
@@ -145,7 +150,7 @@ public class CommandVideoDL extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"videodl", "vdl", "video", "viddl"};
+        return new String[]{"videodl", "vdl", "video", "viddl", "resize"};
     }
 
     @Override
@@ -166,6 +171,7 @@ public class CommandVideoDL extends BaseCommand {
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOption(OptionType.STRING, "url", "URL of the video to download.", true);
+        slashCommand.addOption(OptionType.BOOLEAN, "8mb", "Forced the Video to be <=8MB in size", false);
     }
 
     @Override
