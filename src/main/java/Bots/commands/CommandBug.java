@@ -5,6 +5,8 @@ import Bots.MessageEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import java.util.Objects;
+
 import static Bots.Main.createQuickError;
 
 public class CommandBug extends BaseCommand {
@@ -15,7 +17,7 @@ public class CommandBug extends BaseCommand {
             event.replyEmbeds(createQuickError("Please provide something to report."));
             return;
         }
-        event.getMember().getUser().openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n\n" + event.getContentRaw()).queue());
+        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n\n" + event.getContentRaw()).queue());
         event.reply("Thanks for sending in a bug report!");
     }
 

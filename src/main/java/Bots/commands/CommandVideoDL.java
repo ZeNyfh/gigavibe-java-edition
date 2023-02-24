@@ -109,7 +109,6 @@ public class CommandVideoDL extends BaseCommand {
                 String scale = scaleWidth/4 + ":" + scaleHeight/4;
                 // compression
                 int numThreads = Runtime.getRuntime().availableProcessors() / 2;
-                String command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 33k -c:a libopus -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
                 long time = System.currentTimeMillis();
 
                 // check filesize
@@ -125,7 +124,7 @@ public class CommandVideoDL extends BaseCommand {
                     }
                     crf += 4;
                     bitrate -= 128;
-                    command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 55k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
+                    String command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 55k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
                     p = Runtime.getRuntime().exec(command);
                     p.waitFor();
                     output = new File(outputFile);
