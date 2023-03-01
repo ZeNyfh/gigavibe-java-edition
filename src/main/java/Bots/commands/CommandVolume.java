@@ -14,7 +14,7 @@ import static Bots.Main.*;
 public class CommandVolume extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

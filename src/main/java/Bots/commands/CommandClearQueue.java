@@ -15,7 +15,7 @@ import static Bots.Main.*;
 public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
         final TextChannel channel = event.getChannel().asTextChannel();

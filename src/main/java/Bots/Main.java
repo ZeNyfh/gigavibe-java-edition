@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -369,7 +370,7 @@ public class Main extends ListenerAdapter {
         return false;
     }
 
-    public static boolean IsDJ(Guild guild, TextChannel textChannel, Member member) {
+    public static boolean IsDJ(Guild guild, MessageChannelUnion commandChannel, Member member) {
         int people = 0;
         for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
             if (!vcMember.getUser().isBot()) {
@@ -400,7 +401,7 @@ public class Main extends ListenerAdapter {
         if (check) {
             return true;
         } else {
-            textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
+            commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
             return false;
         }
     }

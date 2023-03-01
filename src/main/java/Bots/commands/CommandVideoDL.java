@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,7 +59,7 @@ public class CommandVideoDL extends BaseCommand {
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile,"--match-filter","\"duration", "<", "7200\"", "--no-playlist", filteredUrl
+                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile, "--match-filter", "\"duration", "<", "7200\"", "--no-playlist", filteredUrl
                 });
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
@@ -73,9 +72,10 @@ public class CommandVideoDL extends BaseCommand {
                             break;
                         }
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
                 p.waitFor();
-                if (new File(inputFile).length() <= finalFileSize){
+                if (new File(inputFile).length() <= finalFileSize) {
                     event.replyFiles(FileUpload.fromData(new File(inputFile)));
                     try {
                         Thread.sleep(5000);
@@ -106,7 +106,7 @@ public class CommandVideoDL extends BaseCommand {
                 // change res to half
                 int scaleWidth = Integer.parseInt(videoWidth);
                 int scaleHeight = Integer.parseInt(videoHeight);
-                String scale = scaleWidth/4 + ":" + scaleHeight/4;
+                String scale = scaleWidth / 4 + ":" + scaleHeight / 4;
                 // compression
                 int numThreads = Runtime.getRuntime().availableProcessors() / 2;
                 long time = System.currentTimeMillis();
@@ -115,7 +115,7 @@ public class CommandVideoDL extends BaseCommand {
                 File output = new File(inputFile);
                 while (output.length() > finalFileSize) {
                     attempt++;
-                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " +  String.format("%.3f", (double)output.length()/1000000) + "MB\nAiming for <= " + finalFileSize /1000000 + "MB"));
+                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " + String.format("%.3f", (double) output.length() / 1000000) + "MB\nAiming for <= " + finalFileSize / 1000000 + "MB"));
                     if (attempt > 10) {
                         message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
                         output.delete();
@@ -129,12 +129,14 @@ public class CommandVideoDL extends BaseCommand {
                     p.waitFor();
                     output = new File(outputFile);
                 }
-                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", "Resizing took " + (System.currentTimeMillis()-time)/1000 + " seconds."));
+                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", "Resizing took " + (System.currentTimeMillis() - time) / 1000 + " seconds."));
                 message[0].editMessageFiles(FileUpload.fromData(output));
                 Thread.sleep(5000);
                 output.delete();
                 new File(inputFile).delete();
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 

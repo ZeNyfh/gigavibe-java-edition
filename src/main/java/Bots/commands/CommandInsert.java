@@ -18,7 +18,7 @@ import static Bots.Main.*;
 public class CommandInsert extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
         if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {

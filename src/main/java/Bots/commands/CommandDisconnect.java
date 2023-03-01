@@ -10,7 +10,7 @@ import static Bots.Main.*;
 public class CommandDisconnect extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel().asTextChannel(), event.getMember())) {
+        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
         if (!event.getGuild().getAudioManager().isConnected()) {
