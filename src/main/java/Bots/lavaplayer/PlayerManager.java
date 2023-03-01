@@ -13,7 +13,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,18 +65,18 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel textChannel, String trackUrl, Boolean sendEmbed) {
+    public void loadAndPlay(MessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                textChannel.sendMessageEmbeds(createQuickError("There was an error and the spotify track could not load.")).queue();
+                commandChannel.sendMessageEmbeds(createQuickError("There was an error and the spotify track could not load.")).queue();
                 return;
             }
         }
-        final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(commandChannel.asGuildMessageChannel().getGuild());
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(textChannel);
+                audioTrack.setUserData(commandChannel);
                 if (!sendEmbed) {
                     musicManager.scheduler.queue(audioTrack);
                     return;
@@ -98,7 +98,7 @@ public class PlayerManager {
                     embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                 }
                 embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
-                textChannel.sendMessageEmbeds(embed.build()).queue();
+                commandChannel.sendMessageEmbeds(embed.build()).queue();
             }
 
 
@@ -122,7 +122,7 @@ public class PlayerManager {
                         embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                        textChannel.sendMessageEmbeds(embed.build()).queue();
+                        commandChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
                         for (int i = 0; i < tracks.size(); ) {
@@ -148,10 +148,10 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
-                        textChannel.sendMessageEmbeds(embed.build()).queue();
+                        commandChannel.sendMessageEmbeds(embed.build()).queue();
                     }
                     for (int i = 0; i < tracks.size(); ) {
-                        tracks.get(i).setUserData(textChannel);
+                        tracks.get(i).setUserData(commandChannel);
                         i++;
                     }
                 }
@@ -159,14 +159,14 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                textChannel.sendMessageEmbeds(createQuickError("No matches found for the track.")).queue();
+                commandChannel.sendMessageEmbeds(createQuickError("No matches found for the track.")).queue();
                 printlnTime("No match found for the track.");
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(textChannel.getGuild().getIdLong());
-                textChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
+                clearVotes(commandChannel.asGuildMessageChannel().getGuild().getIdLong());
+                commandChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();
             }
@@ -175,7 +175,7 @@ public class PlayerManager {
             float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
             Thread.sleep(500);
             if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
-                loadAndPlay(textChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
+                loadAndPlay(commandChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
                 musicManager.scheduler.nextTrack();
             }
         } catch (Exception ignored) {

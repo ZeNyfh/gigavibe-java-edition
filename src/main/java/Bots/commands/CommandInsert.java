@@ -21,7 +21,7 @@ public class CommandInsert extends BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
-        if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
+        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
             return;
         }
         String[] args = event.getContentRaw().split(" ", 3);
@@ -43,7 +43,7 @@ public class CommandInsert extends BaseCommand {
         }
         if (Integer.parseInt(args[1]) >= queue.size() || queue.isEmpty()) {
             try {
-                PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), args[2], true);
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), args[2], true);
             } catch (FriendlyException ignored) {
                 event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
             }
@@ -51,7 +51,7 @@ public class CommandInsert extends BaseCommand {
             try {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(queue.subList(0, Integer.parseInt(args[1]) - 1));
-                PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), args[2], true);
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), args[2], true);
                 musicManager.scheduler.queue.addAll(queue.subList(Integer.parseInt(args[1]), queue.size()));
                 event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
             } catch (Exception e) {

@@ -357,12 +357,12 @@ public class Main extends ListenerAdapter {
         return skips.get(guildID);
     }
 
-    public static boolean IsChannelBlocked(Guild guild, TextChannel textChannel) {
+    public static boolean IsChannelBlocked(Guild guild, MessageChannelUnion commandChannel) {
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (int i = 0; i < blockedChannels.size(); ) {
-            if (textChannel.getId().equals(blockedChannels.get(i))) {
-                textChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
+            if (commandChannel.getId().equals(blockedChannels.get(i))) {
+                commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
                 return true;
             }
             i++;
@@ -420,7 +420,7 @@ public class Main extends ListenerAdapter {
         queuePages.put(event.getGuild().getIdLong(), 0);
         guildTimeouts.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
-        Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
+        Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
     }
 
     @Override

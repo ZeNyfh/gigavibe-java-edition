@@ -125,15 +125,15 @@ public class CommandRadio extends BaseCommand {
         argFinal = argFinal.toLowerCase().substring(1);
         if (radioURL != null) {
             audioManager.openAudioConnection(memberChannel);
-            PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), radioURL, true);
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, true);
         } else {
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
-                    if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
+                    if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
                         return;
                     }
                     audioManager.openAudioConnection(memberChannel);
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), tempMap.getValue(), false);
+                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), tempMap.getValue(), false);
                     event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }

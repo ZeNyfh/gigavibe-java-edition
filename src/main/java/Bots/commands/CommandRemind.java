@@ -143,7 +143,7 @@ public class CommandRemind extends BaseCommand {
             }
             reminderTime = convertToMillis(reminderTime, intValues);
             finalArrayList.add(String.valueOf(reminderTime));
-            finalArrayList.add(event.getChannel().asTextChannel().getId());
+            finalArrayList.add(event.getChannel().getId());
             finalArrayList.add(event.getMember().getUser().getId());
             builder = new StringBuilder();
             int i = 0;

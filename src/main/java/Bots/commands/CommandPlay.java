@@ -24,7 +24,7 @@ public class CommandPlay extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         event.deferReply();
-        if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
+        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
             return;
         }
 
@@ -43,7 +43,7 @@ public class CommandPlay extends BaseCommand {
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()))) {
             String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
-            PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link, true);
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
             return;
         }
         String link;
@@ -70,7 +70,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
         try {
-            PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link, true);
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
         } catch (FriendlyException ignored) {
             event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
         }

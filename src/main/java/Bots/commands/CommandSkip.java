@@ -8,7 +8,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ public class CommandSkip extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -81,7 +79,7 @@ public class CommandSkip extends BaseCommand {
                     eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
                 }
                 eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
-                event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue();
+                event.replyEmbeds(eb.build());
             }
         } else {
             event.replyEmbeds(createQuickEmbed("✅ Voted to skip the track", currentVotes.size() + " of " + VCMembers.size() / 2 + " needed to skip."));

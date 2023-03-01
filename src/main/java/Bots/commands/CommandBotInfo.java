@@ -46,10 +46,10 @@ public class CommandBotInfo extends BaseCommand {
         eb.appendDescription("\uD83C\uDFB5  **VCs: ** " + vcCount + "\n\n");
         eb.setFooter("Version: " + botVersion);
         long time = currentTimeMillis();
-        event.getChannel().asTextChannel().sendMessageEmbeds(eb.build()).queue(response -> {
+        event.replyEmbeds(response -> {
             eb.appendDescription("⏱️  **Ping:** " + (currentTimeMillis() - time) + "ms");
-            response.editMessageEmbeds(eb.build()).queue();
-        });
+            response.editMessageEmbeds(eb.build());
+        }, eb.build());
     }
 
 

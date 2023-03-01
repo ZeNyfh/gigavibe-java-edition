@@ -6,7 +6,6 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.Objects;
 
@@ -18,7 +17,6 @@ public class CommandClearQueue extends BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
-        final TextChannel channel = event.getChannel().asTextChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

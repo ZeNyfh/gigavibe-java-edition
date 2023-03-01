@@ -23,7 +23,7 @@ public class CommandSendAnnouncement extends BaseCommand {
             return;
         }
         for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
-            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asTextChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getContentRaw().replace(event.getArgs()[0], ""))).queue();
+            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getContentRaw().replace(event.getArgs()[0], ""))).queue();
             try {
                 Thread.sleep(10000);
             } catch (Exception ignored) {

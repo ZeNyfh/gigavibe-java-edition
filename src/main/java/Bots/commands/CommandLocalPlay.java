@@ -18,7 +18,7 @@ import static Bots.Main.createQuickError;
 public class CommandLocalPlay extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        if (IsChannelBlocked(event.getGuild(), event.getChannel().asTextChannel())) {
+        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
             return;
         }
 
@@ -34,7 +34,7 @@ public class CommandLocalPlay extends BaseCommand {
             audioManager.openAudioConnection(memberChannel);
         }
         Path finalPath = Paths.get(event.getArgs()[1]);
-        PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), String.valueOf(finalPath), true);
+        PlayerManager.getInstance().loadAndPlay(event.getChannel(), String.valueOf(finalPath), true);
     }
 
     @Override
