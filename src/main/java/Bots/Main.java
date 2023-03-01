@@ -703,6 +703,10 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (!event.isFromGuild()) {
+            event.replyEmbeds(createQuickError("Commands are currently unsupported in DMs")).queue();
+            return;
+        }
         for (BaseCommand Command : commands) {
             if (processSlashCommand(Command, event)) {
                 return;
@@ -712,6 +716,10 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if (!event.isFromGuild() && event.getAuthor() != event.getJDA().getSelfUser()) {
+            event.getMessage().replyEmbeds(createQuickError("Commands are currently unsupported in DMs")).queue();
+            return;
+        }
         if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
             for (BaseCommand Command : commands) {
                 for (String alias : Command.getNames()) {
