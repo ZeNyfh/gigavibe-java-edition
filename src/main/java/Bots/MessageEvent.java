@@ -2,7 +2,7 @@ package Bots;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -27,7 +27,7 @@ public class MessageEvent {
     final Object coreEvent;
     final JDA JDA;
     final Guild guild;
-    final MessageChannelUnion channel;
+    final GuildMessageChannelUnion channel;
     final Member member;
     final User user;
     final String[] args;
@@ -40,7 +40,7 @@ public class MessageEvent {
         this.coreEvent = event;
         this.JDA = event.getJDA();
         this.guild = event.getGuild();
-        this.channel = event.getChannel();
+        this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getAuthor();
         this.args = event.getMessage().getContentRaw().split(" ");
@@ -54,7 +54,7 @@ public class MessageEvent {
         this.coreEvent = event;
         this.JDA = event.getJDA();
         this.guild = event.getGuild();
-        this.channel = event.getChannel();
+        this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getUser();
 
@@ -93,7 +93,7 @@ public class MessageEvent {
         return this.guild;
     }
 
-    public MessageChannelUnion getChannel() {
+    public GuildMessageChannelUnion getChannel() {
         return this.channel;
     }
 

@@ -13,7 +13,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,14 +65,14 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(MessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
+    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 commandChannel.sendMessageEmbeds(createQuickError("There was an error and the spotify track could not load.")).queue();
                 return;
             }
         }
-        final GuildMusicManager musicManager = this.getMusicManager(commandChannel.asGuildMessageChannel().getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(commandChannel.getGuild());
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
@@ -165,7 +165,7 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(commandChannel.asGuildMessageChannel().getGuild().getIdLong());
+                clearVotes(commandChannel.getGuild().getIdLong());
                 commandChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();

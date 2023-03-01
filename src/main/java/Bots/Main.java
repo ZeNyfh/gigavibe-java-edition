@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -357,7 +357,7 @@ public class Main extends ListenerAdapter {
         return skips.get(guildID);
     }
 
-    public static boolean IsChannelBlocked(Guild guild, MessageChannelUnion commandChannel) {
+    public static boolean IsChannelBlocked(Guild guild, GuildMessageChannelUnion commandChannel) {
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (int i = 0; i < blockedChannels.size(); ) {
@@ -370,7 +370,7 @@ public class Main extends ListenerAdapter {
         return false;
     }
 
-    public static boolean IsDJ(Guild guild, MessageChannelUnion commandChannel, Member member) {
+    public static boolean IsDJ(Guild guild, GuildMessageChannelUnion commandChannel, Member member) {
         int people = 0;
         for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
             if (!vcMember.getUser().isBot()) {
