@@ -149,7 +149,7 @@ public class CommandRemind extends BaseCommand {
                     timeLength = matcher.group(1);
                     reminderText = rawContent.substring(matcher.end());
                 } else {
-                    event.replyEmbeds(createQuickError("Invalid arguments (Couldn't find the timestamp)"));
+                    event.replyEmbeds(createQuickError("Invalid arguments, argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)"));
                     return;
                 }
             }
@@ -162,7 +162,7 @@ public class CommandRemind extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
             return;
         }
-        event.replyEmbeds(createQuickError("Invalid arguments."));
+        event.replyEmbeds(createQuickError("Invalid arguments. Argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)"));
     }
 
     @Override
@@ -177,7 +177,7 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Reminds the user after a duration. Argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)";
+        return "Reminds the user after a duration with an optional message";
     }
 
     @Override
