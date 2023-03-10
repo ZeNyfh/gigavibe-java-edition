@@ -178,12 +178,12 @@ public class CommandRemind extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Reminds the user with a message after X amount of time passes.";
+        return "Reminds the user after a duration. Argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)";
     }
 
     @Override
     public String getOptions() {
-        return "reminder add [DD:][HH:][MM:]<SS> [Message] | remove <Index> | list\n";
+        return "add <Duration> [Message] | remove <Index> | list\n";
     }
 
     @Override

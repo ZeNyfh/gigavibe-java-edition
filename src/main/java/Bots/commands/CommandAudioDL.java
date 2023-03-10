@@ -39,7 +39,7 @@ public class CommandAudioDL extends BaseCommand {
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "-x", "--audio-format", "vorbis", "-o", filename, "--match-filter", "duration < 3600", "--no-playlist", filteredUrl
+                        ytdlp, "-x", "--audio-format", "vorbis", "-o", filename, "--no-playlist", filteredUrl
                 });
             } catch (Exception e) {
                 e.printStackTrace();
