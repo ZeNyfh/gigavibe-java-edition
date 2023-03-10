@@ -116,8 +116,6 @@ public class Main extends ListenerAdapter {
         botPrefix = dotenv.get("PREFIX");
         botToken = dotenv.get("TOKEN");
 
-        printlnTime(botToken);
-
         if (dotenv.get("COLOUR") == null) {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
