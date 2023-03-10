@@ -29,8 +29,7 @@ public class CommandRemind extends BaseCommand {
         UnitToSeconds.put("day", 86400L);
         UnitToSeconds.put("week", 604800L);
         UnitToSeconds.put("year", 31536000L); //why
-        for (Object k : UnitToSeconds.keySet().toArray()) { //Alternative forms
-            String key = (String) k;
+        for (String key : UnitToSeconds.keySet().toArray(new String[0])) { //Alternative forms
             UnitToSeconds.put(key.substring(0, 1), UnitToSeconds.get(key));
             UnitToSeconds.put(key + "s", UnitToSeconds.get(key));
         }
