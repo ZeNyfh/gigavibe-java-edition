@@ -136,7 +136,7 @@ public class CommandRemind extends BaseCommand {
             if (event.isSlash()) { //Avoid parsing when we have an easy approach
                 timeLength = event.getOptions()[0].getAsString();
                 if (!timeLength.matches("^\\s*" + timestampMatcher + "\\s*$")) {
-                    event.replyEmbeds(createQuickError("Invalid timestamp duration given"));
+                    event.replyEmbeds(createQuickError("Invalid duration given. The duration must be integers followed by either years, weeks, days, hours, minutes, seconds, or their short-hand equivalent, such as '1day 5h'"));
                     return;
                 }
                 if (event.getOptions().length > 1)
@@ -149,7 +149,7 @@ public class CommandRemind extends BaseCommand {
                     timeLength = matcher.group(1);
                     reminderText = rawContent.substring(matcher.end());
                 } else {
-                    event.replyEmbeds(createQuickError("Invalid arguments, argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)"));
+                    event.replyEmbeds(createQuickError("No duration found. The duration must be integers followed by either years, weeks, days, hours, minutes, seconds, or their short-hand equivalent, such as '1day 5h'"));
                     return;
                 }
             }
@@ -162,7 +162,7 @@ public class CommandRemind extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
             return;
         }
-        event.replyEmbeds(createQuickError("Invalid arguments. Argument <duration> is an integer followed by years, weeks, days, hours, minutes, and seconds, but allows for short-form as well (1d 2h)"));
+        event.replyEmbeds(createQuickError("Invalid arguments"));
     }
 
     @Override
