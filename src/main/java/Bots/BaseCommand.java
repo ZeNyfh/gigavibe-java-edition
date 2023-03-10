@@ -13,27 +13,22 @@ import java.io.IOException;
 public abstract class BaseCommand {
     SlashCommandData slashCommand;
 
-    public void execute(MessageEvent event) throws IOException { //The main event loop
-    }
+    public abstract void execute(MessageEvent event) throws IOException; //The main event loop
 
     public void Init() { //Optional initialisation stuff if something is required on start for a command
     }
 
-    public abstract String getOptions();
+    public abstract String[] getNames(); //The first name in the list is treated as the primary name by cmds
+
+    public abstract String getCategory(); //The category, used by cmds
+
+    public abstract String getDescription(); //The description, used by cmds
+
+    public String getOptions() {
+        return "";
+    } //The options text used by help / cmds. Purely decorative
 
     public void ProvideOptions(SlashCommandData slashCommand) { //Provides options for a slash command
-    }
-
-    public String[] getNames() {
-        return new String[]{"<unset>"};
-    } //The first name in the list is treated as the primary name by cmds
-
-    public String getCategory() {//The category, used by cmds
-        return "<unset>";
-    }
-
-    public String getDescription() {//The description, used by cmds
-        return "<unset>";
     }
 
     public long getRatelimit() { //Ratelimit in milliseconds
