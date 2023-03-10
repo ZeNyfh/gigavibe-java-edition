@@ -70,7 +70,7 @@ public class CommandInsert extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "dev"; //DJ
+        return "DJ";
     }
 
     @Override

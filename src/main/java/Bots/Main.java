@@ -116,6 +116,8 @@ public class Main extends ListenerAdapter {
         botPrefix = dotenv.get("PREFIX");
         botToken = dotenv.get("TOKEN");
 
+        printlnTime(botToken);
+
         if (dotenv.get("COLOUR") == null) {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
@@ -248,7 +250,8 @@ public class Main extends ListenerAdapter {
                     }
                     try {
                         Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
-                    } catch (Exception ignored) {
+                    } catch (NullPointerException ignored) {
+                        Objects.requireNonNull(bot.getThreadChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
                     }
                 }
             }
