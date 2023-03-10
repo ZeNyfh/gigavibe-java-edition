@@ -44,7 +44,7 @@ public class MessageEvent {
         this.member = event.getMember();
         this.user = event.getAuthor();
         this.args = event.getMessage().getContentRaw().split(" ");
-        this.options = new OptionMapping[0]; //Not a thing outside of slash commands
+        this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.rawContent = event.getMessage().getContentRaw();
         this.attachments = event.getMessage().getAttachments();
         this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());
@@ -60,7 +60,7 @@ public class MessageEvent {
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
-        args.add("/" + event.getCommandPath());
+        args.add("/" + event.getCommandPath().replace("/", " ")); //Subcommands are like /command/sub instead of /command sub
         List<Message.Attachment> Attachments = new ArrayList<>();
         for (OptionMapping option : options) {
             if (option.getType() == OptionType.ATTACHMENT) {
@@ -69,10 +69,10 @@ public class MessageEvent {
                 args.add(option.getAsString());
             }
         }
-        this.args = args.toArray(new String[0]);
         this.options = options.toArray(new OptionMapping[0]);
         this.attachments = Attachments;
         this.rawContent = String.join(" ", args);
+        this.args = this.rawContent.split(" "); //Ensure parallel interpretation to a regular message (also just easier)
 
         if (event.getGuild() != null) {
             this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());
