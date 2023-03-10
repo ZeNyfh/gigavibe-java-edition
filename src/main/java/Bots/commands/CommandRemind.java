@@ -10,60 +10,65 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Bots.ConfigManager.GetConfig;
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandRemind extends BaseCommand {
-    public static long convertToMillis(Long unixMillis, List<Integer> time) {
-        if (time.size() >= 1) {
-            unixMillis += time.get(time.size() - 1) * 1000;
+    public static long processReminderTime(String timeText) {
+        long output = 0L;
+        HashMap<String, Long> UnitToSeconds = new HashMap<>();
+        UnitToSeconds.put("second", 1L);
+        UnitToSeconds.put("minute", 60L);
+        UnitToSeconds.put("hour", 3600L);
+        UnitToSeconds.put("day", 86400L);
+        UnitToSeconds.put("week", 604800L);
+        UnitToSeconds.put("year", 31536000L); //why
+        for (Object k : UnitToSeconds.keySet().toArray()) { //Alternative forms
+            String key = (String) k;
+            UnitToSeconds.put(key.substring(0, 1), UnitToSeconds.get(key));
+            UnitToSeconds.put(key + "s", UnitToSeconds.get(key));
         }
-        if (time.size() >= 2) {
-            unixMillis += time.get(time.size() - 2) * 60000;
+        String storage = "";
+        for (String term : timeText.strip().split(" ")) {
+            if (storage.equals("")) { //No stored term
+                if (term.matches("^\\d+$")) { //Unit is in the next term
+                    storage = term;
+                } else {
+                    Matcher matcher = Pattern.compile("^\\d+").matcher(term);
+                    matcher.find(); //This should never be false if the input was ran through timestampMatcher
+                    String multiplier = matcher.group();
+                    term = term.substring(multiplier.length()); //Expert-tier string manipulation
+                    output += UnitToSeconds.get(term) * Integer.parseInt(multiplier);
+                }
+            } else {
+                //Multiplier is the stored term, Unit is the current term
+                output += UnitToSeconds.get(term) * Integer.parseInt(storage);
+                storage = "";
+            }
         }
-        if (time.size() >= 3) {
-            unixMillis += time.get(time.size() - 3) * 3600000;
-        }
-        if (time.size() >= 4) {
-            unixMillis += time.get(time.size() - 4) * 86400000;
-        }
-        return unixMillis;
+        return output * 1000; //Milliseconds
     }
 
     @Override
     public void execute(MessageEvent event) {
         JSONObject reminders = GetConfig("reminders");
         StringBuilder builder = new StringBuilder();
-        ArrayList<String> args;
+        String[] args = event.getArgs();
 
-        // custom args
-        if (event.getArgs()[0].contains("/")) {
-            args = new ArrayList<>(List.of(event.getArgs()[0].substring(1).split("/")));
-        } else {
-            args = new ArrayList<>();
-            args.add(event.getArgs()[0]);
-        }
-        if (event.getArgs().length > 1) {
-            int i = 0;
-            for (String string : event.getArgs()) {
-                if (i == 0) {
-                    i++;
-                    continue;
-                }
-                args.add(string);
-            }
-        }
-        if (args.size() == 1) {
+        if (args.length == 1) {
             event.replyEmbeds(createQuickError("No arguments were given."));
             return;
         }
 
         // list
         try {
-            if (args.get(1).equalsIgnoreCase("list")) {
+            if (args[1].equalsIgnoreCase("list")) {
                 int i = 0;
                 for (Object reminder : reminders.keySet()) {
                     String[] finalReminders = reminders.get(reminder).toString().substring(0, reminders.get(reminder).toString().length() - 1).substring(1).replaceAll("\"", "").split(",");
@@ -88,7 +93,7 @@ public class CommandRemind extends BaseCommand {
         Long timeNow = System.currentTimeMillis();
 
         // remove
-        if (args.get(1).equalsIgnoreCase("remove")) {
+        if (args[1].equalsIgnoreCase("remove")) {
             ArrayList<String[]> finalReminders = new ArrayList<>();
             ArrayList<Object> toRemove = new ArrayList<>();
             for (Object reminder : reminders.keySet()) {
@@ -96,69 +101,64 @@ public class CommandRemind extends BaseCommand {
                 if (!Objects.equals(userReminders[2], event.getMember().getId())) {
                     continue;
                 }
-                if (args.size() <= 2 || !args.get(2).matches("^\\d+$")) {
+                if (args.length <= 2 || !args[2].matches("^\\d+$")) {
                     event.replyEmbeds(createQuickError("Invalid Arguments, was the index correct?"));
                     return;
                 }
                 finalReminders.add(userReminders);
                 toRemove.add(reminder);
             }
-            if (Integer.parseInt(args.get(2)) > finalReminders.size() || Integer.parseInt(args.get(2)) <= 0) {
+            int wantedIndex = Integer.parseInt(args[2]);
+            if (wantedIndex > finalReminders.size() || wantedIndex <= 0) {
                 event.replyEmbeds(createQuickError("Invalid Arguments, the index was invalid."));
                 return;
             }
-            String[] finalReminder = finalReminders.get(Integer.parseInt(args.get(2)) - 1);
+            String[] finalReminder = finalReminders.get(wantedIndex - 1);
             builder = new StringBuilder();
             long reminderTime = Long.parseLong(finalReminder[0]) / 1000;
             builder.append("<t:").append(reminderTime).append(":f>");
             if (finalReminder.length >= 4) {
                 builder.append(" | ").append(finalReminder[3]);
             }
-            event.replyEmbeds(createQuickEmbed("**Removed reminder number " + args.get(2) + "**", String.valueOf(builder)));
-            finalReminders.remove(Integer.parseInt(args.get(2)) - 1);
-            reminders.remove(toRemove.get(Integer.parseInt(args.get(2)) - 1));
+            event.replyEmbeds(createQuickEmbed("**Removed reminder number " + wantedIndex + "**", String.valueOf(builder)));
+            finalReminders.remove(wantedIndex - 1);
+            reminders.remove(toRemove.get(wantedIndex - 1));
             for (String[] oldReminder : finalReminders) {
                 reminders.put(timeNow, oldReminder);
             }
             return;
         }
 
-        Long reminderTime = timeNow;
-        JSONArray finalArrayList = new JSONArray();
-        if (args.get(1).equalsIgnoreCase("add")) {
-            List<Integer> intValues = new ArrayList<>();
-            List<String> values;
-            if (args.get(2).contains(":")) {
-                values = List.of(args.get(2).split(":"));
-            } else {
-                values = List.of(args.get(2));
-            }
-            for (String value : values) {
-                if (!value.matches("^\\d+$")) {
-                    event.replyEmbeds(createQuickError("Invalid Arguments, was the time given correctly formatted? **`[DD:][HH:][MM:]<SS>`**"));
+        if (args[1].equalsIgnoreCase("add")) {
+            JSONArray finalArrayList = new JSONArray();
+            String timeLength;
+            String reminderText = "";
+            String timestampMatcher = "(?:\\d+ ?(?:years?|weeks?|days?|hours?|minutes?|seconds?|[ywdhms])\\s*)+";
+            if (event.isSlash()) { //Avoid parsing when we have an easy approach
+                timeLength = event.getOptions()[0].getAsString();
+                if (!timeLength.matches("^\\s*" + timestampMatcher + "\\s*$")) {
+                    event.replyEmbeds(createQuickError("Invalid timestamp duration given"));
                     return;
+                }
+                if (event.getOptions().length > 1)
+                    reminderText = event.getOptions()[1].getAsString();
+            } else {
+                String rawContent = event.getContentRaw();
+                Pattern pattern = Pattern.compile("^[^\\w]+reminder add (" + timestampMatcher + ")");
+                Matcher matcher = pattern.matcher(rawContent);
+                if (matcher.find()) {
+                    timeLength = matcher.group(1);
+                    reminderText = rawContent.substring(matcher.end());
                 } else {
-                    intValues.add(Integer.parseInt(value));
+                    event.replyEmbeds(createQuickError("Invalid arguments (Couldn't find the timestamp)"));
+                    return;
                 }
             }
-            reminderTime = convertToMillis(reminderTime, intValues);
+            long reminderTime = timeNow + processReminderTime(timeLength);
             finalArrayList.add(String.valueOf(reminderTime));
             finalArrayList.add(event.getChannel().getId());
             finalArrayList.add(event.getMember().getUser().getId());
-            builder = new StringBuilder();
-            int i = 0;
-            for (String arg : args) {
-                printlnTime(arg);
-                if (i == args.size() - 1) {
-                    builder.append(arg);
-                    break;
-                }
-                if (i > 2) {
-                    builder.append(arg).append(" ");
-                }
-                i++;
-            }
-            finalArrayList.add(String.valueOf(builder));
+            finalArrayList.add(reminderText);
             reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID, [reminderMessage]}
             event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
             return;
@@ -190,7 +190,7 @@ public class CommandRemind extends BaseCommand {
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addSubcommands(
                 new SubcommandData("add", "Adds a reminder.").addOptions(
-                        new OptionData(OptionType.STRING, "timestamp", "[DD:][HH:][MM:]<SS> (brackets should be omitted)", true),
+                        new OptionData(OptionType.STRING, "timestamp", "(To set)", true),
                         new OptionData(OptionType.STRING, "message", "The message that you would like to be included in the reminder.", false)
                 ),
                 new SubcommandData("remove", "removes a reminder based on list index.").addOptions(
