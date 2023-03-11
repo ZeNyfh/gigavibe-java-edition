@@ -121,6 +121,10 @@ public class MessageEvent {
         return this.rawContent;
     }
 
+    public Object getCoreEvent() { //Use in commands as little as you can, since this gets hacky fast
+        return this.coreEvent;
+    }
+
     public boolean isAcknowledged() {
         return isSlash() && ((SlashCommandInteractionEvent) this.coreEvent).isAcknowledged();
     }

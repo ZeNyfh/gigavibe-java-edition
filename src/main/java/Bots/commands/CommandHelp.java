@@ -3,6 +3,8 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -29,7 +31,6 @@ public class CommandHelp extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        event.deferReply();
         int i = 0;
         try {
             Arg = event.getArgs()[1].toLowerCase();
@@ -83,9 +84,15 @@ public class CommandHelp extends BaseCommand {
             embed.appendDescription("**Admin**\n" + getCommands("Admin"));
             embed.setFooter("Click the buttons to get more information on a group.");
         }
-        event.getChannel().sendMessageEmbeds(embed.build()).queue(
-                a -> a.editMessageComponents().setActionRow(Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("DJ", "DJ"), Button.secondary("admin", "Admin")).queue()
-        );
+        if (!event.isSlash()) { //Incredibly hacky fix because I don't want to implement all the backend just for this
+            ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
+                    a -> a.editMessageComponents().setActionRow(Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("DJ", "DJ"), Button.secondary("admin", "Admin")).queue()
+            );
+        } else {
+            ((SlashCommandInteractionEvent) event.getCoreEvent()).replyEmbeds(embed.build()).queue(
+                    a -> a.editOriginalComponents().setActionRow(Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("DJ", "DJ"), Button.secondary("admin", "Admin")).queue()
+            );
+        }
         embed.clear();
     }
 
