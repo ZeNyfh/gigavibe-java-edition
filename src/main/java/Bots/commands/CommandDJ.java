@@ -164,7 +164,8 @@ public class CommandDJ extends BaseCommand {
                 new SubcommandData("remove", "Removes someone/a role from DJ.").addOptions(
                         new OptionData(OptionType.USER, "user", "Removes DJ from the user.", false),
                         new OptionData(OptionType.ROLE, "role", "Removes DJ from the role.", false)
-                )
+                ),
+                new SubcommandData("list", "Lists the DJs.")
         );
     }
 
