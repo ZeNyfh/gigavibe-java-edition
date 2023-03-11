@@ -98,15 +98,10 @@ public class CommandPlay extends BaseCommand {
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addSubcommands(
-                new SubcommandData("file", "Plays an uploaded file").addOptions(
-                        new OptionData(OptionType.ATTACHMENT, "file", "The file to play", true)
-                ),
-                new SubcommandData("track", "Plays the given url or track").addOptions(
-                        new OptionData(OptionType.STRING, "track", "The track to play", true)
-                )
+        slashCommand.addOptions(
+                new OptionData(OptionType.STRING, "track", "The track to play", false),
+                new OptionData(OptionType.ATTACHMENT, "file", "The file to play", false)
         );
-        //TODO: System can now handle sub-commands. This was roughly adjusted but the command itself needs to be able to handle the new options. -9382
     }
 
     @Override
