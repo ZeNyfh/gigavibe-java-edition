@@ -14,7 +14,6 @@ import static java.lang.System.currentTimeMillis;
 public class CommandBotInfo extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
-        event.deferReply();
         int CommandCount = 0;
         int vcCount = 0;
         long id = Long.parseLong("211789389401948160");
