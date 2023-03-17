@@ -198,9 +198,9 @@ public class Main extends ListenerAdapter {
             @Override
             public void run() {
                 // timeouts
-                int i = 0;
                 for (Guild guild : bot.getGuilds()) {
                     if (guild.getAudioManager().isConnected()) {
+                        int i = 0;
                         try {
                             if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
                                 for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
