@@ -5,6 +5,7 @@ import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ public class CommandBotInfo extends BaseCommand {
     public void execute(MessageEvent event) {
         int CommandCount = 0;
         int vcCount = 0;
+        int memberCount = 0;
         long id = Long.parseLong("211789389401948160");
         if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
             id = Long.parseLong("260016427900076033");
@@ -31,6 +33,11 @@ public class CommandBotInfo extends BaseCommand {
             if (Objects.requireNonNull(guild.getSelfMember().getVoiceState()).inAudioChannel()) {
                 vcCount++;
             }
+            for (Member member : guild.getMembers()){
+                if (!member.getUser().isBot() || !member.getUser().isSystem() ){
+                    memberCount++;
+                }
+            }
         }
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
@@ -41,6 +48,7 @@ public class CommandBotInfo extends BaseCommand {
         String finalTime = toTimestamp(finalUptime);
         eb.appendDescription("⏰  **Uptime:** " + finalTime + "\n\n");
         eb.appendDescription("\uD83D\uDCE1  **Guilds:** " + event.getJDA().getGuilds().size() + "\n\n");
+        eb.appendDescription("\uD83D\uDC64 **Users:** " + memberCount + "\n\n");
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
         eb.appendDescription("\uD83C\uDFB5  **VCs: ** " + vcCount + "\n\n");
         eb.setFooter("Version: " + botVersion);
