@@ -2,13 +2,13 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 public class CommandSendAnnouncement extends BaseCommand {
 
@@ -22,11 +22,23 @@ public class CommandSendAnnouncement extends BaseCommand {
             event.replyEmbeds(createQuickError("No argument given."));
             return;
         }
-        for (int i = 0; i < event.getJDA().getGuilds().size(); i++) {
-            Objects.requireNonNull(event.getJDA().getGuilds().get(i).getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", event.getContentRaw().replace(event.getArgs()[0], ""))).queue();
+        int i = 0;
+        StringBuilder message = new StringBuilder();
+        for (String string : event.getArgs()) {
+            if (i == 0) {
+                i++;
+                continue;
+            }
+            message.append(string).append(" ");
+            i++;
+        }
+        message.trimToSize();
+        for (Guild guild : event.getJDA().getGuilds()) {
             try {
+                Objects.requireNonNull(guild.getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Announcement**", String.valueOf(message))).queue();
                 Thread.sleep(10000);
             } catch (Exception ignored) {
+                Objects.requireNonNull(event.getJDA().getUserById(guild.getOwnerId())).openPrivateChannel().queue(a -> a.sendMessage("The bot cannot message in the default channel of the server**" + guild.getName() + "** so I am dming you instead.").queue(embed -> embed.editMessageEmbeds(createQuickEmbed("**Announcement**", String.valueOf(message))).queue()));
             }
         }
     }
