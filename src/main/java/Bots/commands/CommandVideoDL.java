@@ -106,7 +106,7 @@ public class CommandVideoDL extends BaseCommand {
                 // change res to half
                 int scaleWidth = Integer.parseInt(videoWidth);
                 int scaleHeight = Integer.parseInt(videoHeight);
-                String scale = scaleWidth / 4 + ":" + scaleHeight / 4;
+                String scale = scaleWidth / 2 + ":" + scaleHeight / 2;
                 // compression
                 int numThreads = Runtime.getRuntime().availableProcessors() / 2;
                 long time = System.currentTimeMillis();
@@ -116,6 +116,13 @@ public class CommandVideoDL extends BaseCommand {
                 while (output.length() > finalFileSize) {
                     attempt++;
                     message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " + String.format("%.3f", (double) output.length() / 1000000) + "MB\nAiming for <= " + finalFileSize / 1000000 + "MB"));
+                    if (attempt > 3) {
+                        crf += 2;
+                        bitrate -= 64;
+                    }
+                    if (attempt == 6) {
+                        scale = scaleWidth/4 + ":" + scaleHeight/4;
+                    }
                     if (attempt > 10) {
                         message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
                         output.delete();
