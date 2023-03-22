@@ -121,7 +121,7 @@ public class CommandVideoDL extends BaseCommand {
                         bitrate -= 64;
                     }
                     if (attempt == 6) {
-                        scale = scaleWidth/4 + ":" + scaleHeight/4;
+                        scale = scaleWidth / 4 + ":" + scaleHeight / 4;
                     }
                     if (attempt > 10) {
                         message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));

@@ -9,18 +9,17 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.ExceptionEvent;
-import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -536,7 +535,47 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
-        //Checks if the bot is now alone
+        if (event.getChannelLeft() == null) {
+            // GuildVoiceJoinEvent
+        } else if (event.getChannelJoined() == null) {
+            // GuildVoiceLeaveEvent
+            if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
+                List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
+                if (currentVotes != null) {
+                    currentVotes.remove(event.getMember());
+                    clearVotes(event.getGuild().getIdLong());
+                }
+            }
+            if (event.getMember() == event.getGuild().getSelfMember()) {
+                LoopGuilds.remove(event.getGuild().getId());
+                LoopQueueGuilds.remove(event.getGuild().getId());
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
+                return;
+            }
+            AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
+            if (botChannel == null) {
+                return;
+            }
+            int botChannelMemberCount = 0;
+            for (Member member : botChannel.getMembers()) {
+                if (!member.getUser().isBot()) {
+                    botChannelMemberCount++;
+                }
+            }
+            if (botChannelMemberCount == 0) {
+                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                event.getGuild().getAudioManager().closeAudioConnection();
+                clearVotes(event.getGuild().getIdLong());
+            }
+        } else {
+            // GuildVoiceMoveEvent
+            if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
+                if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
+                    PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+                    clearVotes(event.getGuild().getIdLong());
+                }
+            }
+        }
         GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (voiceState.getChannel() != null) {
             int members = 0;
@@ -560,50 +599,8 @@ public class Main extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
-        if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
-            if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                clearVotes(event.getGuild().getIdLong());
-            }
-        }
-    }
-
-    @Override
     public void onException(@NotNull ExceptionEvent event) {
         printlnTime(Arrays.toString(event.getCause().getStackTrace()));
-    }
-
-    @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
-            List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
-            if (currentVotes != null) {
-                currentVotes.remove(event.getMember());
-                clearVotes(event.getGuild().getIdLong());
-            }
-        }
-        if (event.getMember() == event.getGuild().getSelfMember()) {
-            LoopGuilds.remove(event.getGuild().getId());
-            LoopQueueGuilds.remove(event.getGuild().getId());
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
-            return;
-        }
-        AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-        if (botChannel == null) {
-            return;
-        }
-        int botChannelMemberCount = 0;
-        for (Member member : botChannel.getMembers()) {
-            if (!member.getUser().isBot()) {
-                botChannelMemberCount++;
-            }
-        }
-        if (botChannelMemberCount == 0) {
-            PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-            event.getGuild().getAudioManager().closeAudioConnection();
-            clearVotes(event.getGuild().getIdLong());
-        }
     }
 
     private float handleRateLimit(BaseCommand Command, Member member) {
@@ -680,6 +677,7 @@ public class Main extends ListenerAdapter {
         }
         return false;
     }
+
 
     @Override
     public void onShutdown(@NotNull ShutdownEvent event) {

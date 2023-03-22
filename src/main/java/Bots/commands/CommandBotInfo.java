@@ -33,8 +33,8 @@ public class CommandBotInfo extends BaseCommand {
             if (Objects.requireNonNull(guild.getSelfMember().getVoiceState()).inAudioChannel()) {
                 vcCount++;
             }
-            for (Member member : guild.getMembers()){
-                if (!member.getUser().isBot() || !member.getUser().isSystem() ){
+            for (Member member : guild.getMembers()) {
+                if (!member.getUser().isBot() || !member.getUser().isSystem()) {
                     memberCount++;
                 }
             }

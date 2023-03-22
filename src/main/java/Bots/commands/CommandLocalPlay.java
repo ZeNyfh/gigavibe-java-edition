@@ -3,7 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.managers.AudioManager;

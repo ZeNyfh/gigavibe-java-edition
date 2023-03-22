@@ -60,7 +60,8 @@ public class MessageEvent {
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
-        args.add("/" + event.getCommandPath().replace("/", " ")); //Subcommands are like /command/sub instead of /command sub
+//        @9382 pls fix
+//        args.add("/" + event.getCommandPath().replace("/", " ")); //Subcommands are like /command/sub instead of /command sub
         List<Message.Attachment> Attachments = new ArrayList<>();
         for (OptionMapping option : options) {
             if (option.getType() == OptionType.ATTACHMENT) {
