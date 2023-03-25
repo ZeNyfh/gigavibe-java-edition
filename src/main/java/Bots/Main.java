@@ -431,9 +431,9 @@ public class Main extends ListenerAdapter {
 
     public static void printlnTime(Object... message) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        String finalMessage = dtf.format(LocalDateTime.now()) + " |";
+        StringBuilder finalMessage = new StringBuilder(dtf.format(LocalDateTime.now()) + " |");
         for (Object segment : message) {
-            finalMessage = finalMessage + " " + segment;
+            finalMessage.append(" ").append(segment);
         }
         System.out.println(finalMessage);
     }

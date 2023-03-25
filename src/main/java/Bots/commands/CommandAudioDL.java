@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,7 +37,6 @@ public class CommandAudioDL extends BaseCommand {
             String filename = dir.getAbsolutePath() + File.separator + System.currentTimeMillis();
             Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
-            printlnTime(ytdlp, "-x", "-o", filename, "--no-playlist", filteredUrl);
             try {
                 p = Runtime.getRuntime().exec(new String[]{
                         ytdlp, "-x", "-o", filename, "--no-playlist", filteredUrl
@@ -71,9 +69,9 @@ public class CommandAudioDL extends BaseCommand {
             try {
                 String[] cmd;
                 if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-                    cmd = new String[] {"cmd", "/c", "dir \"" + filename + ".*\" /b /s /a:-d"};
+                    cmd = new String[]{"cmd", "/c", "dir \"" + filename + ".*\" /b /s /a:-d"};
                 } else {
-                    cmd = new String[] {"sh", "-c", "find . -name \"" + filename + ".*\" -print -quit"};
+                    cmd = new String[]{"sh", "-c", "find . -name \"" + filename + ".*\" -print -quit"};
                 }
 
                 p = Runtime.getRuntime().exec(cmd);
@@ -90,8 +88,6 @@ public class CommandAudioDL extends BaseCommand {
                         }
                         p = Runtime.getRuntime().exec(ffmpegCmd);
                         p.waitFor();
-                    } else {
-                        System.out.println("File not found.");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
