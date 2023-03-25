@@ -51,30 +51,34 @@ public class CommandVideoDL extends BaseCommand {
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
             event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
-
-            String inputFile = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".mp4";
-            String outputFile = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + "K.mp4";
+            String unix = String.valueOf(System.currentTimeMillis());
+            String fileName = dir.getAbsolutePath() + File.separator + unix;
+            String inputFile = dir.getAbsolutePath() + File.separator + unix + ".mp4";
+            String outputFile = dir.getAbsolutePath() + File.separator + unix + "K.mp4";
 
             Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
-                p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "--audio-format", "opus", "-o", inputFile, "--match-filter", "\"duration", "<", "7200\"", "--no-playlist", filteredUrl
-                });
+                String[] command = new String[]{
+                        ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration", "<", "7200\"", "--no-playlist", filteredUrl,
+                };
+                p = Runtime.getRuntime().exec(command);
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
                 int i = 0;
+                boolean check = false;
                 try {
                     while ((line = input.readLine()) != null) {
                         i++;
-                        if (i >= 10 && line.contains("ETA")) {
+                        if (i >= 10 && line.contains("ETA") && !check) {
                             message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
-                            break;
+                            check = true;
                         }
                     }
                 } catch (Exception ignored) {
                 }
                 p.waitFor();
+                input.close();
                 if (new File(inputFile).length() <= finalFileSize) {
                     event.replyFiles(FileUpload.fromData(new File(inputFile)));
                     try {
@@ -106,7 +110,7 @@ public class CommandVideoDL extends BaseCommand {
                 // change res to half
                 int scaleWidth = Integer.parseInt(videoWidth);
                 int scaleHeight = Integer.parseInt(videoHeight);
-                String scale = scaleWidth / 2 + ":" + scaleHeight / 2;
+                String scale = scaleWidth + ":" + scaleHeight;
                 // compression
                 int numThreads = Runtime.getRuntime().availableProcessors() / 2;
                 long time = System.currentTimeMillis();
@@ -120,13 +124,21 @@ public class CommandVideoDL extends BaseCommand {
                         crf += 2;
                         bitrate -= 64;
                     }
-                    if (attempt == 6) {
+                    if (attempt == 2) {
+                        scale = scaleWidth / 2 + ":" + scaleHeight / 2;
+                    }
+                    if (attempt == 4) {
                         scale = scaleWidth / 4 + ":" + scaleHeight / 4;
+                    }
+                    if (attempt == 6) {
+                        scale = scaleWidth / 6 + ":" + scaleHeight / 6;
+                    }
+                    if (attempt == 6) {
+                        scale = scaleWidth / 8 + ":" + scaleHeight / 8;
                     }
                     if (attempt > 10) {
                         message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
-                        output.delete();
-                        new File(inputFile).delete();
+                        deleteFiles(fileName);
                         return;
                     }
                     crf += 4;
@@ -138,12 +150,12 @@ public class CommandVideoDL extends BaseCommand {
                 }
                 message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", "Resizing took " + (System.currentTimeMillis() - time) / 1000 + " seconds."));
                 message[0].editMessageFiles(FileUpload.fromData(output));
-                Thread.sleep(5000);
-                output.delete();
-                new File(inputFile).delete();
+                Thread.sleep(10000);
+                deleteFiles(fileName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            deleteFiles(fileName);
         }).start();
     }
 

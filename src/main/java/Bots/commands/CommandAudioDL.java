@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,34 +28,36 @@ public class CommandAudioDL extends BaseCommand {
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
             ytdlp = "yt-dlp";
         } else {
-            ytdlp = "modules/yt-dlp.exe";
+            ytdlp = "modules\\yt-dlp.exe";
         }
         File dir = new File("auddl");
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
             event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
 
-            String filename = dir.getAbsolutePath() + "/" + System.currentTimeMillis() + ".ogg";
+            String filename = dir.getAbsolutePath() + File.separator + System.currentTimeMillis();
             Process p;
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
+            printlnTime(ytdlp, "-x", "-o", filename, "--no-playlist", filteredUrl);
             try {
                 p = Runtime.getRuntime().exec(new String[]{
-                        ytdlp, "-x", "--audio-format", "vorbis", "-o", filename, "--no-playlist", filteredUrl
+                        ytdlp, "-x", "-o", filename, "--no-playlist", filteredUrl
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong..."));
+                message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong in the download process..."));
                 return;
             }
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             int i = 0;
+            boolean check = false;
             try {
                 while ((line = input.readLine()) != null) {
                     i++;
-                    if (i >= 10 && line.contains("ETA")) {
+                    if (i >= 10 && line.contains("ETA") && !check) {
                         message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
-                        break;
+                        check = true;
                     }
                 }
             } catch (Exception e) {
@@ -65,7 +68,40 @@ public class CommandAudioDL extends BaseCommand {
                 input.close();
             } catch (Exception ignored) {
             }
-            File finalFile = new File(filename);
+            try {
+                String[] cmd;
+                if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+                    cmd = new String[] {"cmd", "/c", "dir \"" + filename + ".*\" /b /s /a:-d"};
+                } else {
+                    cmd = new String[] {"sh", "-c", "find . -name \"" + filename + ".*\" -print -quit"};
+                }
+
+                p = Runtime.getRuntime().exec(cmd);
+                p.waitFor();
+
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                    String filePath = br.readLine();
+                    if (filePath != null) {
+                        String ffmpegCmd;
+                        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+                            ffmpegCmd = "modules\\ffmpeg.exe -loglevel error -y -i \"" + filePath + "\" -b:a 96k -f mp3 \"" + filename + ".mp3\"";
+                        } else {
+                            ffmpegCmd = "ffmpeg -loglevel error -y -i \"" + filePath + "\" -b:a 96k -f mp3 \"" + filename + ".mp3\"";
+                        }
+                        p = Runtime.getRuntime().exec(ffmpegCmd);
+                        p.waitFor();
+                    } else {
+                        System.out.println("File not found.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                message[0].editMessageEmbeds(createQuickError("Something's gone horribly wrong in the conversion process..."));
+                return;
+            }
+            File finalFile = new File(filename + ".mp3");
             float duration;
             if (!finalFile.exists()) {
                 message[0].editMessageEmbeds(createQuickError("No file was downloaded"));
@@ -79,7 +115,7 @@ public class CommandAudioDL extends BaseCommand {
                 } catch (Exception e) {
                     e.printStackTrace();
                     message[0].editMessageEmbeds(createQuickError("The file could not be sent."));
-                    finalFile.getAbsoluteFile().delete();
+                    deleteFiles(filename);
                     return;
                 }
             } else if (finalFile.length() > 8192000) { // this is where the file resizing process happens.
@@ -99,22 +135,22 @@ public class CommandAudioDL extends BaseCommand {
                     duration = Float.parseFloat(strDuration); // duration of the audio file
                 } catch (Exception ignored) {
                     message[0].editMessageEmbeds(createQuickError("Failed to get duration of track, stopping the download."));
-                    finalFile.getAbsoluteFile().delete();
+                    deleteFiles(filename);
                     return;
                 }
                 long desiredBitRate = (long) (65536 / duration); // 8mb
                 if (event.getGuild().getBoostCount() > 7) {
                     desiredBitRate = (long) (409600 / duration); // 50mb
                 }
-                if (desiredBitRate < 45) { // check for ffmpeg bitrate limit
+                if (desiredBitRate < 32) { // check for ffmpeg bitrate limit
                     message[0].editMessageEmbeds(createQuickError("File cannot be resized to 8MB or lower."));
                     try {
-                        finalFile.getAbsoluteFile().delete();
+                        deleteFiles(filename);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return;
-                } // if the desired bitrate is 45 or more
+                } // if the desired bitrate is 32 or more
                 File finalFinalFile = new File(finalFile.getAbsolutePath().substring(0, finalFile.getAbsolutePath().length() - 4) + "K.ogg");
                 try {
                     if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -125,17 +161,27 @@ public class CommandAudioDL extends BaseCommand {
                     p.waitFor();
                     input.close();
                 } catch (Exception e) {
+                    deleteFiles(filename);
                     e.printStackTrace();
                 }
                 message[0].editMessageFiles(FileUpload.fromData(finalFinalFile.getAbsoluteFile()));
                 message[0].editMessageEmbeds(); //Remove embeds
-                finalFinalFile.getAbsoluteFile().delete();
-                finalFile.getAbsoluteFile().delete();
+                try {
+                    Thread.sleep(10000);
+                    deleteFiles(filename);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return;
             }
             message[0].editMessageFiles(FileUpload.fromData(finalFile.getAbsoluteFile()));
             message[0].editMessageEmbeds(); //Remove embeds
-            finalFile.getAbsoluteFile().delete();
+            try {
+                Thread.sleep(10000);
+                deleteFiles(filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 

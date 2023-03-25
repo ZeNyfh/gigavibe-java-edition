@@ -126,6 +126,9 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return;
         }
+        // cleanup of old downloaded stuff
+        deleteFiles(new File("auddl" + File.separator).getAbsolutePath());
+        deleteFiles(new File("viddl" + File.separator).getAbsolutePath());
         try {
             List<Class<?>> classes = new ArrayList<>();
             String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -403,6 +406,26 @@ public class Main extends ListenerAdapter {
         } else {
             commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
             return false;
+        }
+    }
+
+    public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
+        try {
+            String[] command;
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                // Windows command
+                command = new String[]{"cmd", "/c", "del", filePrefix + "*"};
+            } else {
+                // Linux command
+                command = new String[]{"sh", "-c", "rm " + filePrefix + "*"};
+            }
+            Process process = Runtime.getRuntime().exec(command);
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                printlnTime("Error deleting file.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
