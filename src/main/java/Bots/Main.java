@@ -61,7 +61,7 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
-    public static String botVersion = "23.03.10"; // YY.MM.DD
+    public static String botVersion = "23.03.25"; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
