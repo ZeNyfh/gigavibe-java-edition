@@ -18,14 +18,6 @@ public class CommandBotInfo extends BaseCommand {
         int CommandCount = 0;
         int vcCount = 0;
         int memberCount = 0;
-        long id = Long.parseLong("211789389401948160");
-        if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-            id = Long.parseLong("260016427900076033");
-            if (Objects.requireNonNull(event.getMember()).getIdLong() != id) {
-                event.replyEmbeds(createQuickError("You dont have the permission to run this command."));
-                return;
-            }
-        }
         for (BaseCommand ignored : commands) {
             CommandCount++;
         }
@@ -72,7 +64,7 @@ public class CommandBotInfo extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Admin";
+        return "General";
     }
 
     @Override
