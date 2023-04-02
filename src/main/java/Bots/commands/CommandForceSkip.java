@@ -73,6 +73,7 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
+                musicManager.scheduler.nextTrack();
             }
         } else {
             if (musicManager.scheduler.queue.size() >= 1) {
