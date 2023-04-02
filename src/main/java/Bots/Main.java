@@ -70,7 +70,7 @@ public class Main extends ListenerAdapter {
     public static void registerCommand(BaseCommand command) {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
-        commandUsageTracker.putIfAbsent(command.getNames()[0], 0);
+        commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
         commands.add(command);
     }
 
@@ -655,7 +655,7 @@ public class Main extends ListenerAdapter {
             }
             //run command
             String primaryName = Command.getNames()[0];
-            commandUsageTracker.put(primaryName, Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+            commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {
@@ -690,7 +690,7 @@ public class Main extends ListenerAdapter {
             }
             //run command
             String primaryName = Command.getNames()[0];
-            commandUsageTracker.put(primaryName, Integer.parseInt(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+            commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
                 Command.execute(new MessageEvent(event));
             } catch (IOException e) {
