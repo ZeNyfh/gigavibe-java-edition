@@ -41,6 +41,7 @@ public class ConfigManager {
 
     private static JSONObject CreateGuildObject() { //Useful base-plate config
         JSONObject defaultConfig = new JSONObject();
+        defaultConfig.put("announcementChannels", new JSONArray());
         defaultConfig.put("BlockedChannels", new JSONArray());
         defaultConfig.put("DJRoles", new JSONArray());
         defaultConfig.put("DJUsers", new JSONArray());
