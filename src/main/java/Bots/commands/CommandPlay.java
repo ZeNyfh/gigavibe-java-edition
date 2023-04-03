@@ -11,18 +11,25 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-import static Bots.Main.IsChannelBlocked;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
+import static java.lang.System.currentTimeMillis;
 
 public class CommandPlay extends BaseCommand {
-    final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u"};
+    final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"};
 
     @Override
-    public void execute(MessageEvent event) {
-        event.deferReply();
+    public void execute(MessageEvent event) throws IOException {
         if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
             return;
         }
@@ -40,9 +47,23 @@ public class CommandPlay extends BaseCommand {
         }
 
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()))) {
+            if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
+                audioManager.openAudioConnection(memberChannel);
+                URL url = new URL(event.getAttachments().get(0).getUrl());
+                URLConnection connection = url.openConnection();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
+                    printlnTime(line.split(" ", 2)[0]);
+                }
+                event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
+                return;
+            }
             String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
+            event.reply(MessageEvent.Response::delete, ".");
             return;
         }
         String link;
@@ -73,6 +94,7 @@ public class CommandPlay extends BaseCommand {
         } catch (FriendlyException ignored) {
             event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
         }
+        event.reply(MessageEvent.Response::delete, ".");
     }
 
     @Override
