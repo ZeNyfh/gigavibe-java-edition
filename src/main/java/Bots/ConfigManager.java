@@ -42,7 +42,6 @@ public class ConfigManager {
         };
         timer.scheduleAtFixedRate(task, 60000, 120000); //Actively save every 2 minutes
         printlnTime("Config manager initialised");
-        GetConfig("dummy");
     }
 
     private static JSONObject CreateGuildObject() { //Useful base-plate config
