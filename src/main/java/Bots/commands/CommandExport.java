@@ -20,11 +20,11 @@ public class CommandExport extends BaseCommand {
     public void execute(MessageEvent event) throws IOException {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-        if (!event.getGuild().getAudioManager().isConnected()){
+        if (!event.getGuild().getAudioManager().isConnected()) {
             event.replyEmbeds(createQuickError("The bot is not in a VC."));
             return;
         }
-        if (audioPlayer.getPlayingTrack() == null){
+        if (audioPlayer.getPlayingTrack() == null) {
             event.replyEmbeds(createQuickError("The bot is not playing anything."));
             return;
         }
@@ -43,7 +43,9 @@ public class CommandExport extends BaseCommand {
             event.replyFiles(FileUpload.fromData(text));
             Thread.sleep(5000);
             deleteFiles(fileName);
-        } catch (Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

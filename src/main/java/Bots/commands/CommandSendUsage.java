@@ -1,21 +1,17 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.Main;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import org.json.simple.JSONObject;
-import static java.util.Collections.reverseOrder;
-
-import java.util.*;
-import java.util.Map.Entry;
-
-
 
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
+import static Bots.Main.commandUsageTracker;
 
 public class CommandSendUsage extends BaseCommand {
     @Override
@@ -32,7 +28,7 @@ public class CommandSendUsage extends BaseCommand {
         eb.setColor(botColour);
         eb.setTitle("**Usage Logs**");
         eb.appendDescription("```js\n");
-        for (int i = values.length-1; i >= 0; i--) {
+        for (int i = values.length - 1; i >= 0; i--) {
             String reference = InverseReference.get(values[i]).remove(0);
             eb.appendDescription(reference + ": " + values[i] + "\n");
         }
@@ -42,7 +38,7 @@ public class CommandSendUsage extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"sendusage","usage","sendusagelog","usagelog"};
+        return new String[]{"sendusage", "usage", "sendusagelog", "usagelog"};
     }
 
     @Override

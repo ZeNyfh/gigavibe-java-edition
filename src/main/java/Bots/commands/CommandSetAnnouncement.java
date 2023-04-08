@@ -13,7 +13,7 @@ public class CommandSetAnnouncement extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"setannouncement","setannounce","seta"};
+        return new String[]{"setannouncement", "setannounce", "seta"};
     }
 
     @Override

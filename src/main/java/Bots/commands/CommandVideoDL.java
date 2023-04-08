@@ -60,9 +60,9 @@ public class CommandVideoDL extends BaseCommand {
             String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
             try {
                 String[] command = new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"","--no-playlist", filteredUrl,
+                        ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"", "--no-playlist", filteredUrl,
                 };
-                printlnTime(ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"","--no-playlist", filteredUrl);
+                printlnTime(ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"", "--no-playlist", filteredUrl);
                 p = Runtime.getRuntime().exec(command);
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
@@ -85,7 +85,7 @@ public class CommandVideoDL extends BaseCommand {
                 if (new File(inputFile).length() <= finalFileSize) {
                     try {
                         command = new String[]{
-                                ffmpegString, "-nostdin","-loglevel","error","-y","-i","-vcodec","mpeg4","-acodec","-acodec aac"
+                                ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", "-vcodec", "mpeg4", "-acodec", "-acodec aac"
                         };
                         p = Runtime.getRuntime().exec(command);
                         p.waitFor();

@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -28,6 +29,10 @@ public class ConfigManager {
         if (madeNewConfig) {
             printlnTime("Created new config folder");
         }
+        boolean madeNewConfigBackup = Paths.get(configFolder + "/backup").toFile().mkdir();
+        if (madeNewConfigBackup) {
+            printlnTime("Created new config backup folder");
+        }
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -36,7 +41,8 @@ public class ConfigManager {
             }
         };
         timer.scheduleAtFixedRate(task, 60000, 120000); //Actively save every 2 minutes
-        printlnTime("Loaded config manager");
+        printlnTime("Config manager initialised");
+        GetConfig("dummy");
     }
 
     private static JSONObject CreateGuildObject() { //Useful base-plate config
@@ -81,9 +87,12 @@ public class ConfigManager {
         try {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
-            printlnTime("Usurping config for " + Filename + " with a generic one due to bad formatting");
+            printlnTime("Usurping config for " + Filename + " with a generic one and moving old to /backup due to bad formatting");
+            reader.close();
+            Files.move(Paths.get(filePath), Paths.get(configFolder + "/backup/" + Filename + "_" + System.currentTimeMillis() + ".json"));
             return CreateConfig(Filename);
         }
+        reader.close();
         Configs.put(Filename, config);
         return config;
     }

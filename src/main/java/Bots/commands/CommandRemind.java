@@ -158,7 +158,7 @@ public class CommandRemind extends BaseCommand {
             finalArrayList.add(event.getChannel().getId());
             finalArrayList.add(event.getMember().getUser().getId());
             finalArrayList.add(reminderText);
-            reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID, [reminderMessage]}
+            reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID[, reminderMessage]}
             event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
             return;
         }
