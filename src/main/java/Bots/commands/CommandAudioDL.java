@@ -134,12 +134,12 @@ public class CommandAudioDL extends BaseCommand {
                     deleteFiles(filename);
                     return;
                 }
-                long desiredBitRate = (long) (65536 / duration); // 8mb
+                long desiredBitRate = (long) (25600 / duration); // 25mb
                 if (event.getGuild().getBoostCount() > 7) {
-                    desiredBitRate = (long) (409600 / duration); // 50mb
+                    desiredBitRate = (long) (512000 / duration); // 50mb
                 }
                 if (desiredBitRate < 32) { // check for ffmpeg bitrate limit
-                    message[0].editMessageEmbeds(createQuickError("File cannot be resized to 8MB or lower."));
+                    message[0].editMessageEmbeds(createQuickError("File cannot be resized to 25MB or lower."));
                     try {
                         deleteFiles(filename);
                     } catch (Exception e) {

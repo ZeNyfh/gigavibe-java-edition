@@ -38,13 +38,13 @@ public class CommandVideoDL extends BaseCommand {
             ffmpegString = "modules/ffmpeg";
         }
         File dir = new File("viddl");
-        float fileSize = 8192000;
+        float fileSize = 25600000;
         if (event.getGuild().getBoostCount() >= 7) {
             fileSize = 51200000;
         }
         if (event.getArgs().length == 3) {
             if (event.getArgs()[2].toLowerCase().contains("true")) {
-                fileSize = 8192000;
+                fileSize = 25600000;
             }
         }
         float finalFileSize = fileSize;
@@ -199,7 +199,7 @@ public class CommandVideoDL extends BaseCommand {
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOption(OptionType.STRING, "url", "URL of the video to download.", true);
-        slashCommand.addOption(OptionType.BOOLEAN, "8mb", "Forced the Video to be <=8MB in size", false);
+        slashCommand.addOption(OptionType.BOOLEAN, "25mb", "Forced the Video to be <=25MB in size", false);
     }
 
     @Override
