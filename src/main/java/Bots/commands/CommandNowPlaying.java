@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -51,6 +54,11 @@ public class CommandNowPlaying extends BaseCommand {
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
         try {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
+            if (audioPlayer.getPlayingTrack().getInfo().isStream) {
+                if (getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri) != null) {
+                    embed.setTitle(getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri), (audioPlayer.getPlayingTrack().getInfo().uri));
+                }
+            }
         } catch (Exception ignored) {
             embed.setTitle("Unknown");
         }
@@ -77,6 +85,36 @@ public class CommandNowPlaying extends BaseCommand {
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
         event.replyEmbeds(embed.build());
+    }
+
+    private static String getStreamTitle(String streamUrl) {
+        String[] cmd = {"ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_entries", "format_tags", streamUrl};
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_entries", "format_tags", streamUrl};
+        }
+        String streamTitle = null;
+        try {
+            Process process = new ProcessBuilder(cmd).start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            StringBuilder json = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+            process.waitFor();
+            String jsonString = json.toString();
+            int streamTitleStartIndex = jsonString.indexOf("\"StreamTitle\": \"") + 16;
+            int streamTitleEndIndex = jsonString.indexOf("\",", streamTitleStartIndex);
+            streamTitle = jsonString.substring(streamTitleStartIndex, streamTitleEndIndex);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (streamTitle != null) {
+            if (streamTitle.length() > 70) {
+                streamTitle = streamTitle.substring(0, 70) + "...";
+            }
+        }
+        return streamTitle;
     }
 
     @Override
