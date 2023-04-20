@@ -51,7 +51,6 @@ public class CommandPlay extends BaseCommand {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
-                    printlnTime(line.split(" ", 2)[0]);
                 }
                 event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
                 return;
