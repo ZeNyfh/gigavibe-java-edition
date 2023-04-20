@@ -59,7 +59,9 @@ public class CommandPlay extends BaseCommand {
             String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
-            event.reply(MessageEvent.Response::delete, ".");
+            if (event.isSlash()) {
+                event.reply(MessageEvent.Response::delete, ".");
+            }
             return;
         }
         String link;
