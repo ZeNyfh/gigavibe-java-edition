@@ -84,7 +84,7 @@ public class PlayerManager {
                 String length;
                 musicManager.scheduler.queue(audioTrack);
                 EmbedBuilder embed = new EmbedBuilder();
-                if (audioTrack.getInfo().length > 432000000) { // 5 days
+                if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length < 0 || audioTrack.getInfo().uri.toLowerCase().endsWith("opus")) {
                     length = "Unknown";
                 } else {
                     length = toTimestamp((audioTrack.getInfo().length));
@@ -97,6 +97,7 @@ public class PlayerManager {
                 } else {
                     embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                 }
+                printlnTime(audioTrack.getInfo().length);
                 embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
                 commandChannel.sendMessageEmbeds(embed.build()).queue();
             }
@@ -104,13 +105,15 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                String length = "Unknown";
+                String length;
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setColor(botColour);
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     String author = (tracks.get(0).getInfo().author);
-                    if (tracks.get(0).getInfo().length < 432000000) { // 5 days
+                    if (tracks.get(0).getInfo().length > 432000000 || tracks.get(0).getInfo().length < 0 || tracks.get(0).getInfo().uri.toLowerCase().endsWith("opus")) { // 5 days
+                        length = "Unknown";
+                    } else {
                         length = toTimestamp((tracks.get(0).getInfo().length));
                     }
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:")) {
@@ -122,6 +125,7 @@ public class PlayerManager {
                         embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
+                        printlnTime(tracks.get(0).getInfo().length);
                         commandChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
