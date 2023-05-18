@@ -49,19 +49,23 @@ public class CommandPlay extends BaseCommand {
                 URLConnection connection = url.openConnection();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
-                }
-                event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
-                return;
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
+                    }
+                    event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
+                    return;
+                } catch (Exception ignored){event.replyEmbeds(createQuickError("Something went wrong when loading the track."));}
             }
             String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
-            if (event.isSlash()) {
-                event.reply(MessageEvent.Response::delete, ".");
-            }
-            return;
+            try {
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
+                if (event.isSlash()) {
+                    event.reply(MessageEvent.Response::delete, ".");
+                }
+                return;
+            } catch (Exception ignored){event.replyEmbeds(createQuickError("Something went wrong when loading the track."));}
         }
         String link;
         try {
