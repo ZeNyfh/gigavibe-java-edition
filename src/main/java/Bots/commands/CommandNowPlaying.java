@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
@@ -87,26 +86,21 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     private static String getStreamTitle(String streamUrl) {
-        String[] cmd = {"ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_entries", "format_tags", streamUrl};
+        String[] cmd = {"ffprobe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_entries", "format_tags", streamUrl};
+            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
         }
         String streamTitle = null;
         try {
             Process process = new ProcessBuilder(cmd).start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            StringBuilder json = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                json.append(line);
-            }
-            process.waitFor();
-            String jsonString = json.toString();
-            int streamTitleStartIndex = jsonString.indexOf("\"StreamTitle\": \"") + 16;
-            int streamTitleEndIndex = jsonString.indexOf("\",", streamTitleStartIndex);
-            streamTitle = jsonString.substring(streamTitleStartIndex, streamTitleEndIndex);
+            BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            streamTitle = ffprobeInput.readLine();
         } catch (Exception e) {
             e.printStackTrace();
+            streamTitle = "Unknown";
+        }
+        if (Objects.equals(streamTitle, "")) {
+            streamTitle = "Unknown";
         }
         if (streamTitle != null) {
             if (streamTitle.length() > 70) {
