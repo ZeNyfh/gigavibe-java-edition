@@ -4,9 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
@@ -26,7 +24,7 @@ public class CommandGetDump extends BaseCommand {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] jpsOutputLine = line.split(" ");
-                    if (jpsOutputLine[1].equals("bot") || jpsOutputLine[1].equals("bot.jar")) {
+                    if (jpsOutputLine.length >= 2 && (jpsOutputLine[1].equals("bot") || jpsOutputLine[1].equals("bot.jar") || jpsOutputLine[1].equals("Main"))) {
                         PID = jpsOutputLine[0];
                     }
                 }
@@ -35,7 +33,18 @@ public class CommandGetDump extends BaseCommand {
                     event.replyEmbeds(createQuickError("Could not get dump as the process ID was not found."));
                     return;
                 }
-                Runtime.getRuntime().exec("jstack " + PID + " > log.txt");
+                p = Runtime.getRuntime().exec("jstack " + PID);
+                reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("log.txt"));
+
+                while ((line = reader.readLine()) != null) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                writer.close();
+                reader.close();
+                p.waitFor();
             } catch (Exception e) {
                 e.printStackTrace();
                 event.replyEmbeds(createQuickError("Could not get dump.\n```\n" + e.getMessage() + "\n```"));
@@ -43,8 +52,8 @@ public class CommandGetDump extends BaseCommand {
             event.replyFiles(FileUpload.fromData(new File("log.txt")));
             try {
                 Thread.sleep(10000);
+                new File("log.txt").delete();
             } catch (Exception ignored){}
-            new File("log.txt").delete();
         } else {
             event.replyEmbeds(createQuickError("You do not have the permissions for this."));
         }
