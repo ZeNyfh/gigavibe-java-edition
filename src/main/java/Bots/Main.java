@@ -573,9 +573,14 @@ public class Main extends ListenerAdapter {
                 }
             }
             if (event.getMember() == event.getGuild().getSelfMember()) {
+                GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
                 LoopGuilds.remove(event.getGuild().getId());
                 LoopQueueGuilds.remove(event.getGuild().getId());
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.setVolume(100);
+                manager.audioPlayer.setVolume(100);
+                manager.scheduler.queue.clear();
+                manager.audioPlayer.destroy();
+                manager.audioPlayer.setPaused(false);
+                manager.audioPlayer.checkCleanup(0);
                 return;
             }
             AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
