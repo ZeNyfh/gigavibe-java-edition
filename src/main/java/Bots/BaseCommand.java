@@ -13,7 +13,7 @@ import java.io.IOException;
 public abstract class BaseCommand {
     SlashCommandData slashCommand;
 
-    public abstract void execute(MessageEvent event) throws IOException; //The main event loop
+    public abstract void execute(MessageEvent event) throws Exception; //The main event loop
 
     public void Init() { //Optional initialisation stuff if something is required on start for a command
     }

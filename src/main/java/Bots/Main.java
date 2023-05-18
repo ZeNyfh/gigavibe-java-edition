@@ -666,7 +666,7 @@ public class Main extends ListenerAdapter {
             commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
                 Command.execute(new MessageEvent(event));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return true;
@@ -701,7 +701,7 @@ public class Main extends ListenerAdapter {
             commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
             try {
                 Command.execute(new MessageEvent(event));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return true;
