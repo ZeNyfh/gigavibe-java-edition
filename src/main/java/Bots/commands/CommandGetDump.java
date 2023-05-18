@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.Objects;
 
-import static Bots.Main.*;
 import static Bots.Main.createQuickError;
 
 public class CommandGetDump extends BaseCommand {
@@ -63,12 +62,12 @@ public class CommandGetDump extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"killytdlp", "killall", "killdl"};
+        return new String[]{"getdump", "dump"};
     }
 
     @Override
     public String getDescription() {
-        return "Kills YT-DLP processes, should only be used if a download is hanging.";
+        return "Returns a dump of jstack.";
     }
 
     @Override
