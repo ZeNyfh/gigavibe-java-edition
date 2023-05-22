@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
@@ -25,12 +25,10 @@ public class CommandBlockChannel extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have the permission to use this command."));
             return;
         }
-        List<String> args = new ArrayList<>(List.of(event.getArgs()[0].substring(1).split("/")));
-        if (event.getArgs().length > 1) {
-            args.add(event.getArgs()[1]);
-        }
-        if (!args.get(1).equalsIgnoreCase("list")) {
-            if (args.size() != 3) {
+        String[] args = event.getArgs();
+        printlnTime(args, args.length);
+        if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
+            if (args.length < 3) {
                 event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`"));
                 return;
             }
@@ -38,50 +36,52 @@ public class CommandBlockChannel extends BaseCommand {
         JSONObject config = event.getConfig();
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
 
-        for (int i = 0; i < event.getGuild().getChannels().size(); i++) {
-            printlnTime(String.valueOf(i));
-            GuildChannel guildChannel = event.getGuild().getChannels().get(i);
-            if (args.get(1).equalsIgnoreCase("add")) {
-                if (guildChannel.getId().equals(args.get(2))) {
-                    if (blockedChannels.contains(guildChannel.getId())) {
-                        event.replyEmbeds(createQuickError("This channel is already blocked."));
-                        return;
+        if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove")) {
+            String targetChannel = args[2];
+            Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
+            Matcher matcher = pattern.matcher(args[2]);
+            if (matcher.matches()) {
+                targetChannel = matcher.group(1);
+            }
+            for (int i = 0; i < event.getGuild().getChannels().size(); i++) {
+                GuildChannel guildChannel = event.getGuild().getChannels().get(i);
+                if (guildChannel.getId().equals(targetChannel)) {
+                    if (args[1].equalsIgnoreCase("add")) {
+                        if (blockedChannels.contains(guildChannel.getId())) {
+                            event.replyEmbeds(createQuickError("This channel is already blocked."));
+                            return;
+                        }
+                        blockedChannels.add(targetChannel);
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ Added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list."));
+                    } else if (args[1].equalsIgnoreCase("remove")) {
+                        if (!blockedChannels.contains(guildChannel.getId())) {
+                            event.replyEmbeds(createQuickError("This channel is not blocked."));
+                            return;
+                        }
+                        blockedChannels.remove(targetChannel);
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list."));
                     }
-                    blockedChannels.add(args.get(2));
-                    event.replyEmbeds(createQuickEmbed(" ", "✅ added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list."));
                     return;
                 }
-            } else if (args.get(1).equalsIgnoreCase("remove")) {
-                if (guildChannel.getId().equals(args.get(2))) {
-                    if (!blockedChannels.contains(guildChannel.getId())) {
-                        event.replyEmbeds(createQuickError("This channel is not blocked."));
-                        return;
-                    }
-                    blockedChannels.remove(args.get(2));
-                    event.replyEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list."));
-                    return;
-                }
-            } else if (args.get(1).equalsIgnoreCase("list")) {
-                EmbedBuilder eb = new EmbedBuilder();
-                eb.setColor(botColour);
-                eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
-                if (blockedChannels.size() == 0) {
-                    eb.appendDescription("**None.**");
-                    event.replyEmbeds(eb.build());
-                    return;
-                }
-                for (int j = 0; j < blockedChannels.size(); ) {
-                    eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
-                    j++;
-                }
+            }
+            event.replyEmbeds(createQuickError("This channel was not found in this discord server."));
+        } else if (args[1].equalsIgnoreCase("list")) {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(botColour);
+            eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
+            if (blockedChannels.size() == 0) {
+                eb.appendDescription("**None.**");
                 event.replyEmbeds(eb.build());
                 return;
-            } else {
-                event.replyEmbeds(createQuickError("Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>`"));
-                return;
             }
+            for (int j = 0; j < blockedChannels.size(); ) {
+                eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
+                j++;
+            }
+            event.replyEmbeds(eb.build());
+        } else {
+            event.replyEmbeds(createQuickError("Invalid arguments.\n\nThe valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`"));
         }
-        event.replyEmbeds(createQuickError("This channel was not found in this discord server."));
     }
 
     @Override
