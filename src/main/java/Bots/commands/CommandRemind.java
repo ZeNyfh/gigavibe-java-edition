@@ -12,16 +12,15 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.ConfigManager.GetConfig;
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 public class CommandRemind extends BaseCommand {
     public static long processReminderTime(String timeText) {
-        long output = 0L;
         HashMap<String, Long> UnitToSeconds = new HashMap<>();
         UnitToSeconds.put("second", 1L);
         UnitToSeconds.put("minute", 60L);
@@ -30,26 +29,17 @@ public class CommandRemind extends BaseCommand {
         UnitToSeconds.put("week", 604800L);
         UnitToSeconds.put("year", 31536000L); //why
         for (String key : UnitToSeconds.keySet().toArray(new String[0])) { //Alternative forms
-            UnitToSeconds.put(key.substring(0, 1), UnitToSeconds.get(key));
-            UnitToSeconds.put(key + "s", UnitToSeconds.get(key));
+            UnitToSeconds.put(key.substring(0, 1), UnitToSeconds.get(key)); //First character
+            UnitToSeconds.put(key + "s", UnitToSeconds.get(key)); //Plural
         }
-        String storage = "";
-        for (String term : timeText.strip().split(" ")) {
-            if (storage.equals("")) { //No stored term
-                if (term.matches("^\\d+$")) { //Unit is in the next term
-                    storage = term;
-                } else {
-                    Matcher matcher = Pattern.compile("^\\d+").matcher(term);
-                    matcher.find(); //This should never be false if the input was ran through timestampMatcher
-                    String multiplier = matcher.group();
-                    term = term.substring(multiplier.length()); //Expert-tier string manipulation
-                    output += UnitToSeconds.get(term) * Integer.parseInt(multiplier);
-                }
-            } else {
-                //Multiplier is the stored term, Unit is the current term
-                output += UnitToSeconds.get(term) * Integer.parseInt(storage);
-                storage = "";
-            }
+        Pattern pattern = Pattern.compile("(\\d+) ?([^\\d ]+)");
+        Matcher segments = pattern.matcher(timeText.strip());
+        long output = 0L;
+        for (MatchResult match : segments.results().toList()) {
+            String multiplier = match.group(1);
+            String term = match.group(2);
+            //printlnTime("Term",term,"multiplier",multiplier);
+            output += UnitToSeconds.get(term) * Integer.parseInt(multiplier);
         }
         return output * 1000; //Milliseconds
     }
@@ -129,10 +119,9 @@ public class CommandRemind extends BaseCommand {
         }
 
         if (args[1].equalsIgnoreCase("add")) {
-            JSONArray finalArrayList = new JSONArray();
             String timeLength;
             String reminderText = "";
-            String timestampMatcher = "(?:\\d+ ?(?:years?|weeks?|days?|hours?|minutes?|seconds?|[ywdhms])\\s*)+";
+            String timestampMatcher = "(?:\\d+ ?(?:(?:year|week|day|hour|minute|second)s?|[ywdhms])\\s*)+";
             if (event.isSlash()) { //Avoid parsing when we have an easy approach
                 timeLength = event.getOptions()[0].getAsString();
                 if (!timeLength.matches("^\\s*" + timestampMatcher + "\\s*$")) {
@@ -153,7 +142,16 @@ public class CommandRemind extends BaseCommand {
                     return;
                 }
             }
-            long reminderTime = timeNow + processReminderTime(timeLength);
+            printlnTime("Timestamp match:",timeLength);
+            long reminderTime;
+            try {
+                reminderTime = timeNow + processReminderTime(timeLength);
+            } catch (Exception e) {
+                event.replyEmbeds(createQuickError("Unable to parse the duration '"+timeLength+"'"));
+                e.printStackTrace();
+                return;
+            }
+            JSONArray finalArrayList = new JSONArray();
             finalArrayList.add(String.valueOf(reminderTime));
             finalArrayList.add(event.getChannel().getId());
             finalArrayList.add(event.getMember().getUser().getId());
