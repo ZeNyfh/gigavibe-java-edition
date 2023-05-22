@@ -2,8 +2,6 @@ package Bots;
 
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import java.io.IOException;
-
 /**
  * Custom base command class used by all commands
  *

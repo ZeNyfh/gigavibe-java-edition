@@ -55,7 +55,9 @@ public class CommandPlay extends BaseCommand {
                     }
                     event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
                     return;
-                } catch (Exception ignored){event.replyEmbeds(createQuickError("Something went wrong when loading the track."));}
+                } catch (Exception ignored) {
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
+                }
             }
             String link = event.getAttachments().get(0).getUrl();
             audioManager.openAudioConnection(memberChannel);
@@ -65,7 +67,9 @@ public class CommandPlay extends BaseCommand {
                     event.reply(MessageEvent.Response::delete, ".");
                 }
                 return;
-            } catch (Exception ignored){event.replyEmbeds(createQuickError("Something went wrong when loading the track."));}
+            } catch (Exception ignored) {
+                event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
+            }
         }
         String link;
         try {

@@ -6,7 +6,6 @@ import Bots.MessageEvent;
 import java.io.File;
 
 import static Bots.Main.*;
-import static java.lang.System.currentTimeMillis;
 
 public class CommandKillYTDLP extends BaseCommand {
 

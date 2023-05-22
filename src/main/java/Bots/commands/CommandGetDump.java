@@ -53,7 +53,8 @@ public class CommandGetDump extends BaseCommand {
             try {
                 Thread.sleep(10000);
                 new File("log.txt").delete();
-            } catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         } else {
             event.replyEmbeds(createQuickError("You do not have the permissions for this."));
         }

@@ -48,7 +48,8 @@ public class CommandNowPlaying extends BaseCommand {
         String barText = "";
         try {
             barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         embed.setThumbnail("https://img.youtube.com/vi/" + audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
         try {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));

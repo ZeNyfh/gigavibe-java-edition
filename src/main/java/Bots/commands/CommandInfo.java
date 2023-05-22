@@ -42,7 +42,7 @@ public class CommandInfo extends BaseCommand {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                if (!line.toLowerCase().contains("no") && line.length() > 0 ) {
+                if (!line.toLowerCase().contains("no") && line.length() > 0) {
                     ytdlpCount++;
                 }
             }

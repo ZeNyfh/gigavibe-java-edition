@@ -142,12 +142,12 @@ public class CommandRemind extends BaseCommand {
                     return;
                 }
             }
-            printlnTime("Timestamp match:",timeLength);
+            printlnTime("Timestamp match:", timeLength);
             long reminderTime;
             try {
                 reminderTime = timeNow + processReminderTime(timeLength);
             } catch (Exception e) {
-                event.replyEmbeds(createQuickError("Unable to parse the duration '"+timeLength+"'"));
+                event.replyEmbeds(createQuickError("Unable to parse the duration '" + timeLength + "'"));
                 e.printStackTrace();
                 return;
             }
