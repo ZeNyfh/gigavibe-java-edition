@@ -29,9 +29,9 @@ public class ConfigManager {
         if (madeNewConfig) {
             printlnTime("Created new config folder");
         }
-        boolean madeNewConfigBackup = Paths.get(configFolder + "/backup").toFile().mkdir();
-        if (madeNewConfigBackup) {
-            printlnTime("Created new config backup folder");
+        boolean madeNewFailContainer = Paths.get(configFolder + "/failed").toFile().mkdir();
+        if (madeNewFailContainer) {
+            printlnTime("Created new config failure folder");
         }
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -51,6 +51,15 @@ public class ConfigManager {
         defaultConfig.put("DJRoles", new JSONArray());
         defaultConfig.put("DJUsers", new JSONArray());
         return defaultConfig;
+    }
+
+    private static boolean IsConfigDirty(JSONObject config) {
+        try {
+            new JSONParser().parse(config.toJSONString());
+        } catch (ParseException ignored) {
+            return true;
+        }
+        return false;
     }
 
     private static void WriteConfig(Object Filename, JSONObject config) throws IOException { //So I don't have to write it multiple times
@@ -106,8 +115,10 @@ public class ConfigManager {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
             printlnTime("Usurping config for " + GuildID + " with a generic one due to bad formatting");
+            reader.close();
             return CreateGuildConfig(GuildID);
         }
+        reader.close();
 
         //Check the config to ensure it follows the format of any changes
         JSONObject baseConfig = CreateGuildObject();
@@ -185,11 +196,31 @@ public class ConfigManager {
         for (Object Filename : Configs.keySet()) {
             JSONObject config = Configs.get(Filename);
             //printlnTime(Filename+" - "+config);
-            try {
-                WriteConfig(Filename, config);
-            } catch (IOException exception) {
-                printlnTime("Unable to save config for Config " + Filename);
-                exception.printStackTrace();
+            if (IsConfigDirty(config)) {
+                printlnTime("Refusing to save " + Filename + " as it isn't legal json");
+                try {
+                    WriteConfig("failed/" + Filename + "_" + System.currentTimeMillis(), config);
+                } catch (IOException exception) {
+                    printlnTime("Unable to save failed config for Config " + Filename + " (unsurprisingly)");
+                    exception.printStackTrace();
+                }
+                try { //Force a fresh fetch
+                    if (Filename.getClass() == String.class) {
+                        ReadConfig((String) Filename);
+                    } else {
+                        ReadGuildConfig((Long) Filename);
+                    }
+                } catch (IOException exception) {
+                    printlnTime("Unable to load the existing non-screwed version for Config " + Filename);
+                    exception.printStackTrace();
+                }
+            } else {
+                try {
+                    WriteConfig(Filename, config);
+                } catch (IOException exception) {
+                    printlnTime("Unable to save config for Config " + Filename);
+                    exception.printStackTrace();
+                }
             }
         }
     }
