@@ -3,7 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
-import static Bots.Main.*;
+import static Bots.Main.printlnTime;
 
 public class CommandDevTests extends BaseCommand {
     @Override
