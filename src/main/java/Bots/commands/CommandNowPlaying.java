@@ -70,6 +70,11 @@ public class CommandNowPlaying extends BaseCommand {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
+        if (audioPlayer.isPaused()) {
+            embed.addField("⏸️ Track paused:", "✅ **True**", true);
+        } else {
+            embed.addField("⏸️ Track paused:", "❌ **False**", true);
+        }
         if (LoopGuilds.contains(event.getGuild().getId())) {
             embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
