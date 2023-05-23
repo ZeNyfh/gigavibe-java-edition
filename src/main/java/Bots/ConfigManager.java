@@ -95,9 +95,9 @@ public class ConfigManager {
         try {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
-            printlnTime("Usurping config for " + Filename + " with a generic one and moving old to /backup due to bad formatting");
+            printlnTime("Usurping config for " + Filename + " with a generic one and moving old to /failed due to bad formatting");
             reader.close();
-            Files.move(Paths.get(filePath), Paths.get(configFolder + "/backup/" + Filename + "_" + System.currentTimeMillis() + ".json"));
+            Files.move(Paths.get(filePath), Paths.get(configFolder + "/failed/" + Filename + "_" + System.currentTimeMillis() + ".json"));
             return CreateConfig(Filename);
         }
         reader.close();
@@ -114,8 +114,9 @@ public class ConfigManager {
         try {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
-            printlnTime("Usurping config for " + GuildID + " with a generic one due to bad formatting");
+            printlnTime("Usurping config for " + GuildID + " with a generic one and moving old to /failed due to bad formatting");
             reader.close();
+            Files.move(Paths.get(filePath), Paths.get(configFolder + "/failed/" + GuildID + "_" + System.currentTimeMillis() + ".json"));
             return CreateGuildConfig(GuildID);
         }
         reader.close();
