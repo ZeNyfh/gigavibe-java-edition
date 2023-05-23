@@ -378,13 +378,15 @@ public class Main extends ListenerAdapter {
 
     public static boolean IsDJ(Guild guild, GuildMessageChannelUnion commandChannel, Member member) {
         int people = 0;
-        for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
-            if (!vcMember.getUser().isBot()) {
-                people++;
+        if (member.getVoiceState() != null && member.getVoiceState().getChannel() != null) {
+            for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
+                if (!vcMember.getUser().isBot()) {
+                    people++;
+                }
             }
-        }
-        if (people == 1) {
-            return true;
+            if (people == 1) {
+                return true;
+            }
         }
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
