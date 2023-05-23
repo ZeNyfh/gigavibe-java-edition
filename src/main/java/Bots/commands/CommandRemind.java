@@ -11,7 +11,6 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,70 +54,56 @@ public class CommandRemind extends BaseCommand {
             return;
         }
 
-        // list
-        try {
-            if (args[1].equalsIgnoreCase("list")) {
-                int i = 0;
-                for (Object reminder : reminders.keySet()) {
-                    String[] finalReminders = reminders.get(reminder).toString().substring(0, reminders.get(reminder).toString().length() - 1).substring(1).replaceAll("\"", "").split(",");
-                    if (!Objects.equals(finalReminders[2], event.getMember().getId())) {
-                        continue;
-                    }
-                    i++;
-                    builder.append("**").append(i).append(":** <t:").append(Long.parseLong(finalReminders[0]) / 1000).append(":f>");
-                    if (finalReminders.length >= 4) {
-                        builder.append(" | ").append(finalReminders[3]);
-                    }
-                    builder.append("\n");
-                }
-                if (i == 0) {
-                    builder.append("You have no reminders.");
-                }
-                event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
-                return;
-            }
-        } catch (Exception ignored) {
-        }
         Long timeNow = System.currentTimeMillis();
-
-        // remove
-        if (args[1].equalsIgnoreCase("remove")) {
-            ArrayList<String[]> finalReminders = new ArrayList<>();
-            ArrayList<Object> toRemove = new ArrayList<>();
+        // list
+        if (args[1].equalsIgnoreCase("list")) {
+            int i = 0;
             for (Object reminder : reminders.keySet()) {
-                String[] userReminders = reminders.get(reminder).toString().substring(0, reminders.get(reminder).toString().length() - 1).substring(1).replaceAll("\"", "").split(",");
-                if (!Objects.equals(userReminders[2], event.getMember().getId())) {
+                JSONArray reminderData = (JSONArray) reminders.get(reminder);
+                if (!event.getMember().getId().equals(reminderData.get(2))) {
                     continue;
                 }
-                if (args.length <= 2 || !args[2].matches("^\\d+$")) {
-                    event.replyEmbeds(createQuickError("Invalid Arguments, was the index correct?"));
-                    return;
+                i++;
+                builder.append("**").append(i).append(":** <t:").append(Long.parseLong((String) reminderData.get(0)) / 1000).append(":f>");
+                if (reminderData.size() >= 4) {
+                    builder.append(" | ").append(reminderData.get(3));
                 }
-                finalReminders.add(userReminders);
-                toRemove.add(reminder);
+                builder.append("\n");
             }
-            int wantedIndex = Integer.parseInt(args[2]);
-            if (wantedIndex > finalReminders.size() || wantedIndex <= 0) {
-                event.replyEmbeds(createQuickError("Invalid Arguments, the index was invalid."));
+            if (i == 0) {
+                builder.append("You have no reminders.");
+            }
+            event.replyEmbeds(createQuickEmbed("**Reminders**", String.valueOf(builder)));
+        } else if (args[1].equalsIgnoreCase("remove")) { //remove
+            if (args.length <= 2 || !args[2].matches("^\\d+$")) {
+                event.replyEmbeds(createQuickError("Invalid Arguments, was the index correct?"));
                 return;
             }
-            String[] finalReminder = finalReminders.get(wantedIndex - 1);
+            ArrayList<JSONArray> userReminders = new ArrayList<>();
+            ArrayList<Object> indexReference = new ArrayList<>();
+            for (Object reminder : reminders.keySet()) {
+                JSONArray reminderData = (JSONArray) reminders.get(reminder);
+                if (!event.getMember().getId().equals(reminderData.get(2))) {
+                    continue;
+                }
+                userReminders.add(reminderData);
+                indexReference.add(reminder);
+            }
+            int wantedIndex = Integer.parseInt(args[2]);
+            if (wantedIndex > userReminders.size() || wantedIndex <= 0) {
+                event.replyEmbeds(createQuickError("The index provided doesn't exist."));
+                return;
+            }
+            JSONArray unwantedReminder = userReminders.get(wantedIndex - 1);
             builder = new StringBuilder();
-            long reminderTime = Long.parseLong(finalReminder[0]) / 1000;
+            long reminderTime = Long.parseLong((String) unwantedReminder.get(0)) / 1000;
             builder.append("<t:").append(reminderTime).append(":f>");
-            if (finalReminder.length >= 4) {
-                builder.append(" | ").append(finalReminder[3]);
+            if (unwantedReminder.size() >= 4) {
+                builder.append(" | ").append(unwantedReminder.get(3));
             }
             event.replyEmbeds(createQuickEmbed("**Removed reminder number " + wantedIndex + "**", String.valueOf(builder)));
-            finalReminders.remove(wantedIndex - 1);
-            reminders.remove(toRemove.get(wantedIndex - 1));
-            for (String[] oldReminder : finalReminders) {
-                reminders.put(timeNow, oldReminder);
-            }
-            return;
-        }
-
-        if (args[1].equalsIgnoreCase("add")) {
+            reminders.remove(indexReference.get(wantedIndex - 1));
+        } else if (args[1].equalsIgnoreCase("add")) { //add
             String timeLength;
             String reminderText = "";
             String timestampMatcher = "(?:\\d+ ?(?:(?:year|week|day|hour|minute|second)s?|[ywdhms])\\s*)+";
@@ -158,9 +143,9 @@ public class CommandRemind extends BaseCommand {
             finalArrayList.add(reminderText);
             reminders.put(timeNow, finalArrayList); // timeNow, {unixMillisRemind, channelID, userID[, reminderMessage]}
             event.replyEmbeds(createQuickEmbed("**I will remind you!**", "You will be reminded on <t:" + reminderTime / 1000 + ":f>"));
-            return;
+        } else {
+            event.replyEmbeds(createQuickError("Invalid arguments"));
         }
-        event.replyEmbeds(createQuickError("Invalid arguments"));
     }
 
     @Override

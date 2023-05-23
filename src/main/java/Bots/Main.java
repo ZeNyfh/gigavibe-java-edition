@@ -235,26 +235,28 @@ public class Main extends ListenerAdapter {
                 Iterator iterator = reminders.keySet().iterator();
                 while (iterator.hasNext()) {
                     Object key = iterator.next();
-                    String object = reminders.get(key).toString().replaceAll("\"", "");
-                    object = object.substring(1, object.length() - 1);
-                    List<String> list = List.of(object.split(","));
-                    try {
-                        if (currentTimeMillis() < Long.parseLong(list.get(0))) {
-                            continue;
-                        }
-                    } catch (Exception ignored) {
+                    JSONArray reminderData = (JSONArray) reminders.get(key);
+                    if (currentTimeMillis() < Long.parseLong((String) reminderData.get(0))) {
+                        continue;
                     }
                     iterator.remove();
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle("**Reminder!**");
-                    builder.appendDescription(" "); // required because it complains about the description being nothing
-                    if (list.size() == 4) {
-                        builder.appendDescription("\n" + list.get(3)); // adding the optional reason
+                    if (reminderData.size() == 4) {
+                        builder.appendDescription("\n" + reminderData.get(3)); // adding the optional reason
+                    } else {
+                        builder.appendDescription(" "); // required because it complains about the description being nothing
                     }
+                    String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
+                    // sending the message, yes this is compatible with slash commands
                     try {
-                        Objects.requireNonNull(bot.getTextChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
+                        Objects.requireNonNull(
+                                bot.getTextChannelById((String) reminderData.get(1))
+                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
                     } catch (NullPointerException ignored) {
-                        Objects.requireNonNull(bot.getThreadChannelById(list.get(1))).sendMessage((Objects.requireNonNull(bot.getUserById(list.get(2)))).getAsMention()).queue(message -> message.editMessageEmbeds(builder.build()).queue()); // sending the message, yes this is compatible with slash commands
+                        Objects.requireNonNull(
+                                bot.getThreadChannelById((String) reminderData.get(1))
+                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
                     }
                 }
             }
