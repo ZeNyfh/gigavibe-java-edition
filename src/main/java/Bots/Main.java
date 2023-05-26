@@ -67,6 +67,7 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
+    public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
 
     public static void registerCommand(BaseCommand command) {
@@ -74,6 +75,13 @@ public class Main extends ListenerAdapter {
         ratelimitTracker.put(command, new HashMap<>());
         commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
         commands.add(command);
+        for (String name : command.getNames()) {
+            if (commandNames.contains(name)) {
+                printlnTime("Command conflict - 2 commands are attempting to use the name " + name);
+            } else {
+                commandNames.add(name);
+            }
+        }
     }
 
     public static void main(String[] args) throws InterruptedException, LoginException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, URISyntaxException {
