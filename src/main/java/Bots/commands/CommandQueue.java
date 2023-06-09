@@ -10,17 +10,55 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.BlockingQueue;
 
 import static Bots.Main.*;
 import static java.lang.Math.round;
 
 public class CommandQueue extends BaseCommand {
+    private void HandleButtonEvent(ButtonInteractionEvent event) {
+        BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
+        if (Objects.equals(event.getButton().getId(), "forward")) {
+            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
+            if (queuePages.get(event.getGuild().getIdLong()) >= round((Queue.size() / 5F) + 1)) {
+                queuePages.put(event.getGuild().getIdLong(), 1);
+            }
+        } else if (Objects.equals(event.getButton().getId(), "backward")) {
+            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
+            if (queuePages.get(event.getGuild().getIdLong()) <= 0) {
+                queuePages.put(event.getGuild().getIdLong(), round((Queue.size() / 5F) + 1));
+            }
+        }
+        long queueTimeLength = 0;
+        for (AudioTrack track : Queue) {
+            if (track.getInfo().length < 432000000) {
+                queueTimeLength = queueTimeLength + track.getInfo().length;
+            }
+        }
+        EmbedBuilder eb = new EmbedBuilder();
+        for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < Queue.size(); j++) {
+            AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
+            eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+        }
+        eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
+        eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
+        eb.setColor(botColour);
+        eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
+        event.getInteraction().editMessageEmbeds(eb.build()).queue();
+    }
+
+    @Override
+    public void Init() {
+        registerButtonInteraction(new String[]{"forward", "backward"}, this::HandleButtonEvent);
+    }
 
     @Override
     public void execute(MessageEvent event) {

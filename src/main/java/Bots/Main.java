@@ -3,7 +3,6 @@ package Bots;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -44,12 +43,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
+import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static Bots.ConfigManager.GetConfig;
-import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -305,10 +303,26 @@ public class Main extends ListenerAdapter {
             long minutes = seconds / 60;
             seconds %= 60;
             ArrayList<String> totalSet = new ArrayList<>();
-            totalSet.add(days + (days == 1 ? " day" : " days"));
-            totalSet.add(hours + (hours == 1 ? " hour" : " hours"));
-            totalSet.add(minutes + (minutes == 1 ? " minute" : " minutes"));
-            totalSet.add(seconds + (seconds == 1 ? " second" : " seconds"));
+            if (days == 1) {
+                totalSet.add(days + " day");
+            } else if (days != 0) {
+                totalSet.add(days + " days");
+            }
+            if (hours == 1) {
+                totalSet.add(hours + " hour");
+            } else if (hours != 0) {
+                totalSet.add(hours + " hours");
+            }
+            if (minutes == 1) {
+                totalSet.add(minutes + " minute");
+            } else if (minutes != 0) {
+                totalSet.add(minutes + " minutes");
+            }
+            if (seconds == 1) {
+                totalSet.add(seconds + " second");
+            } else if (seconds != 0) {
+                totalSet.add(seconds + " seconds");
+            }
             return String.join(", ", totalSet);
         }
     }
@@ -448,107 +462,31 @@ public class Main extends ListenerAdapter {
         guildTimeouts.remove(event.getGuild().getIdLong());
     }
 
+    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+
+    public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
+        for (String name : names) {
+            registerButtonInteraction(name, func);
+        }
+    }
+
+    public static void registerButtonInteraction(String name, Consumer<ButtonInteractionEvent> func) {
+        if (ButtonInteractionMappings.containsKey(name)) {
+            printlnTime("Attempting to override the button manager for id " + name);
+        }
+        ButtonInteractionMappings.put(name.toLowerCase(), func);
+    }
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(botColour);
-        eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
-        int i = 0;
         String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
-        BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
-        switch (buttonID) {
-            case "general":
-            case "music":
-            case "dj":
-            case "admin":
-                for (BaseCommand Command : commands) {
-                    if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
-                        i++;
-                        StringBuilder builder = new StringBuilder();
-                        if (Command.getNames().length == 2) {
-                            builder.append("\n`Alias:` ");
-                        } else if (Command.getNames().length > 2) {
-                            builder.append("\n`Aliases:` ");
-                        }
-                        int j = 0;
-                        for (String name : Command.getNames()) {
-                            j++;
-                            if (Command.getNames().length == 1 || j == 1) {
-                                continue;
-                            }
-                            if (j != Command.getNames().length) {
-                                builder.append("**(").append(name).append(")**, ");
-                            } else {
-                                builder.append("**(").append(name).append(")**");
-                            }
-                        }
-                        eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + builder + "\n\n");
-                    }
-                }
-                break;
-            case "forward":
-            case "backward":
-        }
-        if (Objects.equals(event.getButton().getId(), "forward")) {
-            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
-            if (queuePages.get(event.getGuild().getIdLong()) >= round((Queue.size() / 5F) + 1)) {
-                queuePages.put(event.getGuild().getIdLong(), 1);
+        for (String name : ButtonInteractionMappings.keySet()) {
+            if (Objects.equals(name, buttonID)) {
+                ButtonInteractionMappings.get(name).accept(event);
+                return;
             }
-            long queueTimeLength = 0;
-            for (AudioTrack track : Queue) {
-                if (track.getInfo().length < 432000000) {
-                    queueTimeLength = queueTimeLength + track.getInfo().length;
-                }
-            }
-            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < Queue.size(); ) {
-                AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
-                eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
-                j++;
-            }
-            eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
-            eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
-            eb.setColor(botColour);
-            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
-        if (Objects.equals(event.getButton().getId(), "backward")) {
-            queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) - 1);
-            if (queuePages.get(event.getGuild().getIdLong()) <= 0) {
-                queuePages.put(event.getGuild().getIdLong(), round((Queue.size() / 5F) + 1));
-            }
-            long queueTimeLength = 0;
-            for (AudioTrack track : Queue) {
-                if (track.getInfo().length < 432000000) {
-                    queueTimeLength = queueTimeLength + track.getInfo().length;
-                }
-            }
-            for (int j = 5 * queuePages.get(event.getGuild().getIdLong()) - 5; j < 5 * queuePages.get(event.getGuild().getIdLong()) && j < Queue.size(); ) {
-                AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
-                eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
-                j++;
-            }
-            eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
-            eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
-            eb.setColor(botColour);
-            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
-        if (Objects.equals(event.getButton().getId().toLowerCase(), "general")) {
-            eb.setTitle("\uD83D\uDCD6 **General**");
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
-        if (Objects.equals(event.getButton().getId().toLowerCase(), "music")) {
-            eb.setTitle("\uD83D\uDD0A **Music**");
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
-        if (Objects.equals(event.getButton().getId().toLowerCase(), "dj")) {
-            eb.setTitle("\uD83C\uDFA7 **DJ**");
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
-        if (Objects.equals(event.getButton().getId().toLowerCase(), "admin")) {
-            eb.setTitle("\uD83D\uDCD1 **Admin**");
-            event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
-        }
+        printlnTime("Button of ID " + buttonID + " has gone ignored - missing listener?");
     }
 
     @Override
