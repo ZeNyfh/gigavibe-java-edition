@@ -26,7 +26,6 @@ public class CommandBlockChannel extends BaseCommand {
             return;
         }
         String[] args = event.getArgs();
-        printlnTime(args, args.length);
         if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
             if (args.length < 3) {
                 event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", "The valid usage is: `blockchannel <remove/add> <ChannelID>` or `blockchannel list`"));

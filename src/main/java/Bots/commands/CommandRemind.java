@@ -127,7 +127,6 @@ public class CommandRemind extends BaseCommand {
                     return;
                 }
             }
-            printlnTime("Timestamp match:", timeLength);
             long reminderTime;
             try {
                 reminderTime = timeNow + processReminderTime(timeLength);

@@ -62,7 +62,6 @@ public class CommandVideoDL extends BaseCommand {
                 String[] command = new String[]{
                         ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"", "--no-playlist", filteredUrl,
                 };
-                printlnTime(ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"", "--no-playlist", filteredUrl);
                 p = Runtime.getRuntime().exec(command);
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String line;
@@ -70,7 +69,6 @@ public class CommandVideoDL extends BaseCommand {
                 boolean check = false;
                 try {
                     while ((line = input.readLine()) != null) {
-                        printlnTime(line);
                         i++;
                         if (i >= 10 && line.contains("ETA") && !check) {
                             message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
@@ -80,7 +78,6 @@ public class CommandVideoDL extends BaseCommand {
                 } catch (Exception ignored) {
                 }
                 p.waitFor();
-                printlnTime(new File(fileName).exists());
                 input.close();
                 if (new File(inputFile).length() <= finalFileSize) {
                     try {

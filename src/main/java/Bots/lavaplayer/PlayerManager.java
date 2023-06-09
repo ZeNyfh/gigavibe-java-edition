@@ -115,7 +115,6 @@ public class PlayerManager {
                 } else {
                     embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                 }
-                printlnTime(audioTrack.getInfo().length);
                 embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
                 commandChannel.sendMessageEmbeds(embed.build()).queue();
             }
@@ -143,7 +142,6 @@ public class PlayerManager {
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                        printlnTime(tracks.get(0).getInfo().length);
                         commandChannel.sendMessageEmbeds(embed.build()).queue();
                     } else {
                         long lengthSeconds = 0;
@@ -204,7 +202,6 @@ public class PlayerManager {
         }
     }
     public String getThumbURL(AudioTrack track) {
-        printlnTime(track.getInfo().uri);
         if (track.getInfo().uri.toLowerCase().contains("youtube")) {
             return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
         }
@@ -221,7 +218,6 @@ public class PlayerManager {
                     output.append(line);
                 }
                 reader.close();
-                printlnTime(output);
                 Pattern pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
                 Matcher matcher = pattern.matcher(output.toString());
                 if (matcher.find()) {
