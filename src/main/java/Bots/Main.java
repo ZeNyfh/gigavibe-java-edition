@@ -306,26 +306,10 @@ public class Main extends ListenerAdapter {
             long minutes = seconds / 60;
             seconds %= 60;
             ArrayList<String> totalSet = new ArrayList<>();
-            if (days == 1) {
-                totalSet.add(days + " day");
-            } else if (days != 0) {
-                totalSet.add(days + " days");
-            }
-            if (hours == 1) {
-                totalSet.add(hours + " hour");
-            } else if (hours != 0) {
-                totalSet.add(hours + " hours");
-            }
-            if (minutes == 1) {
-                totalSet.add(minutes + " minute");
-            } else if (minutes != 0) {
-                totalSet.add(minutes + " minutes");
-            }
-            if (seconds == 1) {
-                totalSet.add(seconds + " second");
-            } else if (seconds != 0) {
-                totalSet.add(seconds + " seconds");
-            }
+            totalSet.add(days + (days == 1 ? " day" : " days"));
+            totalSet.add(hours + (hours == 1 ? " hour" : " hours"));
+            totalSet.add(minutes + (minutes == 1 ? " minute" : " minutes"));
+            totalSet.add(seconds + (seconds == 1 ? " second" : " seconds"));
             return String.join(", ", totalSet);
         }
     }
@@ -376,12 +360,11 @@ public class Main extends ListenerAdapter {
     public static boolean IsChannelBlocked(Guild guild, GuildMessageChannelUnion commandChannel) {
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
-        for (int i = 0; i < blockedChannels.size(); ) {
-            if (commandChannel.getId().equals(blockedChannels.get(i))) {
+        for (Object blockedChannel : blockedChannels) {
+            if (commandChannel.getId().equals(blockedChannel)) {
                 commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
                 return true;
             }
-            i++;
         }
         return false;
     }
@@ -394,7 +377,7 @@ public class Main extends ListenerAdapter {
                     people++;
                 }
             }
-            if (people == 1) {
+            if (people == 1) { //People alone in a VC are allowed to use VC DJ commands
                 return true;
             }
         }
@@ -402,24 +385,22 @@ public class Main extends ListenerAdapter {
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;
-        for (int i = 0; i < DJRoles.size(); ) {
-            if (member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRoles.get(i)))) {
+        for (Object DJRole : DJRoles) {
+            if (member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRole))) {
                 check = true;
             }
-            i++;
         }
         if (!check) {
-            for (int i = 0; i < DJUsers.size(); ) {
-                if (DJUsers.get(i).equals(member.getIdLong())) {
+            for (Object DJUser : DJUsers) {
+                if (DJUser.equals(member.getIdLong())) {
                     check = true;
                 }
-                i++;
             }
         }
         if (check) {
             return true;
         } else {
-            commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "you do not have a DJ role.")).queue();
+            commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have a DJ role.")).queue();
             return false;
         }
     }
@@ -553,11 +534,11 @@ public class Main extends ListenerAdapter {
             eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
-        if (Objects.equals(event.getButton().getId(), "general")) {
+        if (Objects.equals(event.getButton().getId().toLowerCase(), "general")) {
             eb.setTitle("\uD83D\uDCD6 **General**");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
-        if (Objects.equals(event.getButton().getId(), "music")) {
+        if (Objects.equals(event.getButton().getId().toLowerCase(), "music")) {
             eb.setTitle("\uD83D\uDD0A **Music**");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
@@ -565,7 +546,7 @@ public class Main extends ListenerAdapter {
             eb.setTitle("\uD83C\uDFA7 **DJ**");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
-        if (Objects.equals(event.getButton().getId(), "admin")) {
+        if (Objects.equals(event.getButton().getId().toLowerCase(), "admin")) {
             eb.setTitle("\uD83D\uDCD1 **Admin**");
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
@@ -613,7 +594,7 @@ public class Main extends ListenerAdapter {
         } else {
             // GuildVoiceMoveEvent
             if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
-                if (event.getNewValue().getMembers().size() == 1) { // assuming the bot is alone there.
+                if (Objects.requireNonNull(event.getNewValue()).getMembers().size() == 1) { // assuming the bot is alone there.
                     PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
                     clearVotes(event.getGuild().getIdLong());
                 }
