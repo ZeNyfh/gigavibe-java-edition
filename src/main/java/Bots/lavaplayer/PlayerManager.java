@@ -11,13 +11,30 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
+import kotlin.text.Regex;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import org.json.simple.JSONObject;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
@@ -84,6 +101,7 @@ public class PlayerManager {
                 String length;
                 musicManager.scheduler.queue(audioTrack);
                 EmbedBuilder embed = new EmbedBuilder();
+                embed.setThumbnail(getThumbURL(audioTrack));
                 if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length < 0 || audioTrack.getInfo().uri.toLowerCase().endsWith("opus")) {
                     length = "Unknown";
                 } else {
@@ -122,7 +140,7 @@ public class PlayerManager {
                             return;
                         }
                         musicManager.scheduler.queue(tracks.get(0));
-                        embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
+                        embed.setThumbnail(getThumbURL(tracks.get(0)));
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                         printlnTime(tracks.get(0).getInfo().length);
@@ -151,7 +169,7 @@ public class PlayerManager {
                         if (tracks.size() > 5) {
                             embed.appendDescription("...");
                         }
-                        embed.setThumbnail("https://img.youtube.com/vi/" + tracks.get(0).getIdentifier() + "/0.jpg");
+                        embed.setThumbnail(getThumbURL(tracks.get(0)));
                         commandChannel.sendMessageEmbeds(embed.build()).queue();
                     }
                     for (int i = 0; i < tracks.size(); ) {
@@ -183,6 +201,61 @@ public class PlayerManager {
                 musicManager.scheduler.nextTrack();
             }
         } catch (Exception ignored) {
+        }
+    }
+    public String getThumbURL(AudioTrack track) {
+        printlnTime(track.getInfo().uri);
+        if (track.getInfo().uri.toLowerCase().contains("youtube")) {
+            return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
+        }
+        if (track.getInfo().uri.toLowerCase().contains("spotify")) {
+            try {
+                URL url = new URL("https://embed.spotify.com/oembed/?url=" + track.getInfo().uri);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder output = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line);
+                }
+                reader.close();
+                printlnTime(output);
+                Pattern pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
+                Matcher matcher = pattern.matcher(output.toString());
+                if (matcher.find()) {
+                    return matcher.group(1);
+                }
+                return "";
+            } catch (Exception e) {e.printStackTrace();}
+            return "";
+        }
+        if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
+            try {
+                URL url = new URL(track.getInfo().uri);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder output = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line);
+                }
+                reader.close();
+                Pattern pattern = Pattern.compile("<img src=\"([^\"]+)\" width=\"");
+                Matcher matcher = pattern.matcher(output.toString());
+                if (matcher.find()) {
+                    return matcher.group(1);
+                }
+            } catch (Exception e) {e.printStackTrace();}
+            return "";
+        }
+        // if people care about Apple Music, add this feature here
+        else { // assume it is a file
+            return "";
+            // file thumbnail code, WIP but this can be pushed already since this includes soundcloud + spotify thumbnails now
         }
     }
 }

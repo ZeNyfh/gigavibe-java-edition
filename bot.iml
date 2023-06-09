@@ -30,7 +30,7 @@
     <orderEntry type="library" name="Maven: com.github.walkyst.lavaplayer-fork:lavaplayer-ext-youtube-rotator:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.walkyst.lavaplayer-fork:lavaplayer-stream-merger:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.walkyst.lavaplayer-fork:lavaplayer-test-samples:1.4.0" level="project" />
-    <orderEntry type="library" name="Maven: net.dv8tion:JDA:5.0.0-beta.6" level="project" />
+    <orderEntry type="library" name="Maven: net.dv8tion:JDA:5.0.0-beta.9" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
     <orderEntry type="library" name="Maven: com.neovisionaries:nv-websocket-client:2.14" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.10.0" level="project" />

@@ -528,7 +528,7 @@ public class Main extends ListenerAdapter {
             eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
             eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
             eb.setColor(botColour);
-            eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "backward")) {
@@ -550,7 +550,7 @@ public class Main extends ListenerAdapter {
             eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
             eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
             eb.setColor(botColour);
-            eb.setThumbnail("https://img.youtube.com/vi/" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getIdentifier() + "/0.jpg");
+            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
             event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
         }
         if (Objects.equals(event.getButton().getId(), "general")) {
