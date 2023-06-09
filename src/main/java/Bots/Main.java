@@ -59,7 +59,6 @@ public class Main extends ListenerAdapter {
     public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
-    public static String botToken = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
@@ -124,7 +123,7 @@ public class Main extends ListenerAdapter {
             printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
         }
         botPrefix = dotenv.get("PREFIX");
-        botToken = dotenv.get("TOKEN");
+        String botToken = dotenv.get("TOKEN");
 
         if (dotenv.get("COLOUR") == null) {
             printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());

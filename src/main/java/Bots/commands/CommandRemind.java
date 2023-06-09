@@ -16,7 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.ConfigManager.GetConfig;
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandRemind extends BaseCommand {
     public static long processReminderTime(String timeText) {

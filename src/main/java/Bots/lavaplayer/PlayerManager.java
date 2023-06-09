@@ -11,25 +11,14 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
-import kotlin.text.Regex;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
-import org.json.simple.JSONObject;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,6 +190,7 @@ public class PlayerManager {
         } catch (Exception ignored) {
         }
     }
+
     public String getThumbURL(AudioTrack track) {
         if (track.getInfo().uri.toLowerCase().contains("youtube")) {
             return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
@@ -224,7 +214,9 @@ public class PlayerManager {
                     return matcher.group(1);
                 }
                 return "";
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return "";
         }
         if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
@@ -245,7 +237,9 @@ public class PlayerManager {
                 if (matcher.find()) {
                     return matcher.group(1);
                 }
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return "";
         }
         // if people care about Apple Music, add this feature here
