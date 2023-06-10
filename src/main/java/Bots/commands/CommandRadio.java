@@ -81,11 +81,6 @@ public class CommandRadio extends BaseCommand {
             eb.clear();
             return;
         }
-        String argFinal = "";
-        for (int i = 1; i < event.getArgs().length; ) {
-            argFinal = argFinal + " " + event.getArgs()[i];
-            i++;
-        }
         StringBuilder arg = new StringBuilder(event.getArgs()[1]);
         String radioURL = null;
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
@@ -121,13 +116,13 @@ public class CommandRadio extends BaseCommand {
             return;
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
-        argFinal = argFinal.toLowerCase().substring(1);
         if (radioURL != null) {
             audioManager.openAudioConnection(memberChannel);
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, true);
         } else {
+            String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
-                if (tempMap.getKey().equalsIgnoreCase(argFinal)) {
+                if (tempMap.getKey().equalsIgnoreCase(wantedRadio)) {
                     if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
                         return;
                     }

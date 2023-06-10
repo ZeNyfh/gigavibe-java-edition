@@ -14,9 +14,12 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +192,7 @@ public class PlayerManager {
         }
     }
 
+    @Nullable
     public String getThumbURL(AudioTrack track) {
         URL url = null;
         Pattern pattern = null;
@@ -204,7 +208,9 @@ public class PlayerManager {
             } else {
                 return null;
             }
-        } catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (url != null && pattern != null) {
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
