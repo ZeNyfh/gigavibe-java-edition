@@ -195,17 +195,14 @@ public class PlayerManager {
         try {
             if (track.getInfo().uri.toLowerCase().contains("youtube")) {
                 return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
-            }
-            if (track.getInfo().uri.toLowerCase().contains("spotify")) {
+            } else if (track.getInfo().uri.toLowerCase().contains("spotify")) {
                 url = new URL("https://embed.spotify.com/oembed/?url=" + track.getInfo().uri);
                 pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
-            }
-            if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
+            } else if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
                 url = new URL(track.getInfo().uri);
                 pattern = Pattern.compile("<img src=\"([^\"]+)\" width=\"");
-            }
-            else {
-                return "";
+            } else {
+                return null;
             }
         } catch (Exception e) {e.printStackTrace();}
         if (url != null && pattern != null) {
@@ -224,13 +221,13 @@ public class PlayerManager {
                 if (matcher.find()) {
                     return matcher.group(1);
                 } else {
-                    return "";
+                    return null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return "";
+            return null;
         }
-        return "";
+        return null;
     }
 }

@@ -50,7 +50,7 @@ public class CommandRadio extends BaseCommand {
     }
 
     public HashMap<String, String> getRadios() {
-        HashMap<String, String> radioLists = new HashMap<String, String>();
+        HashMap<String, String> radioLists = new HashMap<>();
         radioLists.put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
         radioLists.put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
         radioLists.put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
