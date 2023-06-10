@@ -77,8 +77,7 @@ public class CommandRadio extends BaseCommand {
         eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
         eb.setFooter("Use \"" + botPrefix + "radio <Radio Name>\" to play a radio station.");
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"));
-            event.replyEmbeds(eb.build());
+            event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"), eb.build());
             eb.clear();
             return;
         }
