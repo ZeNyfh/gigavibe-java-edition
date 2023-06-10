@@ -23,7 +23,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.github.walkyst.JAADec-fork:jaadec-ext-aac:0.1.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.mozilla:rhino-engine:1.7.14" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.mozilla:rhino:1.7.14" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jsoup:jsoup:1.12.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.iharder:base64:2.3.9" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.json:json:20220924" level="project" />
     <orderEntry type="library" name="Maven: com.github.walkyst.lavaplayer-fork:lavaplayer-ext-format-xm:1.4.0" level="project" />
@@ -53,8 +52,14 @@
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.github.Topis-Lavalink-Plugins:Topis-Source-Managers:3.2.4" level="project" />
-    <orderEntry type="library" name="Maven: com.github.Topis-Lavalink-Plugins.Topis-Source-Managers:lavasrc:3.2.4" level="project" />
-    <orderEntry type="library" name="Maven: com.github.Topis-Lavalink-Plugins.Topis-Source-Managers:lavasrc-plugin:3.2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.github.Topis-Lavalink-Plugins:Topis-Source-Managers:2.0.7" level="project" />
+    <orderEntry type="library" name="Maven: se.michaelthelin.spotify:spotify-web-api-java:7.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.9" level="project" />
+    <orderEntry type="library" name="Maven: com.neovisionaries:nv-i18n:1.29" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.client5:httpclient5-cache:5.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.client5:httpclient5:5.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.core5:httpcore5:5.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.core5:httpcore5-h2:5.1.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jsoup:jsoup:1.14.3" level="project" />
   </component>
 </module>
