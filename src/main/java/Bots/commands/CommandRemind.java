@@ -19,6 +19,13 @@ import static Bots.ConfigManager.GetConfig;
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
 
+/* Reminder data array structure
+Index 0: reminderTime - The time at which the post should be sent
+Index 1: channelID - The ID of the channel the reminder should be posted in
+Index 2: userID - The ID of the user who made the reminder
+Index 3: reminderText - The text of the reminder. If none was provided, this will be an empty string
+*/
+
 public class CommandRemind extends BaseCommand {
     public static long processReminderTime(String timeText) {
         HashMap<String, Long> UnitToSeconds = new HashMap<>();

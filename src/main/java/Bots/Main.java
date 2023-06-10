@@ -247,11 +247,7 @@ public class Main extends ListenerAdapter {
                     iterator.remove();
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle("**Reminder!**");
-                    if (reminderData.size() == 4) {
-                        builder.appendDescription("\n" + reminderData.get(3)); // adding the optional reason
-                    } else {
-                        builder.appendDescription(" "); // required because it complains about the description being nothing
-                    }
+                    builder.appendDescription("\n" + reminderData.get(3)); // adding the reason
                     String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
                     // sending the message, yes this is compatible with slash commands
                     try {
