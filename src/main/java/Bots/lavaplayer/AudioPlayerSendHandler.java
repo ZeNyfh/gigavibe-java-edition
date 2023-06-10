@@ -5,7 +5,6 @@ import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public class AudioPlayerSendHandler implements AudioSendHandler {
@@ -29,8 +28,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
     @Nullable
     @Override
     public ByteBuffer provide20MsAudio() {
-        final Buffer tmp = this.buffer.flip();
-        return (ByteBuffer) tmp;
+        return this.buffer.flip();
     }
 
     @Override

@@ -75,7 +75,7 @@ public class PlayerManager {
     public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                commandChannel.sendMessageEmbeds(createQuickError("There was an error and the spotify track could not load.")).queue();
+                commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
                 return;
             }
         }
@@ -185,6 +185,7 @@ public class PlayerManager {
             float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
             Thread.sleep(500);
             if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
+                printlnTime("Audio source", musicManager.audioPlayer.getPlayingTrack().getInfo().uri, "appears to have hung");
                 loadAndPlay(commandChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
                 musicManager.scheduler.nextTrack();
             }
