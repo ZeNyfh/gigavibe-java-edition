@@ -79,14 +79,20 @@ public class CommandVideoDL extends BaseCommand {
                 }
                 p.waitFor();
                 input.close();
-                if (new File(inputFile).length() <= finalFileSize) {
+                File file = new File(inputFile);
+                if (!file.exists()) {
+                    message[0].editMessageEmbeds(createQuickError("No file was downloaded"));
+                    return;
+                }
+                if (file.length() <= finalFileSize) {
                     try {
                         command = new String[]{
-                                ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", "-vcodec", "mpeg4", "-acodec", "-acodec aac"
+                                //This is unfinished and asking for errors
+                                ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", inputFile, "-vcodec mpeg4", "-acodec aac"
                         };
                         p = Runtime.getRuntime().exec(command);
                         p.waitFor();
-                        event.replyFiles(FileUpload.fromData(new File(inputFile)));
+                        message[0].editMessageFiles(FileUpload.fromData(file));
                         Thread.sleep(5000);
                     } catch (Exception e) {
                         e.printStackTrace();
