@@ -247,18 +247,11 @@ public class Main extends ListenerAdapter {
                     iterator.remove();
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setTitle("**Reminder!**");
-                    builder.appendDescription("\n" + reminderData.get(3)); // adding the reason
+                    builder.appendDescription("\n" + reminderData.get(3)); // Adding the reason
                     String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
-                    // sending the message, yes this is compatible with slash commands
-                    try {
-                        Objects.requireNonNull(
-                                bot.getTextChannelById((String) reminderData.get(1))
-                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
-                    } catch (NullPointerException ignored) {
-                        Objects.requireNonNull(
-                                bot.getThreadChannelById((String) reminderData.get(1))
-                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
-                    }
+                    Objects.requireNonNull( //Send the message
+                            bot.getChannelById(GuildMessageChannelUnion.class, (String) reminderData.get(1))
+                    ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
                 }
             }
         };
