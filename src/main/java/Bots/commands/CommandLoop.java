@@ -11,9 +11,6 @@ public class CommandLoop extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
-        if (event.getContentRaw().contains("loopqueue")) {
-            return;
-        }
         if (!audioManager.isConnected()) {
             event.replyEmbeds(createQuickError("I am not playing anything."));
             return;
