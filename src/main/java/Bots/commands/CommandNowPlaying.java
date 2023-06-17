@@ -17,6 +17,31 @@ import static Bots.Main.*;
 
 public class CommandNowPlaying extends BaseCommand {
 
+    private static String getStreamTitle(String streamUrl) {
+        String[] cmd = {"ffprobe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
+        }
+        String streamTitle = null;
+        try {
+            Process process = new ProcessBuilder(cmd).start();
+            BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            streamTitle = ffprobeInput.readLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+            streamTitle = "Unknown";
+        }
+        if (Objects.equals(streamTitle, "")) {
+            streamTitle = "Unknown";
+        }
+        if (streamTitle != null) {
+            if (streamTitle.length() > 70) {
+                streamTitle = streamTitle.substring(0, 70) + "...";
+            }
+        }
+        return streamTitle;
+    }
+
     @Override
     public void execute(MessageEvent event) {
         final Member self = event.getGuild().getSelfMember();
@@ -89,31 +114,6 @@ public class CommandNowPlaying extends BaseCommand {
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
         event.replyEmbeds(embed.build());
-    }
-
-    private static String getStreamTitle(String streamUrl) {
-        String[] cmd = {"ffprobe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
-        }
-        String streamTitle = null;
-        try {
-            Process process = new ProcessBuilder(cmd).start();
-            BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            streamTitle = ffprobeInput.readLine();
-        } catch (Exception e) {
-            e.printStackTrace();
-            streamTitle = "Unknown";
-        }
-        if (Objects.equals(streamTitle, "")) {
-            streamTitle = "Unknown";
-        }
-        if (streamTitle != null) {
-            if (streamTitle.length() > 70) {
-                streamTitle = streamTitle.substring(0, 70) + "...";
-            }
-        }
-        return streamTitle;
     }
 
     @Override
