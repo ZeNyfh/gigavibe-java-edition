@@ -56,11 +56,9 @@ public class CommandVideoDL extends BaseCommand {
                 e.printStackTrace();
                 deleteFiles("viddl" + File.separator + time);
             }
-            String downloadSpeed = "Average download speed: " + new DecimalFormat("#.##").format(inputPath.toFile().length() / ((time) * 1000.0)) + "MB per second.\n\n";
             String download = "Download took: " + (System.currentTimeMillis() - time) / 1000 + " seconds.\n\n";
-            printlnTime(inputPath.toFile().length());
             if (inputPath.toFile().length() < targetSize * 1000L * 1024L) { // does not need resizing
-                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + downloadSpeed + "*if the file is not here, wait a few seconds for it to upload*"));
+                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + "*if the file is not here, wait a few seconds for it to upload*"));
                 message[0].editMessageFiles(FileUpload.fromData(inputPath));
                 try {
                     Thread.sleep(10000);
@@ -107,7 +105,7 @@ public class CommandVideoDL extends BaseCommand {
                 processBuilder.start().waitFor();
                 Files.deleteIfExists(passLogFile.toPath());
                 String resize = "Resizing took: " + (System.currentTimeMillis() - newTime) / 1000 + " seconds.\n";
-                downloadSpeed = "Average download speed: " + new DecimalFormat("#.##").format(new File(targetFile).length() / ((newTime - time) * 1000.0)) + "MB per second.\n\n";
+                String downloadSpeed = "Average download speed: " + new DecimalFormat("#.##").format(new File(targetFile).length() / ((newTime - time) * 1000.0)) + "MB per second.\n\n";
                 message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + resize + downloadSpeed + "*if the file is not here, wait a few seconds for it to upload*"));
                 message[0].editMessageFiles(FileUpload.fromData(new File(targetFile)));
                 Thread.sleep(10000);
