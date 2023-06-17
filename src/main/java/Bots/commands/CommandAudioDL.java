@@ -58,6 +58,10 @@ public class CommandAudioDL extends BaseCommand {
                 deleteFiles("auddl" + File.separator + time);
             }
             String download = "Download took: " + (System.currentTimeMillis() - time) / 1000 + " seconds.\n\n";
+            if (!inputPath.toFile().exists()) {
+                message[0].editMessageEmbeds(createQuickError("The file failed to download"));
+                return;
+            }
             if (inputPath.toFile().length() < targetSize * 1000L * 1024L) { // does not need resizing
                 message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + "*if the file is not here, wait a few seconds for it to upload*"));
                 message[0].editMessageFiles(FileUpload.fromData(inputPath));
