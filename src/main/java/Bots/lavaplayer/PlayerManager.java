@@ -197,21 +197,23 @@ public class PlayerManager {
     public String getThumbURL(AudioTrack track) {
         URL url = null;
         Pattern pattern = null;
+        String site = "";
         try {
             if (track.getInfo().uri.toLowerCase().contains("youtube")) {
                 return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
             } else if (track.getInfo().uri.toLowerCase().contains("spotify")) {
+                site = "Spotify";
                 url = new URL("https://embed.spotify.com/oembed/?url=" + track.getInfo().uri);
                 pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
             } else if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
+                site = "SoundCloud";
                 url = new URL(track.getInfo().uri);
                 pattern = Pattern.compile("<img src=\"([^\"]+)\" width=\"");
             } else {
                 return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {printlnTime("Thumb URL Fail : " + site + " |" + url);} // ignore because floods console if image url invalid
+
         if (url != null && pattern != null) {
             try {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -230,9 +232,7 @@ public class PlayerManager {
                 } else {
                     return null;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception ignored) {printlnTime("Thumb Matcher Fail : " + site + " |" + url);} // ignore because floods console if image url invalid
             return null;
         }
         return null;
