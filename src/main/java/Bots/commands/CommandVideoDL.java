@@ -6,12 +6,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -20,6 +19,7 @@ public class CommandVideoDL extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
+        long time = System.currentTimeMillis();
         if (event.getArgs().length < 2 || Objects.equals(event.getArgs()[1], "")) {
             event.replyEmbeds(createQuickError("No arguments given."));
             return;
@@ -28,145 +28,94 @@ public class CommandVideoDL extends BaseCommand {
 
         final String ffprobeString;
         final String ffmpegString;
-        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            ytdlp = "modules" + File.separator + "yt-dlp.exe";
+            ffprobeString = "modules" + File.separator + "ffprobe.exe";
+            ffmpegString = "modules" + File.separator + "ffmpeg.exe";
+        } else {
             ytdlp = "yt-dlp";
             ffprobeString = "ffprobe";
             ffmpegString = "ffmpeg";
-        } else {
-            ytdlp = "modules/yt-dlp.exe";
-            ffprobeString = "modules/ffprobe";
-            ffmpegString = "modules/ffmpeg";
         }
-        File dir = new File("viddl");
-        float fileSize = 25600000;
-        if (event.getGuild().getBoostCount() >= 7) {
-            fileSize = 51200000;
-        }
-        if (event.getArgs().length == 3) {
-            if (event.getArgs()[2].toLowerCase().contains("true")) {
-                fileSize = 25600000;
-            }
-        }
-        float finalFileSize = fileSize;
+        File viddl = new File("viddl");
+        String filteredURL = event.getArgs()[1].replaceAll("\n", "");
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
             event.replyEmbeds(x -> message[0] = x, createQuickEmbed("Thinking...", ""));
-            String unix = String.valueOf(System.currentTimeMillis());
-            String fileName = dir.getAbsolutePath() + File.separator + unix;
-            String inputFile = dir.getAbsolutePath() + File.separator + unix + ".mp4";
-            String outputFile = dir.getAbsolutePath() + File.separator + unix + "K.mp4";
-
-            Process p;
-            String filteredUrl = event.getArgs()[1].replaceAll("\n", "");
+            int targetSize = event.getGuild().getBoostCount() >= 7 ? 50 : 25;
+            Path inputPath = Paths.get(viddl.getAbsolutePath() + File.separator + time + ".mp4");
+            String targetFile = viddl.getAbsolutePath() + File.separator + time + "_Zen.mp4"; // filename out
+            String Null = System.getProperty("os.name").toLowerCase().contains("windows") ? "NUL" : "/dev/null";
             try {
-                String[] command = new String[]{
-                        ytdlp, "--merge-output-format", "mp4", "-o", inputFile, "--match-filter", "\"duration < 7200\"", "--no-playlist", filteredUrl,
-                };
-                p = Runtime.getRuntime().exec(command);
-                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String line;
-                int i = 0;
-                boolean check = false;
+                ProcessBuilder builder = new ProcessBuilder(ytdlp, "--quiet", "--merge-output-format", "mp4", "-o", inputPath.toString(), "--match-filter", "duration < 7200", "--no-playlist", filteredURL);
+                builder.redirectErrorStream(true);
+                Process process = builder.start();
+                process.waitFor();
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+                deleteFiles("viddl" + File.separator + time);
+            }
+            String downloadSpeed = "Average download speed: " + new DecimalFormat("#.##").format(inputPath.toFile().length() / ((time) * 1000.0)) + "MB per second.\n\n";
+            String download = "Download took: " + (System.currentTimeMillis() - time) / 1000 + " seconds.\n\n";
+            printlnTime(inputPath.toFile().length());
+            if (inputPath.toFile().length() < targetSize * 1000L * 1024L) { // does not need resizing
+                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + downloadSpeed + "*if the file is not here, wait a few seconds for it to upload*"));
+                message[0].editMessageFiles(FileUpload.fromData(inputPath));
                 try {
-                    while ((line = input.readLine()) != null) {
-                        i++;
-                        if (i >= 10 && line.contains("ETA") && !check) {
-                            message[0].editMessageEmbeds(createQuickEmbed(" ", "**" + line.replaceAll("(.*?)ETA", "Approximate ETA:**")));
-                            check = true;
-                        }
-                    }
+                    Thread.sleep(10000);
+                    deleteFiles("viddl" + File.separator + time);
                 } catch (Exception ignored) {
                 }
-                p.waitFor();
-                input.close();
-                File file = new File(inputFile);
-                if (!file.exists()) {
-                    message[0].editMessageEmbeds(createQuickError("No file was downloaded"));
-                    return;
-                }
-                if (file.length() <= finalFileSize) {
-                    try {
-                        command = new String[]{
-                                //This is unfinished and asking for errors
-                                ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", inputFile, "-vcodec mpeg4", "-acodec aac"
-                        };
-                        p = Runtime.getRuntime().exec(command);
-                        p.waitFor();
-                        message[0].editMessageFiles(FileUpload.fromData(file));
-                        Thread.sleep(5000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    new File(inputFile).delete();
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                message[0].editMessageEmbeds(createQuickError(e.getMessage()));
                 return;
             }
-
-            int crf = 20;
-            int bitrate = 1024;
-            int attempt = 0;
-
+            message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDD3D **Download Complete!**", download + "Resizing, the file will be here shortly..."));
+            long newTime = System.currentTimeMillis();
             try {
-                // ffprobe to get res
-                String ffprobeCommand = ffprobeString + " -v error -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 " + inputFile;
-                Process ffprobe = Runtime.getRuntime().exec(ffprobeCommand);
-                BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(ffprobe.getInputStream()));
-                String videoWidth = ffprobeInput.readLine();
-                String videoHeight = ffprobeInput.readLine();
+                Process process = new ProcessBuilder(ffprobeString, "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", inputPath.toString())
+                        .redirectErrorStream(true)
+                        .start();
+                String output = new String(process.getInputStream().readAllBytes()).trim();
+                float originalDuration = Float.parseFloat(output);
+                process = new ProcessBuilder(ffprobeString, "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=bit_rate", "-of", "csv=p=0", inputPath.toString())
+                        .redirectErrorStream(true)
+                        .start();
+                output = new String(process.getInputStream().readAllBytes()).trim();
 
-                // change res to half
-                int scaleWidth = Integer.parseInt(videoWidth);
-                int scaleHeight = Integer.parseInt(videoHeight);
-                String scale = scaleWidth + ":" + scaleHeight;
-                // compression
-                int numThreads = Runtime.getRuntime().availableProcessors() / 2;
-                long time = System.currentTimeMillis();
-
-                // check filesize
-                File output = new File(inputFile);
-                while (output.length() > finalFileSize) {
-                    attempt++;
-                    message[0].editMessageEmbeds(createQuickEmbed("\uD83D\uDCCF **Resizing the video**", "Resize attempt: " + attempt + " / 10\nCurrent Filesize: " + String.format("%.3f", (double) output.length() / 1000000) + "MB\nAiming for <= " + finalFileSize / 1000000 + "MB"));
-                    if (attempt > 3) {
-                        crf += 2;
-                        bitrate -= 64;
-                    }
-                    if (attempt == 2) {
-                        scale = scaleWidth / 2 + ":" + scaleHeight / 2;
-                    }
-                    if (attempt == 4) {
-                        scale = scaleWidth / 4 + ":" + scaleHeight / 4;
-                    }
-                    if (attempt == 6) {
-                        scale = scaleWidth / 6 + ":" + scaleHeight / 6;
-                    }
-                    if (attempt == 6) {
-                        scale = scaleWidth / 8 + ":" + scaleHeight / 8;
-                    }
-                    if (attempt > 10) {
-                        message[0].editMessageEmbeds(createQuickError("Failed to resize the video after 10 attempts."));
-                        deleteFiles(fileName);
-                        return;
-                    }
-                    crf += 4;
-                    bitrate -= 128;
-                    String command = ffmpegString + " -nostdin -loglevel error -y -i " + inputFile + " -c:v libx264 -crf " + crf + " -b:a 55k -c:a aac -b:v " + bitrate + "k -vf scale=" + scale + " -threads " + numThreads + " " + outputFile;
-                    p = Runtime.getRuntime().exec(command);
-                    p.waitFor();
-                    output = new File(outputFile);
+                int originalAudioRate = Integer.parseInt(output) / 1024;
+                double targetVideoRate = ((targetSize * 8192.0) / (1.1 * originalDuration)) - originalAudioRate; // used to be 1.048576, but I got an edge case.
+                double targetMinSize = (originalAudioRate * originalDuration) / 8192;
+                if (targetMinSize > targetSize) {
+                    message[0].editMessageEmbeds(createQuickError("Could not resize the video down to " + targetSize + "."));
+                    deleteFiles("viddl" + File.separator + time);
+                    return;
                 }
-                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", "Resizing took " + (System.currentTimeMillis() - time) / 1000 + " seconds."));
-                message[0].editMessageFiles(FileUpload.fromData(output));
+                File passLogFile = File.createTempFile(String.valueOf(time), ".log");
+                // 1st pass
+                ProcessBuilder processBuilder = new ProcessBuilder(
+                        ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", inputPath.toString(), "-c:v", "libx264", "-b:v", (int) targetVideoRate + "k",
+                        "-pass", "1", "-an", "-f", "mp4", "-passlogfile", passLogFile.getAbsolutePath(), "-map", "0", "-map_metadata", "-1", Null
+                );
+                processBuilder.redirectErrorStream(true);
+                processBuilder.start().waitFor();
+                // 2nd pass
+                processBuilder = new ProcessBuilder(
+                        ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", inputPath.toString(), "-c:v", "libx264", "-b:v", (int) targetVideoRate + "k",
+                        "-pass", "2", "-c:a", "aac", "-b:a", originalAudioRate + "k", "-passlogfile", passLogFile.getAbsolutePath(), "-map", "0", "-map_metadata", "-1", targetFile
+                );
+                processBuilder.redirectErrorStream(true);
+                processBuilder.start().waitFor();
+                Files.deleteIfExists(passLogFile.toPath());
+                String resize = "Resizing took: " + (System.currentTimeMillis() - newTime) / 1000 + " seconds.\n";
+                downloadSpeed = "Average download speed: " + new DecimalFormat("#.##").format(new File(targetFile).length() / ((newTime - time) * 1000.0)) + "MB per second.\n\n";
+                message[0].editMessageEmbeds(createQuickEmbed("✅ **Success**", download + resize + downloadSpeed + "*if the file is not here, wait a few seconds for it to upload*"));
+                message[0].editMessageFiles(FileUpload.fromData(new File(targetFile)));
                 Thread.sleep(10000);
-                deleteFiles(fileName);
+                deleteFiles("viddl" + File.separator + time);
             } catch (Exception e) {
+                deleteFiles("viddl" + File.separator + time);
                 e.printStackTrace();
             }
-            deleteFiles(fileName);
         }).start();
     }
 
