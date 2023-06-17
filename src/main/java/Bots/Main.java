@@ -53,8 +53,9 @@ import static java.lang.System.currentTimeMillis;
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT};
-    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
+    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
+    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
@@ -409,14 +410,7 @@ public class Main extends ListenerAdapter {
 
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
         try {
-            String[] command;
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                // Windows command
-                command = new String[]{"cmd", "/c", "del", filePrefix + "*"};
-            } else {
-                // Linux command
-                command = new String[]{"sh", "-c", "rm " + filePrefix + "*"};
-            }
+            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", filePrefix + "*"} : new String[]{"sh", "-c", "rm " + filePrefix + "*"};
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
             if (exitCode != 0) {
@@ -436,6 +430,19 @@ public class Main extends ListenerAdapter {
         System.out.println(finalMessage);
     }
 
+    public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
+        for (String name : names) {
+            registerButtonInteraction(name, func);
+        }
+    }
+
+    public static void registerButtonInteraction(String name, Consumer<ButtonInteractionEvent> func) {
+        if (ButtonInteractionMappings.containsKey(name)) {
+            printlnTime("Attempting to override the button manager for id " + name);
+        }
+        ButtonInteractionMappings.put(name.toLowerCase(), func);
+    }
+
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
@@ -449,21 +456,6 @@ public class Main extends ListenerAdapter {
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         queuePages.remove(event.getGuild().getIdLong());
         guildTimeouts.remove(event.getGuild().getIdLong());
-    }
-
-    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
-
-    public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
-        for (String name : names) {
-            registerButtonInteraction(name, func);
-        }
-    }
-
-    public static void registerButtonInteraction(String name, Consumer<ButtonInteractionEvent> func) {
-        if (ButtonInteractionMappings.containsKey(name)) {
-            printlnTime("Attempting to override the button manager for id " + name);
-        }
-        ButtonInteractionMappings.put(name.toLowerCase(), func);
     }
 
     @Override
