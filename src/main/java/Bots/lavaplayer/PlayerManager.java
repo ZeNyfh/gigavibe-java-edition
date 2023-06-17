@@ -212,7 +212,9 @@ public class PlayerManager {
             } else {
                 return null;
             }
-        } catch (Exception ignored) {printlnTime("Thumb URL Fail : " + site + " |" + url);} // ignore because floods console if image url invalid
+        } catch (Exception ignored) {
+            printlnTime("Thumb URL Fail : " + site + " |" + url);
+        } // ignore because floods console if image url invalid
 
         if (url != null && pattern != null) {
             try {
@@ -232,7 +234,9 @@ public class PlayerManager {
                 } else {
                     return null;
                 }
-            } catch (Exception ignored) {printlnTime("Thumb Matcher Fail : " + site + " |" + url);} // ignore because floods console if image url invalid
+            } catch (Exception ignored) {
+                printlnTime("Thumb Matcher Fail : " + site + " |" + url);
+            } // ignore because floods console if image url invalid
             return null;
         }
         return null;
