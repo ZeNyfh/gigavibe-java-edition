@@ -22,7 +22,7 @@ public class CommandAudioDL extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         long time = System.currentTimeMillis();
-        if (event.getArgs().length < 2 || Objects.equals(event.getArgs()[1], "")) {
+        if (event.getArgs().length < 2 || Objects.equals(event.getArgs()[1], "") || event.getArgs().length > 2) {
             event.replyEmbeds(createQuickError("No arguments given."));
             return;
         }
