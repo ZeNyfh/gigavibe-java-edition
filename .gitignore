@@ -7,3 +7,4 @@ modules/
 src/main/java/META-INF/MANIFEST.MF
 out/artifacts/bot_jar/bot.jar
 .env
+.gradle/
