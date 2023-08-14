@@ -53,9 +53,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.Topis-Lavalink-Plugins</groupId>
-            <artifactId>Topis-Source-Managers</artifactId>
-            <version>2.0.7</version>
+            <groupId>com.github.topi314.lavasrc</groupId>
+            <artifactId>lavasrc-plugin</artifactId>
+            <version>3.2.6</version>
         </dependency>
     </dependencies>
 

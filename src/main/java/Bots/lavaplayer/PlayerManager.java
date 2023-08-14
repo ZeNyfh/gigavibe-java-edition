@@ -1,8 +1,7 @@
 package Bots.lavaplayer;
 
-import com.github.topislavalinkplugins.topissourcemanagers.applemusic.AppleMusicSourceManager;
-import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifyConfig;
-import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifySourceManager;
+import com.github.topisenpai.lavasrc.deezer.DeezerAudioSourceManager;
+import com.github.topisenpai.lavasrc.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -39,14 +38,12 @@ public class PlayerManager {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
 
-        SpotifyConfig spotifyConfig = new SpotifyConfig();
-        spotifyConfig.setClientId(Dotenv.load().get("SPOTIFYCLIENTID"));
-        spotifyConfig.setClientSecret(Dotenv.load().get("SPOTIFYCLIENTSECRET"));
-        spotifyConfig.setCountryCode("GB");
-
-        this.audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(null, "gb", this.audioPlayerManager));
+        String spotifyClientID = Dotenv.load().get("SPOTIFYCLIENTID");
+        String spotifyClientSecret = Dotenv.load().get("SPOTIFYCLIENTSECRET");
+        audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyClientID, spotifyClientSecret, "gb", audioPlayerManager));
+        
         try {
-            this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
+            this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyClientID, spotifyClientSecret, "gb", audioPlayerManager));
             hasSpotify = true;
         } catch (Exception exception) {
             printlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
