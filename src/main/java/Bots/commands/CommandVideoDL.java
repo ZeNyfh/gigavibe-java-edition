@@ -6,7 +6,9 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,6 +54,34 @@ public class CommandVideoDL extends BaseCommand {
                 Process process = builder.start();
                 process.waitFor();
                 Thread.sleep(1000);
+
+                builder = new ProcessBuilder(ffprobeString, "-v", "error", "-show_entries", "stream=codec_name", "-of", "default=noprint_wrappers=1:nokey=1", inputPath.toString());
+
+                try {
+                    process = builder.start();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                    String line;
+                    StringBuilder output = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        output.append(line);
+                    }
+                    reader.close();
+                    if (!output.toString().toLowerCase().contains("mpeg4") || !output.toString().toLowerCase().contains("aac")) {
+                        printlnTime("File does not contain correct codec, re-encoding");
+                        Path newFile = Paths.get(viddl.getAbsolutePath() + File.separator + time + "K.mp4");
+                        ProcessBuilder processBuilder = new ProcessBuilder(
+                                ffmpegString, "-nostdin", "-loglevel", "error", "-y", "-i", inputPath.toString(), "-c:v", "libx264", "-c:a", "aac", newFile.toString()
+                        );
+                        processBuilder.redirectErrorStream(true);
+                        processBuilder.start().waitFor();
+                        Thread.sleep(1000);
+                        inputPath.toFile().delete();
+                        inputPath = newFile;
+                    }
+                    process.waitFor();
+                } catch (Exception e){e.printStackTrace();}
+
             } catch (Exception e) {
                 e.printStackTrace();
                 deleteFiles("viddl" + File.separator + time);
