@@ -62,7 +62,7 @@ public class CommandRemind extends BaseCommand {
             return;
         }
 
-        Long timeNow = System.currentTimeMillis();
+        long timeNow = System.currentTimeMillis();
         // list
         if (args[1].equalsIgnoreCase("list")) {
             int i = 0;
