@@ -52,7 +52,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.MESSAGE_CONTENT};
     public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
@@ -67,7 +67,9 @@ public class Main extends ListenerAdapter {
     public static List<BaseCommand> commands = new ArrayList<>();
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    public static TimerTask task;
 
+    public static Timer timer;
     public static void registerCommand(BaseCommand command) {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
@@ -82,7 +84,8 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, LoginException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, URISyntaxException {
+    public static void main(String[] args) throws Exception {
+        printlnTime("it worked definitely");
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File file = new File(".env");
         if (!file.exists()) {
@@ -201,62 +204,64 @@ public class Main extends ListenerAdapter {
             guildTimeouts.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
         }
-
-        Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                // timeouts
-                for (Guild guild : bot.getGuilds()) {
-                    if (guild.getAudioManager().isConnected()) {
-                        int i = 0;
-                        try {
-                            if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
-                                for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
-                                    if (!member.getUser().isBot() || !member.getUser().isSystem()) {
-                                        i++;
+        try {
+            Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
+            timer = new Timer();
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    // timeouts
+                    for (Guild guild : bot.getGuilds()) {
+                        if (guild.getAudioManager().isConnected()) {
+                            int i = 0;
+                            try {
+                                if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
+                                    for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
+                                        if (!member.getUser().isBot() || !member.getUser().isSystem()) {
+                                            i++;
+                                        }
                                     }
                                 }
-                            }
-                        } catch (Exception ignored) {
-                            guildTimeouts.put(guild.getIdLong(), 0);
-                        }
-                        if (i == 0) {
-                            guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
-                            if (guildTimeouts.get(guild.getIdLong()) >= 60) {
-                                guild.getAudioManager().closeAudioConnection();
-                                PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
+                            } catch (Exception ignored) {
                                 guildTimeouts.put(guild.getIdLong(), 0);
                             }
-                        } else {
-                            guildTimeouts.put(guild.getIdLong(), 0);
+                            if (i == 0) {
+                                guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
+                                if (guildTimeouts.get(guild.getIdLong()) >= 60) {
+                                    guild.getAudioManager().closeAudioConnection();
+                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
+                                    guildTimeouts.put(guild.getIdLong(), 0);
+                                }
+                            } else {
+                                guildTimeouts.put(guild.getIdLong(), 0);
+                            }
                         }
                     }
-                }
 
-                // reminders
-                JSONObject reminders = GetConfig("reminders");
-                Iterator iterator = reminders.keySet().iterator();
-                while (iterator.hasNext()) {
-                    Object key = iterator.next();
-                    JSONArray reminderData = (JSONArray) reminders.get(key);
-                    if (currentTimeMillis() < Long.parseLong((String) reminderData.get(0))) {
-                        continue;
+                    // reminders
+                    JSONObject reminders = GetConfig("reminders");
+                    Iterator iterator = reminders.keySet().iterator();
+                    while (iterator.hasNext()) {
+                        Object key = iterator.next();
+                        JSONArray reminderData = (JSONArray) reminders.get(key);
+                        if (currentTimeMillis() < Long.parseLong((String) reminderData.get(0))) {
+                            continue;
+                        }
+                        iterator.remove();
+                        EmbedBuilder builder = new EmbedBuilder();
+                        builder.setTitle("**Reminder!**");
+                        builder.appendDescription("\n" + reminderData.get(3)); // Adding the reason
+                        String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
+                        Objects.requireNonNull( //Send the message
+                                bot.getChannelById(GuildMessageChannelUnion.class, (String) reminderData.get(1))
+                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
                     }
-                    iterator.remove();
-                    EmbedBuilder builder = new EmbedBuilder();
-                    builder.setTitle("**Reminder!**");
-                    builder.appendDescription("\n" + reminderData.get(3)); // Adding the reason
-                    String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
-                    Objects.requireNonNull( //Send the message
-                            bot.getChannelById(GuildMessageChannelUnion.class, (String) reminderData.get(1))
-                    ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
                 }
-            }
-        };
-        timer.scheduleAtFixedRate(task, 0, 1000);
+            };
+            timer.scheduleAtFixedRate(task, 0, 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
