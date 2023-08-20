@@ -21,6 +21,8 @@ import static Bots.Main.printlnTime;
  * Central manager used to handle the reading, saving, and management of JSON files
  */
 public class ConfigManager {
+    public static Timer timer;
+    public static TimerTask task;
     public static String configFolder = "config";
     public static HashMap<Object, JSONObject> Configs = new HashMap<>();
 
@@ -33,8 +35,8 @@ public class ConfigManager {
         if (madeNewFailContainer) {
             printlnTime("Created new config failure folder");
         }
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
+        timer = new Timer();
+        task = new TimerTask() {
             @Override
             public void run() {
                 SaveConfigs();
