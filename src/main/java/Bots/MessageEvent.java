@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static Bots.Main.createQuickError;
+
 /**
  * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
  * Can take either a SlashCommandInteractionEvent or MessageReceivedEvent as the input
@@ -136,10 +138,14 @@ public class MessageEvent {
     }
 
     public void reply(String s) {
-        if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue();
-        } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue();
+        try {
+            if (!isSlash()) {
+                ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue();
+            } else {
+                ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue();
+            }
+        } catch (Exception e) {
+            ((MessageReceivedEvent) this.coreEvent).getChannel().sendMessageEmbeds(createQuickError("The bot does not have permissions to reply to messages.")).queue();
         }
     }
 
