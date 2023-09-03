@@ -70,6 +70,7 @@ public class PlayerManager {
     }
 
     public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
+        long guildID = commandChannel.getGuild().getIdLong();
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
@@ -172,22 +173,27 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(commandChannel.getGuild().getIdLong());
+                clearVotes(guildID);
                 commandChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();
             }
         });
         try {
-            float check1 = musicManager.audioPlayer.getPlayingTrack().getPosition();
-            Thread.sleep(500);
-            if (musicManager.audioPlayer.getPlayingTrack().getPosition() == check1) {
+            float positionCheck = musicManager.audioPlayer.getPlayingTrack().getPosition();
+            Thread.sleep(1000);
+            if ((musicManager.audioPlayer.getPlayingTrack().getPosition() == positionCheck) && !musicManager.audioPlayer.isPaused()) {
+                if (!messageNoSpamCheck.get(guildID)) { // if no spam check
+                    messageNoSpamCheck.put(guildID, true);
+                }
                 printlnTime("Audio source", musicManager.audioPlayer.getPlayingTrack().getInfo().uri, "appears to have hung");
+                commandChannel.sendMessageEmbeds(createQuickError("Audio source " + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + " appears to have hung.")).queue();
                 loadAndPlay(commandChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
                 musicManager.scheduler.nextTrack();
+            } else {
+                messageNoSpamCheck.put(guildID, false);
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     @Nullable
