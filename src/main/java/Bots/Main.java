@@ -29,14 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -71,6 +67,7 @@ public class Main extends ListenerAdapter {
     public static TimerTask task;
 
     public static Timer timer;
+
     public static void registerCommand(BaseCommand command) {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
@@ -86,7 +83,6 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
-        printlnTime("it worked definitely");
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File file = new File(".env");
         if (!file.exists()) {

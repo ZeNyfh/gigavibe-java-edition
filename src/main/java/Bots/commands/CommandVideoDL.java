@@ -80,7 +80,9 @@ public class CommandVideoDL extends BaseCommand {
                         inputPath = newFile;
                     }
                     process.waitFor();
-                } catch (Exception e){e.printStackTrace();}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
