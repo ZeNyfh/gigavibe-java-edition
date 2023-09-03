@@ -280,26 +280,10 @@ public class Main extends ListenerAdapter {
             long minutes = seconds / 60;
             seconds %= 60;
             ArrayList<String> totalSet = new ArrayList<>();
-            if (days == 1) {
-                totalSet.add(days + " day");
-            } else if (days != 0) {
-                totalSet.add(days + " days");
-            }
-            if (hours == 1) {
-                totalSet.add(hours + " hour");
-            } else if (hours != 0) {
-                totalSet.add(hours + " hours");
-            }
-            if (minutes == 1) {
-                totalSet.add(minutes + " minute");
-            } else if (minutes != 0) {
-                totalSet.add(minutes + " minutes");
-            }
-            if (seconds == 1) {
-                totalSet.add(seconds + " second");
-            } else if (seconds != 0) {
-                totalSet.add(seconds + " seconds");
-            }
+            if (days != 0) totalSet.add(days + (days == 1 ? " day" : "days"));
+            if (hours != 0) totalSet.add(hours + (hours == 1 ? " hour" : " hours"));
+            if (minutes != 0) totalSet.add(minutes + (minutes == 1 ? " minute" : " minutes"));
+            if (seconds != 0) totalSet.add(seconds + (seconds == 1 ? " second" : " seconds"));
             return String.join(", ", totalSet);
         }
     }
