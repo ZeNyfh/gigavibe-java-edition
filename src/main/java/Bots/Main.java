@@ -238,25 +238,6 @@ public class Main extends ListenerAdapter {
                             }
                         }
                     }
-
-                    // reminders
-                    JSONObject reminders = GetConfig("reminders");
-                    Iterator iterator = reminders.keySet().iterator();
-                    while (iterator.hasNext()) {
-                        Object key = iterator.next();
-                        JSONArray reminderData = (JSONArray) reminders.get(key);
-                        if (currentTimeMillis() < Long.parseLong((String) reminderData.get(0))) {
-                            continue;
-                        }
-                        iterator.remove();
-                        EmbedBuilder builder = new EmbedBuilder();
-                        builder.setTitle("**Reminder!**");
-                        builder.appendDescription("\n" + reminderData.get(3)); // Adding the reason
-                        String initialMessage = (Objects.requireNonNull(bot.getUserById((String) reminderData.get(2)))).getAsMention();
-                        Objects.requireNonNull( //Send the message
-                                bot.getChannelById(GuildMessageChannelUnion.class, (String) reminderData.get(1))
-                        ).sendMessage(initialMessage).queue(message -> message.editMessageEmbeds(builder.build()).queue());
-                    }
                 }
             };
             timer.scheduleAtFixedRate(task, 0, 1000);
