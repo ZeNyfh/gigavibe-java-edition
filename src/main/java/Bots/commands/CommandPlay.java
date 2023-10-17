@@ -42,7 +42,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()))) {
+        if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
                 audioManager.openAudioConnection(memberChannel);
                 URL url = new URL(event.getAttachments().get(0).getUrl());
