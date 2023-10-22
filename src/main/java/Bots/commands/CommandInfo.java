@@ -34,28 +34,6 @@ public class CommandInfo extends BaseCommand {
                 }
             }
         }
-        int ytdlpCount = 0;
-        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "tasklist /fi \"imagename eq yt-dlp.exe\" /fo csv /nh");
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                if (!line.toLowerCase().contains("no") && line.length() > 0) {
-                    ytdlpCount++;
-                }
-            }
-        } else {
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "ps -ef | grep yt-dlp | grep -v grep | wc -l");
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = reader.readLine();
-
-            if (line != null) {
-                ytdlpCount = Integer.parseInt(line.trim());
-            }
-        }
 
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
@@ -69,7 +47,6 @@ public class CommandInfo extends BaseCommand {
         eb.appendDescription("\uD83D\uDC64 **Users:** " + memberCount + "\n\n");
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
         eb.appendDescription("\uD83C\uDFB5  **VCs: ** " + vcCount + "\n\n");
-        eb.appendDescription("\uD83D\uDD3D  **Downloads: ** " + ytdlpCount + "\n\n");
         eb.setFooter("Version: " + botVersion);
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
