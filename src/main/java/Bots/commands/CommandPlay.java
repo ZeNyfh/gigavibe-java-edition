@@ -97,7 +97,7 @@ public class CommandPlay extends BaseCommand {
         try {
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
         } catch (FriendlyException ignored) {
-            event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
+            event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
         }
         event.reply(MessageEvent.Response::delete, ".");
     }

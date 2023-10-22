@@ -55,7 +55,7 @@ public class CommandInsert extends BaseCommand {
             try {
                 PlayerManager.getInstance().loadAndPlay(event.getChannel(), args[2], true);
             } catch (FriendlyException ignored) {
-                event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n\nError from decoder 16388"));
+                event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
             }
         } else {
             try {
