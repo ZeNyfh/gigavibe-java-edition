@@ -43,7 +43,7 @@ public class CommandVideoDL extends BaseCommand {
         String filteredURL = event.getArgs()[1].replaceAll("\n", "");
         new Thread(() -> {
             final MessageEvent.Response[] message = new MessageEvent.Response[1];
-            event.replyEmbeds(x -> message[0] = x, createQuickEmbed("(This command will be removed soon) Thinking...", ""));
+            event.replyEmbeds(x -> message[0] = x, createQuickEmbed("(This command will be removed from zenvibe soon) Thinking...", ""));
             int targetSize = event.getGuild().getBoostCount() >= 7 ? 50 : 25;
             Path inputPath = Paths.get(viddl.getAbsolutePath() + File.separator + time + ".mp4");
             String targetFile = viddl.getAbsolutePath() + File.separator + time + "_Zen.mp4"; // filename out
