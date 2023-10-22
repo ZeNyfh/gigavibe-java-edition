@@ -25,13 +25,23 @@ public class CommandInsert extends BaseCommand {
             return;
         }
         String[] args = event.getContentRaw().split(" ", 3);
+        // check here to ensure args[2] is never undefined.
+        if (args.length != 3) {
+            event.replyEmbeds(createQuickError("Not enough arguments provided\nUsage: `<Integer> <URL/SearchTerm>`"));
+            return;
+        }
         if (!args[1].matches("^\\d+$")) {
             event.replyEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`"));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
-        if (args[2].contains("https://") || args[2].contains("http://")) {
+        // prioritise attachment.
+        if (!event.getAttachments().isEmpty()) {
+            args[2] = event.getAttachments().get(0).getUrl();
+        }
+        // if no attachment, try find url.
+        else if (args[2].contains("https://") || args[2].contains("http://")) {
             if (args[2].contains("youtube.com/shorts/")) {
                 args[2] = args[2].replace("youtube.com/shorts/", "youtube.com/watch?v=");
             }
