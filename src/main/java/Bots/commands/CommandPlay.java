@@ -5,6 +5,7 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -43,6 +45,7 @@ public class CommandPlay extends BaseCommand {
         }
 
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
+            // txt file custom playlists
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
                 audioManager.openAudioConnection(memberChannel);
                 URL url = new URL(event.getAttachments().get(0).getUrl());
@@ -59,17 +62,27 @@ public class CommandPlay extends BaseCommand {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
                 }
             }
-            String link = event.getAttachments().get(0).getUrl();
+
+            // audio/video attachments
+
+            List<Message.Attachment> links = event.getAttachments();
             audioManager.openAudioConnection(memberChannel);
-            try {
-                PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
-                if (event.isSlash()) {
-                    event.reply(MessageEvent.Response::delete, ".");
-                }
-                return;
-            } catch (Exception ignored) {
-                event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
+            boolean sendEmbedBool = true;
+            if (links.size() > 1) {
+                event.reply("Queued " + links.size() + " tracks from attachments.");
             }
+            for (Message.Attachment attachment : links) {
+                try {
+                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), attachment.getUrl(), sendEmbedBool);
+                    sendEmbedBool = false;
+                } catch (Exception ignored) {
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
+                }
+            }
+            if (event.isSlash()) {
+                event.reply(MessageEvent.Response::delete, ".");
+            }
+            return;
         }
         String link;
         try {
