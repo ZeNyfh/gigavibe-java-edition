@@ -93,27 +93,6 @@ public class Main extends ListenerAdapter {
             writer.flush();
             writer.close();
         }
-        String errorMessage = "";
-        String OS = System.getProperty("os.name");
-        if (OS.toLowerCase().contains("windows")) {
-            file = new File("modules/ffmpeg.exe");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-            file = new File("modules/ffprobe.exe");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-            file = new File("modules/yt-dlp.exe");
-            if (!file.exists()) {
-                errorMessage = errorMessage + file.getPath() + " does not exist." + "\n";
-            }
-        }
-        if (!errorMessage.equals("")) {
-            errorMessage = errorMessage + " one or more files do not exist, please download the necessary files mentioned in the Requirements section of the readme on github: https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/README.md";
-            printlnTime(errorMessage);
-            return;
-        }
         Dotenv dotenv = Dotenv.load();
         if (dotenv.get("TOKEN") == null) {
             printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
