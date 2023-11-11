@@ -20,10 +20,12 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
@@ -42,6 +44,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 import static Bots.ConfigManager.GetConfig;
 import static java.lang.System.currentTimeMillis;
@@ -418,8 +421,10 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
+        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (event.getChannelLeft() == null) {
             // GuildVoiceJoinEvent
+
         } else if (event.getChannelJoined() == null) {
             // GuildVoiceLeaveEvent
             if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
@@ -430,18 +435,12 @@ public class Main extends ListenerAdapter {
                 }
             }
             if (event.getMember() == event.getGuild().getSelfMember()) {
-                GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-                LoopGuilds.remove(event.getGuild().getId());
-                LoopQueueGuilds.remove(event.getGuild().getId());
-                manager.audioPlayer.setVolume(100);
-                manager.scheduler.queue.clear();
-                manager.audioPlayer.destroy();
-                manager.audioPlayer.setPaused(false);
-                manager.audioPlayer.checkCleanup(0);
+                cleanUpAudioPlayer(event.getGuild());
                 return;
             }
             AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-            if (botChannel == null) {
+            if (!Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel() || botChannel == null) { // if not in vc, clear for safe measure
+                cleanUpAudioPlayer(event.getGuild());
                 return;
             }
             int botChannelMemberCount = 0;
@@ -451,16 +450,13 @@ public class Main extends ListenerAdapter {
                 }
             }
             if (botChannelMemberCount == 0) {
-                PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                event.getGuild().getAudioManager().closeAudioConnection();
-                clearVotes(event.getGuild().getIdLong());
+                cleanUpAudioPlayer(event.getGuild());
             }
         } else {
             // GuildVoiceMoveEvent
             if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
                 if (Objects.requireNonNull(event.getNewValue()).getMembers().size() == 1) { // assuming the bot is alone there.
-                    PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
-                    clearVotes(event.getGuild().getIdLong());
+                    cleanUpAudioPlayer(event.getGuild());
                 }
             }
         }
@@ -472,18 +468,28 @@ public class Main extends ListenerAdapter {
                     members++;
                 }
             }
-            if (members == 0) { //If alone
+            if (members == 0) { // If alone
                 try {
-                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-                    musicManager.scheduler.queue.clear();
-                    musicManager.audioPlayer.destroy();
-                    musicManager.audioPlayer.setPaused(false);
-                    clearVotes(event.getGuild().getIdLong());
-                    event.getGuild().getAudioManager().closeAudioConnection();
+                    cleanUpAudioPlayer(event.getGuild());
                 } catch (Exception ignored) {
                 }
             }
         }
+    }
+
+    public void cleanUpAudioPlayer(Guild guild) {
+        Long id = guild.getIdLong();
+        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
+        String stringID = id.toString();
+        LoopGuilds.remove(stringID);
+        LoopQueueGuilds.remove(stringID);
+        manager.audioPlayer.setVolume(100);
+        manager.scheduler.queue.clear();
+        manager.audioPlayer.destroy();
+        manager.audioPlayer.setPaused(false);
+        manager.audioPlayer.checkCleanup(0);
+        guild.getAudioManager().closeAudioConnection();
+        clearVotes(id);
     }
 
     @Override
