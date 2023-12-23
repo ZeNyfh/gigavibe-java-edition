@@ -244,10 +244,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static String toTimestamp(long seconds) {
+        seconds /= 1000;
         if (seconds <= 0) {
             return "0 seconds";
         } else {
-            seconds /= 1000;
             long days = seconds / 86400;
             seconds %= 86400;
             long hours = seconds / 3600;
