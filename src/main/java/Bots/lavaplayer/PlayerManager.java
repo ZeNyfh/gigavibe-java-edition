@@ -88,7 +88,7 @@ public class PlayerManager {
                 musicManager.scheduler.queue(audioTrack);
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setThumbnail(getThumbURL(audioTrack));
-                if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length < 0 || audioTrack.getInfo().uri.toLowerCase().endsWith("opus")) {
+                if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
                     length = "Unknown";
                 } else {
                     length = toTimestamp((audioTrack.getInfo().length));
@@ -114,7 +114,7 @@ public class PlayerManager {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     String author = (tracks.get(0).getInfo().author);
-                    if (tracks.get(0).getInfo().length > 432000000 || tracks.get(0).getInfo().length < 0 || tracks.get(0).getInfo().uri.toLowerCase().endsWith("opus")) { // 5 days
+                    if (tracks.get(0).getInfo().length > 432000000 || tracks.get(0).getInfo().length <= 1) { // 5 days
                         length = "Unknown";
                     } else {
                         length = toTimestamp((tracks.get(0).getInfo().length));
