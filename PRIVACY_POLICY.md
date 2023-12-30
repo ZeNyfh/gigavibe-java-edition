@@ -11,7 +11,7 @@ By using Zenvibe, you agree to the terms outlined in this Privacy Policy.
 - When I say "Zenvibe" or "the project" in this privacy policy, I am referring to the bot designed to play music from various streaming services and audio files provided by users via HTTP/S URLs, and this GitHub repository.
 - When I say "project owner", "ZeNyfh", or "I" in this privacy policy, I mean myself, the owner of this GitHub repository, ZeNyfh.
 - When I say "users", "moderators", "administrators", "owner" in this privacy policy, I am referring to the users of the Discord service.
-- When I say "DJ command", "help command", "dj add", "dj remove" in this privacy policy, I am referring to a feature that can be used by users.
+- When I say "bug command", "DJ command", "help command", "dj add", "dj remove" in this privacy policy, I am referring to a feature that can be used by users.
 - When I say "guild" in this privacy policy, I am specifically referring to a Discord guild, commonly known as a Discord server, which has Zenvibe present within it.
 
 ### 1.1 User-Provided Information
