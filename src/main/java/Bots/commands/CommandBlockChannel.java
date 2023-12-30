@@ -51,14 +51,14 @@ public class CommandBlockChannel extends BaseCommand {
                             return;
                         }
                         blockedChannels.add(targetChannel);
-                        event.replyEmbeds(createQuickEmbed(" ", "✅ Added " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" to the list."));
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ Added <#" + guildChannel.getIdLong() + "> to the list."));
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         if (!blockedChannels.contains(guildChannel.getId())) {
                             event.replyEmbeds(createQuickError("This channel is not blocked."));
                             return;
                         }
                         blockedChannels.remove(targetChannel);
-                        event.replyEmbeds(createQuickEmbed(" ", "✅ Removed " + guildChannel.getIdLong() + " aka \"" + guildChannel.getName() + "\" from the list."));
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ Removed <#" + guildChannel.getIdLong() + "> from the list."));
                     }
                     return;
                 }
