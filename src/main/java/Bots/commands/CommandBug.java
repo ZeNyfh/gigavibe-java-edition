@@ -38,7 +38,7 @@ public class CommandBug extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "Message";
+        return "<Message>";
     }
 
     @Override
