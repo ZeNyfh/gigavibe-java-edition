@@ -48,7 +48,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.MESSAGE_CONTENT};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
     public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
@@ -97,10 +97,6 @@ public class Main extends ListenerAdapter {
         if (dotenv.get("TOKEN") == null) {
             printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
         }
-        if (dotenv.get("PREFIX") == null) {
-            printlnTime("PREFIX is not set in " + new File(".env").getAbsolutePath());
-        }
-        botPrefix = dotenv.get("PREFIX");
         String botToken = dotenv.get("TOKEN");
 
         if (dotenv.get("COLOUR") == null) {
@@ -111,7 +107,7 @@ public class Main extends ListenerAdapter {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
             printlnTime("Colour was invalid.");
-            e.printStackTrace();
+            e.fillInStackTrace();
             return;
         }
         // cleanup of old downloaded stuff
@@ -162,19 +158,20 @@ public class Main extends ListenerAdapter {
                 printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         ConfigManager.Init();
         PlayerManager.getInstance();
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
+                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
                 .addEventListeners(new Main())
                 .build();
         bot.awaitReady();
         printlnTime("bot is now running, have fun ig");
-        bot.getPresence().setActivity(Activity.playing("The prefix will change soon to be @zenvibe, join the support server in the about me for more info, sorry!"));
+        botPrefix = "<@" + bot.getSelfUser().getId() + ">";
+        bot.getPresence().setActivity(Activity.playing("Music Use \"" + bot.getSelfUser().getName() + " help\" to get started!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             guildTimeouts.put(guild.getIdLong(), 0);
@@ -217,7 +214,7 @@ public class Main extends ListenerAdapter {
             };
             timer.scheduleAtFixedRate(task, 0, 1000);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -363,7 +360,7 @@ public class Main extends ListenerAdapter {
                 printlnTime("Error deleting file.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
@@ -393,13 +390,13 @@ public class Main extends ListenerAdapter {
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
         guildTimeouts.put(event.getGuild().getIdLong(), 0);
-//        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
-        Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
+        Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` or simply reply to this message with `help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-//        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         queuePages.remove(event.getGuild().getIdLong());
         guildTimeouts.remove(event.getGuild().getIdLong());
     }
@@ -527,7 +524,7 @@ public class Main extends ListenerAdapter {
             try {
                 Command.execute(new MessageEvent(event));
             } catch (Exception e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
             return true;
         }
@@ -536,6 +533,7 @@ public class Main extends ListenerAdapter {
 
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
+        commandLower = commandLower.replaceFirst(botPrefix, "").trim();
         if (commandLower.startsWith(matchTerm)) {
             if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
@@ -562,7 +560,7 @@ public class Main extends ListenerAdapter {
             try {
                 Command.execute(new MessageEvent(event));
             } catch (Exception e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
             return true;
         }
@@ -606,16 +604,15 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (!event.isFromGuild() && event.getAuthor() != event.getJDA().getSelfUser()) {
-            event.getMessage().replyEmbeds(createQuickError("Commands are currently unsupported in DMs")).queue();
+        Message.suppressContentIntentWarning(); // use this otherwise console gets spammed
+        String messageContent = event.getMessage().getContentRaw();
+        if (messageContent.isEmpty()) {
             return;
         }
-        if (event.getMessage().getContentRaw().startsWith(botPrefix)) {
-            for (BaseCommand Command : commands) {
-                for (String alias : Command.getNames()) {
-                    if (processCommand(botPrefix + alias, Command, event)) {
-                        return; //Command executed, stop checking
-                    }
+        for (BaseCommand Command : commands) {
+            for (String alias : Command.getNames()) {
+                if (processCommand(alias, Command, event)) {
+                    return; //Command executed, stop checking
                 }
             }
         }
