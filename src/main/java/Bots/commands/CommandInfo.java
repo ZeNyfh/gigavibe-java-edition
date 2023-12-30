@@ -28,11 +28,7 @@ public class CommandInfo extends BaseCommand {
             if (Objects.requireNonNull(guild.getSelfMember().getVoiceState()).inAudioChannel()) {
                 vcCount++;
             }
-            for (Member member : guild.getMembers()) {
-                if (!member.getUser().isBot() || !member.getUser().isSystem()) {
-                    memberCount++;
-                }
-            }
+            memberCount += guild.getMemberCount();
         }
 
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
