@@ -93,6 +93,10 @@ public class CommandQueue extends BaseCommand {
         queuePages.put(event.getGuild().getIdLong(), 1);
         String[] args = event.getArgs();
         if (args.length == 2) {
+            if (args[1].equalsIgnoreCase("clear")) {
+                event.replyEmbeds(createQuickError("Did you mean to use **clearq**?"));
+                return;
+            }
             if (!args[1].matches("^\\d+$")) {
                 event.replyEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`"));
                 return;

@@ -174,7 +174,7 @@ public class PlayerManager {
                 clearVotes(guildID);
                 commandChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
                 printlnTime("track loading failed, stacktrace: ");
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         });
         try {

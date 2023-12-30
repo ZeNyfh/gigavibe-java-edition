@@ -44,7 +44,7 @@ public class CommandExport extends BaseCommand {
             Thread.sleep(5000);
             deleteFiles(fileName);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 

@@ -165,7 +165,7 @@ public class ConfigManager {
                     return CreateConfig(Filename);
                 } catch (IOException exception) {
                     printlnTime(exception.toString());
-                    exception.printStackTrace();
+                    exception.fillInStackTrace();
                 }
             }
         }
@@ -205,7 +205,7 @@ public class ConfigManager {
                     WriteConfig("failed/" + Filename + "_" + System.currentTimeMillis(), config);
                 } catch (IOException exception) {
                     printlnTime("Unable to save failed config for Config " + Filename + " (unsurprisingly)");
-                    exception.printStackTrace();
+                    exception.fillInStackTrace();
                 }
                 try { //Force a fresh fetch
                     if (Filename.getClass() == String.class) {
@@ -215,14 +215,14 @@ public class ConfigManager {
                     }
                 } catch (IOException exception) {
                     printlnTime("Unable to load the existing non-screwed version for Config " + Filename);
-                    exception.printStackTrace();
+                    exception.fillInStackTrace();
                 }
             } else {
                 try {
                     WriteConfig(Filename, config);
                 } catch (IOException exception) {
                     printlnTime("Unable to save config for Config " + Filename);
-                    exception.printStackTrace();
+                    exception.fillInStackTrace();
                 }
             }
         }

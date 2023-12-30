@@ -13,10 +13,11 @@ import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 /**
  * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
@@ -45,7 +46,7 @@ public class MessageEvent {
         this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getAuthor();
-        this.args = event.getMessage().getContentRaw().split(" ");
+        this.args = event.getMessage().getContentRaw().replaceFirst(botPrefix, "").trim().split(" ");
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.rawContent = event.getMessage().getContentRaw();
         this.attachments = event.getMessage().getAttachments();

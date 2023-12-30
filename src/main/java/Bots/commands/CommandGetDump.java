@@ -46,7 +46,7 @@ public class CommandGetDump extends BaseCommand {
                 reader.close();
                 p.waitFor();
             } catch (Exception e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
                 event.replyEmbeds(createQuickError("Could not get dump.\n```\n" + e.getMessage() + "\n```"));
             }
             event.replyFiles(FileUpload.fromData(new File("log.txt")));

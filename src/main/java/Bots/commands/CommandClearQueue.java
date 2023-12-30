@@ -46,7 +46,7 @@ public class CommandClearQueue extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"clearqueue", "queue clear", "clear queue", "queueclear", "clearq", "qclear", "cleara", "clear"};
+        return new String[]{"clearqueue","clear queue", "queueclear", "queue clear", "clearq", "clear q"};
     }
 
     @Override

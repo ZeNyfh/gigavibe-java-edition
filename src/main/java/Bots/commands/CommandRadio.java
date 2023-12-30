@@ -27,7 +27,7 @@ public class CommandRadio extends BaseCommand {
         try {
             url = new URL("https://www.internet-radio.com/search/?radio=" + search);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         assert url != null;
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

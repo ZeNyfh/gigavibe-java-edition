@@ -28,7 +28,7 @@ public class CommandNowPlaying extends BaseCommand {
             BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
             streamTitle = ffprobeInput.readLine();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
             streamTitle = "Unknown";
         }
         if (Objects.equals(streamTitle, "")) {
