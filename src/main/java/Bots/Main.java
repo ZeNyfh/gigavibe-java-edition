@@ -174,7 +174,7 @@ public class Main extends ListenerAdapter {
                 .build();
         bot.awaitReady();
         printlnTime("bot is now running, have fun ig");
-        bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | ?help"));
+        bot.getPresence().setActivity(Activity.playing("The prefix will change soon to be @zenvibe, join the support server in the about me for more info, sorry!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             guildTimeouts.put(guild.getIdLong(), 0);
@@ -393,13 +393,13 @@ public class Main extends ListenerAdapter {
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
         guildTimeouts.put(event.getGuild().getIdLong(), 0);
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
+//        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
+//        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         queuePages.remove(event.getGuild().getIdLong());
         guildTimeouts.remove(event.getGuild().getIdLong());
     }
