@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
  * @version 1.2
  */
 public abstract class BaseCommand {
-    SlashCommandData slashCommand;
+    public SlashCommandData slashCommand;
 
     public abstract void execute(MessageEvent event) throws Exception; //The main event loop
 

@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -577,7 +578,12 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> data = new ArrayList<>();
+        List<net.dv8tion.jda.api.interactions.commands.Command> eventCommands = event.getGuild().retrieveCommands().complete();
+        List<String> eventCommandsStr = new ArrayList<>();
         for (BaseCommand Command : commands) {
+            for (net.dv8tion.jda.api.interactions.commands.Command command : eventCommands) {
+                eventCommandsStr.add(command.getName().toLowerCase());
+            }
             if (Command.slashCommand != null) {
                 data.add(Command.slashCommand);
             } else {
@@ -587,15 +593,14 @@ public class Main extends ListenerAdapter {
                 data.add(slashCommand);
             }
         }
+        if (new HashSet<>(commandNames).containsAll(eventCommandsStr)) {
+            return;
+        }
         event.getGuild().updateCommands().addCommands(data).queue();
     }
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (!event.isFromGuild()) {
-            event.replyEmbeds(createQuickError("Commands are currently unsupported in DMs")).queue();
-            return;
-        }
         for (BaseCommand Command : commands) {
             if (processSlashCommand(Command, event)) {
                 return;
