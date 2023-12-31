@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.ZeNyfh</groupId>
-    <artifactId>Zenvibe</artifactId>
+    <artifactId>bot</artifactId>
     <!--This needs to be updated every time there is a new build.-->
-    <version>23.10.22</version>
+    <version>23.12.31</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
