@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -45,24 +44,25 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static Bots.ConfigManager.GetConfig;
+import static Bots.ConfigManager.SaveConfigs;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
-    public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
+    public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
-    public static HashMap<Long, Integer> guildTimeouts = new HashMap<>();
     public static HashMap<Long, Boolean> messageNoSpamCheck = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
+    public static boolean ignoreFiles = false;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
     public static TimerTask task;
@@ -84,16 +84,29 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
+        ignoreFiles = new File("config/").mkdir();
+        commandUsageTracker = GetConfig("usage-stats");
+        ignoreFiles = new File("update/").mkdir();
         Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File file = new File(".env");
         if (!file.exists()) {
             printlnTime(file.getName() + " doesn't exist, creating now.");
-            file.createNewFile();
+            ignoreFiles = file.createNewFile();
             FileWriter writer = new FileWriter(".env");
             writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
             writer.flush();
             writer.close();
+        }
+        if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
+            file = new File("start.sh");
+            if (!file.exists()) {
+                ignoreFiles = file.createNewFile();
+                FileWriter writer = new FileWriter("start.sh");
+                writer.write("#!/bin/bash\nwhile [ True ]; do\n\tjava -jar bot.jar\ndone");
+                writer.flush();
+                writer.close();
+            }
         }
         Dotenv dotenv = Dotenv.load();
         if (dotenv.get("TOKEN") == null) {
@@ -112,9 +125,7 @@ public class Main extends ListenerAdapter {
             e.fillInStackTrace();
             return;
         }
-        // cleanup of old downloaded stuff
-        deleteFiles(new File("auddl" + File.separator).getAbsolutePath());
-        deleteFiles(new File("viddl" + File.separator).getAbsolutePath());
+
         try {
             List<Class<?>> classes = new ArrayList<>();
             String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -176,41 +187,39 @@ public class Main extends ListenerAdapter {
         bot.getPresence().setActivity(Activity.playing( "Use \"@" + bot.getSelfUser().getName() + " help\" The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
-            guildTimeouts.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
         }
+
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
+            // auto updater code
             timer = new Timer();
             task = new TimerTask() {
+                final File updateFile = new File("update/bot.jar");
+                int time = 0;
                 @Override
                 public void run() {
-                    // timeouts
+                    boolean isInAnyVc = false;
                     for (Guild guild : bot.getGuilds()) {
                         if (guild.getAudioManager().isConnected()) {
-                            int i = 0;
-                            try {
-                                if (!((Objects.requireNonNull(guild.getAudioManager().getConnectedChannel())).getMembers().size() <= 1)) {
-                                    for (Member member : Objects.requireNonNull(guild.getAudioManager().getConnectedChannel()).getMembers()) {
-                                        if (!member.getUser().isBot() || !member.getUser().isSystem()) {
-                                            i++;
-                                        }
-                                    }
-                                }
-                            } catch (Exception ignored) {
-                                guildTimeouts.put(guild.getIdLong(), 0);
-                            }
-                            if (i == 0) {
-                                guildTimeouts.put(guild.getIdLong(), guildTimeouts.get(guild.getIdLong()) + 1);
-                                if (guildTimeouts.get(guild.getIdLong()) >= 60) {
-                                    guild.getAudioManager().closeAudioConnection();
-                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.destroy();
-                                    guildTimeouts.put(guild.getIdLong(), 0);
-                                }
-                            } else {
-                                guildTimeouts.put(guild.getIdLong(), 0);
+                            isInAnyVc = true;
+                        }
+                    }
+
+                    if (!isInAnyVc) { // not in vc
+                        time++;
+                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                            // leeway for upload past the time limit
+                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
+                                printlnTime("It's update time!");
+                                File botJar = new File("bot.jar");
+                                ignoreFiles = botJar.delete();
+                                ignoreFiles = updateFile.renameTo(botJar);
+                                killMain();
                             }
                         }
+                    } else { // in a vc
+                        time = 0;
                     }
                 }
             };
@@ -391,7 +400,6 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
-        guildTimeouts.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` or simply reply to this message with `help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
     }
@@ -400,7 +408,6 @@ public class Main extends ListenerAdapter {
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | ?help"));
         queuePages.remove(event.getGuild().getIdLong());
-        guildTimeouts.remove(event.getGuild().getIdLong());
     }
 
     @Override
@@ -569,6 +576,13 @@ public class Main extends ListenerAdapter {
         return false;
     }
 
+    public static void killMain() {
+        SaveConfigs();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e){e.fillInStackTrace();}
+        System.exit(0);
+    }
 
     @Override
     public void onShutdown(@NotNull ShutdownEvent event) {
