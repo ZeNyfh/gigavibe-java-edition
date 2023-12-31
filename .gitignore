@@ -12,4 +12,4 @@ out/artifacts/bot_jar/bot.jar
 .jar
 .MF
 *.jar
-logs/log*
+logs/*
