@@ -41,7 +41,7 @@ public class CommandUpdateSlashCommands extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Updates slash commands forcefully in all guilds, this should be not done unless some command option was changed.";
+        return "Updates slash commands in all guilds, this should be not done unless command options were changed.";
     }
 
     @Override
