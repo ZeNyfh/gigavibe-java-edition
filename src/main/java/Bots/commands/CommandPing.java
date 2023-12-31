@@ -19,11 +19,6 @@ public class CommandPing extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String[] getNames() {
         return new String[]{"ping"};
     }
