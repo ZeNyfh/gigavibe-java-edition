@@ -83,6 +83,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
+        Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File file = new File(".env");
         if (!file.exists()) {
@@ -171,7 +172,7 @@ public class Main extends ListenerAdapter {
         bot.awaitReady();
         printlnTime("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
-        bot.getPresence().setActivity(Activity.playing("Music Use \"" + bot.getSelfUser().getName() + " help\" to get started!"));
+        bot.getPresence().setActivity(Activity.playing( "Use \"@" + bot.getSelfUser().getName() + " help\" The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             guildTimeouts.put(guild.getIdLong(), 0);
@@ -604,7 +605,6 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        Message.suppressContentIntentWarning(); // use this otherwise console gets spammed
         String messageContent = event.getMessage().getContentRaw();
         if (messageContent.isEmpty()) {
             return;
