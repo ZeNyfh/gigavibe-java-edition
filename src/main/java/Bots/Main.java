@@ -63,6 +63,7 @@ public class Main extends ListenerAdapter {
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static boolean ignoreFiles = false;
+    public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
     public static TimerTask task;
@@ -85,25 +86,32 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws Exception {
         ignoreFiles = new File("config/").mkdir();
-        commandUsageTracker = GetConfig("usage-stats");
         ignoreFiles = new File("update/").mkdir();
+        commandUsageTracker = GetConfig("usage-stats");
+        ignoreFiles = new File("logs/").mkdir();
+        File logFile = new File("logs/log.txt");
+        if (logFile.length() != 0) {
+            ignoreFiles = logFile.renameTo(new File("logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".txt"));
+        }
+        ignoreFiles = logFile.createNewFile();
+        logger = new FileWriter("logs/log.txt");
         Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
-        File file = new File(".env");
-        if (!file.exists()) {
-            printlnTime(file.getName() + " doesn't exist, creating now.");
-            ignoreFiles = file.createNewFile();
+        File env = new File(".env");
+        if (!env.exists()) {
+            printlnTime(env.getName() + " doesn't exist, creating now.");
+            ignoreFiles = env.createNewFile();
             FileWriter writer = new FileWriter(".env");
             writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
             writer.flush();
             writer.close();
         }
         if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
-            file = new File("start.sh");
-            if (!file.exists()) {
-                ignoreFiles = file.createNewFile();
+            File startsh = new File("start.sh");
+            if (!startsh.exists()) {
+                ignoreFiles = startsh.createNewFile();
                 FileWriter writer = new FileWriter("start.sh");
-                writer.write("#!/bin/bash\nwhile [ True ]; do\n\tjava -jar bot.jar\ndone");
+                writer.write("#!/bin/bash\nwhile [ True ]; do\n\tjava -jar bot.jar\n\tsleep 2\ndone");
                 writer.flush();
                 writer.close();
             }
@@ -382,6 +390,10 @@ public class Main extends ListenerAdapter {
             finalMessage.append(" ").append(segment);
         }
         System.out.println(finalMessage);
+        try {
+            logger.write(finalMessage + "\n");
+            logger.flush();
+        } catch (Exception ignored){}
     }
 
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
