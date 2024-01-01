@@ -169,6 +169,8 @@ public class PlayerManager {
                 printlnTime("No match found for the track.");
             }
 
+
+
             @Override
             public void loadFailed(FriendlyException e) {
                 clearVotes(guildID);
@@ -177,22 +179,6 @@ public class PlayerManager {
                 e.fillInStackTrace();
             }
         });
-        try {
-            float positionCheck = musicManager.audioPlayer.getPlayingTrack().getPosition();
-            Thread.sleep(1000);
-            if ((musicManager.audioPlayer.getPlayingTrack().getPosition() == positionCheck) && !musicManager.audioPlayer.isPaused()) {
-                if (!messageNoSpamCheck.get(guildID)) { // if no spam check
-                    messageNoSpamCheck.put(guildID, true);
-                }
-                printlnTime("Audio source", musicManager.audioPlayer.getPlayingTrack().getInfo().uri, "appears to have hung");
-                commandChannel.sendMessageEmbeds(createQuickError("Audio source " + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + " appears to have hung.")).queue();
-                loadAndPlay(commandChannel, musicManager.audioPlayer.getPlayingTrack().getInfo().uri, false);
-                musicManager.scheduler.nextTrack();
-            } else {
-                messageNoSpamCheck.put(guildID, false);
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     @Nullable
