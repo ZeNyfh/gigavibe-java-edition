@@ -529,14 +529,7 @@ public class Main extends ListenerAdapter {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
             if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> {
-                    try {
-                        Thread.sleep((long) ratelimitTime * 1000);
-                        message.deleteOriginal().queue();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.deleteOriginal().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
                 return false;
             }
             //run command
