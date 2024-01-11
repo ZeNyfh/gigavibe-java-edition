@@ -46,9 +46,9 @@ public class MessageEvent {
         this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getAuthor();
-        this.args = event.getMessage().getContentRaw().replaceFirst(botPrefix, "").trim().split(" ");
+        this.rawContent = event.getMessage().getContentRaw().replaceFirst(botPrefix, "").trim();
+        this.args = this.rawContent.split(" ");
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
-        this.rawContent = event.getMessage().getContentRaw();
         this.attachments = event.getMessage().getAttachments();
         this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());
     }
