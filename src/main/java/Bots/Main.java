@@ -626,10 +626,25 @@ public class Main extends ListenerAdapter {
         if (messageContent.isEmpty()) {
             return;
         }
-        for (BaseCommand Command : commands) {
-            for (String alias : Command.getNames()) {
-                if (processCommand(alias, Command, event)) {
-                    return; //Command executed, stop checking
+        boolean containsCommand = false;
+        for (String command : commandNames) {
+            if (messageContent.toLowerCase().contains(command)) {
+                containsCommand = true;
+                break;
+            }
+        }
+
+        if (messageContent.startsWith("?") && containsCommand) {
+            event.getMessage().replyEmbeds(createQuickError("The bot no longer supports the `?` prefix due to discord reasons.\n\n__Please either use one of the two options:__\n- " + botPrefix + " help\n- reply to the bot with the command.\n- use slash commands\n\n**Sorry for any inconvenience!**")).queue(message -> {
+                message.delete().queueAfter(20, TimeUnit.SECONDS);
+            });
+        }
+        if (event.getMessage().getMentions().getUsers().contains(event.getJDA().getSelfUser())) {
+            for (BaseCommand Command : commands) {
+                for (String alias : Command.getNames()) {
+                    if (processCommand(alias, Command, event)) {
+                        return; //Command executed, stop checking
+                    }
                 }
             }
         }
