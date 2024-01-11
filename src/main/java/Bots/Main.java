@@ -39,6 +39,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -49,7 +50,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long Uptime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
+    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.MESSAGE_CONTENT};
     public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
@@ -638,6 +639,20 @@ public class Main extends ListenerAdapter {
         String messageContent = event.getMessage().getContentRaw();
         if (messageContent.isEmpty()) {
             return;
+        }
+
+        boolean containsCommand = false;
+        for (String command : commandNames) {
+            if (messageContent.toLowerCase().contains(command)) {
+                containsCommand = true;
+                break;
+            }
+        }
+
+        if (messageContent.startsWith("?") && containsCommand) {
+            event.getMessage().replyEmbeds(createQuickError("The bot no longer supports the `?` prefix due to discord reasons.\n\n__Please either use one of the two options:__\n- " + botPrefix + " help\n- reply to the bot with the command.\n\n**Sorry for any inconvenience!**")).queue(message -> {
+                message.delete().queueAfter(20, TimeUnit.SECONDS);
+            });
         }
         for (BaseCommand Command : commands) {
             for (String alias : Command.getNames()) {
