@@ -56,6 +56,7 @@ public class Main extends ListenerAdapter {
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
+    public static String readableBotPrefix = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
@@ -192,7 +193,8 @@ public class Main extends ListenerAdapter {
         bot.awaitReady();
         printlnTime("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
-        bot.getPresence().setActivity(Activity.playing( "Use \"@" + bot.getSelfUser().getName() + " help\" The bot is in " + bot.getGuilds().size() + " Servers!"));
+        readableBotPrefix = "@" + bot.getSelfUser().getName();
+        bot.getPresence().setActivity(Activity.playing( "Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
@@ -412,13 +414,13 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + botPrefix + " help"));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asStandardGuildMessageChannel().sendMessageEmbeds(createQuickEmbed("**Important!**", "This is a music bot which needs some setting up done first for the best experience. You can use `" + botPrefix + "help` or simply reply to this message with `help` for a general overview of the commands.\n\nAdd dj roles/users with the `" + botPrefix + "dj` command. This will allow some users or roles to have more control over the bots functions with commands like forceskip, disconnect and shuffle.\nIf you wish to give boosters this permission, just add the booster role to the dj roles.\n\nYou can also add optional blocked channels, which will disallow some commands from being used in the blocked channels. This can be done with the `" + botPrefix + "blockchannel` command.\n\nIf you encounter any bugs, issues, or have any feature requests, use `" + botPrefix + "bug <Message>` to report it to the developer")).queue();
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + botPrefix + " help"));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
         queuePages.remove(event.getGuild().getIdLong());
     }
 
@@ -626,19 +628,7 @@ public class Main extends ListenerAdapter {
         if (messageContent.isEmpty()) {
             return;
         }
-        boolean containsCommand = false;
-        for (String command : commandNames) {
-            if (messageContent.toLowerCase().contains(command)) {
-                containsCommand = true;
-                break;
-            }
-        }
 
-        if (messageContent.startsWith("?") && containsCommand) {
-            event.getMessage().replyEmbeds(createQuickError("The bot no longer supports the `?` prefix due to discord reasons.\n\n__Please either use one of the two options:__\n- " + botPrefix + " help\n- reply to the bot with the command.\n- use slash commands\n\n**Sorry for any inconvenience!**")).queue(message -> {
-                message.delete().queueAfter(20, TimeUnit.SECONDS);
-            });
-        }
         if (event.getMessage().getMentions().getUsers().contains(event.getJDA().getSelfUser())) {
             for (BaseCommand Command : commands) {
                 for (String alias : Command.getNames()) {
