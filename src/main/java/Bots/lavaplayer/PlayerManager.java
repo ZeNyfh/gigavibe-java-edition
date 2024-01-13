@@ -1,5 +1,6 @@
 package Bots.lavaplayer;
 
+import Bots.MessageEvent;
 import com.github.topisenpai.lavasrc.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -32,6 +33,7 @@ public class PlayerManager {
     private static boolean hasSpotify = false;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
+    public static MessageEvent message;
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -102,7 +104,7 @@ public class PlayerManager {
                     embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                 }
                 embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
-                commandChannel.sendMessageEmbeds(embed.build()).queue();
+                message.replyEmbeds(embed.build());
             }
 
 
@@ -128,7 +130,7 @@ public class PlayerManager {
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
                         embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
                         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                        commandChannel.sendMessageEmbeds(embed.build()).queue();
+                        message.replyEmbeds(embed.build());
                     } else {
                         long lengthSeconds = 0;
                         for (int i = 0; i < tracks.size(); ) {
@@ -154,7 +156,7 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        commandChannel.sendMessageEmbeds(embed.build()).queue();
+                        message.replyEmbeds(embed.build());
                     }
                     for (int i = 0; i < tracks.size(); ) {
                         tracks.get(i).setUserData(commandChannel);
@@ -165,7 +167,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                commandChannel.sendMessageEmbeds(createQuickError("No matches found for the track.")).queue();
+                message.replyEmbeds(createQuickError("No matches found for the track."));
                 printlnTime("No match found for the track.");
             }
 
@@ -174,7 +176,7 @@ public class PlayerManager {
             @Override
             public void loadFailed(FriendlyException e) {
                 clearVotes(guildID);
-                commandChannel.sendMessageEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```")).queue();
+                message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
                 printlnTime("track loading failed, stacktrace: ");
                 e.fillInStackTrace();
             }

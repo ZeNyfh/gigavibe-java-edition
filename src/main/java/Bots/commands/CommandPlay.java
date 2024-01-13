@@ -32,6 +32,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
+        PlayerManager.message = event;
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
@@ -40,7 +41,7 @@ public class CommandPlay extends BaseCommand {
         assert memberState != null;
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (!memberState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("you arent in a vc."));
+            event.replyEmbeds(createQuickError("You aren't in a vc."));
             return;
         }
 
@@ -64,7 +65,6 @@ public class CommandPlay extends BaseCommand {
             }
 
             // audio/video attachments
-
             List<Message.Attachment> links = event.getAttachments();
             audioManager.openAudioConnection(memberChannel);
             boolean sendEmbedBool = true;
@@ -112,7 +112,6 @@ public class CommandPlay extends BaseCommand {
         } catch (FriendlyException ignored) {
             event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
         }
-        event.reply(MessageEvent.Response::delete, ".");
     }
 
     @Override
