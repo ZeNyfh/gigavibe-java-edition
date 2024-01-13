@@ -1,7 +1,6 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.Main;
 import Bots.MessageEvent;
 
 import static Bots.Main.createQuickEmbed;

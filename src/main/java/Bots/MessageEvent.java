@@ -13,11 +13,11 @@ import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static Bots.Main.*;
+import static Bots.Main.botPrefix;
+import static Bots.Main.createQuickError;
 
 /**
  * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
