@@ -203,37 +203,37 @@ public class Main extends ListenerAdapter {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
             // auto updater code
-//            timer = new Timer();
-//            task = new TimerTask() {
-//                final File updateFile = new File("update/bot.jar");
-//                int time = 0;
-//                @Override
-//                public void run() {
-//                    boolean isInAnyVc = false;
-//                    for (Guild guild : bot.getGuilds()) {
-//                        if (guild.getAudioManager().isConnected()) {
-//                            isInAnyVc = true;
-//                        }
-//                    }
-//
-//                    if (!isInAnyVc) { // not in vc
-//                        time++;
-//                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
-//                            // leeway for upload past the time limit
-//                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
-//                                printlnTime("It's update time!");
-//                                File botJar = new File("bot.jar");
-//                                ignoreFiles = botJar.delete();
-//                                ignoreFiles = updateFile.renameTo(botJar);
-//                                killMain();
-//                            }
-//                        }
-//                    } else { // in a vc
-//                        time = 0;
-//                    }
-//                }
-//            };
-//            timer.scheduleAtFixedRate(task, 0, 1000);
+            timer = new Timer();
+            task = new TimerTask() {
+                final File updateFile = new File("update/bot.jar");
+                int time = 0;
+                @Override
+                public void run() {
+                    boolean isInAnyVc = false;
+                    for (Guild guild : bot.getGuilds()) {
+                        if (guild.getAudioManager().isConnected()) {
+                            isInAnyVc = true;
+                        }
+                    }
+
+                    if (!isInAnyVc) { // not in vc
+                        time++;
+                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                            // leeway for upload past the time limit
+                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
+                                printlnTime("It's update time!");
+                                File botJar = new File("bot.jar");
+                                ignoreFiles = botJar.delete();
+                                ignoreFiles = updateFile.renameTo(botJar);
+                                killMain();
+                            }
+                        }
+                    } else { // in a vc
+                        time = 0;
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(task, 0, 1000);
         } catch (Exception e) {
             e.fillInStackTrace();
         }
