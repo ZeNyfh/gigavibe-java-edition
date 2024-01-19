@@ -34,14 +34,10 @@ public class CommandHelp extends BaseCommand {
         }
     }
 
-    private void HandleButtonEvent(ButtonInteractionEvent event) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(botColour);
-        eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
-        String ButtonCategory = Objects.requireNonNull(event.getButton().getId()).split("help-")[1];
+    private void BuildEmbedFromCategory(EmbedBuilder embed, String category) {
         int i = 0;
         for (BaseCommand Command : commands) {
-            if (Command.getCategory().name().equalsIgnoreCase(ButtonCategory)) {
+            if (Command.getCategory().name().equalsIgnoreCase(category)) {
                 i++;
                 StringBuilder aliases = new StringBuilder();
                 if (Command.getNames().length == 2) {
@@ -52,7 +48,7 @@ public class CommandHelp extends BaseCommand {
                 int j = 0;
                 for (String name : Command.getNames()) {
                     j++;
-                    if (Command.getNames().length == 1 || j == 1) {
+                    if (j == 1) {
                         continue;
                     }
                     if (j != Command.getNames().length) {
@@ -61,9 +57,17 @@ public class CommandHelp extends BaseCommand {
                         aliases.append("**(").append(name).append(")**");
                     }
                 }
-                eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + aliases + "\n\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + aliases + "\n\n");
             }
         }
+    }
+
+    private void HandleButtonEvent(ButtonInteractionEvent event) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(botColour);
+        eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
+        String ButtonCategory = Objects.requireNonNull(event.getButton().getId()).split("help-")[1];
+        BuildEmbedFromCategory(eb, ButtonCategory);
         switch (ButtonCategory) {
             case "general" -> eb.setTitle("\uD83D\uDCD6 **General**");
             case "music" -> eb.setTitle("\uD83D\uDD0A **Music**");
@@ -96,31 +100,7 @@ public class CommandHelp extends BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
         embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
-        int i = 0;
-        for (BaseCommand Command : commands) {
-            if (Command.getCategory().name().equalsIgnoreCase(Arg)) {
-                i++;
-                StringBuilder aliases = new StringBuilder();
-                if (Command.getNames().length == 2) {
-                    aliases.append("\n`Alias:` ");
-                } else if (Command.getNames().length > 2) {
-                    aliases.append("\n`Aliases:` ");
-                }
-                int j = 0;
-                for (String name : Command.getNames()) {
-                    j++;
-                    if (Command.getNames().length == 1 || j == 1) {
-                        continue;
-                    }
-                    if (j != Command.getNames().length) {
-                        aliases.append("**(").append(name).append(")**, ");
-                    } else {
-                        aliases.append("**(").append(name).append(")**");
-                    }
-                }
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + aliases + "\n\n");
-            }
-        }
+        BuildEmbedFromCategory(embed, Arg);
         switch (Arg) {
             case "general" -> embed.setTitle("\uD83D\uDCD6 **General**");
             case "music" -> embed.setTitle("\uD83D\uDD0A **Music**");
