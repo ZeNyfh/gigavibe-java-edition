@@ -92,7 +92,7 @@ public class CommandInsert extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "DJ";
+        return Categories.DJ.name();
     }
 
     @Override

@@ -10,6 +10,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
  */
 public abstract class BaseCommand {
     public SlashCommandData slashCommand;
+    public static enum Categories {
+        General, Admin, DJ, Dev, Music
+    }
 
     public abstract void execute(MessageEvent event) throws Exception; //The main event loop
 

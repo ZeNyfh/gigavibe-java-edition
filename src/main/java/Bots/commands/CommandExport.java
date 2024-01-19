@@ -55,7 +55,7 @@ public class CommandExport extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Music";
+        return Categories.Music.name();
     }
 
     @Override

@@ -39,7 +39,7 @@ public class CommandLocalPlay extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "dev";
+        return Categories.Dev.name();
     }
 
     @Override

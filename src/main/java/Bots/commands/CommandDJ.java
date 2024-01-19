@@ -135,7 +135,7 @@ public class CommandDJ extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Admin";
+        return Categories.Admin.name();
     }
 
     @Override

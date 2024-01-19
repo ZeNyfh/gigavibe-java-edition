@@ -28,7 +28,7 @@ public class CommandBug extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "General";
+        return Categories.General.name();
     }
 
     @Override

@@ -90,7 +90,7 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Admin";
+        return Categories.Admin.name();
     }
 
     @Override

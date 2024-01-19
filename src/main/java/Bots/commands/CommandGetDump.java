@@ -62,7 +62,7 @@ public class CommandGetDump extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "Dev";
+        return Categories.Dev.name();
     }
 
     @Override

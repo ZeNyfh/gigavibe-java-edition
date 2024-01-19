@@ -32,7 +32,7 @@ public class CommandDisconnect extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "DJ";
+        return Categories.DJ.name();
     }
 
     @Override

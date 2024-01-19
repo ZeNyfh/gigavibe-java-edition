@@ -93,7 +93,7 @@ public class CommandSeek extends BaseCommand {
 
     @Override
     public String getCategory() {
-        return "DJ";
+        return Categories.DJ.name();
     }
 
 
