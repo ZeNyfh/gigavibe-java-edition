@@ -8,16 +8,19 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandHelp extends BaseCommand {
-    String Arg = "";
+    List<ItemComponent> CategoryButtons = new ArrayList<>();
 
-    public String getCommands(String category) {
+    public String getCommands(Category category) {
         String Commands = "";
         for (BaseCommand Command : commands) {
             if (Command.getCategory().equals(category)) {
@@ -35,15 +38,16 @@ public class CommandHelp extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
         eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
+        String ButtonCategory = Objects.requireNonNull(event.getButton().getId()).split("help-")[1];
         int i = 0;
         for (BaseCommand Command : commands) {
-            if (Command.getCategory().equalsIgnoreCase(Objects.requireNonNull(event.getButton().getId()))) {
+            if (Command.getCategory().name().equalsIgnoreCase(ButtonCategory)) {
                 i++;
-                StringBuilder builder = new StringBuilder();
+                StringBuilder aliases = new StringBuilder();
                 if (Command.getNames().length == 2) {
-                    builder.append("\n`Alias:` ");
+                    aliases.append("\n`Alias:` ");
                 } else if (Command.getNames().length > 2) {
-                    builder.append("\n`Aliases:` ");
+                    aliases.append("\n`Aliases:` ");
                 }
                 int j = 0;
                 for (String name : Command.getNames()) {
@@ -52,52 +56,55 @@ public class CommandHelp extends BaseCommand {
                         continue;
                     }
                     if (j != Command.getNames().length) {
-                        builder.append("**(").append(name).append(")**, ");
+                        aliases.append("**(").append(name).append(")**, ");
                     } else {
-                        builder.append("**(").append(name).append(")**");
+                        aliases.append("**(").append(name).append(")**");
                     }
                 }
-                eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + builder + "\n\n");
+                eb.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + aliases + "\n\n");
             }
         }
-        switch (Objects.requireNonNull(event.getButton().getId())) {
-            case "general":
-                eb.setTitle("\uD83D\uDCD6 **General**");
-            case "music":
-                eb.setTitle("\uD83D\uDD0A **Music**");
-            case "dj":
-                eb.setTitle("\uD83C\uDFA7 **DJ**");
-            case "admin":
-                eb.setTitle("\uD83D\uDCD1 **Admin**");
+        switch (ButtonCategory) {
+            case "general" -> eb.setTitle("\uD83D\uDCD6 **General**");
+            case "music" -> eb.setTitle("\uD83D\uDD0A **Music**");
+            case "dj" -> eb.setTitle("\uD83C\uDFA7 **DJ**");
+            case "admin" -> eb.setTitle("\uD83D\uDCD1 **Admin**");
         }
         event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
     }
 
     @Override
     public void Init() {
-        registerButtonInteraction(new String[]{"general", "music", "dj", "admin"}, this::HandleButtonEvent);
+        String[] ExpectedButtonIDs = new String[Category.values().length];
+        for (int i = 0; i < Category.values().length; i++) {
+            Category category = Category.values()[i];
+            ExpectedButtonIDs[i] = "help-" + category.name().toLowerCase();
+            if (category != Category.Dev)
+                CategoryButtons.add(Button.secondary("help-"+category.name().toLowerCase(), category.name()));
+        }
+        registerButtonInteraction(ExpectedButtonIDs, this::HandleButtonEvent);
     }
 
     @Override
     public void execute(MessageEvent event) {
+        String Arg;
         try {
             Arg = event.getArgs()[1].toLowerCase();
         } catch (Exception ignored) {
             Arg = "";
         }
         EmbedBuilder embed = new EmbedBuilder();
-        StringBuilder builder;
         embed.setColor(botColour);
         embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
         int i = 0;
         for (BaseCommand Command : commands) {
-            if (Command.getCategory().toLowerCase().equals(Arg)) {
+            if (Command.getCategory().name().equalsIgnoreCase(Arg)) {
                 i++;
-                builder = new StringBuilder();
+                StringBuilder aliases = new StringBuilder();
                 if (Command.getNames().length == 2) {
-                    builder.append("\n`Alias:` ");
+                    aliases.append("\n`Alias:` ");
                 } else if (Command.getNames().length > 2) {
-                    builder.append("\n`Aliases:` ");
+                    aliases.append("\n`Aliases:` ");
                 }
                 int j = 0;
                 for (String name : Command.getNames()) {
@@ -106,47 +113,39 @@ public class CommandHelp extends BaseCommand {
                         continue;
                     }
                     if (j != Command.getNames().length) {
-                        builder.append("**(").append(name).append(")**, ");
+                        aliases.append("**(").append(name).append(")**, ");
                     } else {
-                        builder.append("**(").append(name).append(")**");
+                        aliases.append("**(").append(name).append(")**");
                     }
                 }
-                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + builder + "\n\n");
+                embed.appendDescription("`" + i + ")` **" + Command.getNames()[0] + " " + Command.getOptions() + "** - " + Command.getDescription() + aliases + "\n\n");
             }
         }
-        if ("general".equals(Arg)) {
-            embed.setTitle("\uD83D\uDCD6 **General**");
-        } else if ("music".equals(Arg)) {
-            embed.setTitle("\uD83D\uDD0A **Music**");
-        } else if ("dj".equals(Arg)) {
-            embed.setTitle("\uD83C\uDFA7 **DJ**");
-        } else if ("admin".equals(Arg)) {
-            embed.setTitle("\uD83D\uDCD1 **Admin**");
-        } else if ("dev".equals(Arg)) {
-            embed.setTitle("\uD83D\uDD28 **Dev**");
-        } else {
-            embed.setTitle("\uD83D\uDCD4 **Commands**");
-            embed.setDescription("");
-            embed.appendDescription("**General**\n" + getCommands("General") + "\n\n");
-            embed.appendDescription("**Music**\n" + getCommands("Music") + "\n\n");
-            embed.appendDescription("**DJ**\n" + getCommands("DJ") + "\n\n");
-            embed.appendDescription("**Admin**\n" + getCommands("Admin"));
-            embed.setFooter("Click the buttons to get more information on a group.");
+        switch (Arg) {
+            case "general" -> embed.setTitle("\uD83D\uDCD6 **General**");
+            case "music" -> embed.setTitle("\uD83D\uDD0A **Music**");
+            case "dj" -> embed.setTitle("\uD83C\uDFA7 **DJ**");
+            case "admin" -> embed.setTitle("\uD83D\uDCD1 **Admin**");
+            case "dev" -> embed.setTitle("\uD83D\uDD28 **Dev**");
+            default -> {
+                embed.setTitle("\uD83D\uDCD4 **Commands**");
+                embed.setDescription("");
+                for (Category category : Category.values()) {
+                    if (category != Category.Dev)
+                        embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
+                }
+                embed.setFooter("Click the buttons to get more information on a group.");
+            }
         }
         if (!event.isSlash()) { //Incredibly hacky fix because I don't want to implement all the backend just for this
             ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
-                    a -> a.editMessageComponents().setActionRow(
-                            Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("dj", "DJ"), Button.secondary("admin", "Admin")
-                    ).queue()
+                    a -> a.editMessageComponents().setActionRow(CategoryButtons).queue()
             );
         } else {
             ((SlashCommandInteractionEvent) event.getCoreEvent()).replyEmbeds(embed.build()).queue(
-                    a -> a.editOriginalComponents().setActionRow(
-                            Button.secondary("general", "General"), Button.secondary("music", "Music"), Button.secondary("dj", "DJ"), Button.secondary("admin", "Admin")
-                    ).queue()
+                    a -> a.editOriginalComponents().setActionRow(CategoryButtons).queue()
             );
         }
-        embed.clear();
     }
 
     @Override
