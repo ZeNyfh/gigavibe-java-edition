@@ -18,16 +18,16 @@ public class CommandHelp extends BaseCommand {
     String Arg = "";
 
     public String getCommands(String category) {
-        String Commands = "";
+        StringBuilder Commands = new StringBuilder();
         for (BaseCommand Command : commands) {
             if (Command.getCategory().equals(category)) {
-                Commands = (Commands + " `" + Command.getNames()[0] + "`");
+                Commands.append(" `").append(Command.getNames()[0]).append("`");
             }
         }
-        if (Commands.equals("")) {
+        if (Commands.isEmpty()) {
             return "none";
         } else {
-            return Commands;
+            return Commands.toString();
         }
     }
 

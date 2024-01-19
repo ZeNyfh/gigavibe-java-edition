@@ -55,11 +55,6 @@ public class CommandClearQueue extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "Clears the current queue.";
     }

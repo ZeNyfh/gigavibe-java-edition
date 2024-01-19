@@ -68,7 +68,7 @@ public class CommandBlockChannel extends BaseCommand {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
             eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
-            if (blockedChannels.size() == 0) {
+            if (blockedChannels.isEmpty()) {
                 eb.appendDescription("**None.**");
                 event.replyEmbeds(eb.build());
                 return;

@@ -66,11 +66,6 @@ public class CommandGetDump extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String[] getNames() {
         return new String[]{"getdump", "dump"};
     }
@@ -80,8 +75,4 @@ public class CommandGetDump extends BaseCommand {
         return "Returns a dump of jstack.";
     }
 
-    @Override
-    public long getRatelimit() {
-        return 0;
-    }
 }

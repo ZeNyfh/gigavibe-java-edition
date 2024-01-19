@@ -97,11 +97,6 @@ public class CommandSkip extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "Casts a vote or skips the current song.";
     }

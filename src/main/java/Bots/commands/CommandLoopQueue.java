@@ -31,11 +31,6 @@ public class CommandLoopQueue extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getCategory() {
         return Categories.Music.name();
     }

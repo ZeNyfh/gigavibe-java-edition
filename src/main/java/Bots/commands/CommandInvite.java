@@ -22,11 +22,6 @@ public class CommandInvite extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "Sends an invite to the bot.";
     }

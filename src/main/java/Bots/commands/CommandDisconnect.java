@@ -36,11 +36,6 @@ public class CommandDisconnect extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "Makes the bot forcefully leave the vc.";
     }
