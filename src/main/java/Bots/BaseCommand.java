@@ -10,8 +10,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
  */
 public abstract class BaseCommand {
     public SlashCommandData slashCommand;
-    public static enum Categories {
-        General, Admin, DJ, Dev, Music
+    public enum Category {
+        General, Music, DJ, Admin, Dev
     }
 
     public abstract void execute(MessageEvent event) throws Exception; //The main event loop
@@ -21,7 +21,7 @@ public abstract class BaseCommand {
 
     public abstract String[] getNames(); //The first name in the list is treated as the primary name by cmds
 
-    public abstract String getCategory(); //The category, used by cmds
+    public abstract Category getCategory(); //The category, used by cmds
 
     public abstract String getDescription(); //The description, used by cmds
 
