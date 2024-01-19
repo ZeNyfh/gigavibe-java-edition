@@ -32,7 +32,7 @@ public class CommandExport extends BaseCommand {
         File text = new File(fileName + ".txt");
         FileWriter writer = new FileWriter(text);
         writer.write(audioPlayer.getPlayingTrack().getInfo().uri + " | " + audioPlayer.getPlayingTrack().getInfo().title + "\n");
-        if (musicManager.scheduler.queue.size() > 0) {
+        if (!musicManager.scheduler.queue.isEmpty()) {
             for (AudioTrack track : musicManager.scheduler.queue) {
                 writer.write(track.getInfo().uri + " | " + track.getInfo().title + "\n");
             }
