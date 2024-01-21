@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
  */
 public abstract class BaseCommand {
     public SlashCommandData slashCommand;
+
     public enum Category {
         General, Music, DJ, Admin, Dev
     }

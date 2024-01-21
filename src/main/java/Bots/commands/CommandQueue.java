@@ -82,13 +82,11 @@ public class CommandQueue extends BaseCommand {
         embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;
-        for (int x = 0; x < queueLength; ) {
-            if (queue.get(x).getInfo().length > 432000000) {
-                x++;
+        for (AudioTrack audioTrack : queue) {
+            if (audioTrack.getInfo().length > 432000000) {
                 continue; // will be slightly inaccurate due to tracks with unknown duration
             }
-            queueTimeLength = queueTimeLength + queue.get(x).getInfo().length;
-            x++;
+            queueTimeLength = queueTimeLength + audioTrack.getInfo().length;
         }
         queuePages.put(event.getGuild().getIdLong(), 1);
         String[] args = event.getArgs();
@@ -104,10 +102,9 @@ public class CommandQueue extends BaseCommand {
             queuePages.put(event.getGuild().getIdLong(), Integer.parseInt(args[1]));
         }
         int multiplier = queuePages.get(event.getGuild().getIdLong());
-        for (int i = 5 * multiplier - 5; i < 5 * multiplier && i < queueLength; ) {
+        for (int i = 5 * multiplier - 5; i < 5 * multiplier && i < queueLength; i++) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
-            i++;
         }
         embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);

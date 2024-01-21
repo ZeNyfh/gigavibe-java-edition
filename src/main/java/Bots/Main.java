@@ -199,7 +199,7 @@ public class Main extends ListenerAdapter {
         printlnTime("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
-        bot.getPresence().setActivity(Activity.playing( "Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
+        bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
@@ -212,6 +212,7 @@ public class Main extends ListenerAdapter {
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
                 int time = 0;
+
                 @Override
                 public void run() {
                     boolean isInAnyVc = false;
@@ -400,7 +401,8 @@ public class Main extends ListenerAdapter {
         try {
             logger.write(finalMessage + "\n");
             logger.flush();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
@@ -584,7 +586,9 @@ public class Main extends ListenerAdapter {
         SaveConfigs();
         try {
             Thread.sleep(1000);
-        } catch (Exception e){e.fillInStackTrace();}
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
         System.exit(0);
     }
 

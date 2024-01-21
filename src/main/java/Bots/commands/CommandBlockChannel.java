@@ -73,9 +73,8 @@ public class CommandBlockChannel extends BaseCommand {
                 event.replyEmbeds(eb.build());
                 return;
             }
-            for (int j = 0; j < blockedChannels.size(); ) {
-                eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
-                j++;
+            for (Object blockedChannel : blockedChannels) {
+                eb.appendDescription("**" + blockedChannel + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannel)).getName() + "\n");
             }
             event.replyEmbeds(eb.build());
         } else {

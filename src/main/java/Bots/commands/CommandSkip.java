@@ -49,11 +49,10 @@ public class CommandSkip extends BaseCommand {
 
         List<Member> VCMembers = new ArrayList<>(); //Filter to remove bots
         List<Member> UnfilteredMembers = Objects.requireNonNull(selfVoiceState.getChannel()).getMembers();
-        for (int i = 0; i < UnfilteredMembers.size(); ) {
-            if (!UnfilteredMembers.get(i).getUser().isBot()) {
-                VCMembers.add(UnfilteredMembers.get(i));
+        for (Member member : UnfilteredMembers) {
+            if (!member.getUser().isBot()) {
+                VCMembers.add(member);
             }
-            i++;
         }
         List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
         if (currentVotes.contains(event.getMember())) {

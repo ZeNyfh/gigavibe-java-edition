@@ -84,7 +84,7 @@ public class CommandHelp extends BaseCommand {
             Category category = Category.values()[i];
             ExpectedButtonIDs[i] = "help-" + category.name().toLowerCase();
             if (category != Category.Dev)
-                CategoryButtons.add(Button.secondary("help-"+category.name().toLowerCase(), category.name()));
+                CategoryButtons.add(Button.secondary("help-" + category.name().toLowerCase(), category.name()));
         }
         registerButtonInteraction(ExpectedButtonIDs, this::HandleButtonEvent);
     }
