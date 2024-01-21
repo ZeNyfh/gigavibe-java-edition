@@ -38,8 +38,8 @@ public class CommandLocalPlay extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return Categories.Dev.name();
+    public Category getCategory() {
+        return Category.Dev;
     }
 
     @Override

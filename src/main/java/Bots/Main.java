@@ -176,11 +176,16 @@ public class Main extends ListenerAdapter {
 
             // registering all the commands
             for (Class<?> commandClass : classes) {
-                registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-                printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+                try {
+                    registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
+                    printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+                } catch (Exception e) {
+                    printlnTime("Unable to load command " + commandClass.getSimpleName().substring(7));
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
         ConfigManager.Init();
         PlayerManager.getInstance();

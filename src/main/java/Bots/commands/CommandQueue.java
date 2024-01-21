@@ -123,8 +123,8 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return Categories.Music.name();
+    public Category getCategory() {
+        return Category.Music;
     }
 
     @Override
