@@ -21,16 +21,16 @@ public class CommandHelp extends BaseCommand {
     List<ItemComponent> CategoryButtons = new ArrayList<>();
 
     public String getCommands(Category category) {
-        String Commands = "";
+        StringBuilder Commands = new StringBuilder();
         for (BaseCommand Command : commands) {
             if (Command.getCategory().equals(category)) {
-                Commands = (Commands + " `" + Command.getNames()[0] + "`");
+                Commands.append(" `").append(Command.getNames()[0]).append("`");
             }
         }
-        if (Commands.equals("")) {
+        if (Commands.isEmpty()) {
             return "none";
         } else {
-            return Commands;
+            return Commands.toString();
         }
     }
 

@@ -28,11 +28,6 @@ public class CommandJoin extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public Category getCategory() {
         return Category.DJ;
     }

@@ -54,7 +54,7 @@ public class CommandForceSkip extends BaseCommand {
             return;
         }
         if (event.getArgs().length == 1) {
-            if (musicManager.scheduler.queue.size() >= 1) {
+            if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             } else {
@@ -76,7 +76,7 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.nextTrack();
             }
         } else {
-            if (musicManager.scheduler.queue.size() >= 1) {
+            if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             } else {

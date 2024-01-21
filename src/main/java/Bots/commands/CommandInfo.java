@@ -55,11 +55,6 @@ public class CommandInfo extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public Category getCategory() {
         return Category.General;
     }

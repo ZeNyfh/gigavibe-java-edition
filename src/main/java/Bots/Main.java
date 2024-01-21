@@ -443,10 +443,9 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
-        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (event.getChannelLeft() == null) {
+            return;
             // GuildVoiceJoinEvent
-
         } else if (event.getChannelJoined() == null) {
             // GuildVoiceLeaveEvent
             if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {

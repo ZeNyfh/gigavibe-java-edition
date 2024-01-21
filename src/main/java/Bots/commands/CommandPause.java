@@ -68,11 +68,6 @@ public class CommandPause extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "pauses or resumes the current track.";
     }

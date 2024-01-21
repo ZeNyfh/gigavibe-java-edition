@@ -127,11 +127,6 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "";
-    }
-
-    @Override
     public String getDescription() {
         return "Shows you the track that is currently playing";
     }
