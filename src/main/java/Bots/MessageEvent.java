@@ -136,15 +136,6 @@ public class MessageEvent {
             ((SlashCommandInteractionEvent) this.coreEvent).deferReply().queue();
         }
     }
-
-    public void reply(String s) {
-        if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue();
-        } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue();
-        }
-    }
-
     public void reply(Consumer<MessageEvent.Response> lambda, String s) {
         if (isSlash()) {
             ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
@@ -152,13 +143,8 @@ public class MessageEvent {
             ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
-
-    public void replyEmbeds(MessageEmbed embed, MessageEmbed... embeds) {
-        if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue();
-        } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue();
-        }
+    public void reply(String s) {
+        reply(x -> {}, s);
     }
 
     public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
@@ -168,13 +154,8 @@ public class MessageEvent {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
-
-    public void replyFiles(FileUpload... files) {
-        if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue();
-        } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue();
-        }
+    public void replyEmbeds(MessageEmbed embed, MessageEmbed... embeds) {
+        replyEmbeds(x -> {}, embed, embeds);
     }
 
     public void replyFiles(Consumer<MessageEvent.Response> lambda, FileUpload... files) {
@@ -183,6 +164,9 @@ public class MessageEvent {
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
+    }
+    public void replyFiles(FileUpload... files) {
+        replyFiles(x -> {}, files);
     }
 
     public JSONObject getConfig() {
