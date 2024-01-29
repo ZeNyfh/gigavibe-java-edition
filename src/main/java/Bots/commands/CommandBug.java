@@ -18,6 +18,9 @@ public class CommandBug extends BaseCommand {
             return;
         }
         Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "\n\n" + event.getContentRaw().split(" ", 2)[1]).queue());
+        if (event.isSlash()) {
+            event.deferReply(true); //hacky way of making it ephemeral
+        }
         event.reply("Thanks for sending in a bug report!");
     }
 
