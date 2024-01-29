@@ -28,7 +28,7 @@ public class CommandQueue extends BaseCommand {
         BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
         if (Objects.equals(event.getButton().getId(), "forward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
-            if (queuePages.get(event.getGuild().getIdLong()) >= round((Queue.size() / 5F) + 1)) {
+            if (queuePages.get(event.getGuild().getIdLong()) > round((Queue.size() / 5F) + 1)) {
                 queuePages.put(event.getGuild().getIdLong(), 1);
             }
         } else if (Objects.equals(event.getButton().getId(), "backward")) {
