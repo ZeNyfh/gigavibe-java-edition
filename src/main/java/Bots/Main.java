@@ -86,6 +86,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
+        ignoreFiles = new File("modules/").mkdir();
+        if (!new File("modules/ffprobe*").exists()) {
+            printlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
+        }
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         commandUsageTracker = GetConfig("usage-stats");
