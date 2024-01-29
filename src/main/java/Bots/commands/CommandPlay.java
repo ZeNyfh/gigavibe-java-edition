@@ -32,9 +32,7 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        if (event.isSlash()) {
-            event.deferReply(); //expect to take a while
-        }
+        event.deferReply(); //expect to take a while
         PlayerManager.message = event;
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
