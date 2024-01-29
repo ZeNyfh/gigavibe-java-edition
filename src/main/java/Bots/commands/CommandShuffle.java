@@ -39,7 +39,7 @@ public class CommandShuffle extends BaseCommand {
             return;
         }
 
-        if (queue.size() == 0) {
+        if (queue.isEmpty()) {
             event.replyEmbeds(createQuickError("There is nothing in the queue."));
             return;
         }
@@ -58,13 +58,8 @@ public class CommandShuffle extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "DJ";
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
+    public Category getCategory() {
+        return Category.DJ;
     }
 
     @Override

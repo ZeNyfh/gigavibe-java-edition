@@ -58,18 +58,13 @@ public class CommandPause extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "DJ";
+    public Category getCategory() {
+        return Category.DJ;
     }
 
     @Override
     public String[] getNames() {
         return new String[]{"pause", "resume", "res", "continue", "unpause", "stop"};
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
     }
 
     @Override

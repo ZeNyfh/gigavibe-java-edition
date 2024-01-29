@@ -117,18 +117,13 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Music";
+    public Category getCategory() {
+        return Category.Music;
     }
 
     @Override
     public String[] getNames() {
         return new String[]{"np", "nowplaying"};
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
     }
 
     @Override

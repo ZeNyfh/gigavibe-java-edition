@@ -82,66 +82,61 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 audioTrack.setUserData(commandChannel);
-                if (!sendEmbed) {
-                    musicManager.scheduler.queue(audioTrack);
-                    return;
-                }
-                String length;
                 musicManager.scheduler.queue(audioTrack);
-                EmbedBuilder embed = new EmbedBuilder();
-                embed.setThumbnail(getThumbURL(audioTrack));
-                if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
-                    length = "Unknown";
-                } else {
-                    length = toTimestamp((audioTrack.getInfo().length));
+                if (sendEmbed) {
+                    EmbedBuilder embed = new EmbedBuilder();
+                    embed.setThumbnail(getThumbURL(audioTrack));
+                    String length;
+                    if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
+                        length = "Unknown";
+                    } else {
+                        length = toTimestamp((audioTrack.getInfo().length));
+                    }
+                    embed.setColor(botColour);
+                    if (audioTrack.getInfo().title.isEmpty()) {
+                        String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
+                        String trackName = trackNameArray[trackNameArray.length - 1];
+                        embed.setTitle((trackName), (audioTrack.getInfo().uri));
+                    } else {
+                        embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
+                    }
+                    embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+                    message.replyEmbeds(embed.build());
                 }
-                embed.setColor(botColour);
-                if (audioTrack.getInfo().title.isEmpty()) {
-                    String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
-                    String trackName = trackNameArray[trackNameArray.length - 1];
-                    embed.setTitle((trackName), (audioTrack.getInfo().uri));
-                } else {
-                    embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
-                }
-                embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
-                message.replyEmbeds(embed.build());
             }
 
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                String length;
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setColor(botColour);
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     String author = (tracks.get(0).getInfo().author);
+                    String length;
                     if (tracks.get(0).getInfo().length > 432000000 || tracks.get(0).getInfo().length <= 1) { // 5 days
                         length = "Unknown";
                     } else {
                         length = toTimestamp((tracks.get(0).getInfo().length));
                     }
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:")) {
-                        if (!sendEmbed) {
-                            musicManager.scheduler.queue(tracks.get(0));
-                            return;
-                        }
                         musicManager.scheduler.queue(tracks.get(0));
-                        embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
-                        embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                        message.replyEmbeds(embed.build());
+                        if (sendEmbed) {
+                            embed.setThumbnail(getThumbURL(tracks.get(0)));
+                            embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
+                            embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
+                            message.replyEmbeds(embed.build());
+                        }
                     } else {
                         long lengthSeconds = 0;
-                        for (int i = 0; i < tracks.size(); ) {
-                            lengthSeconds = (lengthSeconds + tracks.get(i).getInfo().length);
-                            musicManager.scheduler.queue(tracks.get(i));
-                            i++;
+                        for (AudioTrack track : tracks) {
+                            lengthSeconds = (lengthSeconds + track.getInfo().length);
+                            musicManager.scheduler.queue(track);
                         }
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
                         embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
 
-                        for (int i = 0; i < tracks.size(); ) {
+                        for (int i = 0; i < tracks.size(); i++) {
                             if (i > 4 || tracks.get(i) == null) {
                                 break;
                             }
@@ -150,7 +145,6 @@ public class PlayerManager {
                             } else {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().title + "](" + tracks.get(i).getInfo().uri + ")\n");
                             }
-                            i++;
                         }
                         if (tracks.size() > 5) {
                             embed.appendDescription("...");
@@ -158,9 +152,8 @@ public class PlayerManager {
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
                         message.replyEmbeds(embed.build());
                     }
-                    for (int i = 0; i < tracks.size(); ) {
-                        tracks.get(i).setUserData(commandChannel);
-                        i++;
+                    for (AudioTrack track : tracks) {
+                        track.setUserData(commandChannel);
                     }
                 }
             }
@@ -170,7 +163,6 @@ public class PlayerManager {
                 message.replyEmbeds(createQuickError("No matches found for the track."));
                 printlnTime("No match found for the track.");
             }
-
 
 
             @Override

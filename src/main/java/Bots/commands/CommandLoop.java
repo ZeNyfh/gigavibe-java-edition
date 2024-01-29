@@ -26,13 +26,8 @@ public class CommandLoop extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Music";
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
+    public Category getCategory() {
+        return Category.Music;
     }
 
     @Override

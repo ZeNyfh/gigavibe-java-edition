@@ -70,8 +70,8 @@ public class CommandVolume extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "DJ";
+    public Category getCategory() {
+        return Category.DJ;
     }
 
     @Override

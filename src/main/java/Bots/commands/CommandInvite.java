@@ -12,18 +12,13 @@ public class CommandInvite extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "General";
+    public Category getCategory() {
+        return Category.General;
     }
 
     @Override
     public String[] getNames() {
         return new String[]{"invite"};
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
     }
 
     @Override

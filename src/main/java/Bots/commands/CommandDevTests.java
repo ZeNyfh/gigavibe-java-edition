@@ -55,8 +55,8 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Dev";
+    public Category getCategory() {
+        return Category.Dev;
     }
 
     @Override

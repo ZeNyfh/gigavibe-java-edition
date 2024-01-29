@@ -61,13 +61,8 @@ public class CommandGetDump extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Dev";
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
+    public Category getCategory() {
+        return Category.Dev;
     }
 
     @Override
@@ -80,8 +75,4 @@ public class CommandGetDump extends BaseCommand {
         return "Returns a dump of jstack.";
     }
 
-    @Override
-    public long getRatelimit() {
-        return 0;
-    }
 }

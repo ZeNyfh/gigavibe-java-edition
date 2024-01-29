@@ -12,18 +12,13 @@ public class CommandGithub extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "General";
+    public Category getCategory() {
+        return Category.General;
     }
 
     @Override
     public String[] getNames() {
         return new String[]{"github"};
-    }
-
-    @Override
-    public String getOptions() {
-        return "";
     }
 
     @Override

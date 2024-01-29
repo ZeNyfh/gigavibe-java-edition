@@ -18,8 +18,8 @@ public class CommandPrivacyPolicy extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "General";
+    public Category getCategory() {
+        return Category.General;
     }
 
     @Override

@@ -54,12 +54,11 @@ public class CommandSeek extends BaseCommand {
         if (args.length > 1) {
             if (audioPlayer.getPlayingTrack().isSeekable()) {
                 String[] times = args[1].split(":", 3);
-                for (int i = 0; i < times.length; ) {
-                    if (!times[i].matches("^\\d+$")) {
+                for (String time : times) {
+                    if (!time.matches("^\\d+$")) {
                         event.replyEmbeds(createQuickError("Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`"));
                         return;
                     }
-                    i++;
                 }
                 if (times.length == 3) {
                     position = (Long.parseLong(times[0]) * 60 * 60) + (Long.parseLong(times[1]) * 60) + (Long.parseLong(times[2]));
@@ -92,8 +91,8 @@ public class CommandSeek extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "DJ";
+    public Category getCategory() {
+        return Category.DJ;
     }
 
 

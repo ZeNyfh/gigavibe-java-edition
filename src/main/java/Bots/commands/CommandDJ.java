@@ -35,7 +35,7 @@ public class CommandDJ extends BaseCommand {
             StringBuilder builder = new StringBuilder();
             builder.append("**Roles:**\n"); // list DJ roles in embed
             int i = 0;
-            if (DJRoles.size() == 0) {
+            if (DJRoles.isEmpty()) {
                 builder.append("None.");
             } else {
                 for (Object role : DJRoles) {
@@ -50,7 +50,7 @@ public class CommandDJ extends BaseCommand {
             }
             builder.append("\n\n**Users:**\n"); // list DJ users in embed
             i = 0;
-            if (DJUsers.size() == 0) {
+            if (DJUsers.isEmpty()) {
                 builder.append("None.");
             } else {
                 for (Object user : DJUsers) {
@@ -114,8 +114,8 @@ public class CommandDJ extends BaseCommand {
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
             String roleText = FoundRoles.size() == 1 ? "role" : "roles";
             String msg;
-            if (FoundMembers.size() > 0) {
-                if (FoundRoles.size() > 0) {
+            if (!FoundMembers.isEmpty()) {
+                if (!FoundRoles.isEmpty()) {
                     msg = String.format("%d %s and %d %s", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
                 } else {
                     msg = String.format("%d %s", FoundMembers.size(), memberText);
@@ -134,8 +134,8 @@ public class CommandDJ extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Admin";
+    public Category getCategory() {
+        return Category.Admin;
     }
 
     @Override

@@ -68,14 +68,13 @@ public class CommandBlockChannel extends BaseCommand {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
             eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
-            if (blockedChannels.size() == 0) {
+            if (blockedChannels.isEmpty()) {
                 eb.appendDescription("**None.**");
                 event.replyEmbeds(eb.build());
                 return;
             }
-            for (int j = 0; j < blockedChannels.size(); ) {
-                eb.appendDescription("**" + blockedChannels.get(j) + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannels.get(j))).getName() + "\n");
-                j++;
+            for (Object blockedChannel : blockedChannels) {
+                eb.appendDescription("**" + blockedChannel + "** - " + Objects.requireNonNull(event.getJDA().getTextChannelById((String) blockedChannel)).getName() + "\n");
             }
             event.replyEmbeds(eb.build());
         } else {
@@ -89,8 +88,8 @@ public class CommandBlockChannel extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Admin";
+    public Category getCategory() {
+        return Category.Admin;
     }
 
     @Override

@@ -68,8 +68,8 @@ public class CommandRemove extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "DJ";
+    public Category getCategory() {
+        return Category.DJ;
     }
 
     @Override

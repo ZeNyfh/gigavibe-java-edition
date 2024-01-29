@@ -17,7 +17,7 @@ public class CommandBug extends BaseCommand {
             event.replyEmbeds(createQuickError("Please provide something to report."));
             return;
         }
-        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "#" + event.getUser().getDiscriminator() + "\n\n" + event.getContentRaw()).queue());
+        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "\n\n" + event.getContentRaw().split(" ", 2)[1]).queue());
         event.reply("Thanks for sending in a bug report!");
     }
 
@@ -27,8 +27,8 @@ public class CommandBug extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "General";
+    public Category getCategory() {
+        return Category.General;
     }
 
     @Override

@@ -176,11 +176,16 @@ public class Main extends ListenerAdapter {
 
             // registering all the commands
             for (Class<?> commandClass : classes) {
-                registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-                printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+                try {
+                    registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
+                    printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+                } catch (Exception e) {
+                    printlnTime("Unable to load command " + commandClass.getSimpleName().substring(7));
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
         ConfigManager.Init();
         PlayerManager.getInstance();
@@ -194,7 +199,7 @@ public class Main extends ListenerAdapter {
         printlnTime("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
-        bot.getPresence().setActivity(Activity.playing( "Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
+        bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
@@ -203,37 +208,38 @@ public class Main extends ListenerAdapter {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
             // auto updater code
-//            timer = new Timer();
-//            task = new TimerTask() {
-//                final File updateFile = new File("update/bot.jar");
-//                int time = 0;
-//                @Override
-//                public void run() {
-//                    boolean isInAnyVc = false;
-//                    for (Guild guild : bot.getGuilds()) {
-//                        if (guild.getAudioManager().isConnected()) {
-//                            isInAnyVc = true;
-//                        }
-//                    }
-//
-//                    if (!isInAnyVc) { // not in vc
-//                        time++;
-//                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
-//                            // leeway for upload past the time limit
-//                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
-//                                printlnTime("It's update time!");
-//                                File botJar = new File("bot.jar");
-//                                ignoreFiles = botJar.delete();
-//                                ignoreFiles = updateFile.renameTo(botJar);
-//                                killMain();
-//                            }
-//                        }
-//                    } else { // in a vc
-//                        time = 0;
-//                    }
-//                }
-//            };
-//            timer.scheduleAtFixedRate(task, 0, 1000);
+            timer = new Timer();
+            task = new TimerTask() {
+                final File updateFile = new File("update/bot.jar");
+                int time = 0;
+
+                @Override
+                public void run() {
+                    boolean isInAnyVc = false;
+                    for (Guild guild : bot.getGuilds()) {
+                        if (guild.getAudioManager().isConnected()) {
+                            isInAnyVc = true;
+                        }
+                    }
+
+                    if (!isInAnyVc) { // not in vc
+                        time++;
+                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                            // leeway for upload past the time limit
+                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
+                                printlnTime("It's update time!");
+                                File botJar = new File("bot.jar");
+                                ignoreFiles = botJar.delete();
+                                ignoreFiles = updateFile.renameTo(botJar);
+                                killMain();
+                            }
+                        }
+                    } else { // in a vc
+                        time = 0;
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(task, 0, 1000);
         } catch (Exception e) {
             e.fillInStackTrace();
         }
@@ -395,7 +401,8 @@ public class Main extends ListenerAdapter {
         try {
             logger.write(finalMessage + "\n");
             logger.flush();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
@@ -438,10 +445,9 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
-        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (event.getChannelLeft() == null) {
+            return;
             // GuildVoiceJoinEvent
-
         } else if (event.getChannelJoined() == null) {
             // GuildVoiceLeaveEvent
             if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
@@ -580,7 +586,9 @@ public class Main extends ListenerAdapter {
         SaveConfigs();
         try {
             Thread.sleep(1000);
-        } catch (Exception e){e.fillInStackTrace();}
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
         System.exit(0);
     }
 

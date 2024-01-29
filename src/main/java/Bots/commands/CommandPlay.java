@@ -112,8 +112,8 @@ public class CommandPlay extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "Music";
+    public Category getCategory() {
+        return Category.Music;
     }
 
     @Override

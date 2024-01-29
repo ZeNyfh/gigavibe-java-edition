@@ -14,8 +14,8 @@ public class CommandPing extends BaseCommand {
     }
 
     @Override
-    public String getCategory() {
-        return "General";
+    public Category getCategory() {
+        return Category.General;
     }
 
     @Override
