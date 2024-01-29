@@ -18,6 +18,10 @@ import java.util.function.Consumer;
 
 import static Bots.Main.botPrefix;
 
+// TODO: Purge this file and re-make the system to be better
+// (Basically, give the queueing responsibility back to the code that calls this)
+// (This would allow code to call setEphemeral and whatever as it likes)
+
 /**
  * An extension of the MessageReceivedEvent that provides generally useful attributes for commands.
  * Can take either a SlashCommandInteractionEvent or MessageReceivedEvent as the input
@@ -131,14 +135,21 @@ public class MessageEvent {
         return isSlash() && ((SlashCommandInteractionEvent) this.coreEvent).isAcknowledged();
     }
 
-    public void deferReply() {
+    public void deferReply(boolean ephemereal) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).deferReply().queue();
+            ((SlashCommandInteractionEvent) this.coreEvent).deferReply(ephemereal).queue();
         }
     }
+    public void deferReply() {
+        deferReply(false);
+    }
+
     public void reply(Consumer<MessageEvent.Response> lambda, String s) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            if (isAcknowledged())
+                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginal(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            else
+                ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
@@ -149,7 +160,11 @@ public class MessageEvent {
 
     public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            if (isAcknowledged())
+                // TODO: This voids any extra embeds provided, that is bad. We should really re-design the entire flow of this but not right now please
+                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalEmbeds(embed).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            else
+                ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
@@ -160,7 +175,10 @@ public class MessageEvent {
 
     public void replyFiles(Consumer<MessageEvent.Response> lambda, FileUpload... files) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            if (isAcknowledged())
+                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalAttachments(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            else
+                ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
