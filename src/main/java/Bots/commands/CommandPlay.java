@@ -79,9 +79,6 @@ public class CommandPlay extends BaseCommand {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
                 }
             }
-            if (event.isSlash()) {
-                event.reply(MessageEvent.Response::delete, ".");
-            }
             return;
         }
         String link;
