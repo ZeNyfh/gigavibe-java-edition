@@ -14,4 +14,3 @@ out/artifacts/bot_jar/bot.jar
 *.jar
 logs/*
 start.sh
-bot.iml
