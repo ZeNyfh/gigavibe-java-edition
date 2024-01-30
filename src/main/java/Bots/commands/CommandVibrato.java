@@ -56,7 +56,7 @@ public class CommandVibrato extends BaseCommand {
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
-        float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
+        float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
         event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + ".\n\n*1 is the default value.*"));
         VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato);
         vibrato.setFrequency(value);
