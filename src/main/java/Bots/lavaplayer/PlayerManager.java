@@ -177,7 +177,6 @@ public class PlayerManager {
 
     @Nullable
     public String getThumbURL(AudioTrack track) {
-        if (!track.getInfo().artworkUrl.isEmpty()) return track.getInfo().artworkUrl;
         URL url = null;
         Pattern pattern = null;
         String site = "";
