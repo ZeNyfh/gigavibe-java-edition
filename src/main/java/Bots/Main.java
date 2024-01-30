@@ -2,6 +2,10 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+import com.github.natanbc.lavadsp.tremolo.TremoloPcmAudioFilter;
+import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
+import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -67,6 +71,12 @@ public class Main extends ListenerAdapter {
     public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    public static HashMap<Long, HashMap<filters, AudioFilter>> guildFilters = new HashMap<>();
+
+    public static enum filters {
+        Vibrato, Timescale, Tremolo
+    }
+
     public static TimerTask task;
 
     public static Timer timer;
@@ -205,8 +215,19 @@ public class Main extends ListenerAdapter {
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
+            cleanUpAudioPlayer(guild);
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
+
+            // audio filter stuff
+            PlayerManager.getInstance().getMusicManager(guild).audioPlayer.setFilterFactory((track, format, output) -> {
+                HashMap<filters, AudioFilter> filterMap = new HashMap<>();
+                filterMap.put(filters.Vibrato, new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate));
+                filterMap.put(filters.Timescale, new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate));
+                filterMap.put(filters.Tremolo, new TremoloPcmAudioFilter(output, format.channelCount, format.sampleRate));
+                guildFilters.put(guild.getIdLong(), filterMap);
+                return new ArrayList<>(filterMap.values());
+            });
         }
 
         try {
@@ -504,7 +525,7 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public void cleanUpAudioPlayer(Guild guild) {
+    public static void cleanUpAudioPlayer(Guild guild) {
         Long id = guild.getIdLong();
         GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
         String stringID = id.toString();
@@ -517,6 +538,14 @@ public class Main extends ListenerAdapter {
         manager.audioPlayer.checkCleanup(0);
         guild.getAudioManager().closeAudioConnection();
         clearVotes(id);
+        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Vibrato);
+        vibrato.setFrequency(1);
+        vibrato.setDepth(1);
+        vibrato.flush();
+        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Timescale);
+        timescale.setPitch(1);
+        timescale.setSpeed(1);
+        timescale.flush();
     }
 
     @Override

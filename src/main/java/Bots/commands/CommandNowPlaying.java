@@ -4,6 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -62,14 +63,16 @@ public class CommandNowPlaying extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
-        long totalTime = audioPlayer.getPlayingTrack().getDuration();
+        double totalTime = audioPlayer.getPlayingTrack().getDuration();
+        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale);
+        totalTime = totalTime / timescale.getSpeed();
         String totalTimeText;
         if (totalTime > 432000000) { // 5 days
             totalTimeText = "Unknown"; //Assume malformed
         } else {
-            totalTimeText = toSimpleTimestamp(totalTime);
+            totalTimeText = toSimpleTimestamp((long) totalTime);
         }
-        int trackLocation = Math.toIntExact(Math.round(((double) totalTime - trackPos) / totalTime * 20d)); //WHY DOES (double) MATTER -9382
+        int trackLocation = Math.toIntExact(Math.round((totalTime - trackPos) / totalTime * 20d));
         String barText = "";
         try {
             barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
