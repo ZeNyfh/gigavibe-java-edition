@@ -214,7 +214,6 @@ public class Main extends ListenerAdapter {
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
-            cleanUpAudioPlayer(guild);
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
 
@@ -223,7 +222,6 @@ public class Main extends ListenerAdapter {
                 HashMap<filters, AudioFilter> filterMap = new HashMap<>();
                 filterMap.put(filters.Vibrato, new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate));
                 filterMap.put(filters.Timescale, new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate));
-                filterMap.put(filters.Tremolo, new TremoloPcmAudioFilter(output, format.channelCount, format.sampleRate));
                 guildFilters.put(guild.getIdLong(), filterMap);
                 return new ArrayList<>(filterMap.values());
             });
@@ -537,16 +535,6 @@ public class Main extends ListenerAdapter {
         manager.audioPlayer.checkCleanup(0);
         guild.getAudioManager().closeAudioConnection();
         clearVotes(id);
-        try {
-            VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Vibrato);
-            vibrato.setFrequency(1);
-            vibrato.setDepth(1);
-            vibrato.flush();
-            TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Timescale);
-            timescale.setPitch(1);
-            timescale.setSpeed(1);
-            timescale.flush();
-        } catch (Exception ignored) {}
     }
     @Override
     public void onException(@NotNull ExceptionEvent event) {
