@@ -66,8 +66,8 @@ public class CommandVibrato extends BaseCommand {
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.NUMBER, "Frequency", "The frequency at which the track \"bounces\", supports decimals.", false);
-        slashCommand.addOption(OptionType.NUMBER, "Depth", "How powerful the \"bounce\" will be, supports decimals.", false);
+        slashCommand.addOption(OptionType.NUMBER, "frequency", "The frequency at which the track \"bounces\", supports decimals.", false);
+        slashCommand.addOption(OptionType.NUMBER, "depth", "How powerful the \"bounce\" will be, supports decimals.", false);
     }
 
     @Override

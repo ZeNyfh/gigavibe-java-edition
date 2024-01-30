@@ -58,7 +58,7 @@ public class CommandSpeed extends BaseCommand {
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.NUMBER, "Tempo", "The speed at which the track will playback, supports decimals.", false);
+        slashCommand.addOption(OptionType.NUMBER, "tempo", "The speed at which the track will playback, supports decimals.", false);
     }
 
     @Override
