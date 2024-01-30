@@ -54,8 +54,19 @@
 
         <dependency>
             <groupId>com.github.topi314.lavasrc</groupId>
-            <artifactId>lavasrc-plugin</artifactId>
-            <version>3.2.6</version>
+            <artifactId>lavasrc</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.topi314.lavasrc</groupId>
+            <artifactId>protocol-jvm</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.JustRed23</groupId>
+            <artifactId>lavadsp</artifactId>
+            <version>0.7.7-1</version>
         </dependency>
     </dependencies>
 
@@ -73,6 +84,11 @@
             <id>jcenter</id>
             <name>jcenter</name>
             <url>https://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
+            <id>TopiWTF-releases</id>
+            <name>Topis Maven Repo</name>
+            <url>https://maven.topi.wtf/releases</url>
         </repository>
     </repositories>
 
