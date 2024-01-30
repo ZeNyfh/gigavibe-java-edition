@@ -71,11 +71,10 @@ public class Main extends ListenerAdapter {
     public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    public static HashMap<Long, HashMap<filters, AudioFilter>> guildFilters = new HashMap<>();
-
     public static enum filters {
         Vibrato, Timescale, Tremolo
     }
+    public static HashMap<Long, HashMap<filters, AudioFilter>> guildFilters = new HashMap<>();
 
     public static TimerTask task;
 
@@ -538,16 +537,17 @@ public class Main extends ListenerAdapter {
         manager.audioPlayer.checkCleanup(0);
         guild.getAudioManager().closeAudioConnection();
         clearVotes(id);
-        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Vibrato);
-        vibrato.setFrequency(1);
-        vibrato.setDepth(1);
-        vibrato.flush();
-        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Timescale);
-        timescale.setPitch(1);
-        timescale.setSpeed(1);
-        timescale.flush();
+        try {
+            VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Vibrato);
+            vibrato.setFrequency(1);
+            vibrato.setDepth(1);
+            vibrato.flush();
+            TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(guild.getIdLong()).get(filters.Timescale);
+            timescale.setPitch(1);
+            timescale.setSpeed(1);
+            timescale.flush();
+        } catch (Exception ignored) {}
     }
-
     @Override
     public void onException(@NotNull ExceptionEvent event) {
         printlnTime(Arrays.toString(event.getCause().getStackTrace()));
