@@ -1,7 +1,7 @@
 package Bots.lavaplayer;
 
 import Bots.MessageEvent;
-import com.github.topisenpai.lavasrc.spotify.SpotifySourceManager;
+import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -177,6 +177,7 @@ public class PlayerManager {
 
     @Nullable
     public String getThumbURL(AudioTrack track) {
+        if (!track.getInfo().artworkUrl.isEmpty()) return track.getInfo().artworkUrl;
         URL url = null;
         Pattern pattern = null;
         String site = "";
