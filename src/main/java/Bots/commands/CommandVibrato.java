@@ -46,7 +46,6 @@ public class CommandVibrato extends BaseCommand {
             VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato); // this needs to be redefined many times due to how it works.
             vibrato.setFrequency(1);
             vibrato.setDepth(1);
-            vibrato.flush();
             return;
         }
 
@@ -61,7 +60,6 @@ public class CommandVibrato extends BaseCommand {
         VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato);
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        vibrato.flush();
     }
 
     @Override

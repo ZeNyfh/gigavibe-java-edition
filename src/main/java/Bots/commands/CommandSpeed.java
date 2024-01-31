@@ -45,7 +45,6 @@ public class CommandSpeed extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the speed back to 1."));
             TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale); // this needs to be redefined many times due to how it works.
             timescale.setSpeed(1);
-            timescale.flush();
             return;
         }
 
@@ -53,7 +52,6 @@ public class CommandSpeed extends BaseCommand {
         event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the playback speed of the track to " + value + "x."));
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale);
         timescale.setSpeed(value);
-        timescale.flush();
     }
 
     @Override
