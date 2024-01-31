@@ -27,6 +27,7 @@ public class CommandUpdateSlashCommands extends BaseCommand {
             }
             guild.updateCommands().addCommands(data).queue();
         }
+        printlnTime("Finished updating slash commands");
     }
 
     @Override
