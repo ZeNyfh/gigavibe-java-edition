@@ -10,12 +10,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static Bots.Main.botColour;
-import static Bots.Main.commandUsageTracker;
+import static Bots.Main.*;
 
 public class CommandSendUsage extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws IOException {
+        if (event.getUser().getIdLong() != 211789389401948160L && event.getUser().getIdLong() != 260016427900076033L) {
+            event.replyEmbeds(createQuickError("You do not have the permissions for this."));
+            return;
+        }
         Long[] values = (Long[]) commandUsageTracker.values().toArray(new Long[0]);
         Arrays.sort(values);
         HashMap<Long, List<String>> InverseReference = new HashMap<>();

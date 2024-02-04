@@ -15,6 +15,10 @@ import static Bots.Main.*;
 public class CommandUpdateSlashCommands extends BaseCommand {
     @Override
     public void execute(MessageEvent event) throws Exception {
+        if (event.getUser().getIdLong() != 211789389401948160L && event.getUser().getIdLong() != 260016427900076033L) {
+            event.replyEmbeds(createQuickError("You do not have the permissions for this."));
+            return;
+        }
         event.replyEmbeds(createQuickEmbed("WARNING", "This command will take some time and *may* cause lag."));
         printlnTime("Starting slash command updating, expect red text in the console.");
         for (Guild guild : event.getJDA().getGuilds()) {
