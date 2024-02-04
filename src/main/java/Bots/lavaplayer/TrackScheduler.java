@@ -6,7 +6,6 @@ import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.concurrent.BlockingQueue;
@@ -37,7 +36,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        TextChannel userData = (TextChannel) track.getUserData();
+        GuildMessageChannelUnion userData = (GuildMessageChannelUnion) track.getUserData();
         clearVotes(userData.getGuild().getIdLong());
         if (LoopGuilds.contains(userData.getGuild().getId())) {
             if (endReason.mayStartNext) {
@@ -99,7 +98,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     private void onTrackStuck(AudioTrack nextTrack) {
-        TextChannel userData = (TextChannel) nextTrack.getUserData();
+        GuildMessageChannelUnion userData = (GuildMessageChannelUnion) nextTrack.getUserData();
         clearVotes(userData.getGuild().getIdLong());
         userData.sendMessageEmbeds(createQuickError("Track got stuck, skipping.")).queue();
         nextTrack();
