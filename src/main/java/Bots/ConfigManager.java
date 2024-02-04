@@ -165,7 +165,6 @@ public class ConfigManager {
                     return CreateConfig(Filename);
                 } catch (IOException exception) {
                     printlnTime(exception.toString());
-                    exception.fillInStackTrace();
                 }
             }
         }
@@ -182,12 +181,14 @@ public class ConfigManager {
                 try {
                     return ReadGuildConfig(GuildID);
                 } catch (IOException exception) {
+                    printlnTime("Failed to read the guild config for " + GuildID);
                     printlnTime(exception.toString());
                 }
             } else { //It doesn't exist
                 try {
                     return CreateGuildConfig(GuildID);
                 } catch (IOException exception) {
+                    printlnTime("Failed to create a guild config for " + GuildID);
                     printlnTime(exception.toString());
                 }
             }
@@ -205,7 +206,7 @@ public class ConfigManager {
                     WriteConfig("failed/" + Filename + "_" + System.currentTimeMillis(), config);
                 } catch (IOException exception) {
                     printlnTime("Unable to save failed config for Config " + Filename + " (unsurprisingly)");
-                    exception.fillInStackTrace();
+                    exception.printStackTrace();
                 }
                 try { //Force a fresh fetch
                     if (Filename.getClass() == String.class) {
@@ -215,14 +216,14 @@ public class ConfigManager {
                     }
                 } catch (IOException exception) {
                     printlnTime("Unable to load the existing non-screwed version for Config " + Filename);
-                    exception.fillInStackTrace();
+                    exception.printStackTrace();
                 }
             } else {
                 try {
                     WriteConfig(Filename, config);
                 } catch (IOException exception) {
                     printlnTime("Unable to save config for Config " + Filename);
-                    exception.fillInStackTrace();
+                    exception.printStackTrace();
                 }
             }
         }

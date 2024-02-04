@@ -29,7 +29,7 @@ public class CommandNowPlaying extends BaseCommand {
             BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
             streamTitle = ffprobeInput.readLine();
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
             streamTitle = "Unknown";
         }
         if (Objects.equals(streamTitle, "")) {

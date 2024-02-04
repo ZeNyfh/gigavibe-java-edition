@@ -144,7 +144,7 @@ public class Main extends ListenerAdapter {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
             printlnTime("Colour was invalid.");
-            e.fillInStackTrace();
+            e.printStackTrace();
             return;
         }
 
@@ -263,7 +263,7 @@ public class Main extends ListenerAdapter {
             };
             timer.scheduleAtFixedRate(task, 0, 1000);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -409,7 +409,7 @@ public class Main extends ListenerAdapter {
                 printlnTime("Error deleting file.");
             }
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -567,7 +567,7 @@ public class Main extends ListenerAdapter {
             try {
                 Command.execute(new MessageEvent(event));
             } catch (Exception e) {
-                e.fillInStackTrace();
+                e.printStackTrace();
             }
             return true;
         }
@@ -596,7 +596,7 @@ public class Main extends ListenerAdapter {
             try {
                 Command.execute(new MessageEvent(event));
             } catch (Exception e) {
-                e.fillInStackTrace();
+                e.printStackTrace();
             }
             return true;
         }
@@ -608,7 +608,7 @@ public class Main extends ListenerAdapter {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
         System.exit(0);
     }
