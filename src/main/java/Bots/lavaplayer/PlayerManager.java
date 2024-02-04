@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,28 +112,31 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setColor(botColour);
+                boolean autoplaying = AutoplayGuilds.contains(commandChannel.getGuild().getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    String author = (tracks.get(0).getInfo().author);
+                    AudioTrack track = tracks.get(0);
+                    if (autoplaying) track = tracks.get(ThreadLocalRandom.current().nextInt(2, 4)); // this is to prevent looping tracks
+                    String author = (track.getInfo().author);
                     String length;
-                    if (tracks.get(0).getInfo().length > 432000000 || tracks.get(0).getInfo().length <= 1) { // 5 days
+                    if (track.getInfo().length > 432000000 || track.getInfo().length <= 1) { // 5 days
                         length = "Unknown";
                     } else {
-                        length = toTimestamp((tracks.get(0).getInfo().length));
+                        length = toTimestamp((track.getInfo().length));
                     }
-                    if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:")) {
-                        musicManager.scheduler.queue(tracks.get(0));
+                    if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
+                        musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            embed.setThumbnail(getThumbURL(tracks.get(0)));
-                            embed.setTitle((tracks.get(0).getInfo().title), (tracks.get(0).getInfo().uri));
+                            embed.setThumbnail(getThumbURL(track));
+                            embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                             message.replyEmbeds(embed.build());
                         }
                     } else {
                         long lengthSeconds = 0;
-                        for (AudioTrack track : tracks) {
-                            lengthSeconds = (lengthSeconds + track.getInfo().length);
-                            musicManager.scheduler.queue(track);
+                        for (AudioTrack audioTrack : tracks) {
+                            lengthSeconds = (lengthSeconds + audioTrack.getInfo().length);
+                            musicManager.scheduler.queue(audioTrack);
                         }
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
                         embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
@@ -152,8 +157,8 @@ public class PlayerManager {
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
                         message.replyEmbeds(embed.build());
                     }
-                    for (AudioTrack track : tracks) {
-                        track.setUserData(commandChannel);
+                    for (AudioTrack audioTrack : tracks) {
+                        audioTrack.setUserData(commandChannel);
                     }
                 }
             }

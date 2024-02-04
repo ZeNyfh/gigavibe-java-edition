@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,14 @@ public class CommandSkip extends BaseCommand {
         currentVotes.add(event.getMember());
         if (currentVotes.size() >= VCMembers.size() / 2) {
             clearVotes(event.getGuild().getIdLong());
+            if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+                if (!audioPlayer.getPlayingTrack().getInfo().uri.toLowerCase().contains("youtube")) {
+                    event.replyEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay."));
+                }
+                String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
+                String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioUrl, true);
+            }
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the track."));

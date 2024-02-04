@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -52,6 +53,18 @@ public class TrackScheduler extends AudioEventAdapter {
                 AudioTrack loopTrack = track.makeClone();
                 nextTrack();
                 queue(loopTrack);
+                return;
+            }
+        }
+        if (AutoplayGuilds.contains(userData.getGuild().getIdLong())) {
+            if (endReason.mayStartNext) {
+                if (!track.getInfo().uri.toLowerCase().contains("youtube")) {
+                    userData.sendMessageEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay.")).queue();
+                    return;
+                }
+                String trackId = track.getInfo().identifier;
+                String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
+                PlayerManager.getInstance().loadAndPlay((GuildMessageChannelUnion) userData, radioUrl, true);
                 return;
             }
         }

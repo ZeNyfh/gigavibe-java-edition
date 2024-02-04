@@ -64,14 +64,15 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
     public static List<String> LoopGuilds = new ArrayList<>();
+    public static List<Long> AutoplayGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static boolean ignoreFiles = false;
     public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    public static enum filters {
-        Vibrato, Timescale, Tremolo
+    public enum filters {
+        Vibrato, Timescale
     }
     public static HashMap<Long, HashMap<filters, AudioFilter>> guildFilters = new HashMap<>();
 

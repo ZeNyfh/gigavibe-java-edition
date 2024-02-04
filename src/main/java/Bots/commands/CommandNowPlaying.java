@@ -114,6 +114,11 @@ public class CommandNowPlaying extends BaseCommand {
         } else {
             embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
         }
+        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+            embed.addField("♾\uFE0F Auto playing:", "✅ **True**", true);
+        } else {
+            embed.addField("♾\uFE0F Auto playing:", "❌ **False**", true);
+        }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
         event.replyEmbeds(embed.build());

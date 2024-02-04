@@ -46,6 +46,11 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
+        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+            AutoplayGuilds.remove(event.getGuild().getIdLong());
+            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying due to manual track play."));
+        }
+
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
             // txt file custom playlists
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {

@@ -53,6 +53,14 @@ public class CommandForceSkip extends BaseCommand {
             event.replyEmbeds(createQuickError("No tracks are playing right now."));
             return;
         }
+        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+            if (!audioPlayer.getPlayingTrack().getInfo().uri.toLowerCase().contains("youtube")) {
+                event.replyEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay."));
+            }
+            String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
+            String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioUrl, true);
+        }
         if (event.getArgs().length == 1) {
             if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
