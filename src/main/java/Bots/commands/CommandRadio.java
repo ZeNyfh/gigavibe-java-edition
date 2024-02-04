@@ -24,13 +24,13 @@ import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
     public static String getRadio(String search) throws IOException {
-        URL url = null;
+        URL url;
         try {
             url = new URL("https://www.internet-radio.com/search/?radio=" + search);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
+            return "None";
         }
-        assert url != null;
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         StringBuilder builder = new StringBuilder();
@@ -44,7 +44,7 @@ public class CommandRadio extends BaseCommand {
         Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
         Matcher matcher = pattern.matcher(builder.toString());
         if (matcher.find()) {
-            return (matcher.group(1));
+            return matcher.group(1);
         } else {
             return "None";
         }
@@ -71,44 +71,25 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) throws IOException {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(botColour);
-        eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
-        getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
-        eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
-        eb.setFooter("Use \"" + readableBotPrefix + "radio <Radio Name>\" to play a radio station.");
-        if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"), eb.build());
-            eb.clear();
+        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
             return;
         }
-        StringBuilder arg = new StringBuilder(event.getArgs()[1]);
-        String radioURL = null;
-        if (event.getArgs()[1].equalsIgnoreCase("search")) {
-            if (event.getArgs().length == 2) {
-                event.replyEmbeds(createQuickError("No search term given."));
-                return;
+
+        if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(botColour);
+            eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
+            getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
+            eb.appendDescription("\n*Or use `" + botPrefix + "radio search <String>`*");
+            eb.setFooter("Use \"" + readableBotPrefix + "radio <Radio Name>\" to play a radio station.");
+            if (event.getArgs().length == 1) {
+                event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"), eb.build());
+            } else {
+                event.replyEmbeds(eb.build());
             }
-            arg = new StringBuilder();
-            List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
-            otherArgs.remove(0);
-            otherArgs.remove(0);
-            int i = 0;
-            for (String string : otherArgs) {
-                i++;
-                if (otherArgs.size() > i) {
-                    arg.append(string).append("+");
-                } else {
-                    arg.append(string);
-                }
-            }
-            radioURL = getRadio(arg.toString());
-        }
-        if (arg.toString().equalsIgnoreCase("list")) {
-            event.replyEmbeds(eb.build());
-            eb.clear();
             return;
         }
+
         final AudioManager audioManager = event.getGuild().getAudioManager();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert memberState != null;
@@ -116,45 +97,59 @@ public class CommandRadio extends BaseCommand {
             event.replyEmbeds(createQuickError("you arent in a vc."));
             return;
         }
-        final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
-        if (radioURL != null) {
-            try {
-                audioManager.openAudioConnection(memberChannel);
-            } catch (InsufficientPermissionException e) {
-                event.replyEmbeds(createQuickError("The bot can't access your channel"));
+        try {
+            audioManager.openAudioConnection(memberState.getChannel());
+        } catch (InsufficientPermissionException e) {
+            event.replyEmbeds(createQuickError("The bot can't access your channel"));
+            return;
+        }
+        event.deferReply(); //Give us time to think
+
+        String radioURL = null;
+        StringBuilder radioSearchTerm = new StringBuilder();
+        if (event.getArgs()[1].equalsIgnoreCase("search")) {
+            if (event.getArgs().length == 2) {
+                event.replyEmbeds(createQuickError("No search term given."));
                 return;
             }
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, true);
+            List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
+            otherArgs.remove(0);
+            otherArgs.remove(0);
+            int i = 0;
+            for (String string : otherArgs) {
+                i++;
+                if (otherArgs.size() > i) {
+                    radioSearchTerm.append(string).append("+");
+                } else {
+                    radioSearchTerm.append(string);
+                }
+            }
+            radioURL = getRadio(radioSearchTerm.toString());
+        }
+        if (radioURL != null) {
+            if (radioURL.equals("None")) {
+                event.replyEmbeds(createQuickError("Couldn't find a radio station with the given name"));
+            } else {
+                //TODO: Consider somehow getting the real name of the station rather than using the search term that found it
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, false);
+                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + radioSearchTerm + "](" + radioURL + ")**"));
+            }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(wantedRadio)) {
-                    if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
-                        return;
-                    }
-                    try {
-                        audioManager.openAudioConnection(memberChannel);
-                    } catch (InsufficientPermissionException e) {
-                        event.replyEmbeds(createQuickError("The bot can't access your channel"));
-                        return;
-                    }
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), tempMap.getValue(), false);
                     event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }
             }
             event.replyEmbeds(createQuickError("Not a valid radio station."));
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.STRING, "search", "Searches for a radio station or lists a couple if blank.", false);
+        slashCommand.addOption(OptionType.STRING, "source", "Play a radio station. Prefix with \"search\" to search for a custom station", false);
     }
 
     @Override
@@ -174,7 +169,7 @@ public class CommandRadio extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Plays a radio station.";
+        return "Plays a radio station. Specify nothing for a list of some available radio stations";
     }
 
     @Override
