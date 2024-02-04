@@ -2,6 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Objects;
 
@@ -17,7 +18,12 @@ public class CommandJoin extends BaseCommand {
             event.replyEmbeds(createQuickError("You are not in a vc."));
             return;
         }
-        event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+        try {
+            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+        } catch (InsufficientPermissionException e) {
+            event.replyEmbeds(createQuickError("The bot can't access your channel"));
+            return;
+        }
         event.replyEmbeds(createQuickEmbed(" ", "✅ Joined your vc."));
 
     }

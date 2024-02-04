@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -54,7 +55,12 @@ public class CommandPlay extends BaseCommand {
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
             // txt file custom playlists
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
-                audioManager.openAudioConnection(memberChannel);
+                try {
+                    audioManager.openAudioConnection(memberChannel);
+                } catch (InsufficientPermissionException e) {
+                    event.replyEmbeds(createQuickError("The bot can't access your channel"));
+                    return;
+                }
                 URL url = new URL(event.getAttachments().get(0).getUrl());
                 URLConnection connection = url.openConnection();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -72,7 +78,12 @@ public class CommandPlay extends BaseCommand {
 
             // audio/video attachments
             List<Message.Attachment> links = event.getAttachments();
-            audioManager.openAudioConnection(memberChannel);
+            try {
+                audioManager.openAudioConnection(memberChannel);
+            } catch (InsufficientPermissionException e) {
+                event.replyEmbeds(createQuickError("The bot can't access your channel"));
+                return;
+            }
             boolean sendEmbedBool = true;
             if (links.size() > 1) {
                 event.reply("Queued " + links.size() + " tracks from attachments.");
@@ -105,7 +116,12 @@ public class CommandPlay extends BaseCommand {
             link = "ytsearch: " + link;
         }
         if (!selfState.inAudioChannel()) {
-            audioManager.openAudioConnection(memberChannel);
+            try {
+                audioManager.openAudioConnection(memberChannel);
+            } catch (InsufficientPermissionException e) {
+                event.replyEmbeds(createQuickError("The bot can't access your channel"));
+                return;
+            }
         } else if (memberState.getChannel() != selfState.getChannel()) {
             event.replyEmbeds(createQuickError("you arent in the same vc."));
             return;

@@ -6,6 +6,7 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -117,7 +118,12 @@ public class CommandRadio extends BaseCommand {
         }
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (radioURL != null) {
-            audioManager.openAudioConnection(memberChannel);
+            try {
+                audioManager.openAudioConnection(memberChannel);
+            } catch (InsufficientPermissionException e) {
+                event.replyEmbeds(createQuickError("The bot can't access your channel"));
+                return;
+            }
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, true);
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
@@ -126,7 +132,12 @@ public class CommandRadio extends BaseCommand {
                     if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
                         return;
                     }
-                    audioManager.openAudioConnection(memberChannel);
+                    try {
+                        audioManager.openAudioConnection(memberChannel);
+                    } catch (InsufficientPermissionException e) {
+                        event.replyEmbeds(createQuickError("The bot can't access your channel"));
+                        return;
+                    }
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), tempMap.getValue(), false);
                     event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
