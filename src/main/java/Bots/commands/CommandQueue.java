@@ -92,7 +92,7 @@ public class CommandQueue extends BaseCommand {
         String[] args = event.getArgs();
         if (args.length == 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError("Did you mean to use **clearq**?"));
+                event.replyEmbeds(createQuickError("Did you mean to use **clearqueue**?"));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
