@@ -103,12 +103,12 @@ public class Main extends ListenerAdapter {
         ignoreFiles = new File("update/").mkdir();
         commandUsageTracker = GetConfig("usage-stats");
         ignoreFiles = new File("logs/").mkdir();
-        File logFile = new File("logs/log.txt");
+        File logFile = new File("logs/log.log");
         if (logFile.length() != 0) {
-            ignoreFiles = logFile.renameTo(new File("logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".txt"));
+            ignoreFiles = logFile.renameTo(new File("logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".log"));
         }
         ignoreFiles = logFile.createNewFile();
-        logger = new FileWriter("logs/log.txt");
+        logger = new FileWriter("logs/log.log");
         Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File env = new File(".env");
