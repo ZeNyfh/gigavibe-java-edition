@@ -52,15 +52,21 @@ public class CommandPlay extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying due to manual track play."));
         }
 
+        if (memberState.getChannel() != selfState.getChannel()) {
+            event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
+            return;
+        }
+
+        try {
+            audioManager.openAudioConnection(memberChannel);
+        } catch (InsufficientPermissionException e) {
+            event.replyEmbeds(createQuickError("The bot can't access your channel"));
+            return;
+        }
+
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
-            // txt file custom playlists
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
-                try {
-                    audioManager.openAudioConnection(memberChannel);
-                } catch (InsufficientPermissionException e) {
-                    event.replyEmbeds(createQuickError("The bot can't access your channel"));
-                    return;
-                }
+                // txt file custom playlists
                 URL url = new URL(event.getAttachments().get(0).getUrl());
                 URLConnection connection = url.openConnection();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -70,66 +76,47 @@ public class CommandPlay extends BaseCommand {
                         PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
                     }
                     event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
-                    return;
                 } catch (Exception ignored) {
-                    event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks."));
                 }
-            }
-
-            // audio/video attachments
-            List<Message.Attachment> links = event.getAttachments();
-            try {
-                audioManager.openAudioConnection(memberChannel);
-            } catch (InsufficientPermissionException e) {
-                event.replyEmbeds(createQuickError("The bot can't access your channel"));
-                return;
-            }
-            boolean sendEmbedBool = true;
-            if (links.size() > 1) {
-                event.reply("Queued " + links.size() + " tracks from attachments.");
-            }
-            for (Message.Attachment attachment : links) {
-                try {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), attachment.getUrl(), sendEmbedBool);
+            } else {
+                // normal audio/video attachments
+                List<Message.Attachment> links = event.getAttachments();
+                boolean sendEmbedBool = true;
+                if (links.size() > 1) {
+                    event.reply("Queued " + links.size() + " tracks from attachments.");
                     sendEmbedBool = false;
-                } catch (Exception ignored) {
-                    event.replyEmbeds(createQuickError("Something went wrong when loading the track."));
                 }
-            }
-            return;
-        }
-        String link;
-        try {
-            link = String.valueOf(args[1]);
-        } catch (Exception ignored) {
-            event.replyEmbeds(createQuickError("No arguments given."));
-            return;
-        }
-        if (link.contains("https://") || link.contains("http://")) {
-            if (link.contains("youtube.com/shorts/")) {
-                link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
-            }
-            if (link.contains("youtu.be/")) {
-                link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
+                try {
+                    for (Message.Attachment attachment : links) {
+                        PlayerManager.getInstance().loadAndPlay(event.getChannel(), attachment.getUrl(), sendEmbedBool);
+                        sendEmbedBool = false;
+                    }
+                } catch (Exception ignored) {
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks."));
+                }
             }
         } else {
-            link = "ytsearch: " + link;
-        }
-        if (!selfState.inAudioChannel()) {
-            try {
-                audioManager.openAudioConnection(memberChannel);
-            } catch (InsufficientPermissionException e) {
-                event.replyEmbeds(createQuickError("The bot can't access your channel"));
+            if (args.length == 1) {
+                event.replyEmbeds(createQuickError("No arguments given."));
                 return;
             }
-        } else if (memberState.getChannel() != selfState.getChannel()) {
-            event.replyEmbeds(createQuickError("you arent in the same vc."));
-            return;
-        }
-        try {
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
-        } catch (FriendlyException ignored) {
-            event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
+            String link = String.valueOf(args[1]);
+            if (link.contains("https://") || link.contains("http://")) {
+                if (link.contains("youtube.com/shorts/")) {
+                    link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
+                }
+                if (link.contains("youtu.be/")) {
+                    link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
+                }
+            } else {
+                link = "ytsearch: " + link;
+            }
+            try {
+                PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
+            } catch (FriendlyException ignored) {
+                event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
+            }
         }
     }
 
@@ -145,7 +132,7 @@ public class CommandPlay extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Plays songs or playlists from many sources including yt, soundcloud spotify and discord/http urls.";
+        return "Plays songs and playlists from sources such as yt, soundcloud, spotify, and discord/http urls.";
     }
 
     @Override
