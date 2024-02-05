@@ -38,9 +38,8 @@ public class CommandPlay extends BaseCommand {
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
-        GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
+        GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
-        assert memberState != null;
         final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
         if (!memberState.inAudioChannel()) {
             event.replyEmbeds(createQuickError("You aren't in a vc."));
@@ -52,7 +51,7 @@ public class CommandPlay extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying due to manual track play."));
         }
 
-        if (memberState.getChannel() != selfState.getChannel()) {
+        if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
             event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
             return;
         }
