@@ -91,10 +91,14 @@ public class CommandRadio extends BaseCommand {
         }
 
         final AudioManager audioManager = event.getGuild().getAudioManager();
-        GuildVoiceState memberState = Objects.requireNonNull(event.getMember()).getVoiceState();
-        assert memberState != null;
+        GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
+        GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (!memberState.inAudioChannel()) {
             event.replyEmbeds(createQuickError("you arent in a vc."));
+            return;
+        }
+        if (selfState.getChannel() != null && selfState.getChannel() != memberState.getChannel()) {
+            event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
             return;
         }
         try {
