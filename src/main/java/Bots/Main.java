@@ -558,7 +558,7 @@ public class Main extends ListenerAdapter {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
             if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.deleteOriginal().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
                 return false;
             }
             //run command
