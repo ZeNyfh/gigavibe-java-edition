@@ -485,6 +485,7 @@ public class Main extends ListenerAdapter {
                 List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
                 currentVotes.remove(event.getMember());
                 //TODO: The entire vote should not be restarted because 1 person left
+                // (Complications with re-processing the count after removing a vote)
                 clearVotes(event.getGuild().getIdLong());
             } else { //we left
                 cleanUpAudioPlayer(event.getGuild());
@@ -492,6 +493,7 @@ public class Main extends ListenerAdapter {
             }
         } else {
             // GuildVoiceMoveEvent
+            clearVotes(event.getGuild().getIdLong()); //See the note above about changing this
         }
         GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (voiceState.getChannel() != null) {
