@@ -477,42 +477,21 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event) {
         if (event.getChannelLeft() == null) {
-            return;
             // GuildVoiceJoinEvent
+            return;
         } else if (event.getChannelJoined() == null) {
             // GuildVoiceLeaveEvent
-            if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) {
+            if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) { //someone else left
                 List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
-                if (currentVotes != null) {
-                    currentVotes.remove(event.getMember());
-                    clearVotes(event.getGuild().getIdLong());
-                }
-            }
-            if (event.getMember() == event.getGuild().getSelfMember()) {
+                currentVotes.remove(event.getMember());
+                //TODO: The entire vote should not be restarted because 1 person left
+                clearVotes(event.getGuild().getIdLong());
+            } else { //we left
                 cleanUpAudioPlayer(event.getGuild());
                 return;
-            }
-            AudioChannel botChannel = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel();
-            if (!Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel() || botChannel == null) { // if not in vc, clear for safe measure
-                cleanUpAudioPlayer(event.getGuild());
-                return;
-            }
-            int botChannelMemberCount = 0;
-            for (Member member : botChannel.getMembers()) {
-                if (!member.getUser().isBot()) {
-                    botChannelMemberCount++;
-                }
-            }
-            if (botChannelMemberCount == 0) {
-                cleanUpAudioPlayer(event.getGuild());
             }
         } else {
             // GuildVoiceMoveEvent
-            if (event.getMember().getUser() == event.getJDA().getSelfUser()) {
-                if (Objects.requireNonNull(event.getNewValue()).getMembers().size() == 1) { // assuming the bot is alone there.
-                    cleanUpAudioPlayer(event.getGuild());
-                }
-            }
         }
         GuildVoiceState voiceState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
         if (voiceState.getChannel() != null) {
@@ -523,10 +502,7 @@ public class Main extends ListenerAdapter {
                 }
             }
             if (members == 0) { // If alone
-                try {
-                    cleanUpAudioPlayer(event.getGuild());
-                } catch (Exception ignored) {
-                }
+                cleanUpAudioPlayer(event.getGuild());
             }
         }
     }
