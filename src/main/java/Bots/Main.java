@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -365,15 +366,18 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsDJ(Guild guild, GuildMessageChannelUnion commandChannel, Member member) {
-        int people = 0;
         if (member.getVoiceState() != null && member.getVoiceState().getChannel() != null) {
-            for (Member vcMember : Objects.requireNonNull(Objects.requireNonNull(member.getVoiceState()).getChannel()).getMembers()) {
-                if (!vcMember.getUser().isBot()) {
-                    people++;
+            AudioChannelUnion botChannel = Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel();
+            if (botChannel == null || botChannel == member.getVoiceState().getChannel()) {
+                int people = 0;
+                for (Member vcMember : member.getVoiceState().getChannel().getMembers()) {
+                    if (!vcMember.getUser().isBot()) {
+                        people++;
+                    }
                 }
-            }
-            if (people == 1) { //People alone in a VC are allowed to use VC DJ commands
-                return true;
+                if (people == 1) { //People alone in a VC are allowed to use VC DJ commands
+                    return true;
+                }
             }
         }
         JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
@@ -381,7 +385,7 @@ public class Main extends ListenerAdapter {
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;
         for (Object DJRole : DJRoles) {
-            if (member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRole))) {
+            if ((long) DJRole == guild.getIdLong() || member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRole))) {
                 check = true;
             }
         }

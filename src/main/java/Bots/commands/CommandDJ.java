@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +39,13 @@ public class CommandDJ extends BaseCommand {
             } else {
                 for (Object role : DJRoles) {
                     i++;
-                    String mention = Objects.requireNonNull(event.getJDA().getRoleById((long) role)).getAsMention();
-                    if (i == DJRoles.size()) {
-                        builder.append(mention);
+                    if ((long) role == event.getGuild().getIdLong()) {
+                        builder.append("@everyone"); //edge-case fix
                     } else {
-                        builder.append(mention).append(", ");
+                        builder.append("<@&").append(role).append(">");
+                    }
+                    if (i != DJRoles.size()) {
+                        builder.append(", ");
                     }
                 }
             }
@@ -55,10 +56,9 @@ public class CommandDJ extends BaseCommand {
             } else {
                 for (Object user : DJUsers) {
                     i++;
-                    if (i == DJUsers.size()) {
-                        builder.append(Objects.requireNonNull(event.getJDA().getUserById((Long) user)).getAsMention());
-                    } else {
-                        builder.append(Objects.requireNonNull(event.getJDA().getUserById((Long) user)).getAsMention()).append(", ");
+                    builder.append("<@").append(user).append(">");
+                    if (i != DJUsers.size()) {
+                        builder.append(", ");
                     }
                 }
             }
