@@ -563,15 +563,15 @@ public class Main extends ListenerAdapter {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
             if (ratelimitTime > 0) {
                 event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
-                return false;
-            }
-            //run command
-            String primaryName = Command.getNames()[0];
-            commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-            try {
-                Command.execute(new MessageEvent(event));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                //run command
+                String primaryName = Command.getNames()[0];
+                commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                try {
+                    Command.execute(new MessageEvent(event));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             return true;
         }
@@ -592,15 +592,15 @@ public class Main extends ListenerAdapter {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
             if (ratelimitTime > 0) {
                 event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
-                return false;
-            }
-            //run command
-            String primaryName = Command.getNames()[0];
-            commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-            try {
-                Command.execute(new MessageEvent(event));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                //run command
+                String primaryName = Command.getNames()[0];
+                commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                try {
+                    Command.execute(new MessageEvent(event));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             return true;
         }
