@@ -160,10 +160,12 @@ public class MessageEvent {
 
     public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
         if (isSlash()) {
-            if (isAcknowledged())
-                // TODO: This voids any extra embeds provided, that is bad. We should really re-design the entire flow of this but not right now please
-                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalEmbeds(embed).queue(x -> lambda.accept(new MessageEvent.Response(x)));
-            else
+            if (isAcknowledged()) {
+                List<MessageEmbed> allembeds = new ArrayList<>();
+                allembeds.add(embed);
+                allembeds.addAll(List.of(embeds));
+                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalEmbeds(allembeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            } else
                 ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
