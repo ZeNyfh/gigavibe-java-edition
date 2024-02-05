@@ -24,7 +24,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -68,6 +67,7 @@ public class Main extends ListenerAdapter {
     public static List<Long> AutoplayGuilds = new ArrayList<>();
     public static List<String> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
+    public static List<SlashCommandData> slashCommands = new ArrayList<>();
     public static boolean ignoreFiles = false;
     public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
@@ -86,6 +86,10 @@ public class Main extends ListenerAdapter {
         ratelimitTracker.put(command, new HashMap<>());
         commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
         commands.add(command);
+        SlashCommandData slashCommand = Commands.slash(command.getNames()[0], command.getDescription());
+        command.ProvideOptions(slashCommand);
+        command.slashCommand = slashCommand;
+        slashCommands.add(slashCommand);
         for (String name : command.getNames()) {
             if (commandNames.contains(name)) {
                 printlnTime("Command conflict - 2 commands are attempting to use the name " + name);
@@ -210,6 +214,7 @@ public class Main extends ListenerAdapter {
                 .addEventListeners(new Main())
                 .build();
         bot.awaitReady();
+        bot.updateCommands().addCommands(slashCommands).queue();
         printlnTime("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
@@ -540,6 +545,7 @@ public class Main extends ListenerAdapter {
         guild.getAudioManager().closeAudioConnection();
         clearVotes(id);
     }
+
     @Override
     public void onException(@NotNull ExceptionEvent event) {
         printlnTime(Arrays.toString(event.getCause().getStackTrace()));
@@ -624,26 +630,7 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
-        List<CommandData> data = new ArrayList<>();
-        List<net.dv8tion.jda.api.interactions.commands.Command> eventCommands = event.getGuild().retrieveCommands().complete();
-        List<String> eventCommandsStr = new ArrayList<>();
-        for (BaseCommand Command : commands) {
-            for (net.dv8tion.jda.api.interactions.commands.Command command : eventCommands) {
-                eventCommandsStr.add(command.getName().toLowerCase());
-            }
-            if (Command.slashCommand != null) {
-                data.add(Command.slashCommand);
-            } else {
-                SlashCommandData slashCommand = Commands.slash(Command.getNames()[0], Command.getDescription());
-                Command.ProvideOptions(slashCommand);
-                Command.slashCommand = slashCommand;
-                data.add(slashCommand);
-            }
-        }
-        if (new HashSet<>(commandNames).containsAll(eventCommandsStr)) {
-            return;
-        }
-        event.getGuild().updateCommands().addCommands(data).queue();
+        // nothing to do
     }
 
     @Override
