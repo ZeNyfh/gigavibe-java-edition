@@ -38,7 +38,7 @@ public class CommandInsert extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         List<String> tracksToPlay = new ArrayList<>();
-        // prioritise attachment.
+        // prioritise attachment/s.
         if (!event.getAttachments().isEmpty()) {
             for (Message.Attachment attachment : event.getAttachments()) {
                 tracksToPlay.add(attachment.getUrl());
@@ -55,9 +55,11 @@ public class CommandInsert extends BaseCommand {
         } else {
             args[2] = "ytsearch: " + args[2];
         }
+        int position = Integer.parseInt(args[1]) - 1;
         tracksToPlay.add(args[2]);
         boolean sendEmbedBool = true;
-        if (Integer.parseInt(args[1]) >= queue.size() || queue.isEmpty()) {
+        // queue is empty or the argument was larger than or equal to the queue size, simply load and play like usual.
+        if (position + 1 >= queue.size() || queue.isEmpty()) {
             for (String track : tracksToPlay) {
                 try {
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, sendEmbedBool);
@@ -66,15 +68,18 @@ public class CommandInsert extends BaseCommand {
                     event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
                 }
             }
+        // insertion between songs happens here
         } else {
             try {
+                List<AudioTrack> queueHalf1 = queue.subList(0, position);
+                List<AudioTrack> queueHalf2 = queue.subList(position + 1, queue.size() - 1);
                 musicManager.scheduler.queue.clear();
-                musicManager.scheduler.queue.addAll(queue.subList(0, Integer.parseInt(args[1]) - 1));
+                musicManager.scheduler.queue.addAll(queueHalf1);
                 for (String track : tracksToPlay) {
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, sendEmbedBool);
                     sendEmbedBool = false;
                 }
-                musicManager.scheduler.queue.addAll(queue.subList(Integer.parseInt(args[1]), queue.size()));
+                musicManager.scheduler.queue.addAll(queueHalf2);
                 event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
