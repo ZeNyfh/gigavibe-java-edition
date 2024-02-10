@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import static Bots.Main.*;
 
@@ -72,14 +73,26 @@ public class CommandInsert extends BaseCommand {
         } else {
             try {
                 List<AudioTrack> queueHalf1 = queue.subList(0, position);
-                List<AudioTrack> queueHalf2 = queue.subList(position + 1, queue.size() - 1);
+                List<AudioTrack> queueHalf2 = queue.subList(position, queue.size());
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(queueHalf1);
+                if (position == 1) {
+                    musicManager.scheduler.queue(queue.get(1));
+                }
                 for (String track : tracksToPlay) {
                     PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, sendEmbedBool);
                     sendEmbedBool = false;
                 }
+                long panicBreak = System.currentTimeMillis();
+                while (queue.size() == musicManager.scheduler.queue.size() + queueHalf2.size()) {
+                    if (System.currentTimeMillis() - panicBreak > 5000) {
+                        printlnTime("CommandInsert took over 5 seconds to run, is everything ok?");
+                        break;
+                    }
+                    Thread.sleep(250); // don't run as fast as you can please :)
+                }
                 musicManager.scheduler.queue.addAll(queueHalf2);
+
                 event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
             } catch (Exception e) {
                 throw new RuntimeException(e);

@@ -63,7 +63,7 @@ public class TrackScheduler extends AudioEventAdapter {
                 }
                 String trackId = track.getInfo().identifier;
                 String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
-                PlayerManager.getInstance().loadAndPlay((GuildMessageChannelUnion) userData, radioUrl, true);
+                PlayerManager.getInstance().loadAndPlay(userData, radioUrl, true);
                 return;
             }
         }
