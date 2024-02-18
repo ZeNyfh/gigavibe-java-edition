@@ -44,8 +44,8 @@ public class CommandVibrato extends BaseCommand {
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the parameters to their default values."));
             VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato); // this needs to be redefined many times due to how it works.
-            vibrato.setFrequency(1);
-            vibrato.setDepth(1);
+            vibrato.setFrequency(2);
+            vibrato.setDepth(0.5f);
             return;
         }
 
@@ -56,10 +56,10 @@ public class CommandVibrato extends BaseCommand {
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + ".\n\n*1 is the default value.*"));
         VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato);
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + ".\n\n*0.5 is the default depth value.*"));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CommandVibrato extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "[Number] [Number]";
+        return "[frequency] [depth]";
     }
 
     @Override
