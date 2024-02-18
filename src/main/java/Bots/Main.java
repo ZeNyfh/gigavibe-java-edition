@@ -2,7 +2,6 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -69,10 +68,9 @@ public class Main extends ListenerAdapter {
     public static FileWriter logger;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    public enum filters {
+    public enum audioFilters {
         Vibrato, Timescale
     }
-    public static HashMap<Long, HashMap<filters, AudioFilter>> guildFilters = new HashMap<>();
 
     public static TimerTask task;
 

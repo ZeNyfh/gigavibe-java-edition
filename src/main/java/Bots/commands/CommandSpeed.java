@@ -2,6 +2,8 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -41,17 +43,18 @@ public class CommandSpeed extends BaseCommand {
             return;
         }
 
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale); // this needs to be redefined many times due to how it works.
+
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the speed back to 1."));
-            TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale); // this needs to be redefined many times due to how it works.
             timescale.setSpeed(1);
+            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the speed back to 1."));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the playback speed of the track to " + value + "x."));
-        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale);
         timescale.setSpeed(value);
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the playback speed of the track to " + value + "x."));
     }
 
     @Override

@@ -2,6 +2,8 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -41,11 +43,13 @@ public class CommandVibrato extends BaseCommand {
             return;
         }
 
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato); // this needs to be redefined many times due to how it works.
+
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the parameters to their default values."));
-            VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato); // this needs to be redefined many times due to how it works.
             vibrato.setFrequency(2);
             vibrato.setDepth(0.5f);
+            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the parameters to their default values."));
             return;
         }
 
@@ -56,7 +60,6 @@ public class CommandVibrato extends BaseCommand {
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
-        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Vibrato);
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
         event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + ".\n\n*0.5 is the default depth value.*"));

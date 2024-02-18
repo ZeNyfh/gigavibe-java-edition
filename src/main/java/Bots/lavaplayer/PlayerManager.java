@@ -35,7 +35,7 @@ import static Bots.Main.*;
 public class PlayerManager {
 
     private static PlayerManager INSTANCE;
-    private static boolean hasSpotify = false;
+    private static boolean hasSpotify;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
     public static MessageEvent message;
@@ -72,10 +72,8 @@ public class PlayerManager {
             guildMusicManager.audioPlayer.setFilterFactory((track, format, output) -> {
                 VibratoPcmAudioFilter vibrato = new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate);
                 TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(vibrato, format.channelCount, format.sampleRate);
-                HashMap<filters, AudioFilter> filterMap = new HashMap<>();
-                filterMap.put(filters.Vibrato, vibrato);
-                filterMap.put(filters.Timescale, timescale);
-                guildFilters.put(guild.getIdLong(), filterMap); //TODO: Do this any way other than this way
+                guildMusicManager.filters.put(audioFilters.Vibrato, vibrato);
+                guildMusicManager.filters.put(audioFilters.Timescale, timescale);
                 //Just make sure the items are in the reverse order they were made and all will be good
                 return Arrays.asList(new AudioFilter[]{timescale, vibrato});
             });

@@ -64,7 +64,7 @@ public class CommandNowPlaying extends BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
         double totalTime = audioPlayer.getPlayingTrack().getDuration();
-        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) guildFilters.get(event.getGuild().getIdLong()).get(filters.Timescale);
+        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
         totalTime = totalTime / timescale.getSpeed();
         String totalTimeText;
         if (totalTime > 432000000) { // 5 days
