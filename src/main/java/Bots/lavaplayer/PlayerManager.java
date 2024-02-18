@@ -1,7 +1,10 @@
 package Bots.lavaplayer;
 
 import Bots.MessageEvent;
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
+import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -12,7 +15,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +69,16 @@ public class PlayerManager {
     public GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
+            guildMusicManager.audioPlayer.setFilterFactory((track, format, output) -> {
+                VibratoPcmAudioFilter vibrato = new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate);
+                TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(vibrato, format.channelCount, format.sampleRate);
+                HashMap<filters, AudioFilter> filterMap = new HashMap<>();
+                filterMap.put(filters.Vibrato, vibrato);
+                filterMap.put(filters.Timescale, timescale);
+                guildFilters.put(guild.getIdLong(), filterMap); //TODO: Do this any way other than this way
+                //Just make sure the items are in the reverse order they were made and all will be good
+                return Arrays.asList(new AudioFilter[]{timescale, vibrato});
+            });
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
             return guildMusicManager;
         });

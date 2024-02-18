@@ -2,8 +2,6 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
-import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -221,15 +219,6 @@ public class Main extends ListenerAdapter {
         for (Guild guild : bot.getGuilds()) {
             queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
-
-            // audio filter stuff
-            PlayerManager.getInstance().getMusicManager(guild).audioPlayer.setFilterFactory((track, format, output) -> {
-                HashMap<filters, AudioFilter> filterMap = new HashMap<>();
-                filterMap.put(filters.Vibrato, new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate));
-                filterMap.put(filters.Timescale, new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate));
-                guildFilters.put(guild.getIdLong(), filterMap);
-                return new ArrayList<>(filterMap.values());
-            });
         }
 
         try {
