@@ -45,6 +45,8 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static Bots.ConfigManager.GetConfig;
 import static Bots.ConfigManager.SaveConfigs;
@@ -120,10 +122,17 @@ public class Main extends ListenerAdapter {
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         commandUsageTracker = GetConfig("usage-stats");
-        ignoreFiles = new File("logs/").mkdir();
+        File logDir = new File("logs/");
+        ignoreFiles = logDir.mkdir();
         File logFile = new File("logs/log.log");
         if (logFile.length() != 0) {
-            ignoreFiles = logFile.renameTo(new File("logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".log"));
+            String outputZip = logDir + "/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".zip";
+            String logPath = logFile.getAbsolutePath();
+            try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(outputZip))) {
+                File fileToZip = new File(logPath);
+                zipOut.putNextEntry(new ZipEntry(fileToZip.getName()));
+                Files.copy(fileToZip.toPath(), zipOut);
+            }
         }
         ignoreFiles = logFile.createNewFile();
         logger = new FileWriter("logs/log.log");
