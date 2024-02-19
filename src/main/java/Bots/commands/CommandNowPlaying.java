@@ -65,6 +65,7 @@ public class CommandNowPlaying extends BaseCommand {
         long trackPos = audioPlayer.getPlayingTrack().getPosition();
         double totalTime = audioPlayer.getPlayingTrack().getDuration();
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
+        trackPos = (long) (trackPos / timescale.getSpeed());
         totalTime = totalTime / timescale.getSpeed();
         String totalTimeText;
         if (totalTime > 432000000) { // 5 days
