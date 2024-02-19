@@ -32,6 +32,9 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Stream;
 
 import static Bots.ConfigManager.GetConfig;
 import static Bots.ConfigManager.SaveConfigs;
@@ -100,10 +104,19 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         System.setOut(new PrintStream(byteArrayOut));
         System.setErr(new PrintStream(byteArrayErr));
-        ignoreFiles = new File("modules/").mkdir();
-        if (!new File("modules/ffprobe").exists()) { //TODO: That isn't how file paths work
+        Path modules = new File("modules/").toPath();
+        Stream<Path> stream = Files.list(Paths.get(modules.toUri()));
+        boolean hasFFprobe = false;
+        for (Path file : stream.toList()) {
+            if (file.getFileName().toString().toLowerCase().startsWith("ffprobe")) {
+                hasFFprobe = true;
+                break;
+            }
+        }
+        if (!hasFFprobe) {
             printlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
         }
+        ignoreFiles = new File("modules/").mkdir();
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         commandUsageTracker = GetConfig("usage-stats");
