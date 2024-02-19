@@ -96,7 +96,7 @@ public class Main extends ListenerAdapter {
         slashCommands.add(slashCommand);
         for (String name : command.getNames()) {
             if (commandNames.contains(name)) {
-                printlnTime("Command conflict - 2 commands are attempting to use the name " + name);
+                errorlnTime("Command conflict - 2 commands are attempting to use the name " + name);
             } else {
                 commandNames.add(name);
             }
@@ -116,7 +116,7 @@ public class Main extends ListenerAdapter {
             }
         }
         if (!hasFFprobe) {
-            printlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
+            errorlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
         }
         ignoreFiles = new File("modules/").mkdir();
         ignoreFiles = new File("config/").mkdir();
@@ -159,18 +159,18 @@ public class Main extends ListenerAdapter {
         }
         Dotenv dotenv = Dotenv.load();
         if (dotenv.get("TOKEN") == null) {
-            printlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
+            errorlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
         }
         String botToken = dotenv.get("TOKEN");
 
         if (dotenv.get("COLOUR") == null) {
-            printlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
+            errorlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
             return;
         }
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
-            printlnTime("Colour was invalid.");
+            errorlnTime("Colour was invalid.");
             e.printStackTrace();
             return;
         }
@@ -220,7 +220,7 @@ public class Main extends ListenerAdapter {
                     registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
                     printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
                 } catch (Exception e) {
-                    printlnTime("Unable to load command " + commandClass.getSimpleName().substring(7));
+                    errorlnTime("Unable to load command " + commandClass.getSimpleName().substring(7));
                     e.printStackTrace();
                 }
             }
@@ -473,11 +473,19 @@ public class Main extends ListenerAdapter {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                printlnTime("Error deleting file.");
+                errorlnTime("Error deleting file.");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void errorlnTime(Object... message) {
+        StringBuilder finalMessage = new StringBuilder();
+        for (Object segment : message) {
+            finalMessage.append(" ").append(segment);
+        }
+        System.err.println(finalMessage);
     }
 
     public static void printlnTime(Object... message) {
@@ -497,7 +505,7 @@ public class Main extends ListenerAdapter {
 
     public static void registerButtonInteraction(String name, Consumer<ButtonInteractionEvent> func) {
         if (ButtonInteractionMappings.containsKey(name)) {
-            printlnTime("Attempting to override the button manager for id " + name);
+            errorlnTime("Attempting to override the button manager for id " + name);
         }
         ButtonInteractionMappings.put(name.toLowerCase(), func);
     }
@@ -525,7 +533,7 @@ public class Main extends ListenerAdapter {
                 return;
             }
         }
-        printlnTime("Button of ID " + buttonID + " has gone ignored - missing listener?");
+        errorlnTime("Button of ID " + buttonID + " has gone ignored - missing listener?");
     }
 
     @Override
@@ -576,11 +584,6 @@ public class Main extends ListenerAdapter {
         manager.audioPlayer.checkCleanup(0);
         guild.getAudioManager().closeAudioConnection();
         clearVotes(id);
-    }
-
-    @Override
-    public void onException(@NotNull ExceptionEvent event) {
-        printlnTime(Arrays.toString(event.getCause().getStackTrace()));
     }
 
     private float handleRateLimit(BaseCommand Command, Member member) {

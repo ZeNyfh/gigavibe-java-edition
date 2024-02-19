@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static Bots.Main.errorlnTime;
 import static Bots.Main.printlnTime;
 
 /**
@@ -75,7 +76,7 @@ public class ConfigManager {
         String filePath = configFolder + "/" + Filename + ".json";
         boolean madeFile = Paths.get(filePath).toFile().createNewFile();
         if (!madeFile) {
-            printlnTime("Warning: Potentially overwriting an existing config (" + Filename + ")");
+            errorlnTime("Warning: Potentially overwriting an existing config (" + Filename + ")");
         }
         WriteConfig(Filename, Content);
         return Content;
@@ -97,7 +98,7 @@ public class ConfigManager {
         try {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
-            printlnTime("Usurping config for " + Filename + " with a generic one and moving old to /failed due to bad formatting");
+            errorlnTime("Usurping config for " + Filename + " with a generic one and moving old to /failed due to bad formatting");
             reader.close();
             Files.move(Paths.get(filePath), Paths.get(configFolder + "/failed/" + Filename + "_" + System.currentTimeMillis() + ".json"));
             return CreateConfig(Filename);
@@ -116,7 +117,7 @@ public class ConfigManager {
         try {
             config = (JSONObject) parser.parse(reader);
         } catch (ParseException exception) { //Useless config, just discard it and start fresh
-            printlnTime("Usurping config for " + GuildID + " with a generic one and moving old to /failed due to bad formatting");
+            errorlnTime("Usurping config for " + GuildID + " with a generic one and moving old to /failed due to bad formatting");
             reader.close();
             Files.move(Paths.get(filePath), Paths.get(configFolder + "/failed/" + GuildID + "_" + System.currentTimeMillis() + ".json"));
             return CreateGuildConfig(GuildID);
@@ -127,18 +128,18 @@ public class ConfigManager {
         JSONObject baseConfig = CreateGuildObject();
         for (Object key : baseConfig.keySet()) {
             if (!config.containsKey(key)) {
-                printlnTime("Config " + GuildID + " missing key " + key);
+                errorlnTime("Config " + GuildID + " missing key " + key);
                 config.put(key, baseConfig.get(key)); //Overwrite
             } else {
                 if (config.get(key).getClass() != baseConfig.get(key).getClass()) {
-                    printlnTime("Config " + GuildID + " has invalid value type for key " + key);
+                    errorlnTime("Config " + GuildID + " has invalid value type for key " + key);
                     config.put(key, baseConfig.get(key)); //Overwrite
                 }
             }
         }
         for (Object key : config.keySet()) {
             if (!baseConfig.containsKey(key)) {
-                printlnTime("Config " + GuildID + " has unrecognised key " + key);
+                errorlnTime("Config " + GuildID + " has unrecognised key " + key);
                 config.remove(key); //Remove
             }
         }
@@ -158,13 +159,13 @@ public class ConfigManager {
                 try {
                     return ReadConfig(Filename);
                 } catch (IOException exception) {
-                    printlnTime(exception.toString());
+                    exception.printStackTrace();
                 }
             } else { //It doesn't exist
                 try {
                     return CreateConfig(Filename);
                 } catch (IOException exception) {
-                    printlnTime(exception.toString());
+                    exception.printStackTrace();
                 }
             }
         }
@@ -181,15 +182,15 @@ public class ConfigManager {
                 try {
                     return ReadGuildConfig(GuildID);
                 } catch (IOException exception) {
-                    printlnTime("Failed to read the guild config for " + GuildID);
-                    printlnTime(exception.toString());
+                    errorlnTime("Failed to read the guild config for " + GuildID);
+                    exception.printStackTrace();
                 }
             } else { //It doesn't exist
                 try {
                     return CreateGuildConfig(GuildID);
                 } catch (IOException exception) {
-                    printlnTime("Failed to create a guild config for " + GuildID);
-                    printlnTime(exception.toString());
+                    errorlnTime("Failed to create a guild config for " + GuildID);
+                    exception.printStackTrace();
                 }
             }
         }
@@ -199,13 +200,12 @@ public class ConfigManager {
     public static void SaveConfigs() { //Saves all configs. Should ideally be run just before shutdown
         for (Object Filename : Configs.keySet()) {
             JSONObject config = Configs.get(Filename);
-            //printlnTime(Filename+" - "+config);
             if (IsConfigDirty(config)) {
-                printlnTime("Refusing to save " + Filename + " as it isn't legal json");
+                errorlnTime("Refusing to save " + Filename + " as it isn't legal json");
                 try {
                     WriteConfig("failed/" + Filename + "_" + System.currentTimeMillis(), config);
                 } catch (IOException exception) {
-                    printlnTime("Unable to save failed config for Config " + Filename + " (unsurprisingly)");
+                    errorlnTime("Unable to save failed config for Config " + Filename + " (unsurprisingly)");
                     exception.printStackTrace();
                 }
                 try { //Force a fresh fetch
@@ -215,14 +215,14 @@ public class ConfigManager {
                         ReadGuildConfig((Long) Filename);
                     }
                 } catch (IOException exception) {
-                    printlnTime("Unable to load the existing non-screwed version for Config " + Filename);
+                    errorlnTime("Unable to load the existing non-screwed version for Config " + Filename);
                     exception.printStackTrace();
                 }
             } else {
                 try {
                     WriteConfig(Filename, config);
                 } catch (IOException exception) {
-                    printlnTime("Unable to save config for Config " + Filename);
+                    errorlnTime("Unable to save config for Config " + Filename);
                     exception.printStackTrace();
                 }
             }

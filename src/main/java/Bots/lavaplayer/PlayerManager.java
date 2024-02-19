@@ -51,7 +51,7 @@ public class PlayerManager {
             this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyClientID, spotifyClientSecret, "gb", audioPlayerManager));
             hasSpotify = true;
         } catch (Exception exception) {
-            printlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
+            errorlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
             hasSpotify = false;
         }
 
@@ -177,7 +177,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 message.replyEmbeds(createQuickError("No matches found for the track."));
-                printlnTime("No match found for the track.");
+                errorlnTime("No match found for the track.\nURL: " + trackUrl);
             }
 
 
@@ -185,7 +185,6 @@ public class PlayerManager {
             public void loadFailed(FriendlyException e) {
                 clearVotes(guildID);
                 message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
-                printlnTime("track loading failed, stacktrace: ");
                 e.printStackTrace();
             }
         });
@@ -211,7 +210,7 @@ public class PlayerManager {
                 return null;
             }
         } catch (Exception ignored) {
-            printlnTime("Thumb URL Fail : " + site + " |" + url);
+            errorlnTime("Thumb URL Fail : " + site + " |" + url);
         } // ignore because floods console if image url invalid
 
         if (url != null && pattern != null) {
@@ -233,7 +232,7 @@ public class PlayerManager {
                     return null;
                 }
             } catch (Exception ignored) {
-                printlnTime("Thumb Matcher Fail : " + site + " |" + url);
+                errorlnTime("Thumb Matcher Fail : " + site + " |" + url);
             } // ignore because floods console if image url invalid
             return null;
         }

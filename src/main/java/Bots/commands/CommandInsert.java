@@ -92,7 +92,7 @@ public class CommandInsert extends BaseCommand {
                 long panicBreak = System.currentTimeMillis();
                 while (queue.size() == musicManager.scheduler.queue.size() + queueHalf2.size()) {
                     if (System.currentTimeMillis() - panicBreak > 5000) {
-                        printlnTime("CommandInsert took over 5 seconds to run, is everything ok?");
+                        errorlnTime("CommandInsert took over 5 seconds to run, is everything ok?");
                         break;
                     }
                     Thread.sleep(250); // don't run as fast as you can please :)
