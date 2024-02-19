@@ -53,6 +53,12 @@ public class CommandPitch extends BaseCommand {
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
+
+        if (!(value <= 5.0 && value >= 0.25)) {
+            event.replyEmbeds(createQuickError("This pitch value is too extreme, please choose something between 0.25 and 5!"));
+            return;
+        }
+
         timescale.setPitch(value);
         event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the pitch of the track to " + value + "x."));
     }

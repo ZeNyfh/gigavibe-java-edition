@@ -53,6 +53,12 @@ public class CommandSpeed extends BaseCommand {
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
+
+        if (!(value <= 5 && value >= 0.25)) {
+            event.replyEmbeds(createQuickError("This speed value is too extreme, please choose something between 0.25 and 5!"));
+            return;
+        }
+
         timescale.setSpeed(value);
         event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the playback speed of the track to " + value + "x."));
     }

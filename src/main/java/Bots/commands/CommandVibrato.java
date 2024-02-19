@@ -60,9 +60,20 @@ public class CommandVibrato extends BaseCommand {
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
+
+        if (!(value <= 14 && value >= 2)) {
+            event.replyEmbeds(createQuickError("This frequency value is too extreme, please choose something between 2 and 14!"));
+            return;
+        }
+
+        if (!(power <= 1 && power >= 0.1)) {
+            event.replyEmbeds(createQuickError("This depth value is too extreme, please choose something between 0.25 and 1!"));
+            return;
+        }
+
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + ".\n\n*0.5 is the default depth value.*"));
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power + "!"));
     }
 
     @Override
