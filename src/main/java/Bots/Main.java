@@ -2,6 +2,7 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -29,9 +30,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -66,6 +65,10 @@ public class Main extends ListenerAdapter {
     public static List<SlashCommandData> slashCommands = new ArrayList<>();
     public static boolean ignoreFiles = false;
     public static FileWriter logger;
+    public static final PrintStream out = System.out;
+    public static final PrintStream err = System.err;
+    public static ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+    public static ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
     public enum audioFilters {
@@ -95,8 +98,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
+        System.setOut(new PrintStream(byteArrayOut));
+        System.setErr(new PrintStream(byteArrayErr));
         ignoreFiles = new File("modules/").mkdir();
-        if (!new File("modules/ffprobe*").exists()) { //TODO: That isn't how file paths work
+        if (!new File("modules/ffprobe").exists()) { //TODO: That isn't how file paths work
             printlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
         }
         ignoreFiles = new File("config/").mkdir();
@@ -226,13 +231,58 @@ public class Main extends ListenerAdapter {
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
                 int time = 0;
-
+                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 @Override
                 public void run() {
+                    // logger code
+                    // string-building the out and err char arrays
+                    StringBuilder builderOut = new StringBuilder();
+                    StringBuilder builderErr = new StringBuilder();
+                    for (byte b : byteArrayOut.toByteArray()){
+                        builderOut.append((char) b);
+                    }
+                    for (byte b: byteArrayErr.toByteArray()) {
+                        builderErr.append((char) b);
+                    }
+
+                    try {
+                        // handling for sys.out
+                        if (builderOut.toString().length() > 1) {
+                            String trimmedBuilder = builderOut.toString().trim();
+                            // set sys.out to what it was originally to print to the console.
+                            System.setOut(out);
+                            printlnTime(trimmedBuilder);
+                            // clear the byte array and set sys.out again.
+                            byteArrayOut = new ByteArrayOutputStream();
+                            System.setOut(new PrintStream(byteArrayOut));
+                            // write to the file and empty the buffer.
+                            logger.write(trimmedBuilder);
+                            logger.flush();
+                        }
+                        //handling for sys.err
+                        if (builderErr.toString().length() > 1) {
+                            // datetime formatting to add the date and time to sys.err messages.
+                            String finalMessage = dtf.format(LocalDateTime.now()) + " | " + builderErr.toString().trim();
+                            // set sys.err to what it was originally to print to the console.
+                            System.setErr(err);
+                            err.println(finalMessage.trim());
+                            // clear the byte array and set sys.err again.
+                            byteArrayErr = new ByteArrayOutputStream();
+                            System.setErr(new PrintStream(byteArrayErr));
+                            // write to the file and empty the buffer.
+                            logger.write("\n" + finalMessage);
+                            logger.flush();
+                        }
+                    } catch (Exception e) {
+                        err.println(e);
+                    }
+
+                    // updater code
                     boolean isInAnyVc = false;
                     for (Guild guild : bot.getGuilds()) {
                         if (guild.getAudioManager().isConnected()) {
                             isInAnyVc = true;
+                            break;
                         }
                     }
 
@@ -415,11 +465,6 @@ public class Main extends ListenerAdapter {
             finalMessage.append(" ").append(segment);
         }
         System.out.println(finalMessage);
-        try {
-            logger.write(finalMessage + "\n");
-            logger.flush();
-        } catch (Exception ignored) {
-        }
     }
 
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
@@ -438,12 +483,14 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         queuePages.put(event.getGuild().getIdLong(), 0);
+        trackLoops.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         queuePages.remove(event.getGuild().getIdLong());
+        trackLoops.remove(event.getGuild().getIdLong());
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
     }
 
