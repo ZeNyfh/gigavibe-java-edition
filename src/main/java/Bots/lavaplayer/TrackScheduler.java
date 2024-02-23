@@ -38,25 +38,20 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         GuildMessageChannelUnion userData = (GuildMessageChannelUnion) track.getUserData();
         clearVotes(userData.getGuild().getIdLong());
-        if (LoopGuilds.contains(userData.getGuild().getId())) {
-            if (endReason.mayStartNext) {
+        if (endReason.mayStartNext) {
+            if (LoopGuilds.contains(userData.getGuild().getId())) {
                 AudioTrack loopTrack = track.makeClone();
                 this.player.startTrack(loopTrack, false);
-                int value = trackLoops.get(userData.getGuild().getIdLong()) + 1; // it had to be a variable, it hated me just adding 1 in the put
-                trackLoops.put(userData.getGuild().getIdLong(), value);
+                trackLoops.put(userData.getGuild().getIdLong(), trackLoops.get(userData.getGuild().getIdLong()) + 1);
                 return;
             }
-        }
-        if (LoopQueueGuilds.contains(userData.getGuild().getId())) {
-            if (endReason.mayStartNext) {
+            if (LoopQueueGuilds.contains(userData.getGuild().getId())) {
                 AudioTrack loopTrack = track.makeClone();
                 nextTrack();
                 queue(loopTrack);
                 return;
             }
-        }
-        if (AutoplayGuilds.contains(userData.getGuild().getIdLong())) {
-            if (endReason.mayStartNext) {
+            if (AutoplayGuilds.contains(userData.getGuild().getIdLong())) {
                 if (!track.getInfo().uri.toLowerCase().contains("youtube")) {
                     userData.sendMessageEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay.")).queue();
                     return;
@@ -90,10 +85,9 @@ public class TrackScheduler extends AudioEventAdapter {
             userData.sendMessageEmbeds(eb.build()).queue();
             return;
         }
-        if (endReason.name().equals("REPLACED") || endReason.name().equals("FINISHED")) {
+        if (endReason == AudioTrackEndReason.REPLACED || endReason == AudioTrackEndReason.FINISHED) {
             return;
         }
-        assert false;
         onTrackStuck(nextTrack);
     }
 
