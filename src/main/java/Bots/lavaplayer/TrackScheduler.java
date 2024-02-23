@@ -63,10 +63,9 @@ public class TrackScheduler extends AudioEventAdapter {
             }
         }
         trackLoops.put(userData.getGuild().getIdLong(), 0);
-        AudioTrack nextTrack = null;
         if (endReason.mayStartNext) {
             nextTrack();
-            nextTrack = player.getPlayingTrack();
+            AudioTrack nextTrack = player.getPlayingTrack();
             EmbedBuilder eb = new EmbedBuilder();
             if (!nextTrack.getInfo().title.isEmpty()) {
                 eb.setTitle("Now playing: " + nextTrack.getInfo().title, nextTrack.getInfo().uri);
@@ -83,18 +82,6 @@ public class TrackScheduler extends AudioEventAdapter {
             eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
             eb.setColor(botColour);
             userData.sendMessageEmbeds(eb.build()).queue();
-            return;
         }
-        if (endReason == AudioTrackEndReason.REPLACED || endReason == AudioTrackEndReason.FINISHED) {
-            return;
-        }
-        onTrackStuck(nextTrack);
-    }
-
-    private void onTrackStuck(AudioTrack nextTrack) {
-        GuildMessageChannelUnion userData = (GuildMessageChannelUnion) nextTrack.getUserData();
-        clearVotes(userData.getGuild().getIdLong());
-        userData.sendMessageEmbeds(createQuickError("Track got stuck, skipping.")).queue();
-        nextTrack();
     }
 }
