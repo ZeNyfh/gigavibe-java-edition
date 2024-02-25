@@ -509,7 +509,7 @@ public class Main extends ListenerAdapter {
         if (ButtonInteractionMappings.containsKey(name)) {
             errorlnTime("Attempting to override the button manager for id " + name);
         }
-        ButtonInteractionMappings.put(name.toLowerCase(), func);
+        ButtonInteractionMappings.put(name, func);
     }
 
     @Override
@@ -528,10 +528,15 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-        String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId()).toLowerCase();
+        String buttonID = Objects.requireNonNull(event.getInteraction().getButton().getId());
         for (String name : ButtonInteractionMappings.keySet()) {
-            if (Objects.equals(name, buttonID)) {
-                ButtonInteractionMappings.get(name).accept(event);
+            if (name.equalsIgnoreCase(buttonID)) {
+                try {
+                    ButtonInteractionMappings.get(name).accept(event);
+                } catch (Exception e) {
+                    errorlnTime("Issue handling button interaction for", name);
+                    e.printStackTrace();
+                }
                 return;
             }
         }
