@@ -195,7 +195,7 @@ public class Main extends ListenerAdapter {
                     }
                     try {
                         for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
-                            if (classFile.getName().endsWith(".class")) {
+                            if (classFile.getName().endsWith(".class") && !classFile.getName().contains("$")) {
                                 classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
                             }
                         }
@@ -209,7 +209,7 @@ public class Main extends ListenerAdapter {
                 Enumeration<JarEntry> resources = jarFile.entries();
                 while (resources.hasMoreElements()) {
                     JarEntry url = resources.nextElement();
-                    if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command")) {
+                    if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command") && !url.toString().contains("$")) {
                         classes.add(ClassLoader.getSystemClassLoader().loadClass(url.getName().substring(0, url.getName().length() - 6).replaceAll("/", ".")));
                     }
                 }
