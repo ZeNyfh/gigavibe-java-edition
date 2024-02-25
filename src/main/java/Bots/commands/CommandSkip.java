@@ -8,7 +8,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.ArrayList;
 import java.util.List;

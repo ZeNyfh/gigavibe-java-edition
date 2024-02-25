@@ -64,13 +64,13 @@ public class TrackScheduler extends AudioEventAdapter {
         } else {
             guildFailCount.put(guildId, 0);
             if (endReason.mayStartNext) { //Not to be handled if a load failed
-                if (LoopGuilds.contains(String.valueOf(guildId))) { //TODO: Why the hell are these strings
+                if (LoopGuilds.contains(guildId)) {
                     AudioTrack loopTrack = track.makeClone();
                     this.player.startTrack(loopTrack, false);
                     trackLoops.put(guildId, trackLoops.get(guildId) + 1);
                     return;
                 }
-                if (LoopQueueGuilds.contains(String.valueOf(guildId))) {
+                if (LoopQueueGuilds.contains(guildId)) {
                     AudioTrack loopTrack = track.makeClone();
                     nextTrack();
                     queue(loopTrack);

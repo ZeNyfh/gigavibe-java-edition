@@ -127,7 +127,8 @@ public class PlayerManager {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
-                    if (autoplaying) track = tracks.get(ThreadLocalRandom.current().nextInt(2, 4)); // this is to prevent looping tracks
+                    if (autoplaying)
+                        track = tracks.get(ThreadLocalRandom.current().nextInt(2, 4)); // this is to prevent looping tracks
                     String author = (track.getInfo().author);
                     String length;
                     if (track.getInfo().length > 432000000 || track.getInfo().length <= 1) { // 5 days

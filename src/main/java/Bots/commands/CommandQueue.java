@@ -72,15 +72,14 @@ public class CommandQueue extends BaseCommand {
             event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
-        EmbedBuilder embed = new EmbedBuilder();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
             event.replyEmbeds(createQuickError("The queue is empty."));
-            embed.clear();
             return;
         }
+        EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;

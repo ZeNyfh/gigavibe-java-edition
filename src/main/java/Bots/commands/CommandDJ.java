@@ -33,10 +33,10 @@ public class CommandDJ extends BaseCommand {
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
             builder.append("**Roles:**\n"); // list DJ roles in embed
-            int i = 0;
             if (DJRoles.isEmpty()) {
                 builder.append("None.");
             } else {
+                int i = 0;
                 for (Object role : DJRoles) {
                     i++;
                     if ((long) role == event.getGuild().getIdLong()) {
@@ -50,10 +50,10 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             builder.append("\n\n**Users:**\n"); // list DJ users in embed
-            i = 0;
             if (DJUsers.isEmpty()) {
                 builder.append("None.");
             } else {
+                int i = 0;
                 for (Object user : DJUsers) {
                     i++;
                     builder.append("<@").append(user).append(">");
@@ -81,10 +81,8 @@ public class CommandDJ extends BaseCommand {
                     long ID = Long.parseLong(matcher.group(1));
                     if (event.getGuild().getMemberById(ID) != null) {
                         FoundMembers.add(ID);
-                    } else {
-                        if (event.getGuild().getRoleById(ID) != null) {
-                            FoundRoles.add(ID);
-                        }
+                    } else if (event.getGuild().getRoleById(ID) != null) {
+                        FoundRoles.add(ID);
                     }
                 }
             }

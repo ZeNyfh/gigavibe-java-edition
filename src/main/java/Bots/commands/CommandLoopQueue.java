@@ -16,12 +16,12 @@ public class CommandLoopQueue extends BaseCommand {
             return;
         }
 
-        if (LoopQueueGuilds.contains(event.getGuild().getId())) {
+        if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue."));
-            LoopQueueGuilds.remove(event.getGuild().getId());
+            LoopQueueGuilds.remove(event.getGuild().getIdLong());
         } else {
             event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue."));
-            LoopQueueGuilds.add(event.getGuild().getId());
+            LoopQueueGuilds.add(event.getGuild().getIdLong());
         }
     }
 

@@ -16,12 +16,12 @@ public class CommandLoop extends BaseCommand {
             return;
         }
 
-        if (LoopGuilds.contains(event.getGuild().getId())) {
+        if (LoopGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track."));
-            LoopGuilds.remove(event.getGuild().getId());
+            LoopGuilds.remove(event.getGuild().getIdLong());
         } else {
             event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track."));
-            LoopGuilds.add(event.getGuild().getId());
+            LoopGuilds.add(event.getGuild().getIdLong());
         }
     }
 

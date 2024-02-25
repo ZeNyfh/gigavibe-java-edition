@@ -2,7 +2,6 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,7 +10,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
-import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -64,9 +62,9 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
-    public static List<String> LoopGuilds = new ArrayList<>();
+    public static List<Long> LoopGuilds = new ArrayList<>();
     public static List<Long> AutoplayGuilds = new ArrayList<>();
-    public static List<String> LoopQueueGuilds = new ArrayList<>();
+    public static List<Long> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static List<SlashCommandData> slashCommands = new ArrayList<>();
     public static boolean ignoreFiles = false;
@@ -77,6 +75,7 @@ public class Main extends ListenerAdapter {
     public static ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+
     public enum audioFilters {
         Vibrato, Timescale
     }
@@ -256,16 +255,17 @@ public class Main extends ListenerAdapter {
                 final File updateFile = new File("update/bot.jar");
                 int time = 0;
                 final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
                 @Override
                 public void run() {
                     // logger code
                     // string-building the out and err char arrays
                     StringBuilder builderOut = new StringBuilder();
                     StringBuilder builderErr = new StringBuilder();
-                    for (byte b : byteArrayOut.toByteArray()){
+                    for (byte b : byteArrayOut.toByteArray()) {
                         builderOut.append((char) b);
                     }
-                    for (byte b: byteArrayErr.toByteArray()) {
+                    for (byte b : byteArrayErr.toByteArray()) {
                         builderErr.append((char) b);
                     }
 
@@ -452,12 +452,14 @@ public class Main extends ListenerAdapter {
         for (Object DJRole : DJRoles) {
             if ((long) DJRole == guild.getIdLong() || member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRole))) {
                 check = true;
+                break;
             }
         }
         if (!check) {
             for (Object DJUser : DJUsers) {
                 if (DJUser.equals(member.getIdLong())) {
                     check = true;
+                    break;
                 }
             }
         }
@@ -581,9 +583,9 @@ public class Main extends ListenerAdapter {
     public static void cleanUpAudioPlayer(Guild guild) {
         Long id = guild.getIdLong();
         GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
-        String stringID = id.toString();
-        LoopGuilds.remove(stringID);
-        LoopQueueGuilds.remove(stringID);
+        LoopGuilds.remove(id);
+        LoopQueueGuilds.remove(id);
+        AutoplayGuilds.remove(id);
         manager.audioPlayer.setVolume(100);
         manager.scheduler.queue.clear();
         manager.audioPlayer.destroy();

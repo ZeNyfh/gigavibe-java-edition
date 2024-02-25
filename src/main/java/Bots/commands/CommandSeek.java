@@ -20,7 +20,6 @@ public class CommandSeek extends BaseCommand {
         if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
-        long position = 0;
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -60,18 +59,17 @@ public class CommandSeek extends BaseCommand {
                         return;
                     }
                 }
+                long position = 0;
                 if (times.length == 3) {
                     position = (Long.parseLong(times[0]) * 60 * 60) + (Long.parseLong(times[1]) * 60) + (Long.parseLong(times[2]));
-                }
-                if (times.length == 2) {
+                } else if (times.length == 2) {
                     position = (Long.parseLong(times[0]) * 60) + (Long.parseLong(times[1]));
-                }
-                if (times.length == 1) {
+                } else if (times.length == 1) {
                     position = Long.parseLong(times[0]);
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    event.replyEmbeds(createQuickError("Argument is lower than or equal to 0."));
+                    event.replyEmbeds(createQuickError("The time provided is lower than or equal to 0."));
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
@@ -87,7 +85,7 @@ public class CommandSeek extends BaseCommand {
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.STRING, "timestamp", "Timestamp to seek to, E.g: 1:54 | 12 | 1:12:34.", true);
+        slashCommand.addOption(OptionType.STRING, "timestamp", "Timestamp to seek to, E.g: 12 | 1:54 | 1:09:34.", true);
     }
 
     @Override

@@ -2,8 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
-import Bots.lavaplayer.GuildMusicManager;
-import Bots.lavaplayer.PlayerManager;
 
 import java.util.Objects;
 
@@ -11,16 +9,16 @@ import static Bots.Main.*;
 
 public class CommandAutoplay extends BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws Exception {
+    public void execute(MessageEvent event) {
         if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
             return;
         }
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("I am not in a vc."));
+            event.replyEmbeds(createQuickError("I'm not in a vc."));
             return;
         }
         if (event.getGuild().getAudioManager().getConnectedChannel() != Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()) {
-            event.replyEmbeds(createQuickError("You are not in the same vc as me."));
+            event.replyEmbeds(createQuickError("You aren't in the same vc as me."));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {

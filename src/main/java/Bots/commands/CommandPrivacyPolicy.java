@@ -8,7 +8,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandPrivacyPolicy extends BaseCommand {
 
     @Override
-    public void execute(MessageEvent event) throws Exception {
+    public void execute(MessageEvent event) {
         event.replyEmbeds(createQuickEmbed("Privacy Policy", "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));
     }
 

@@ -13,12 +13,12 @@ public class CommandBug extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
+        event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError("Please provide something to report."));
             return;
         }
-        Objects.requireNonNull(event.getJDA().getUserById("211789389401948160")).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "\n\n" + event.getContentRaw().split(" ", 2)[1]).queue());
-        event.deferReply(true); //hacky way of making it ephemeral
+        Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "\n\n" + event.getContentRaw().split(" ", 2)[1]).queue());
         event.reply("Thanks for sending in a bug report!");
     }
 
@@ -34,12 +34,12 @@ public class CommandBug extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Sends a bug report to the developer.";
+        return "Send a bug report to the developer.";
     }
 
     @Override
     public String getOptions() {
-        return "<Message>";
+        return "<message>";
     }
 
     @Override

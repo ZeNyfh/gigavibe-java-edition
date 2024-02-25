@@ -23,8 +23,6 @@ public class CommandShuffle extends BaseCommand {
         }
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
             event.replyEmbeds((createQuickError("Im not in a vc.")));
@@ -39,6 +37,8 @@ public class CommandShuffle extends BaseCommand {
             return;
         }
 
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
             event.replyEmbeds(createQuickError("There is nothing in the queue."));
             return;

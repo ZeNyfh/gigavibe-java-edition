@@ -35,31 +35,28 @@ public class CommandRemove extends BaseCommand {
             event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }
+
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
-        String string = event.getArgs()[1];
-        if (string.matches("")) {
-            event.replyEmbeds(createQuickError("Invalid arguments, provide an integer."));
+        if (queue.isEmpty()) {
+            event.replyEmbeds(createQuickError("There are no songs in the queue to remove."));
             return;
         }
-        if (!string.matches("^\\d+$")) {
+        if (event.getArgs().length == 1 || !event.getArgs()[1].matches("^\\d+$")) {
             event.replyEmbeds(createQuickError("Invalid arguments, integers only."));
             return;
         }
-        if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("What are you trying to remove, the queue is empty."));
-            return;
-        }
-        if (queue.size() < Integer.parseInt(string) - 1) {
-            event.replyEmbeds(createQuickError("The provided number was too large."));
+        int position = Integer.parseInt(event.getArgs()[1]);
+        if (queue.size() < position - 1) {
+            event.replyEmbeds(createQuickError("The provided number was larger than the size of the queue."));
             return;
         }
         musicManager.scheduler.queue.clear();
-        queue.remove(Integer.parseInt(string) - 1);
+        queue.remove(position - 1);
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + (Integer.parseInt(string)) + "** successfully.")); // not an error, intended
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + position + "** successfully.")); // not an error, intended
     }
 
     @Override

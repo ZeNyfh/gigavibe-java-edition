@@ -14,20 +14,20 @@ public class CommandDisconnect extends BaseCommand {
             return;
         }
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("I am not in a voice channel."));
+            event.replyEmbeds(createQuickError("I'm not in a voice channel."));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue."));
         clearVotes(event.getGuild().getIdLong());
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue."));
     }
 
     @Override
     public String[] getNames() {
-        return new String[]{"disconnect", "fu" + "ckoff", "fu" + "ck off", "shutup", "dc", "leave"};
+        return new String[]{"disconnect", "dc", "leave", "fu" + "ckoff", "fu" + "ck off", "shutup"};
     }
 
     @Override

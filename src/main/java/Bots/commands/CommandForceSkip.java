@@ -29,7 +29,7 @@ public class CommandForceSkip extends BaseCommand {
 
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
+            event.replyEmbeds(createQuickError("I'm not in a vc."));
             return;
         }
 
@@ -57,31 +57,23 @@ public class CommandForceSkip extends BaseCommand {
             if (!audioPlayer.getPlayingTrack().getInfo().uri.toLowerCase().contains("youtube")) {
                 event.replyEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay."));
             }
+            //TODO: This autoplay stuff has multiple issues (#148 work)
+            //(Double reply potential, the above if check doesn't prevent the below code (that's gotta be a bug)
             String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
-            String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
+            String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=RD" + trackId;
             PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioUrl, true);
         }
-        if (event.getArgs().length == 1) {
-            if (!musicManager.scheduler.queue.isEmpty()) {
-                musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
-            } else {
-                musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track"));
-            }
-        } else if (event.getArgs()[1].matches("^\\d+$")) {
+        if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) {
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue"));
-                clearVotes(event.getGuild().getIdLong());
-                return;
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
                 musicManager.scheduler.nextTrack();
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {

@@ -8,7 +8,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandTOS extends BaseCommand {
 
     @Override
-    public void execute(MessageEvent event) throws Exception {
+    public void execute(MessageEvent event) {
         event.replyEmbeds(createQuickEmbed("Terms of Service", "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
     }
 

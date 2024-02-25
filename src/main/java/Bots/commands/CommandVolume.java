@@ -19,7 +19,7 @@ public class CommandVolume extends BaseCommand {
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("I am not in a vc."));
+            event.replyEmbeds(createQuickError("I'm not in a vc."));
             return;
         }
         if (event.getGuild().getAudioManager().getConnectedChannel() != Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()) {
@@ -47,11 +47,7 @@ public class CommandVolume extends BaseCommand {
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
-                if (volume > 201) {
-                    event.replyEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**.\n\nNote: I do not recommend using anything above 200"));
-                } else {
-                    event.replyEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**."));
-                }
+                event.replyEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**."));
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
                 event.replyEmbeds(createQuickError("Invalid value."));

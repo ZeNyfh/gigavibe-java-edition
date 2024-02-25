@@ -140,6 +140,7 @@ public class MessageEvent {
             ((SlashCommandInteractionEvent) this.coreEvent).deferReply(ephemereal).queue();
         }
     }
+
     public void deferReply() {
         deferReply(false);
     }
@@ -154,8 +155,10 @@ public class MessageEvent {
             ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
+
     public void reply(String s) {
-        reply(x -> {}, s);
+        reply(x -> {
+        }, s);
     }
 
     public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
@@ -171,8 +174,10 @@ public class MessageEvent {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
+
     public void replyEmbeds(MessageEmbed embed, MessageEmbed... embeds) {
-        replyEmbeds(x -> {}, embed, embeds);
+        replyEmbeds(x -> {
+        }, embed, embeds);
     }
 
     public void replyFiles(Consumer<MessageEvent.Response> lambda, FileUpload... files) {
@@ -185,8 +190,10 @@ public class MessageEvent {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
+
     public void replyFiles(FileUpload... files) {
-        replyFiles(x -> {}, files);
+        replyFiles(x -> {
+        }, files);
     }
 
     public JSONObject getConfig() {

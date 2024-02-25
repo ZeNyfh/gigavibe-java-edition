@@ -23,7 +23,7 @@ public class CommandNowPlaying extends BaseCommand {
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
         }
-        String streamTitle = null;
+        String streamTitle;
         try {
             Process process = new ProcessBuilder(cmd).start();
             BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -83,8 +83,9 @@ public class CommandNowPlaying extends BaseCommand {
         try {
             embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
             if (audioPlayer.getPlayingTrack().getInfo().isStream) {
-                if (getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri) != null) {
-                    embed.setTitle(getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri), (audioPlayer.getPlayingTrack().getInfo().uri));
+                String streamTitle = getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri);
+                if (streamTitle != null) {
+                    embed.setTitle(streamTitle, audioPlayer.getPlayingTrack().getInfo().uri);
                 }
             }
         } catch (Exception ignored) {
@@ -104,13 +105,13 @@ public class CommandNowPlaying extends BaseCommand {
         } else {
             embed.addField("⏸️ Track paused:", "❌ **False**", true);
         }
-        if (LoopGuilds.contains(event.getGuild().getId())) {
+        if (LoopGuilds.contains(event.getGuild().getIdLong())) {
             embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
             embed.addField("\uD83D\uDD02 Track looping:", "❌ **False**", true);
         }
-        if (LoopQueueGuilds.contains(event.getGuild().getId())) {
+        if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
             embed.addField("\uD83D\uDD01 Queue looping:", "✅ **True**", true);
         } else {
             embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
@@ -137,7 +138,7 @@ public class CommandNowPlaying extends BaseCommand {
 
     @Override
     public String getDescription() {
-        return "Shows you the track that is currently playing";
+        return "Shows you the track that is currently playing.";
     }
 
     @Override

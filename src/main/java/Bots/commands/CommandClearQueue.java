@@ -23,7 +23,7 @@ public class CommandClearQueue extends BaseCommand {
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
         assert selfVoiceState != null;
         if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
+            event.replyEmbeds(createQuickError("I'm not in a vc."));
             return;
         }
 
@@ -41,7 +41,7 @@ public class CommandClearQueue extends BaseCommand {
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Cleared the queue!"));
+        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Cleared the queue"));
     }
 
     @Override

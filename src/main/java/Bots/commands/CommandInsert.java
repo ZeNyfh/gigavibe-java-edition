@@ -75,9 +75,11 @@ public class CommandInsert extends BaseCommand {
                     event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
                 }
             }
-        // insertion between songs happens here
         } else {
+            // insertion between songs happens here
             try {
+                //TODO: There has to be a better way to do this
+                // (We really don't want to Thread.sleep or have to do any sort of time check)
                 List<AudioTrack> queueHalf1 = queue.subList(0, position);
                 List<AudioTrack> queueHalf2 = queue.subList(position, queue.size());
                 musicManager.scheduler.queue.clear();
@@ -109,7 +111,7 @@ public class CommandInsert extends BaseCommand {
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOptions(
-                new OptionData(OptionType.INTEGER, "position", "Position to insert the track.", true),
+                new OptionData(OptionType.INTEGER, "position", "The position to insert the track.", true),
                 new OptionData(OptionType.STRING, "track", "The track to insert.", true)
         );
     }
@@ -121,7 +123,7 @@ public class CommandInsert extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "<Queue_Position> <Track>";
+        return "<Position> <Track>";
     }
 
     @Override

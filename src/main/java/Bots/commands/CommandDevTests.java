@@ -4,6 +4,8 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import static Bots.Main.*;
@@ -60,12 +62,17 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
-    public String getOptions() {
-        return "(dirty-config)"; //(Command1 | Command2 | Command3) - add them here once they exist
+    public String getDescription() {
+        return "A suite of testing tools for making sure features work";
     }
 
     @Override
-    public String getDescription() {
-        return "A suite of testing tools for making sure features work";
+    public String getOptions() {
+        return "(dirty-config | test-buttons)"; //(Command1 | Command2 | Command3) - add them here once they exist
+    }
+
+    @Override
+    public void ProvideOptions(SlashCommandData slashCommand) {
+        slashCommand.addOption(OptionType.STRING, "tool", "The tool to use", true);
     }
 }
