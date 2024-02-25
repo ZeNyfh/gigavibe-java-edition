@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static Bots.Main.createQuickError;
-import static Bots.Main.deleteFiles;
 
 public class CommandExport extends BaseCommand {
     @Override
@@ -28,8 +27,8 @@ public class CommandExport extends BaseCommand {
             event.replyEmbeds(createQuickError("The bot is not playing anything."));
             return;
         }
-        String fileName = String.valueOf(System.currentTimeMillis());
-        File text = new File(fileName + ".txt");
+        String fileName = "temp/" + System.currentTimeMillis() + ".txt";
+        File text = new File(fileName);
         FileWriter writer = new FileWriter(text);
         writer.write(audioPlayer.getPlayingTrack().getInfo().uri + " | " + audioPlayer.getPlayingTrack().getInfo().title + "\n");
         if (!musicManager.scheduler.queue.isEmpty()) {
@@ -37,15 +36,9 @@ public class CommandExport extends BaseCommand {
                 writer.write(track.getInfo().uri + " | " + track.getInfo().title + "\n");
             }
         }
-        try {
-            writer.flush();
-            writer.close();
-            event.replyFiles(FileUpload.fromData(text));
-            Thread.sleep(5000);
-            deleteFiles(fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        writer.flush();
+        writer.close();
+        event.replyFiles(FileUpload.fromData(text));
     }
 
     @Override

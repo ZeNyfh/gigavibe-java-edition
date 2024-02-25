@@ -1,7 +1,6 @@
 .idea/
 target/
-auddl/
-viddl/
+temp/
 modules/
 artifacts/
 resources/

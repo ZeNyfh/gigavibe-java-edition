@@ -121,6 +121,8 @@ public class Main extends ListenerAdapter {
         ignoreFiles = new File("modules/").mkdir();
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
+        ignoreFiles = new File("temp/").mkdir();
+        deleteFiles("temp\\"); //must be backslash for deleteFiles
         commandUsageTracker = GetConfig("usage-stats");
         File logDir = new File("logs/");
         ignoreFiles = logDir.mkdir();
@@ -469,7 +471,7 @@ public class Main extends ListenerAdapter {
 
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
         try {
-            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", filePrefix + "*"} : new String[]{"sh", "-c", "rm " + filePrefix + "*"};
+            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", "/Q", filePrefix + "*"} : new String[]{"sh", "-c", "rm " + filePrefix + "*"};
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
             if (exitCode != 0) {

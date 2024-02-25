@@ -13,15 +13,13 @@ public class CommandGetDump extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (event.getUser().getIdLong() == 211789389401948160L || event.getUser().getIdLong() == 260016427900076033L) {
-            if (new File("log.txt").exists()) {
-                new File("log.txt").delete();
-            }
-            String PID = "";
+            new File("temp/dump.txt").delete();
             try {
                 Process p = Runtime.getRuntime().exec("jps");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
                 String line;
+                String PID = "";
                 while ((line = reader.readLine()) != null) {
                     String[] jpsOutputLine = line.split(" ");
                     if (jpsOutputLine.length >= 2 && (jpsOutputLine[1].equals("bot") || jpsOutputLine[1].equals("bot.jar") || jpsOutputLine[1].equals("Main"))) {
@@ -35,7 +33,7 @@ public class CommandGetDump extends BaseCommand {
                 }
                 p = Runtime.getRuntime().exec("jstack " + PID);
                 reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                BufferedWriter writer = new BufferedWriter(new FileWriter("log.txt"));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("temp/dump.txt"));
 
                 while ((line = reader.readLine()) != null) {
                     writer.write(line);
@@ -49,12 +47,8 @@ public class CommandGetDump extends BaseCommand {
                 e.printStackTrace();
                 event.replyEmbeds(createQuickError("Could not get dump.\n```\n" + e.getMessage() + "\n```"));
             }
-            event.replyFiles(FileUpload.fromData(new File("log.txt")));
-            try {
-                Thread.sleep(10000);
-                new File("log.txt").delete();
-            } catch (Exception ignored) {
-            }
+            event.deferReply();
+            event.replyFiles(FileUpload.fromData(new File("temp/dump.txt")));
         } else {
             event.replyEmbeds(createQuickError("You do not have the permissions for this."));
         }
