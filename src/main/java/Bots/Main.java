@@ -220,9 +220,9 @@ public class Main extends ListenerAdapter {
             for (Class<?> commandClass : classes) {
                 try {
                     registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-                    printlnTime("loaded command: " + commandClass.getSimpleName().substring(7));
+                    printlnTime("loaded command:", commandClass.getSimpleName().substring(7));
                 } catch (Exception e) {
-                    errorlnTime("Unable to load command " + commandClass.getSimpleName().substring(7));
+                    errorlnTime("Unable to load command", commandClass);
                     e.printStackTrace();
                 }
             }
