@@ -274,6 +274,7 @@ public class Main extends ListenerAdapter {
                         // handling for sys.out
                         if (builderOut.toString().length() > 1) {
                             String trimmedBuilder = builderOut.toString().trim();
+                            trimmedBuilder = trimmedBuilder + "\n";
                             // set sys.out to what it was originally to print to the console.
                             System.setOut(out);
                             printlnTime(trimmedBuilder);
@@ -288,6 +289,7 @@ public class Main extends ListenerAdapter {
                         if (builderErr.toString().length() > 1) {
                             // datetime formatting to add the date and time to sys.err messages.
                             String finalMessage = dtf.format(LocalDateTime.now()) + " | " + builderErr.toString().trim();
+                            finalMessage = finalMessage + "\n";
                             // set sys.err to what it was originally to print to the console.
                             System.setErr(err);
                             err.println(finalMessage.trim());
