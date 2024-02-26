@@ -98,7 +98,7 @@ public class PlayerManager {
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.setThumbnail(getThumbURL(audioTrack));
+                    if (getThumbURL(audioTrack) != null) embed.setThumbnail(getThumbURL(audioTrack));
                     String length;
                     if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
                         length = "Unknown";
@@ -139,7 +139,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            embed.setThumbnail(getThumbURL(track));
+                            if (getThumbURL(track) != null) embed.setThumbnail(getThumbURL(track));
                             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                             message.replyEmbeds(embed.build());
@@ -166,7 +166,7 @@ public class PlayerManager {
                         if (tracks.size() > 5) {
                             embed.appendDescription("...");
                         }
-                        embed.setThumbnail(getThumbURL(tracks.get(0)));
+                        if (getThumbURL(tracks.get(0)) != null) embed.setThumbnail(getThumbURL(tracks.get(0)));
                         message.replyEmbeds(embed.build());
                     }
                     for (AudioTrack audioTrack : tracks) {
@@ -186,6 +186,7 @@ public class PlayerManager {
             public void loadFailed(FriendlyException e) {
                 clearVotes(guildID);
                 message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
+                errorlnTime("Track failed to load.\nURL: " + trackUrl);
                 e.printStackTrace();
             }
         });
@@ -201,7 +202,7 @@ public class PlayerManager {
                 return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
             } else if (track.getInfo().uri.toLowerCase().contains("spotify")) {
                 site = "Spotify";
-                url = new URL("https://embed.spotify.com/oembed/?url=" + track.getInfo().uri);
+                url = new URL("https://embed.spotify.com/oembed?url=" + track.getInfo().uri);
                 pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
             } else if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
                 site = "SoundCloud";
@@ -210,9 +211,10 @@ public class PlayerManager {
             } else {
                 return null;
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
             errorlnTime("Thumb URL Fail : " + site + " |" + url);
-        } // ignore because floods console if image url invalid
+        }
 
         if (url != null && pattern != null) {
             try {

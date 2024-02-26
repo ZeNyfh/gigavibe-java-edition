@@ -6,6 +6,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -56,14 +57,16 @@ public class CommandNowPlaying extends BaseCommand {
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioTrack track = audioPlayer.getPlayingTrack();
 
-        if (audioPlayer.getPlayingTrack() == null) {
+        if (track == null) {
             event.replyEmbeds(createQuickError("No tracks are playing right now."));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
-        long trackPos = audioPlayer.getPlayingTrack().getPosition();
-        double totalTime = audioPlayer.getPlayingTrack().getDuration();
+
+        long trackPos = track.getPosition();
+        double totalTime = track.getDuration();
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
         trackPos = (long) (trackPos / timescale.getSpeed());
         totalTime = totalTime / timescale.getSpeed();
@@ -79,22 +82,22 @@ public class CommandNowPlaying extends BaseCommand {
             barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
         } catch (Exception ignored) {
         }
-        embed.setThumbnail(PlayerManager.getInstance().getThumbURL(audioPlayer.getPlayingTrack()));
+        if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         try {
-            embed.setTitle((audioPlayer.getPlayingTrack().getInfo().title), (audioPlayer.getPlayingTrack().getInfo().uri));
-            if (audioPlayer.getPlayingTrack().getInfo().isStream) {
-                String streamTitle = getStreamTitle(audioPlayer.getPlayingTrack().getInfo().uri);
+            embed.setTitle((track.getInfo().title), (track.getInfo().uri));
+            if (track.getInfo().isStream) {
+                String streamTitle = getStreamTitle(track.getInfo().uri);
                 if (streamTitle != null) {
-                    embed.setTitle(streamTitle, audioPlayer.getPlayingTrack().getInfo().uri);
+                    embed.setTitle(streamTitle, track.getInfo().uri);
                 }
             }
         } catch (Exception ignored) {
             embed.setTitle("Unknown");
         }
         embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
-        embed.addField("\uD83D\uDC64 Channel:", audioPlayer.getPlayingTrack().getInfo().author, true);
+        embed.addField("\uD83D\uDC64 Channel:", track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
-            embed.setThumbnail(PlayerManager.getInstance().getThumbURL(audioPlayer.getPlayingTrack()));
+            if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
             embed.addField("▶️ Up next:", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
@@ -117,9 +120,9 @@ public class CommandNowPlaying extends BaseCommand {
             embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("♾\uFE0F Auto playing:", "✅ **True**", true);
+            embed.addField("♾️ Auto playing:", "✅ **True**", true);
         } else {
-            embed.addField("♾\uFE0F Auto playing:", "❌ **False**", true);
+            embed.addField("♾️ Auto playing:", "❌ **False**", true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);

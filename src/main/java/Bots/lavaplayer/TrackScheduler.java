@@ -106,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter {
                     eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
                     eb.addField("**Duration**\n", "Unknown", true);
                 }
-                eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
+                if (PlayerManager.getInstance().getThumbURL(nextTrack) != null) eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
                 eb.setColor(botColour);
                 userData.sendMessageEmbeds(eb.build()).queue();
             }

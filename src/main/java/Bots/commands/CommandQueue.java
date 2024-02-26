@@ -27,7 +27,9 @@ import static java.lang.Math.round;
 
 public class CommandQueue extends BaseCommand {
     private void HandleButtonEvent(ButtonInteractionEvent event) {
-        BlockingQueue<AudioTrack> Queue = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild())).scheduler.queue;
+        final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
+        final AudioTrack track = manager.audioPlayer.getPlayingTrack();
+        final BlockingQueue<AudioTrack> Queue = manager.scheduler.queue;
         if (Objects.equals(event.getButton().getId(), "forward")) {
             queuePages.put(event.getGuild().getIdLong(), queuePages.get(event.getGuild().getIdLong()) + 1);
             if (queuePages.get(event.getGuild().getIdLong()) > round((Queue.size() / 5F) + 1)) {
@@ -40,9 +42,9 @@ public class CommandQueue extends BaseCommand {
             }
         }
         long queueTimeLength = 0;
-        for (AudioTrack track : Queue) {
-            if (track.getInfo().length < 432000000) {
-                queueTimeLength = queueTimeLength + track.getInfo().length;
+        for (AudioTrack queueTrack : Queue) {
+            if (queueTrack.getInfo().length < 432000000) {
+                queueTimeLength = queueTimeLength + queueTrack.getInfo().length;
             }
         }
         EmbedBuilder eb = new EmbedBuilder();
@@ -50,10 +52,10 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
             eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
         }
-        eb.setTitle("__**Now playing:**__\n" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri);
+        eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
         eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         eb.setColor(botColour);
-        eb.setThumbnail(PlayerManager.getInstance().getThumbURL(PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack()));
+        if (PlayerManager.getInstance().getThumbURL(track) != null) eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
 
@@ -112,7 +114,7 @@ public class CommandQueue extends BaseCommand {
         }
         embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
-        embed.setThumbnail(PlayerManager.getInstance().getThumbURL(audioPlayer.getPlayingTrack()));
+        if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         if (!event.isSlash()) { //Incredibly hacky fix because @9382 doesn't want to implement all the backend just for this
             ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
                     message -> message.editMessageComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue()
