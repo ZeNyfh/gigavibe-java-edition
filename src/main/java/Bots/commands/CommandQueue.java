@@ -80,7 +80,10 @@ public class CommandQueue extends BaseCommand {
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("__**Now playing:**__\n" + audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
+        AudioTrack track = audioPlayer.getPlayingTrack();
+        String title = track.getInfo().title;
+        if (track.getInfo().title == null) title = "Unknown title";
+        embed.setTitle("__**Now playing:**__\n" + title, track.getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {

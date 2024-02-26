@@ -249,11 +249,12 @@ public class Main extends ListenerAdapter {
 
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
-            // auto updater code
             timer = new Timer();
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
-                int time = 0;
+                int VCTime = 0;
+                int cleanUpTime = 0;
+                File tempDir = new File("temp/");
                 final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
                 @Override
@@ -301,6 +302,18 @@ public class Main extends ListenerAdapter {
                         err.println(e);
                     }
 
+                    // temp directory cleanup
+                    cleanUpTime++;
+                    // we shouldn't need to check this often or if the directory is empty
+                    if (cleanUpTime > 300) {
+                        File[] contents = tempDir.listFiles();
+                        if (contents != null && contents.length != 0) {
+                            // we don't want to delete something as it is being written to.
+                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000) deleteFiles("temp\\");
+                            cleanUpTime = 0;
+                        }
+                    }
+
                     // updater code
                     boolean isInAnyVc = false;
                     for (Guild guild : bot.getGuilds()) {
@@ -309,10 +322,9 @@ public class Main extends ListenerAdapter {
                             break;
                         }
                     }
-
                     if (!isInAnyVc) { // not in vc
-                        time++;
-                        if (time >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                        VCTime++;
+                        if (VCTime >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
                             // leeway for upload past the time limit
                             if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
                                 printlnTime("It's update time!");
@@ -323,7 +335,7 @@ public class Main extends ListenerAdapter {
                             }
                         }
                     } else { // in a vc
-                        time = 0;
+                        VCTime = 0;
                     }
                 }
             };
