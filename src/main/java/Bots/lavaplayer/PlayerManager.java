@@ -178,7 +178,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 message.replyEmbeds(createQuickError("No matches found for the track."));
-                errorlnTime("No match found for the track.\nURL: " + trackUrl);
+                errorlnTime("No match found for the track.\nURL:\"" + trackUrl + "\"");
             }
 
 
@@ -186,7 +186,7 @@ public class PlayerManager {
             public void loadFailed(FriendlyException e) {
                 clearVotes(guildID);
                 message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
-                errorlnTime("Track failed to load.\nURL: " + trackUrl);
+                errorlnTime("Track failed to load.\nURL: \"" + trackUrl + "\"");
                 e.printStackTrace();
             }
         });

@@ -37,7 +37,7 @@
         <dependency>
             <groupId>dev.arbjerg</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>2.0.2</version>
+            <version>00d5258dea97b2ca623eaa8e7c251543c4f17b71-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -90,6 +90,12 @@
             <name>Topis Maven Repo</name>
             <url>https://maven.topi.wtf/releases</url>
         </repository>
+        <repository>
+            <id>arbjergDev-snapshots</id>
+            <name>Lavalink Repository</name>
+            <url>https://maven.lavalink.dev/snapshots</url>
+        </repository>
+
     </repositories>
 
 </project>
