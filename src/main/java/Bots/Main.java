@@ -123,7 +123,9 @@ public class Main extends ListenerAdapter {
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         ignoreFiles = new File("temp/").mkdir();
-        deleteFiles("temp\\"); //must be backslash for deleteFiles
+        if (Files.list(Paths.get("temp/").toAbsolutePath()).findAny().isPresent()) {
+            deleteFiles("temp\\"); //must be backslash for deleteFiles
+        }
         commandUsageTracker = GetConfig("usage-stats");
         File logDir = new File("logs/");
         ignoreFiles = logDir.mkdir();
