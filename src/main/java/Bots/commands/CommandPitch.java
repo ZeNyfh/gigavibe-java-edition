@@ -30,6 +30,11 @@ public class CommandPitch extends BaseCommand {
             return;
         }
 
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
+            return;
+        }
+
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 
         assert memberVoiceState != null;

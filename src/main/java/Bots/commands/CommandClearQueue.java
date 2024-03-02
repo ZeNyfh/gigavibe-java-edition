@@ -21,19 +21,22 @@ public class CommandClearQueue extends BaseCommand {
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
+        if (selfVoiceState != null && !selfVoiceState.inAudioChannel()) {
             event.replyEmbeds(createQuickError("I'm not in a vc."));
             return;
         }
 
-        assert memberVoiceState != null;
-        if (!memberVoiceState.inAudioChannel()) {
+        if (musicManager.audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
+            return;
+        }
+
+        if (memberVoiceState != null && !memberVoiceState.inAudioChannel()) {
             event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
             return;
         }
 
-        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
+        if (selfVoiceState != null && memberVoiceState != null && !Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
             event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
             return;
         }

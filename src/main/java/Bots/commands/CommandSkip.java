@@ -43,7 +43,7 @@ public class CommandSkip extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("No tracks are playing right now."));
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
             return;
         }
 

@@ -32,6 +32,10 @@ public class CommandInsert extends BaseCommand {
             event.replyEmbeds(createQuickError("You aren't in a vc."));
             return;
         }
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
+            return;
+        }
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {

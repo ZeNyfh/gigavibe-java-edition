@@ -26,6 +26,10 @@ public class CommandVolume extends BaseCommand {
             event.replyEmbeds(createQuickError("You are not in the same vc as me."));
             return;
         }
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
+            return;
+        }
         String[] args = event.getArgs();
         if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);

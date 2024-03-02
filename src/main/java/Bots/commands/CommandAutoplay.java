@@ -2,6 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import Bots.lavaplayer.PlayerManager;
 
 import java.util.Objects;
 
@@ -19,6 +20,10 @@ public class CommandAutoplay extends BaseCommand {
         }
         if (event.getGuild().getAudioManager().getConnectedChannel() != Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()) {
             event.replyEmbeds(createQuickError("You aren't in the same vc as me."));
+            return;
+        }
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {

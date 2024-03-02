@@ -29,6 +29,10 @@ public class CommandVibrato extends BaseCommand {
             event.replyEmbeds(createQuickError("Im not in a vc."));
             return;
         }
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
+            return;
+        }
 
         final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
 

@@ -2,6 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.MessageEvent;
+import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.*;
@@ -11,8 +12,9 @@ public class CommandLoopQueue extends BaseCommand {
     public void execute(MessageEvent event) {
         final AudioManager audioManager = event.getGuild().getAudioManager();
 
-        if (!audioManager.isConnected()) {
-            event.replyEmbeds(createQuickError("I am not playing anything."));
+
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(createQuickError("Nothing is playing right now."));
             return;
         }
 
