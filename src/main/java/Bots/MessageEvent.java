@@ -1,6 +1,7 @@
 package Bots;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,9 +15,11 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static Bots.Main.botPrefix;
+import static Bots.Main.createQuickError;
 
 // TODO: Purge this file and re-make the system to be better
 // (Basically, give the queueing responsibility back to the code that calls this)
@@ -135,9 +138,9 @@ public class MessageEvent {
         return isSlash() && ((SlashCommandInteractionEvent) this.coreEvent).isAcknowledged();
     }
 
-    public void deferReply(boolean ephemereal) {
+    public void deferReply(boolean ephemeral) {
         if (isSlash()) {
-            ((SlashCommandInteractionEvent) this.coreEvent).deferReply(ephemereal).queue();
+            ((SlashCommandInteractionEvent) this.coreEvent).deferReply(ephemeral).queue();
         }
     }
 
@@ -147,10 +150,11 @@ public class MessageEvent {
 
     public void reply(Consumer<MessageEvent.Response> lambda, String s) {
         if (isSlash()) {
+            SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged())
-                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginal(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.getHook().editOriginal(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             else
-                ((SlashCommandInteractionEvent) this.coreEvent).reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
@@ -163,15 +167,22 @@ public class MessageEvent {
 
     public void replyEmbeds(Consumer<MessageEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
         if (isSlash()) {
+            SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged()) {
                 List<MessageEmbed> allembeds = new ArrayList<>();
                 allembeds.add(embed);
                 allembeds.addAll(List.of(embeds));
-                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalEmbeds(allembeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.getHook().editOriginalEmbeds(allembeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             } else
-                ((SlashCommandInteractionEvent) this.coreEvent).replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            MessageReceivedEvent event = ((MessageReceivedEvent) this.coreEvent);
+            if (!event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_SEND)) {
+                try {
+                    Objects.requireNonNull(event.getMember()).getUser().openPrivateChannel().queue(dm -> dm.sendMessageEmbeds(createQuickError(String.format("The bot does not have the permission to message in `%s`.", event.getChannel().getName()))).queue());
+                } catch (Exception ignored) {} // this can safely be ignored as I expect this to throw an exception.
+            }
+            event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
     }
 
@@ -182,10 +193,11 @@ public class MessageEvent {
 
     public void replyFiles(Consumer<MessageEvent.Response> lambda, FileUpload... files) {
         if (isSlash()) {
+            SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged())
-                ((SlashCommandInteractionEvent) this.coreEvent).getHook().editOriginalAttachments(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.getHook().editOriginalAttachments(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             else
-                ((SlashCommandInteractionEvent) this.coreEvent).replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+                event.replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
             ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         }
