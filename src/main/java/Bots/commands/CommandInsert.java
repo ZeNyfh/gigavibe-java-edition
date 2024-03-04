@@ -82,30 +82,19 @@ public class CommandInsert extends BaseCommand {
         } else {
             // insertion between songs happens here
             try {
-                //TODO: There has to be a better way to do this
-                // (We really don't want to Thread.sleep or have to do any sort of time check)
-                List<AudioTrack> queueHalf1 = queue.subList(0, position);
-                List<AudioTrack> queueHalf2 = queue.subList(position, queue.size());
-                musicManager.scheduler.queue.clear();
-                musicManager.scheduler.queue.addAll(queueHalf1);
-                if (position == 1) {
-                    musicManager.scheduler.queue(queue.get(1));
+                List<AudioTrack> TemporaryQueue = new ArrayList<>();
+                musicManager.scheduler.queue.drainTo(TemporaryQueue);
+                for (int i = 0; i < position; i++) {
+                    musicManager.scheduler.queue(TemporaryQueue.get(i));
                 }
                 for (String track : tracksToPlay) {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, sendEmbedBool);
-                    sendEmbedBool = false;
+                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, false, () -> {
+                        for (int i = position; i < TemporaryQueue.size(); i++) {
+                            musicManager.scheduler.queue(TemporaryQueue.get(i));
+                        }
+                        event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
+                    });
                 }
-                long panicBreak = System.currentTimeMillis();
-                while (queue.size() == musicManager.scheduler.queue.size() + queueHalf2.size()) {
-                    if (System.currentTimeMillis() - panicBreak > 5000) {
-                        errorlnTime("CommandInsert took over 5 seconds to run, is everything ok?");
-                        break;
-                    }
-                    Thread.sleep(250); // don't run as fast as you can please :)
-                }
-                musicManager.scheduler.queue.addAll(queueHalf2);
-
-                event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -82,7 +82,7 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
+    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
         long guildID = commandChannel.getGuild().getIdLong();
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
@@ -116,6 +116,7 @@ public class PlayerManager {
                     embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
                     message.replyEmbeds(embed.build());
                 }
+                OnCompletion.run();
             }
 
 
@@ -173,12 +174,14 @@ public class PlayerManager {
                         audioTrack.setUserData(commandChannel);
                     }
                 }
+                OnCompletion.run();
             }
 
             @Override
             public void noMatches() {
                 message.replyEmbeds(createQuickError("No matches found for the track."));
                 errorlnTime("No match found for the track.\nURL:\"" + trackUrl + "\"");
+                OnCompletion.run();
             }
 
 
@@ -188,8 +191,13 @@ public class PlayerManager {
                 message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
                 errorlnTime("Track failed to load.\nURL: \"" + trackUrl + "\"");
                 e.printStackTrace();
+                OnCompletion.run();
             }
         });
+    }
+
+    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
+        loadAndPlay(commandChannel, trackUrl, sendEmbed, () -> {});
     }
 
     @Nullable
