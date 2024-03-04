@@ -5,7 +5,7 @@ dj users or roles and some other cool features for you to play with once you [in
 
 ## Requirements
 
-* [JDK 16](https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html)
+* [JDK 16](https://adoptium.net/temurin/releases/?version=16&package=jdk)
 
 ## Usage
 
@@ -16,7 +16,7 @@ Run the bot using the latest included .jar file in releases or compile the jar y
 
 ## Java Installation
 
-JDK 16 can be acquired from [The Oracle Archive](https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html) or from other trusted sources.
+JDK 16 can be acquired from [Temurin by Adoptium](https://adoptium.net/temurin/releases/?version=16&package=jdk) or from other trusted sources.
 
 ## Note / Help
 
