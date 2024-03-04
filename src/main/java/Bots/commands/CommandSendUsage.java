@@ -40,7 +40,7 @@ public class CommandSendUsage extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"sendusage", "usage", "sendusagelog", "usagelog"};
+        return new String[]{"sendusage", "usage", "getusage", "get usage"};
     }
 
     @Override
