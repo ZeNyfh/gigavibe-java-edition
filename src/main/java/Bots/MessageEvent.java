@@ -156,7 +156,11 @@ public class MessageEvent {
             else
                 event.reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            try {
+                ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            } catch (Exception e) {
+                Main.errorlnTime(e.getMessage());
+            }
         }
     }
 
@@ -182,7 +186,11 @@ public class MessageEvent {
                     Objects.requireNonNull(event.getMember()).getUser().openPrivateChannel().queue(dm -> dm.sendMessageEmbeds(createQuickError(String.format("The bot does not have the permission to message in `%s`.", event.getChannel().getName()))).queue());
                 } catch (Exception ignored) {} // this can safely be ignored as I expect this to throw an exception.
             }
-            event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            try {
+                event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            } catch (Exception e) {
+                Main.errorlnTime(e.getMessage());
+            }
         }
     }
 
@@ -199,7 +207,11 @@ public class MessageEvent {
             else
                 event.replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
         } else {
-            ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            try {
+                ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
+            } catch (Exception e) {
+                Main.errorlnTime(e.getMessage());
+            }
         }
     }
 
