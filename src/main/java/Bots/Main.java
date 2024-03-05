@@ -656,7 +656,7 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            //ratelimit code. ratelimit is per-user across all guilds
+            //ratelimit code. ratelimit is per-user per-guild
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
             if (ratelimitTime > 0) {
                 event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
