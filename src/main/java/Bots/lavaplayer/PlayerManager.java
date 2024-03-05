@@ -38,7 +38,6 @@ public class PlayerManager {
     private static boolean hasSpotify;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
-    public static MessageEvent message;
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -82,8 +81,8 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
-        long guildID = commandChannel.getGuild().getIdLong();
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
+        GuildMessageChannelUnion commandChannel = event.getChannel();
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
@@ -94,7 +93,7 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(commandChannel);
+                audioTrack.setUserData(event);
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
                     EmbedBuilder embed = new EmbedBuilder();
@@ -114,7 +113,7 @@ public class PlayerManager {
                         embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                     }
                     embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
-                    message.replyEmbeds(embed.build());
+                    event.replyEmbeds(embed.build());
                 }
                 OnCompletion.run();
             }
@@ -143,7 +142,7 @@ public class PlayerManager {
                             if (getThumbURL(track) != null) embed.setThumbnail(getThumbURL(track));
                             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                            message.replyEmbeds(embed.build());
+                            event.replyEmbeds(embed.build());
                         }
                     } else {
                         long lengthSeconds = 0;
@@ -168,10 +167,10 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         if (getThumbURL(tracks.get(0)) != null) embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        message.replyEmbeds(embed.build());
+                        event.replyEmbeds(embed.build());
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(commandChannel);
+                        audioTrack.setUserData(event);
                     }
                 }
                 OnCompletion.run();
@@ -179,7 +178,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                message.replyEmbeds(createQuickError("No matches found for the track."));
+                event.replyEmbeds(createQuickError("No matches found for the track."));
                 errorlnTime("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 OnCompletion.run();
             }
@@ -187,8 +186,8 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(guildID);
-                message.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
+                clearVotes(event.getGuild().getIdLong());
+                event.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + e.getMessage() + "\n```"));
                 errorlnTime("Track failed to load.\nURL: \"" + trackUrl + "\"");
                 e.printStackTrace();
                 OnCompletion.run();
@@ -196,8 +195,8 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(GuildMessageChannelUnion commandChannel, String trackUrl, Boolean sendEmbed) {
-        loadAndPlay(commandChannel, trackUrl, sendEmbed, () -> {});
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
+        loadAndPlay(event, trackUrl, sendEmbed, () -> {});
     }
 
     @Nullable

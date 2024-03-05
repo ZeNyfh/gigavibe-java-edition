@@ -68,7 +68,7 @@ public class CommandSkip extends BaseCommand {
                 }
                 String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
                 String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
-                PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioUrl, true);
+                PlayerManager.getInstance().loadAndPlay(event, radioUrl, true);
             }
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command

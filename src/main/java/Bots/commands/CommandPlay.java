@@ -34,7 +34,6 @@ public class CommandPlay extends BaseCommand {
         }
 
         event.deferReply(); //expect to take a while
-        PlayerManager.message = event;
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
         final AudioManager audioManager = event.getGuild().getAudioManager();
@@ -72,7 +71,7 @@ public class CommandPlay extends BaseCommand {
                 String line;
                 try {
                     while ((line = reader.readLine()) != null) {
-                        PlayerManager.getInstance().loadAndPlay(event.getChannel(), line.split(" ", 2)[0], false);
+                        PlayerManager.getInstance().loadAndPlay(event, line.split(" ", 2)[0], false);
                     }
                     event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
                 } catch (Exception ignored) {
@@ -88,7 +87,7 @@ public class CommandPlay extends BaseCommand {
                 }
                 try {
                     for (Message.Attachment attachment : links) {
-                        PlayerManager.getInstance().loadAndPlay(event.getChannel(), attachment.getUrl(), sendEmbedBool);
+                        PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), sendEmbedBool);
                         sendEmbedBool = false;
                     }
                 } catch (Exception ignored) {
@@ -112,7 +111,7 @@ public class CommandPlay extends BaseCommand {
                 link = "ytsearch: " + link;
             }
             try {
-                PlayerManager.getInstance().loadAndPlay(event.getChannel(), link, true);
+                PlayerManager.getInstance().loadAndPlay(event, link, true);
             } catch (FriendlyException ignored) {
                 event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
             }

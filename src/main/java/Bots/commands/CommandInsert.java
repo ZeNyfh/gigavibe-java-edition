@@ -73,7 +73,7 @@ public class CommandInsert extends BaseCommand {
         if (position + 1 >= queue.size() || queue.isEmpty()) {
             for (String track : tracksToPlay) {
                 try {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, sendEmbedBool);
+                    PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
                     sendEmbedBool = false;
                 } catch (FriendlyException ignored) {
                     event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
@@ -88,7 +88,7 @@ public class CommandInsert extends BaseCommand {
                     musicManager.scheduler.queue(TemporaryQueue.get(i));
                 }
                 for (String track : tracksToPlay) {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), track, false, () -> {
+                    PlayerManager.getInstance().loadAndPlay(event, track, false, () -> {
                         for (int i = position; i < TemporaryQueue.size(); i++) {
                             musicManager.scheduler.queue(TemporaryQueue.get(i));
                         }

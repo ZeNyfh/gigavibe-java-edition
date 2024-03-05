@@ -58,10 +58,10 @@ public class CommandForceSkip extends BaseCommand {
                 event.replyEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay."));
             }
             //TODO: This autoplay stuff has multiple issues (#148 work)
-            //(Double reply potential, the above if check doesn't prevent the below code (that's gotta be a bug)
+            //(Double reply potential, the above if check doesn't prevent the below code (that's gotta be a bug))
             String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
             String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=RD" + trackId;
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioUrl, true);
+            PlayerManager.getInstance().loadAndPlay(event, radioUrl, true);
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) {
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {

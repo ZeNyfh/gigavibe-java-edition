@@ -1,5 +1,6 @@
 package Bots.lavaplayer;
 
+import Bots.MessageEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
@@ -38,8 +39,9 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        GuildMessageChannelUnion userData = (GuildMessageChannelUnion) track.getUserData();
-        long guildId = userData.getGuild().getIdLong();
+        MessageEvent originalEvent = (MessageEvent) track.getUserData();
+        GuildMessageChannelUnion originalEventChannel = originalEvent.getChannel();
+        long guildId = originalEvent.getGuild().getIdLong();
         clearVotes(guildId);
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);
@@ -56,10 +58,10 @@ public class TrackScheduler extends AudioEventAdapter {
                 eb.setDescription("Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.");
                 eb.setFooter("If this issue persists with specific audio sources, please file a /bug report");
                 eb.setColor(botColour);
-                userData.sendMessageEmbeds(eb.build()).queue();
+                originalEventChannel.sendMessageEmbeds(eb.build()).queue();
                 return;
             } else {
-                userData.sendMessageEmbeds(createQuickError("The track failed to load due to an unknown reason. Skipping...")).queue();
+                originalEventChannel.sendMessageEmbeds(createQuickError("The track failed to load due to an unknown reason. Skipping...")).queue();
                 if (queue.isEmpty()) {
                     guildFailCount.put(guildId, 0);
                 }
@@ -81,12 +83,12 @@ public class TrackScheduler extends AudioEventAdapter {
                 }
                 if (AutoplayGuilds.contains(guildId)) {
                     if (!track.getInfo().uri.toLowerCase().contains("youtube")) {
-                        userData.sendMessageEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay.")).queue();
+                        originalEventChannel.sendMessageEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay.")).queue();
                         return;
                     }
                     String trackId = track.getInfo().identifier;
                     String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
-                    PlayerManager.getInstance().loadAndPlay(userData, radioUrl, true);
+                    PlayerManager.getInstance().loadAndPlay(originalEvent, radioUrl, true);
                     return;
                 }
             }
@@ -111,7 +113,7 @@ public class TrackScheduler extends AudioEventAdapter {
                 }
                 if (PlayerManager.getInstance().getThumbURL(nextTrack) != null) eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
                 eb.setColor(botColour);
-                userData.sendMessageEmbeds(eb.build()).queue();
+                originalEventChannel.sendMessageEmbeds(eb.build()).queue();
             }
         }
     }

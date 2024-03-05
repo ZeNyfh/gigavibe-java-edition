@@ -134,14 +134,14 @@ public class CommandRadio extends BaseCommand {
                 event.replyEmbeds(createQuickError("Couldn't find a radio station with the given name"));
             } else {
                 //TODO: Consider somehow getting the real name of the station rather than using the search term that found it
-                PlayerManager.getInstance().loadAndPlay(event.getChannel(), radioURL, false);
+                PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
                 event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + radioSearchTerm + "](" + radioURL + ")**"));
             }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(wantedRadio)) {
-                    PlayerManager.getInstance().loadAndPlay(event.getChannel(), tempMap.getValue(), false);
+                    PlayerManager.getInstance().loadAndPlay(event, tempMap.getValue(), false);
                     event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }
