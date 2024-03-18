@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
+    Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+
     public static String getRadio(String search) throws IOException {
         URL url;
         try {
@@ -40,7 +42,6 @@ public class CommandRadio extends BaseCommand {
         } catch (Exception ignored) {
             return "None";
         }
-        Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
         Matcher matcher = pattern.matcher(builder.toString());
         if (matcher.find()) {
             return matcher.group(1);
@@ -49,22 +50,28 @@ public class CommandRadio extends BaseCommand {
         }
     }
 
+
+    private static final HashMap<String, Pattern> patterns = new HashMap<>() {{
+        put("Spotify", Pattern.compile("<img src=\"([^\"]+)\" width=\""));
+        put("SoundCloud", Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\""));
+    }};
+
+    HashMap<String, String> radioLists = new HashMap<>() {{
+        put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
+        put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
+        put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
+        put("Beats n Breaks", "http://83.137.145.141:14280/;");
+        put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
+        put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
+        put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
+        put("Nova DK", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        put("Pro FM", "https://player.profm.nl/proxy/profm?mp=/stream");
+        put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
+        put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
+        put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
+        put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
+    }};
     public HashMap<String, String> getRadios() {
-        HashMap<String, String> radioLists = new HashMap<>();
-        radioLists.put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
-        radioLists.put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
-        radioLists.put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
-        radioLists.put("Estilo Leblon", "https://us4.internet-radio.com/proxy/radioestiloleblon?mp=/stream;");
-        radioLists.put("Beats n Breaks", "http://83.137.145.141:14280/;");
-        radioLists.put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
-        radioLists.put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
-        radioLists.put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
-        radioLists.put("Nova DK", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
-        radioLists.put("Pro FM", "https://player.profm.nl/proxy/profm?mp=/stream");
-        radioLists.put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
-        radioLists.put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
-        radioLists.put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
-        radioLists.put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
         return radioLists;
     }
 

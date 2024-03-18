@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class CommandDJ extends BaseCommand {
+    Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
 
     @Override
     public void execute(MessageEvent event) {
@@ -71,7 +72,6 @@ public class CommandDJ extends BaseCommand {
                 event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have the permission to use this command."));
                 return;
             }
-            Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
             List<Long> FoundMembers = new ArrayList<>();
             List<Long> FoundRoles = new ArrayList<>();
             for (int i = 2; i < event.getArgs().length; i++) {

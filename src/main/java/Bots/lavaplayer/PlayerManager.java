@@ -33,7 +33,10 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class PlayerManager {
-
+    private static final HashMap<String, Pattern> patterns = new HashMap<>() {{
+        put("Spotify", Pattern.compile("<img src=\"([^\"]+)\" width=\""));
+        put("SoundCloud", Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\""));
+    }};
     private static PlayerManager INSTANCE;
     private static boolean hasSpotify;
     private final Map<Long, GuildMusicManager> musicManagers;
@@ -210,14 +213,13 @@ public class PlayerManager {
             } else if (track.getInfo().uri.toLowerCase().contains("spotify")) {
                 site = "Spotify";
                 url = new URL("https://embed.spotify.com/oembed?url=" + track.getInfo().uri);
-                pattern = Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\"");
             } else if (track.getInfo().uri.toLowerCase().contains("soundcloud")) {
                 site = "SoundCloud";
                 url = new URL(track.getInfo().uri);
-                pattern = Pattern.compile("<img src=\"([^\"]+)\" width=\"");
             } else {
                 return null;
             }
+            pattern = patterns.get(site);
         } catch (Exception e) {
             e.printStackTrace();
             errorlnTime("Thumb URL Fail : " + site + " |" + url);

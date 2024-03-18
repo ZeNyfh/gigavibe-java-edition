@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class CommandBlockChannel extends BaseCommand {
+    Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
+
     @Override
     public void execute(MessageEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
@@ -35,7 +37,7 @@ public class CommandBlockChannel extends BaseCommand {
         JSONArray blockedChannels = (JSONArray) event.getConfig().get("BlockedChannels");
         if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove")) {
             String targetChannel = args[2];
-            Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
+
             Matcher matcher = pattern.matcher(args[2]);
             if (matcher.matches()) {
                 targetChannel = matcher.group(1);
