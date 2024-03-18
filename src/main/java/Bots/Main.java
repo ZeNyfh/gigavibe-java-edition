@@ -490,6 +490,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
+        // I use cmd/bash here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
             String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", "/Q", filePrefix + "*"} : new String[]{"sh", "-c", "rm " + filePrefix + "*"};
             Process process = Runtime.getRuntime().exec(command);
