@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
-    Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+    private static final Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
 
     public static String getRadio(String search) throws IOException {
         URL url;
