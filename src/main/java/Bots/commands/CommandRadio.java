@@ -50,12 +50,6 @@ public class CommandRadio extends BaseCommand {
         }
     }
 
-
-    private static final HashMap<String, Pattern> patterns = new HashMap<>() {{
-        put("Spotify", Pattern.compile("<img src=\"([^\"]+)\" width=\""));
-        put("SoundCloud", Pattern.compile("\"thumbnail_url\":\"([^\"]+)\",\""));
-    }};
-
     HashMap<String, String> radioLists = new HashMap<>() {{
         put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
         put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
