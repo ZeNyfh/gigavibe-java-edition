@@ -34,7 +34,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
@@ -131,7 +133,7 @@ public class Main extends ListenerAdapter {
         ignoreFiles = logDir.mkdir();
         File logFile = new File("logs/log.log");
         if (logFile.length() != 0) {
-            String outputZip = logDir + "/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".zip";
+            String outputZip = logDir + "/log_" + Instant.ofEpochMilli(Uptime).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".zip";
             String logPath = logFile.getAbsolutePath();
             try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(outputZip))) {
                 File fileToZip = new File(logPath);
