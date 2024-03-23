@@ -4,9 +4,11 @@ import Bots.MessageEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 
 import java.util.HashMap;
@@ -116,5 +118,12 @@ public class TrackScheduler extends AudioEventAdapter {
                 originalEventChannel.sendMessageEmbeds(eb.build()).queue();
             }
         }
+    }
+
+    @Override
+    public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+        Guild guild = ((MessageEvent) track.getUserData()).getGuild();
+        printlnTime("AudioPlayer in", guild.getIdLong(), guild.getName(), "threw friendly exception on track", track.getInfo().uri);
+        exception.printStackTrace();
     }
 }
