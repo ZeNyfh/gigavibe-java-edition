@@ -131,9 +131,9 @@ public class Main extends ListenerAdapter {
         File logDir = new File("logs/");
         if (logDir.isDirectory()) {
             File[] logs = logDir.listFiles();
-            if (logs != null && logs.length != 0 && logs.length < 20) {
+            if (logs != null && logs.length != 0 && logs.length > 20) {
                 for (File log : logs) {
-                    if (System.currentTimeMillis() - log.lastModified() <= 2419200000L) {
+                    if (System.currentTimeMillis() - log.lastModified() >= 2419200000L) {
                         ignoreFiles = log.delete();
                     }
                 }
