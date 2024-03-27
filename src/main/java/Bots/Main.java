@@ -128,8 +128,18 @@ public class Main extends ListenerAdapter {
         if (Files.list(Paths.get("temp/").toAbsolutePath()).findAny().isPresent()) {
             deleteFiles("temp\\"); //must be backslash for deleteFiles
         }
-        commandUsageTracker = GetConfig("usage-stats");
         File logDir = new File("logs/");
+        if (logDir.isDirectory()) {
+            File[] logs = logDir.listFiles();
+            if (logs != null && logs.length != 0 && logs.length > 20) {
+                for (File log : logs) {
+                    if (System.currentTimeMillis() - log.lastModified() >= 2419200000L) {
+                        ignoreFiles = log.delete();
+                    }
+                }
+            }
+        }
+        commandUsageTracker = GetConfig("usage-stats");
         ignoreFiles = logDir.mkdir();
         File logFile = new File("logs/log.log");
         if (logFile.length() != 0) {
