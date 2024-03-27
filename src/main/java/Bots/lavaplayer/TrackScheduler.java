@@ -48,11 +48,11 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);
             if (guildFailCount.get(guildId) == 1) {
-                printlnTime("Failed to load a track " + track.getInfo().uri + " retrying...");
+                errorlnTime("Failed to load a track " + track.getInfo().uri + " retrying...");
                 event.player.startTrack(track, false);
             }
             if (guildFailCount.get(guildId) >= 3) {
-                printlnTime("Failed to load a song 3 times in a row, killing queue");
+                errorlnTime("Failed to load a song 3 times in a row, killing queue");
                 queue.clear();
                 guildFailCount.put(guildId, 0);
                 EmbedBuilder eb = new EmbedBuilder();
