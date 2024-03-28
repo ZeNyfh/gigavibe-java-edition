@@ -30,6 +30,7 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -125,8 +126,9 @@ public class Main extends ListenerAdapter {
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         ignoreFiles = new File("temp/").mkdir();
-        if (Files.list(Paths.get("temp/").toAbsolutePath()).findAny().isPresent()) {
-            deleteFiles("temp\\"); //must be backslash for deleteFiles
+        Path fullDir = Paths.get("temp/").toAbsolutePath();
+        if (Files.list(fullDir).findAny().isPresent()) {
+            deleteFiles(fullDir.toAbsolutePath().toString());
         }
         File logDir = new File("logs/");
         if (logDir.isDirectory()) {
@@ -327,7 +329,8 @@ public class Main extends ListenerAdapter {
                         File[] contents = tempDir.listFiles();
                         if (contents != null && contents.length != 0) {
                             // we don't want to delete something as it is being written to.
-                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000) deleteFiles("temp\\");
+                            Path fullDir = Paths.get("temp/").toAbsolutePath();
+                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000) deleteFiles(fullDir.toAbsolutePath().toString());
                             cleanUpTime = 0;
                         }
                     }
@@ -500,7 +503,6 @@ public class Main extends ListenerAdapter {
             return false;
         }
     }
-
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
         File directory = new File(filePrefix).getParentFile();
         if (directory != null && directory.isDirectory()) {
@@ -511,11 +513,18 @@ public class Main extends ListenerAdapter {
         }
         // I use cmd/bash here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
-            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", "/Q", filePrefix + "*"} : new String[]{"sh", "-c", "rm " + filePrefix + "*"};
+            if (filePrefix.isEmpty()) {
+                errorlnTime("Tried to delete empty string, bad idea.");
+                return;
+            }
+            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", "/Q", "\"" + filePrefix + "\\*\""} : new String[]{"rm", "-rf", filePrefix + "/*"};
+            printlnTime(Arrays.toString(command));
+            printlnTime(filePrefix);
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
+            String error = new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
             if (exitCode != 0) {
-                errorlnTime("Error deleting file, Exit code: " + exitCode);
+                errorlnTime("Error deleting file, Exit code: " + exitCode + "\n" + error);
             }
         } catch (Exception e) {
             e.printStackTrace();
