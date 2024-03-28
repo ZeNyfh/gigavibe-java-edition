@@ -345,7 +345,7 @@ public class Main extends ListenerAdapter {
                     }
                     if (!isInAnyVc) { // not in vc
                         VCTime++;
-                        if (VCTime >= 300 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                        if (VCTime >= 60 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
                             // leeway for upload past the time limit
                             if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
                                 printlnTime("It's update time!");
