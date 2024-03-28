@@ -504,22 +504,26 @@ public class Main extends ListenerAdapter {
         }
     }
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
-        File directory = new File(filePrefix).getParentFile();
-        if (directory != null && directory.isDirectory()) {
+        File directory = new File(filePrefix);
+        if (directory.isDirectory()) {
             File[] files = directory.listFiles();
             if (files != null && files.length == 0) {
                 return;
             }
         }
-        // I use cmd/bash here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
+        // I use cmd here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
             if (filePrefix.isEmpty()) {
                 errorlnTime("Tried to delete empty string, bad idea.");
                 return;
             }
-            String[] command = System.getProperty("os.name").toLowerCase().contains("windows") ? new String[]{"cmd", "/c", "del", "/Q", "\"" + filePrefix + "\\*\""} : new String[]{"rm", "-rf", filePrefix + "/*"};
-            printlnTime(Arrays.toString(command));
-            printlnTime(filePrefix);
+            if (!System.getProperty("os.name").toLowerCase().contains("windows") && directory != null) {
+                for (File file : Objects.requireNonNull(directory.listFiles())) {
+                    ignoreFiles = file.delete();
+                }
+                return;
+            }
+            String[] command = new String[]{"cmd", "/c", "del", "/Q", "\"" + filePrefix + "\\*\""};
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
             String error = new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
