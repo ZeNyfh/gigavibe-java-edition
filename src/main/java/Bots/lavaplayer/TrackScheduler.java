@@ -124,6 +124,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         Guild guild = ((MessageEvent) track.getUserData()).getGuild();
         printlnTime("AudioPlayer in", guild.getIdLong(), guild.getName(), "threw friendly exception on track", track.getInfo().uri);
-        exception.printStackTrace();
+        errorlnTime(exception.getMessage());
     }
 }
