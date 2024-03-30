@@ -56,7 +56,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + position + "** successfully.")); // not an error, intended
+        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + position + "** successfully."));
     }
 
     @Override

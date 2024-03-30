@@ -194,9 +194,8 @@ public class PlayerManager {
                 if (e.getCause().getMessage().toLowerCase().contains("search response: 400")) {
                     loadFailedBuilder.append("An error with the youtube search API has occurred.\n");
                 }
-                loadFailedBuilder.append(e.getCause().getMessage()).append("\n");
-                loadFailedBuilder.append(e.getMessage()).append("\n```");
-                event.replyEmbeds(createQuickError("The track failed to load.\n\n```\n" + loadFailedBuilder));
+                loadFailedBuilder.append(e.getMessage()).append("\n");
+                event.replyEmbeds(createQuickError("```The track failed to load.\n\n```\n" + loadFailedBuilder));
                 errorlnTime("Track failed to load.\nURL: \"" + trackUrl + "\"");
                 e.printStackTrace();
                 OnCompletion.run();
