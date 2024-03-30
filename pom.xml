@@ -37,8 +37,9 @@
         <dependency>
             <groupId>dev.arbjerg</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>2.1.1</version>
+            <version>00d5258dea97b2ca623eaa8e7c251543c4f17b71-SNAPSHOT</version>
         </dependency>
+
 
 
         <dependency>
