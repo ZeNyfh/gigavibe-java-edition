@@ -73,8 +73,18 @@ public class CommandNowPlaying extends BaseCommand {
         embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         embed.addField("\uD83D\uDC64 Channel:", track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
-            if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
-            embed.addField("▶️ Up next:", "[" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().title + "](" + Objects.requireNonNull(getTrackFromQueue(event.getGuild(), 0)).getInfo().uri + ")", true);
+            AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
+            if (PlayerManager.getInstance().getThumbURL(track) != null) {
+                embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+            }
+            String title = Objects.requireNonNull(trackQueue0).getInfo().title;
+            if (Objects.requireNonNull(trackQueue0).getInfo().isStream) {
+                String streamTitle = getStreamTitle(trackQueue0.getInfo().uri);
+                if (streamTitle != null) {
+                    title = streamTitle;
+                }
+            }
+            embed.addField("▶️ Up next:", "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }

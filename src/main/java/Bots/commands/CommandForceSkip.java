@@ -6,6 +6,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
+import static Bots.lavaplayer.PlayerManager.getStreamTitle;
 
 public class CommandForceSkip extends BaseCommand {
 
@@ -73,12 +75,28 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
+                AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
+                String title = trackInfo.title;
+                if (trackInfo.isStream) {
+                    String streamTitle = getStreamTitle(trackInfo.uri);
+                    if (streamTitle != null) {
+                        title = streamTitle;
+                    }
+                }
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + title + "](" + trackInfo.uri + ")**__"));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "](" + musicManager.audioPlayer.getPlayingTrack().getInfo().uri + ")**__"));
+                AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
+                String title = trackInfo.title;
+                if (trackInfo.isStream) {
+                    String streamTitle = getStreamTitle(trackInfo.uri);
+                    if (streamTitle != null) {
+                        title = streamTitle;
+                    }
+                }
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track to __**[" + title + "](" + trackInfo.uri + ")**__"));
             } else {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the current track"));
