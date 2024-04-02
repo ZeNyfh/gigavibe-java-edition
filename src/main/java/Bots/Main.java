@@ -63,7 +63,6 @@ public class Main extends ListenerAdapter {
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
-    public static HashMap<Long, Integer> queuePages = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
     public static List<Long> LoopGuilds = new ArrayList<>();
     public static List<Long> AutoplayGuilds = new ArrayList<>();
@@ -261,7 +260,6 @@ public class Main extends ListenerAdapter {
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
-            queuePages.put(guild.getIdLong(), 0);
             trackLoops.put(guild.getIdLong(), 0);
         }
 
@@ -569,14 +567,12 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        queuePages.put(event.getGuild().getIdLong(), 0);
         trackLoops.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-        queuePages.remove(event.getGuild().getIdLong());
         trackLoops.remove(event.getGuild().getIdLong());
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
     }
