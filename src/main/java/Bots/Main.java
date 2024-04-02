@@ -59,6 +59,11 @@ public class Main extends ListenerAdapter {
     public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+    private static final PrintStream out = System.out;
+    private static final PrintStream err = System.err;
+    private static ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+    private static ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
+    private static FileWriter logger;
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
@@ -70,11 +75,6 @@ public class Main extends ListenerAdapter {
     public static List<BaseCommand> commands = new ArrayList<>();
     public static List<SlashCommandData> slashCommands = new ArrayList<>();
     public static boolean ignoreFiles = false;
-    public static FileWriter logger;
-    public static final PrintStream out = System.out;
-    public static final PrintStream err = System.err;
-    public static ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-    public static ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
 
