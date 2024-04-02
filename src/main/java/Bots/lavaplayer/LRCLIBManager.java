@@ -12,26 +12,21 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class LRCLIBManager {
-    private static final StringBuilder responseBuilder = new StringBuilder();
-    private static final StringBuilder urlBuilder = new StringBuilder();
-
     public static String getLyrics(AudioTrack track) {
         if (track.getInfo().title == null || track.getInfo().title.equalsIgnoreCase("unknown title")) {
             return "";
         }
-        responseBuilder.setLength(0);
         String url = createURL(track);
         if (url.isEmpty()) {
             return "";
         }
 
-        String lyrics;
         try {
             URL requestURL = new URL(url);
-            System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
             connection.setRequestMethod("GET");
 
+            StringBuilder responseBuilder = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -42,21 +37,20 @@ public class LRCLIBManager {
                 return "";
             }
 
-            lyrics = parseLyrics(response);
+            String lyrics = parseLyrics(response);
             if (lyrics == null || lyrics.equalsIgnoreCase("null")) {
                 return "";
             }
+            return lyrics;
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
-        return lyrics;
     }
 
     private static String createURL(AudioTrack track) {
-        urlBuilder.setLength(0);
+        StringBuilder urlBuilder = new StringBuilder();
         String title = track.getInfo().title;
-
         String duration = "";
         urlBuilder.append("https://lrclib.net/api/search?q=");
 
@@ -66,7 +60,6 @@ public class LRCLIBManager {
 
         urlBuilder.append(java.net.URLEncoder.encode(title, StandardCharsets.UTF_8));
         String url = urlBuilder.toString();
-        System.out.println(url);
         if (url.contains("+%28")) {
             url = url.split("\\+%28")[0].trim();
         }
