@@ -276,7 +276,6 @@ public class Main extends ListenerAdapter {
                 @Override
                 public void run() {
                     // logger code
-                    // string-building the out and err char arrays
                     String outString = byteArrayOut.toString();
                     String errString = byteArrayErr.toString();
                     try {
