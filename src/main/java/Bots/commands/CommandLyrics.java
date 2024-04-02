@@ -40,19 +40,20 @@ public class CommandLyrics extends BaseCommand {
             event.replyEmbeds(createQuickError("No results found or the song title was unknown."));
             return;
         }
-        EmbedBuilder builder = new EmbedBuilder();
+        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter("Lyrics sourced from lrclib.net");
         String title = "Lyrics for: " + audioPlayer.getPlayingTrack().getInfo().title;
         if (title.length() > 256) {
             title = title.substring(0, 253) + "...";
         }
         if (lyrics.length() <= 2000) {
             builder.setDescription(lyrics);
-            builder.setTitle(title).setColor(botColour).setFooter("Lyrics sourced from lrclib.net");
+            builder.setTitle(title);
+            event.replyEmbeds(builder.build());
         } else {
             builder.setDescription("Lyrics were too long, uploading them as a file.");
+            event.replyEmbeds(builder.build());
             event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title+".txt")).queue();
         }
-        event.replyEmbeds(builder.build());
     }
 
     @Override
