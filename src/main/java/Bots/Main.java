@@ -61,8 +61,8 @@ public class Main extends ListenerAdapter {
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
     private static final PrintStream out = System.out;
     private static final PrintStream err = System.err;
-    private static ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-    private static ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
+    private static final ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+    private static final ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
     private static FileWriter logger;
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
@@ -270,52 +270,35 @@ public class Main extends ListenerAdapter {
                 final File updateFile = new File("update/bot.jar");
                 int VCTime = 0;
                 int cleanUpTime = 0;
-                File tempDir = new File("temp/");
+                final File tempDir = new File("temp/");
                 final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
                 @Override
                 public void run() {
                     // logger code
                     // string-building the out and err char arrays
-                    StringBuilder builderOut = new StringBuilder();
-                    StringBuilder builderErr = new StringBuilder();
-                    for (byte b : byteArrayOut.toByteArray()) {
-                        builderOut.append((char) b);
-                    }
-                    for (byte b : byteArrayErr.toByteArray()) {
-                        builderErr.append((char) b);
-                    }
-
+                    String outString = byteArrayOut.toString();
+                    String errString = byteArrayErr.toString();
                     try {
                         // handling for sys.out
-                        if (builderOut.toString().length() > 1) {
-                            String trimmedBuilder = builderOut.toString().trim();
-                            trimmedBuilder = trimmedBuilder + "\n";
-                            // set sys.out to what it was originally to print to the console.
-                            System.setOut(out);
-                            printlnTime(trimmedBuilder);
-                            // clear the byte array and set sys.out again.
-                            byteArrayOut = new ByteArrayOutputStream();
-                            System.setOut(new PrintStream(byteArrayOut));
-                            // write to the file and empty the buffer.
-                            logger.write(trimmedBuilder);
-                            logger.flush();
+                        if (outString.length() >= 1) {
+                            // no automatic date and time for sys.out; we defer to printlnTime for history reasons
+                            // (maybe we should stop doing that? wouldn't be difficult to arrange)
+                            // print our string to the real out stream, reset the byte stream, and log the text
+                            out.print(outString);
+                            byteArrayOut.reset();
+                            logger.write(outString);
                         }
-                        //handling for sys.err
-                        if (builderErr.toString().length() > 1) {
-                            // datetime formatting to add the date and time to sys.err messages.
-                            String finalMessage = dtf.format(LocalDateTime.now()) + " | " + builderErr.toString().trim();
-                            finalMessage = finalMessage + "\n";
-                            // set sys.err to what it was originally to print to the console.
-                            System.setErr(err);
-                            err.println(finalMessage.trim());
-                            // clear the byte array and set sys.err again.
-                            byteArrayErr = new ByteArrayOutputStream();
-                            System.setErr(new PrintStream(byteArrayErr));
-                            // write to the file and empty the buffer.
-                            logger.write("\n" + finalMessage);
-                            logger.flush();
+                        // handling for sys.err
+                        if (errString.length() >= 1) {
+                            // datetime formatting to add the date and time to sys.err messages
+                            errString = dtf.format(LocalDateTime.now()) + " | " + errString;
+                            // print our string to the real err stream, reset the byte stream, and log the text
+                            err.print(errString);
+                            byteArrayErr.reset();
+                            logger.write(errString);
                         }
+                        logger.flush();
                     } catch (Exception e) {
                         err.println(e);
                     }
