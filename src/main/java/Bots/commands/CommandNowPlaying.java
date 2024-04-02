@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.LRCLIBManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -44,8 +45,10 @@ public class CommandNowPlaying extends BaseCommand {
         long trackPos = track.getPosition();
         double totalTime = track.getDuration();
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
-        trackPos = (long) (trackPos / timescale.getSpeed());
-        totalTime = totalTime / timescale.getSpeed();
+        if (timescale != null){
+            trackPos = (long) (trackPos / timescale.getSpeed());
+            totalTime = totalTime / timescale.getSpeed();
+        }
         String totalTimeText;
         if (totalTime > 432000000) { // 5 days
             totalTimeText = "Unknown"; //Assume malformed
