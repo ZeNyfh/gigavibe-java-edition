@@ -65,6 +65,7 @@ public class CommandRadio extends BaseCommand {
         put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
         put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
     }};
+
     public HashMap<String, String> getRadios() {
         return radioLists;
     }

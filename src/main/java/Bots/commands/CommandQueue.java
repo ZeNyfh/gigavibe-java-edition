@@ -55,7 +55,8 @@ public class CommandQueue extends BaseCommand {
         eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
         eb.setFooter(Queue.size() + " songs queued. | " + round((Queue.size() / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         eb.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null) eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+        if (PlayerManager.getInstance().getThumbURL(track) != null)
+            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
 
@@ -114,7 +115,8 @@ public class CommandQueue extends BaseCommand {
         }
         embed.setFooter(queueLength + " songs queued. | " + round((queueLength / 5F) + 1) + " pages. | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+        if (PlayerManager.getInstance().getThumbURL(track) != null)
+            embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         if (!event.isSlash()) { //Incredibly hacky fix because @9382 doesn't want to implement all the backend just for this
             ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
                     message -> message.editMessageComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue()

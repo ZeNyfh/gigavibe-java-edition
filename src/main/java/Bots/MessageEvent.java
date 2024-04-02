@@ -184,7 +184,8 @@ public class MessageEvent {
             if (!event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_SEND)) {
                 try {
                     Objects.requireNonNull(event.getMember()).getUser().openPrivateChannel().queue(dm -> dm.sendMessageEmbeds(createQuickError(String.format("The bot does not have the permission to message in `%s`.", event.getChannel().getName()))).queue());
-                } catch (Exception ignored) {} // this can safely be ignored as I expect this to throw an exception.
+                } catch (Exception ignored) {
+                } // this can safely be ignored as I expect this to throw an exception.
             }
             try {
                 event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));

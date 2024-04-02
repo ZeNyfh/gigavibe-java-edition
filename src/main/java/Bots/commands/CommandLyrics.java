@@ -13,7 +13,8 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.nio.charset.StandardCharsets;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
+import static Bots.Main.createQuickError;
 
 public class CommandLyrics extends BaseCommand {
     @Override
@@ -52,7 +53,7 @@ public class CommandLyrics extends BaseCommand {
         } else {
             builder.setDescription("Lyrics were too long, uploading them as a file.");
             event.replyEmbeds(builder.build());
-            event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title+".txt")).queue();
+            event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title + ".txt")).queue();
         }
     }
 

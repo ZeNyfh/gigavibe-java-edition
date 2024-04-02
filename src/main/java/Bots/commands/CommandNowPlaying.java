@@ -42,7 +42,7 @@ public class CommandNowPlaying extends BaseCommand {
         long trackPos = track.getPosition();
         double totalTime = track.getDuration();
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
-        if (timescale != null){
+        if (timescale != null) {
             trackPos = (long) (trackPos / timescale.getSpeed());
             totalTime = totalTime / timescale.getSpeed();
         }
@@ -58,7 +58,8 @@ public class CommandNowPlaying extends BaseCommand {
             barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
         } catch (Exception ignored) {
         }
-        if (PlayerManager.getInstance().getThumbURL(track) != null) embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+        if (PlayerManager.getInstance().getThumbURL(track) != null)
+            embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
             if (track.getInfo().isStream) {

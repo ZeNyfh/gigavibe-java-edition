@@ -330,7 +330,8 @@ public class Main extends ListenerAdapter {
                         if (contents != null && contents.length != 0) {
                             // we don't want to delete something as it is being written to.
                             Path fullDir = Paths.get("temp/").toAbsolutePath();
-                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000) deleteFiles(fullDir.toAbsolutePath().toString());
+                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000)
+                                deleteFiles(fullDir.toAbsolutePath().toString());
                             cleanUpTime = 0;
                         }
                     }
@@ -503,6 +504,7 @@ public class Main extends ListenerAdapter {
             return false;
         }
     }
+
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING
         File directory = new File(filePrefix);
         if (directory.isDirectory()) {

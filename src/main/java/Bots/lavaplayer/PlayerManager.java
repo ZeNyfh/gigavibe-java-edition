@@ -209,6 +209,7 @@ public class PlayerManager {
             }
 
             final StringBuilder loadFailedBuilder = new StringBuilder();
+
             @Override
             public void loadFailed(FriendlyException e) {
                 clearVotes(event.getGuild().getIdLong());
@@ -227,7 +228,8 @@ public class PlayerManager {
     }
 
     public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
-        loadAndPlay(event, trackUrl, sendEmbed, () -> {});
+        loadAndPlay(event, trackUrl, sendEmbed, () -> {
+        });
     }
 
     @Nullable
