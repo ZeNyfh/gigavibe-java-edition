@@ -3,7 +3,6 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
-import Bots.lavaplayer.LRCLIBManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -12,8 +11,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Objects;
 
 import static Bots.Main.*;
