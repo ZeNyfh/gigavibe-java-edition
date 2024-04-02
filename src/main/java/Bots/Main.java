@@ -605,15 +605,15 @@ public class Main extends ListenerAdapter {
             return;
         } else if (event.getChannelJoined() == null) {
             // GuildVoiceLeaveEvent
-            if (event.getChannelLeft().getMembers().contains(event.getGuild().getSelfMember())) { //someone else left
+            if (event.getMember() == event.getGuild().getSelfMember()) { //we left
+                cleanUpAudioPlayer(event.getGuild());
+                return;
+            } else { //someone else left
                 List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
                 currentVotes.remove(event.getMember());
                 //TODO: The entire vote should not be restarted because 1 person left
                 // (Complications with re-processing the count after removing a vote)
                 clearVotes(event.getGuild().getIdLong());
-            } else { //we left
-                cleanUpAudioPlayer(event.getGuild());
-                return;
             }
         } else {
             // GuildVoiceMoveEvent
