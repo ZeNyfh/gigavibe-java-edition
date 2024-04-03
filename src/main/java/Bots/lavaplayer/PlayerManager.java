@@ -213,6 +213,9 @@ public class PlayerManager {
         Pattern pattern = null;
         String site = "";
         try {
+            if (track.getInfo().artworkUrl != null) {
+                return track.getInfo().artworkUrl;
+            }
             if (track.getInfo().uri.toLowerCase().contains("youtube")) {
                 return "https://img.youtube.com/vi/" + track.getIdentifier() + "/0.jpg";
             } else if (track.getInfo().uri.toLowerCase().contains("spotify")) {
