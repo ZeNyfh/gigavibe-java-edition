@@ -40,26 +40,31 @@ public class CommandNowPlaying extends BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
 
         long trackPos = track.getPosition();
-        double totalTime = track.getDuration();
-        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
-        if (timescale != null) {
-            trackPos = (long) (trackPos / timescale.getSpeed());
-            totalTime = totalTime / timescale.getSpeed();
-        }
-        String totalTimeText;
-        if (totalTime > 432000000) { // 5 days
-            totalTimeText = "Unknown"; //Assume malformed
+        if (!track.getInfo().isStream){
+            double totalTime = track.getDuration();
+            TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
+            if (timescale != null) {
+                trackPos = (long) (trackPos / timescale.getSpeed());
+                totalTime = totalTime / timescale.getSpeed();
+            }
+            String totalTimeText;
+            if (totalTime > 432000000) { // 5 days
+                totalTimeText = "Unknown"; //Assume malformed
+            } else {
+                totalTimeText = toSimpleTimestamp((long) totalTime);
+            }
+            int trackLocation = Math.toIntExact(Math.round((totalTime - trackPos) / totalTime * 20d));
+            String barText = "";
+            try {
+                barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
+            } catch (Exception ignored) {
+            }
+            if (PlayerManager.getInstance().getThumbURL(track) != null)
+                embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+            embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            totalTimeText = toSimpleTimestamp((long) totalTime);
+            embed.setDescription("```Live stream duration: " + toSimpleTimestamp(trackPos) + "```");
         }
-        int trackLocation = Math.toIntExact(Math.round((totalTime - trackPos) / totalTime * 20d));
-        String barText = "";
-        try {
-            barText = new String(new char[20 - trackLocation]).replace("\0", "━") + "\uD83D\uDD18" + new String(new char[trackLocation]).replace("\0", "━");
-        } catch (Exception ignored) {
-        }
-        if (PlayerManager.getInstance().getThumbURL(track) != null)
-            embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
             if (track.getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
@@ -69,7 +74,6 @@ public class CommandNowPlaying extends BaseCommand {
         } catch (Exception ignored) {
             embed.setTitle("Unknown");
         }
-        embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         embed.addField("\uD83D\uDC64 Channel:", track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
