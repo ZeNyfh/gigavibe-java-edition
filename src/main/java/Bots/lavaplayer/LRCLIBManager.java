@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class LRCLIBManager {
     public static String getLyrics(AudioTrack track) {
@@ -50,7 +51,6 @@ public class LRCLIBManager {
 
     private static String createURL(AudioTrack track) {
         StringBuilder urlBuilder = new StringBuilder();
-        String title = track.getInfo().title;
         String duration = "";
         urlBuilder.append("https://lrclib.net/api/search?q=");
 
@@ -58,10 +58,20 @@ public class LRCLIBManager {
             duration = "&duration=" + (int) (track.getInfo().length / 1000);
         }
 
+        String title = track.getInfo().title;
+        if (track.getInfo().isStream && Objects.equals(track.getSourceManager().getSourceName(), "http")) {
+            duration = "";
+            title = RadioDataFetcher.getStreamSongNow(track.getInfo().uri);
+        }
+
         urlBuilder.append(java.net.URLEncoder.encode(title, StandardCharsets.UTF_8));
         String url = urlBuilder.toString();
+        System.out.println(url);
         if (url.contains("+%28")) {
             url = url.split("\\+%28")[0].trim();
+        }
+        if (url.contains("%5B")) {
+            url = url.split("\\+%5B")[0].trim();
         }
         if (url.toLowerCase().contains("+ft.")) {
             url = url.split("\\+ft\\.")[0].trim();
@@ -72,7 +82,15 @@ public class LRCLIBManager {
 
     private static String parseLyrics(String rawJson) {
         Object object = JSONValue.parse(rawJson);
-        JSONObject trackDetailsObject = (JSONObject) ((JSONArray) object).get(1);
+        JSONObject trackDetailsObject = null;
+        try {
+            trackDetailsObject = (JSONObject) ((JSONArray) object).get(1);
+        } catch (Exception ignored) {
+            System.err.println("No lyrics were found for this track.");
+        }
+        if (trackDetailsObject == null) {
+            return "";
+        }
         return (String) trackDetailsObject.get("plainLyrics");
     }
 }

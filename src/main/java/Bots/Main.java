@@ -107,21 +107,6 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         System.setOut(new PrintStream(byteArrayOut));
         System.setErr(new PrintStream(byteArrayErr));
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            Path modules = new File("modules/").toPath();
-            Stream<Path> stream = Files.list(Paths.get(modules.toUri()));
-            boolean hasFFprobe = false;
-            for (Path file : stream.toList()) {
-                if (file.getFileName().toString().toLowerCase().startsWith("ffprobe")) {
-                    hasFFprobe = true;
-                    break;
-                }
-            }
-            if (!hasFFprobe) {
-                errorlnTime("WARNING: ffprobe does not exist, be sure to download it from \"https://ffmpeg.org/download.html\" and place it into \"" + new File("modules\"").getAbsolutePath());
-            }
-        }
-        ignoreFiles = new File("modules/").mkdir();
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         ignoreFiles = new File("temp/").mkdir();

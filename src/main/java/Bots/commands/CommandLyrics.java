@@ -5,6 +5,7 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LRCLIBManager;
 import Bots.lavaplayer.PlayerManager;
+import Bots.lavaplayer.RadioDataFetcher;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -12,9 +13,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import static Bots.Main.botColour;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 public class CommandLyrics extends BaseCommand {
     @Override
@@ -42,7 +43,12 @@ public class CommandLyrics extends BaseCommand {
             return;
         }
         EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter("Lyrics sourced from lrclib.net");
-        String title = "Lyrics for: " + audioPlayer.getPlayingTrack().getInfo().title;
+        String title = audioPlayer.getPlayingTrack().getInfo().title;
+        if (audioPlayer.getPlayingTrack().getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
+            title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri);
+        }
+
+        title = "Lyrics for: " + title;
         if (title.length() > 256) {
             title = title.substring(0, 253) + "...";
         }

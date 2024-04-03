@@ -4,6 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import Bots.lavaplayer.RadioDataFetcher;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
-import static Bots.lavaplayer.PlayerManager.getStreamTitle;
 
 public class CommandForceSkip extends BaseCommand {
 
@@ -78,7 +78,7 @@ public class CommandForceSkip extends BaseCommand {
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
                 if (trackInfo.isStream) {
-                    String streamTitle = getStreamTitle(trackInfo.uri);
+                    String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
                     }
@@ -91,7 +91,7 @@ public class CommandForceSkip extends BaseCommand {
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
                 if (trackInfo.isStream) {
-                    String streamTitle = getStreamTitle(trackInfo.uri);
+                    String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
                     }

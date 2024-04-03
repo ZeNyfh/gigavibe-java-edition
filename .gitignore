@@ -1,7 +1,6 @@
 .idea/
 target/
 temp/
-modules/
 artifacts/
 resources/
 *.json

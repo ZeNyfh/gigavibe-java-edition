@@ -4,6 +4,7 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import Bots.lavaplayer.RadioDataFetcher;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -14,7 +15,6 @@ import net.dv8tion.jda.api.entities.Member;
 import java.util.Objects;
 
 import static Bots.Main.*;
-import static Bots.lavaplayer.PlayerManager.getStreamTitle;
 
 public class CommandNowPlaying extends BaseCommand {
 
@@ -62,11 +62,9 @@ public class CommandNowPlaying extends BaseCommand {
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
-            if (track.getInfo().isStream) {
-                String streamTitle = getStreamTitle(track.getInfo().uri);
-                if (streamTitle != null) {
-                    embed.setTitle(streamTitle, track.getInfo().uri);
-                }
+            if (track.getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
+                String streamTitle = RadioDataFetcher.getStreamSongNow(track.getInfo().uri);
+                embed.setTitle(streamTitle, track.getInfo().uri);
             }
         } catch (Exception ignored) {
             embed.setTitle("Unknown");
@@ -80,7 +78,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             String title = Objects.requireNonNull(trackQueue0).getInfo().title;
             if (Objects.requireNonNull(trackQueue0).getInfo().isStream) {
-                String streamTitle = getStreamTitle(trackQueue0.getInfo().uri);
+                String streamTitle = RadioDataFetcher.getStreamTitle(trackQueue0.getInfo().uri);
                 if (streamTitle != null) {
                     title = streamTitle;
                 }

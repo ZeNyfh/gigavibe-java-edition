@@ -65,31 +65,6 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    public static String getStreamTitle(String streamUrl) {
-        String[] cmd = {"ffprobe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            cmd = new String[]{"modules/ffprobe.exe", "-v", "quiet", "-show_entries", "format_tags=StreamTitle", "-of", "default=noprint_wrappers=1:nokey=1", streamUrl};
-        }
-        String streamTitle;
-        try {
-            Process process = new ProcessBuilder(cmd).start();
-            BufferedReader ffprobeInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            streamTitle = ffprobeInput.readLine();
-        } catch (Exception e) {
-            e.printStackTrace();
-            streamTitle = "Unknown";
-        }
-        if (Objects.equals(streamTitle, "")) {
-            streamTitle = "Unknown";
-        }
-        if (streamTitle != null) {
-            if (streamTitle.length() > 70) {
-                streamTitle = streamTitle.substring(0, 70) + "...";
-            }
-        }
-        return streamTitle;
-    }
-
     public GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);

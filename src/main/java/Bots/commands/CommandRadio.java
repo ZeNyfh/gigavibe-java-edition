@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
+import Bots.lavaplayer.RadioDataFetcher;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -135,9 +136,8 @@ public class CommandRadio extends BaseCommand {
             if (radioURL.equals("None")) {
                 event.replyEmbeds(createQuickError("Couldn't find a radio station with the given name"));
             } else {
-                //TODO: Consider somehow getting the real name of the station rather than using the search term that found it
                 PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
-                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + radioSearchTerm + "](" + radioURL + ")**"));
+                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + RadioDataFetcher.getStreamTitle(radioURL) + "](" + radioURL + ")**"));
             }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
