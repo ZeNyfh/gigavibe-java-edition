@@ -21,7 +21,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
-    public TrackEndEvent event;
     private final HashMap<Long, Integer> guildFailCount = new HashMap<>();
 
     public TrackScheduler(AudioPlayer player) {
@@ -48,8 +47,9 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);
             if (guildFailCount.get(guildId) == 1) {
-                errorlnTime("Failed to load a track " + track.getInfo().uri + " retrying...");
-                event.player.startTrack(track, false);
+                errorlnTime("Failed to load track " + track.getInfo().uri + " ; retrying...");
+                this.player.startTrack(track.makeClone(), false);
+                return;
             }
             if (guildFailCount.get(guildId) >= 3) {
                 errorlnTime("Failed to load a song 3 times in a row, killing queue");
