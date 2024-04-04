@@ -40,8 +40,6 @@
             <version>afec211f05c9dcf0b6ee44276a02f0316ea2458a-SNAPSHOT</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
@@ -63,6 +61,12 @@
             <groupId>com.github.topi314.lavasrc</groupId>
             <artifactId>protocol-jvm</artifactId>
             <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.11</version>
         </dependency>
 
         <dependency>
