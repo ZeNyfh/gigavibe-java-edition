@@ -50,7 +50,7 @@ public class PlayerManager {
             this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyClientID, spotifyClientSecret, "gb", audioPlayerManager));
             hasSpotify = true;
         } catch (Exception exception) {
-            errorlnTime("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
+            System.err.println("Spotify manager was unable to load due to a complication. Continuing without it...\nError: " + exception);
             hasSpotify = false;
         }
 
@@ -179,7 +179,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 event.replyEmbeds(createQuickError("No matches found for the track."));
-                errorlnTime("No match found for the track.\nURL:\"" + trackUrl + "\"");
+                System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 OnCompletion.run();
             }
 
@@ -194,7 +194,7 @@ public class PlayerManager {
                 }
                 loadFailedBuilder.append(e.getMessage()).append("\n");
                 event.replyEmbeds(createQuickError("```The track failed to load.\n\n```\n" + loadFailedBuilder));
-                errorlnTime("Track failed to load.\nURL: \"" + trackUrl + "\"");
+                System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"");
                 e.printStackTrace();
                 OnCompletion.run();
                 loadFailedBuilder.setLength(0);
@@ -230,7 +230,7 @@ public class PlayerManager {
             pattern = patterns.get(site);
         } catch (Exception e) {
             e.printStackTrace();
-            errorlnTime("Thumb URL Fail : " + site + " |" + url);
+            System.err.println("Thumb URL Fail : " + site + " |" + url);
         }
 
         if (url != null && pattern != null) {
@@ -252,7 +252,7 @@ public class PlayerManager {
                     return null;
                 }
             } catch (Exception ignored) {
-                errorlnTime("Thumb Matcher Fail : " + site + " |" + url);
+                System.err.println("Thumb Matcher Fail : " + site + " |" + url);
             } // ignore because floods console if image url invalid
             return null;
         }

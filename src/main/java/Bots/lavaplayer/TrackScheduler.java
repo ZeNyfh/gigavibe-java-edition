@@ -47,12 +47,12 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);
             if (guildFailCount.get(guildId) == 1) {
-                errorlnTime("Failed to load track " + track.getInfo().uri + " ; retrying...");
+                System.err.println("Failed to load track " + track.getInfo().uri + " ; retrying...");
                 this.player.startTrack(track.makeClone(), false);
                 return;
             }
             if (guildFailCount.get(guildId) >= 3) {
-                errorlnTime("Failed to load a song 3 times in a row, killing queue");
+                System.err.println("Failed to load a song 3 times in a row, killing queue");
                 queue.clear();
                 guildFailCount.put(guildId, 0);
                 EmbedBuilder eb = new EmbedBuilder();
@@ -124,7 +124,7 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         Guild guild = ((MessageEvent) track.getUserData()).getGuild();
-        printlnTime("AudioPlayer in", guild.getIdLong(), guild.getName(), "threw friendly exception on track", track.getInfo().uri);
-        errorlnTime(exception.getMessage());
+        System.out.println("AudioPlayer in " + guild.getIdLong() + guild.getName() + " threw friendly exception on track: " + track.getInfo().uri);
+        System.err.println(exception.getMessage());
     }
 }

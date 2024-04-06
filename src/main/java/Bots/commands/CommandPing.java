@@ -9,6 +9,7 @@ public class CommandPing extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
+        System.out.println("test");
         long time = currentTimeMillis();
         event.reply(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time), ".");
     }

@@ -97,7 +97,7 @@ public class Main extends ListenerAdapter {
         slashCommands.add(slashCommand);
         for (String name : command.getNames()) {
             if (commandNames.contains(name)) {
-                errorlnTime("Command conflict - 2 commands are attempting to use the name " + name);
+                System.err.println("Command conflict - 2 commands are attempting to use the name " + name);
             } else {
                 commandNames.add(name);
             }
@@ -143,7 +143,7 @@ public class Main extends ListenerAdapter {
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File env = new File(".env");
         if (!env.exists()) {
-            printlnTime(env.getName() + " doesn't exist, creating now.");
+            System.out.println(env.getName() + " doesn't exist, creating now.");
             ignoreFiles = env.createNewFile();
             FileWriter writer = new FileWriter(".env");
             writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
@@ -162,18 +162,18 @@ public class Main extends ListenerAdapter {
         }
         Dotenv dotenv = Dotenv.load();
         if (dotenv.get("TOKEN") == null) {
-            errorlnTime("TOKEN is not set in " + new File(".env").getAbsolutePath());
+            System.err.println("TOKEN is not set in " + new File(".env").getAbsolutePath());
         }
         String botToken = dotenv.get("TOKEN");
 
         if (dotenv.get("COLOUR") == null) {
-            errorlnTime("Hex value COLOUR is not set in " + new File(".env" + "\n example: #FFCCEE").getAbsolutePath());
+            System.err.println("Hex value COLOUR is not set in " + new File(".env").getAbsolutePath() + " example: #FFCCEE");
             return;
         }
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
         } catch (NumberFormatException e) {
-            errorlnTime("Colour was invalid.");
+            System.err.println("Colour was invalid.");
             e.printStackTrace();
             return;
         }
@@ -181,13 +181,13 @@ public class Main extends ListenerAdapter {
         try {
             List<Class<?>> classes = new ArrayList<>();
             String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            printlnTime(tempJarPath);
+            System.out.println(tempJarPath);
             JarFile jarFile = null;
             boolean jarFileCheck = false;
             try {
                 jarFile = new JarFile(tempJarPath.substring(5));
             } catch (FileNotFoundException ignored) {
-                printlnTime("detected process in IDE, registering commands in a different way...");
+                System.out.println("detected process in IDE, registering commands in a different way...");
                 Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
                 while (resources.hasMoreElements()) {
                     URL url = resources.nextElement();
@@ -221,9 +221,9 @@ public class Main extends ListenerAdapter {
             for (Class<?> commandClass : classes) {
                 try {
                     registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-                    printlnTime("loaded command:", commandClass.getSimpleName().substring(7));
+                    System.out.println("loaded command: " + commandClass.getSimpleName().substring(7));
                 } catch (Exception e) {
-                    errorlnTime("Unable to load command", commandClass);
+                    System.err.println("Unable to load command: " + commandClass);
                     e.printStackTrace();
                 }
             }
@@ -240,7 +240,7 @@ public class Main extends ListenerAdapter {
                 .build();
         bot.awaitReady();
         bot.updateCommands().addCommands(slashCommands).queue();
-        printlnTime("bot is now running, have fun ig");
+        System.out.println("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
@@ -263,20 +263,20 @@ public class Main extends ListenerAdapter {
                     // logger code
                     String outString = byteArrayOut.toString();
                     String errString = byteArrayErr.toString();
+                    String date = dtf.format(LocalDateTime.now()) + " | ";
                     try {
                         // handling for sys.out
-                        if (outString.length() >= 1) {
-                            // no automatic date and time for sys.out; we defer to printlnTime for history reasons
-                            // (maybe we should stop doing that? wouldn't be difficult to arrange)
+                        if (!outString.isEmpty()) {
                             // print our string to the real out stream, reset the byte stream, and log the text
+                            outString = date + outString;
                             out.print(outString);
                             byteArrayOut.reset();
                             logger.write(outString);
                         }
                         // handling for sys.err
-                        if (errString.length() >= 1) {
+                        if (!errString.isEmpty()) {
                             // datetime formatting to add the date and time to sys.err messages
-                            errString = dtf.format(LocalDateTime.now()) + " | " + errString;
+                            errString = date + errString;
                             // print our string to the real err stream, reset the byte stream, and log the text
                             err.print(errString);
                             byteArrayErr.reset();
@@ -314,7 +314,7 @@ public class Main extends ListenerAdapter {
                         if (VCTime >= 60 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
                             // leeway for upload past the time limit
                             if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
-                                printlnTime("It's update time!");
+                                System.out.println("It's update time!");
                                 File botJar = new File("bot.jar");
                                 ignoreFiles = botJar.delete();
                                 ignoreFiles = updateFile.renameTo(botJar);
@@ -481,7 +481,7 @@ public class Main extends ListenerAdapter {
         // I use cmd here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
             if (filePrefix.isEmpty()) {
-                errorlnTime("Tried to delete empty string, bad idea.");
+                System.err.println("Tried to delete empty string, bad idea.");
                 return;
             }
             if (!System.getProperty("os.name").toLowerCase().contains("windows") && directory != null) {
@@ -495,28 +495,11 @@ public class Main extends ListenerAdapter {
             int exitCode = process.waitFor();
             String error = new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
             if (exitCode != 0) {
-                errorlnTime("Error deleting file, Exit code: " + exitCode + "\n" + error);
+                System.err.println("Error deleting file, Exit code: " + exitCode + " | Error:" + error);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void errorlnTime(Object... message) {
-        StringBuilder finalMessage = new StringBuilder();
-        for (Object segment : message) {
-            finalMessage.append(" ").append(segment);
-        }
-        System.err.println(finalMessage);
-    }
-
-    public static void printlnTime(Object... message) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        StringBuilder finalMessage = new StringBuilder(dtf.format(LocalDateTime.now()) + " |");
-        for (Object segment : message) {
-            finalMessage.append(" ").append(segment);
-        }
-        System.out.println(finalMessage);
     }
 
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
@@ -527,7 +510,7 @@ public class Main extends ListenerAdapter {
 
     public static void registerButtonInteraction(String name, Consumer<ButtonInteractionEvent> func) {
         if (ButtonInteractionMappings.containsKey(name)) {
-            errorlnTime("Attempting to override the button manager for id " + name);
+            System.err.println("Attempting to override the button manager for id " + name);
         }
         ButtonInteractionMappings.put(name, func);
     }
@@ -552,13 +535,13 @@ public class Main extends ListenerAdapter {
                 try {
                     ButtonInteractionMappings.get(name).accept(event);
                 } catch (Exception e) {
-                    errorlnTime("Issue handling button interaction for", name);
+                    System.err.println("Issue handling button interaction for " + name);
                     e.printStackTrace();
                 }
                 return;
             }
         }
-        errorlnTime("Button of ID " + buttonID + " has gone ignored - missing listener?");
+        System.err.println("Button of ID " + buttonID + " has gone ignored - missing listener?");
     }
 
     @Override

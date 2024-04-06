@@ -41,7 +41,7 @@ public class CommandHelp extends BaseCommand {
             case DJ -> embed.setTitle("\uD83C\uDFA7 **DJ**");
             case Admin -> embed.setTitle("\uD83D\uDCD1 **Admin**");
             case Dev -> embed.setTitle("\uD83D\uDD28 **Dev**");
-            default -> errorlnTime("Unrecognised category for help title", category);
+            default -> System.err.println("Unrecognised category for help title: " + category);
         }
         int i = 0;
         for (BaseCommand Command : commands) {

@@ -159,7 +159,7 @@ public class MessageEvent {
             try {
                 ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             } catch (Exception e) {
-                Main.errorlnTime(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -190,7 +190,7 @@ public class MessageEvent {
             try {
                 event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             } catch (Exception e) {
-                Main.errorlnTime(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -211,7 +211,7 @@ public class MessageEvent {
             try {
                 ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new MessageEvent.Response(x)));
             } catch (Exception e) {
-                Main.errorlnTime(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }

@@ -26,7 +26,7 @@ public class CommandDevTests extends BaseCommand {
     @Override
     public void execute(MessageEvent event) {
         if (event.getUser().getIdLong() == 211789389401948160L || event.getUser().getIdLong() == 260016427900076033L) {
-            printlnTime("Its dev time");
+            System.out.println("Its dev time");
             String[] args = event.getArgs();
             if (args.length == 1) {
                 event.reply("No dev command provided");
