@@ -44,20 +44,20 @@ public class LastFMManager {
             artistName = artist;
         }
 
+        if (APIKEY == null) {
+            return "noapi";
+        }
+
+        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + encode(artistName)[0] + "&track=" + encode(songName)[0] + "&api_key=" + APIKEY + "&format=json";
+        System.out.println(urlString);
+
+        StringBuilder response = new StringBuilder();
         try {
-            if (APIKEY == null) {
-                return "noapi";
-            }
-
-            String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + encode(artistName)[0] + "&track=" + encode(songName)[0] + "&api_key=" + APIKEY + "&format=json";
-            System.out.println(urlString);
-
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "Zenvibe/" + botVersion); // identifiable User-Agent header as requested by last.fm
 
-            StringBuilder response = new StringBuilder();
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
@@ -65,48 +65,47 @@ public class LastFMManager {
                 }
             }
             connection.disconnect();
-
-            if (response.toString().startsWith("{\"error\":6,\"message\":\"Track not found\"")) {
-                return "notfound";
-            }
-
-            String trackToSearch = extractTracks(response.toString(), guildID);
-            if (trackToSearch.isEmpty()) {
-                return "none";
-            } else {
-                return trackToSearch;
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
+            return "";
         }
-        return "";
+
+        if (response.toString().startsWith("{\"error\":6,\"message\":\"Track not found\"")) {
+            return "notfound";
+        }
+
+        String trackToSearch = extractTracks(response.toString(), guildID);
+        if (trackToSearch.isEmpty()) {
+            return "none";
+        } else {
+            return trackToSearch;
+        }
     }
 
     public static String[] encode(String str) {
-        String encodedStr = URLEncoder.encode(str, StandardCharsets.UTF_8);
+        String encodedStr = URLEncoder.encode(str, StandardCharsets.UTF_8).toLowerCase();
         if (encodedStr.contains("+%28")) {
-            encodedStr = encodedStr.split("\\+%28")[0].trim();
+            encodedStr = encodedStr.split("\\+%28")[0];
         }
         if (encodedStr.contains("%5B")) {
-            encodedStr = encodedStr.split("\\+%5B")[0].trim();
+            encodedStr = encodedStr.split("\\+%5B")[0];
         }
-        if (encodedStr.toLowerCase().contains("+ft.")) {
-            encodedStr = encodedStr.split("ft\\.")[0].trim();
+        if (encodedStr.contains("+ft.")) {
+            encodedStr = encodedStr.split("ft\\.")[0];
         }
         String artistName = "";
         if (encodedStr.contains("-")) {
-            artistName = encodedStr.split("-", 2)[0].trim();
-            encodedStr = encodedStr.split("-", 2)[1].trim();
+            artistName = encodedStr.split("-", 2)[0];
+            encodedStr = encodedStr.split("-", 2)[1];
         }
-        if (encodedStr.toLowerCase().contains("vevo")) {
-            encodedStr = encodedStr.toLowerCase().replaceAll("vevo", "").trim();
+        if (encodedStr.contains("vevo")) {
+            encodedStr = encodedStr.replaceAll("vevo", "");
         }
         if (encodedStr.contains("lyrics")) {
-            encodedStr = encodedStr.toLowerCase().split("lyrics", 2)[0];
+            encodedStr = encodedStr.split("lyrics", 2)[0];
         }
-        artistName = artistName.toLowerCase().replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
-        encodedStr = encodedStr.toLowerCase().replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
+        artistName = artistName.replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
+        encodedStr = encodedStr.replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
         return new String[]{encodedStr, artistName};
     }
 
@@ -118,7 +117,6 @@ public class LastFMManager {
         for (Object obj : trackInfoArray) {
             builder.append(String.valueOf(((JSONObject) ((JSONObject) obj).get("artist")).get("name")).toLowerCase()).append(" - ");
             builder.append(String.valueOf(((JSONObject) obj).get("name")).toLowerCase());
-            System.out.println(autoPlayedTracks.get(guildID));
             if (autoPlayedTracks.get(guildID).contains(builder.toString())) {
                 builder.setLength(0);
             } else {
