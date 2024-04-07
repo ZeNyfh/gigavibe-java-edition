@@ -81,7 +81,7 @@ public class CommandSkip extends BaseCommand {
                 }
                 if (canPlay) {
                     PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + searchTerm, false);
-                    messageBuilder.append("\n♾️ autoplay queued: ").append(searchTerm).append("\n");
+                    messageBuilder.append("\n♾️ Autoplay queued: ").append(searchTerm).append("\n");
                 }
             }
             musicManager.scheduler.nextTrack();

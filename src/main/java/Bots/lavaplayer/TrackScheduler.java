@@ -100,7 +100,7 @@ public class TrackScheduler extends AudioEventAdapter {
                     }
                     if (canPlay) {
                         PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + searchTerm, true);
-                        messageBuilder.append("♾️ autoplay queued: ").append(searchTerm).append("\n");
+                        messageBuilder.append("♾️ Autoplay queued: ").append(searchTerm).append("\n");
                     }
                 }
             }
