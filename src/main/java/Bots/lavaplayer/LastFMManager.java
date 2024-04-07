@@ -41,9 +41,9 @@ public class LastFMManager {
 
         String songName;
         if (track.getInfo().title.contains("-")){
-            songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true, true);
+            songName = encode(track.getInfo().title.toLowerCase(), true, true);
         } else {
-            songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true, false);
+            songName = encode(track.getInfo().title.toLowerCase(), true, false);
         }
         // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
         String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null || track.getInfo().title.contains("-"))
@@ -96,14 +96,13 @@ public class LastFMManager {
         if (str.contains("official")) str = str.split("official",  2)[0];
         str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "").trim();
         if (str.contains("+")) str = str.replaceAll("\\+", " ").trim();
-
         if (shouldCheck && str.contains("-")) {
             String[] split = str.split("-");
             return isTitle
-                    ? split[1].replaceAll("\\+", " ").trim()
-                    : split[0].replaceAll("\\+", " ").trim();
+                    ? split[1].replaceAll("\\+", " ").trim().replaceAll(" ", "+")
+                    : split[0].replaceAll("\\+", " ").trim().replaceAll(" ", "+");
         } else {
-            return str.replaceAll("\\+", " ");
+            return str.replaceAll("\\+", " ").replaceAll(" ", "+");
         }
     }
 
