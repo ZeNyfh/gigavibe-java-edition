@@ -48,7 +48,7 @@ public class LastFMManager {
             return "noapi";
         }
 
-        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + encode(artistName)[0] + "&track=" + encode(songName)[0] + "&api_key=" + APIKEY + "&format=json";
+        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + encode(artistName)[1] + "&track=" + encode(songName)[0] + "&api_key=" + APIKEY + "&format=json";
         System.out.println(urlString);
 
         StringBuilder response = new StringBuilder();
