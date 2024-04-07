@@ -39,18 +39,24 @@ public class LastFMManager {
             return "noapi";
         }
 
-        String songName = null;
+        String songName;
         if (track.getInfo().title.contains("-")){
+            songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true, true);
+        } else {
             songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true, false);
         }
         // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null && track.getInfo().title.contains("-"))
-                ? encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), false, true)
-                : encode(URLEncoder.encode(track.getInfo().author, StandardCharsets.UTF_8).toLowerCase(), false, true);
+        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null || track.getInfo().title.contains("-"))
+                ? encode((track.getInfo().title).toLowerCase(), false, true)
+                : encode((track.getInfo().author).toLowerCase(), false, true);
 
 
-        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + artistName + "&track=" + songName + "&api_key=" + APIKEY + "&format=json";
-        System.out.println(urlString);
+
+        StringBuilder urlStringBuilder = new StringBuilder();
+        urlStringBuilder.append("http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=").append(artistName).append("&track=").append(songName);
+        System.out.println(urlStringBuilder); // debug printing but removing the API key from the print.
+        urlStringBuilder.append("&api_key=").append(APIKEY).append("&format=json");
+        String urlString = urlStringBuilder.toString();
 
         StringBuilder response = new StringBuilder();
         try {
@@ -82,23 +88,22 @@ public class LastFMManager {
 
 
     public static String encode(String str, boolean isTitle, boolean shouldCheck) {
-        switch(str) {
-            case "%28": str = str.split("%28")[0]; // (
-            case "(": str = str.split("\\(")[0];
-            case "%5b": str = str.split("%5b")[0]; // [
-            case "[": str = str.split("\\[")[0];
-            case "ft.": str = str.split("ft\\.")[0];
-            case "lyrics": str = str.split("lyrics", 2)[0];
-            return str.trim();
-        }
-
-        str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "");
+        str = URLEncoder.encode(str, StandardCharsets.UTF_8).toLowerCase();
+        if (str.contains("%28")) str = str.split("%28")[0];
+        if (str.contains("%5b")) str = str.split("%5b")[0];
+        if (str.contains("ft.")) str = str.split("ft\\.")[0];
+        if (str.contains("lyric")) str = str.split("lyric", 2)[0];
+        if (str.contains("official")) str = str.split("official",  2)[0];
+        str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "").trim();
+        if (str.contains("+")) str = str.replaceAll("\\+", " ").trim();
 
         if (shouldCheck && str.contains("-")) {
             String[] split = str.split("-");
-            return isTitle ? split[1].trim() : split[0].trim();
+            return isTitle
+                    ? split[1].replaceAll("\\+", " ").trim()
+                    : split[0].replaceAll("\\+", " ").trim();
         } else {
-            return str;
+            return str.replaceAll("\\+", " ");
         }
     }
 
