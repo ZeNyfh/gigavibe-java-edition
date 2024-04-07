@@ -102,9 +102,9 @@ public class TrackScheduler extends AudioEventAdapter {
                     if (canPlay) {
                         // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
                         String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                                ? encode((track.getInfo().title).toLowerCase(), false)
-                                : encode(track.getInfo().author.toLowerCase(), false);
-                        String title = encode(track.getInfo().title, true);
+                                ? encode((track.getInfo().title).toLowerCase(), false, true)
+                                : encode(track.getInfo().author.toLowerCase(), false, true);
+                        String title = encode(track.getInfo().title, true, false);
                         PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + artistName + " - " + title, true);
                         messageBuilder.append("♾️ Autoplay queued: ").append(searchTerm).append("\n");
                     }

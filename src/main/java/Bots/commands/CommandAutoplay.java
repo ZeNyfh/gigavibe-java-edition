@@ -47,9 +47,9 @@ public class CommandAutoplay extends BaseCommand {
                 List<String> list = autoPlayedTracks.get(event.getGuild().getIdLong());
                 // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
                 String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                        ? encode((track.getInfo().title).toLowerCase(), false)
-                        : encode(track.getInfo().author.toLowerCase(), false);
-                list.add(artistName + " - " + encode(track.getInfo().title, true));
+                        ? encode((track.getInfo().title).toLowerCase(), false, true)
+                        : encode(track.getInfo().author.toLowerCase(), false, true);
+                list.add(artistName + " - " + encode(track.getInfo().title, true, false));
                 autoPlayedTracks.put(event.getGuild().getIdLong(), list);
             }
         }

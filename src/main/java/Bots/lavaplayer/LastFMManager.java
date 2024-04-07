@@ -39,11 +39,14 @@ public class LastFMManager {
             return "noapi";
         }
 
-        String songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true);
+        String songName = null;
+        if (track.getInfo().title.contains("-")){
+            songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true, false);
+        }
         // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                ? encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), false)
-                : encode(URLEncoder.encode(track.getInfo().author, StandardCharsets.UTF_8).toLowerCase(), false);
+        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null && track.getInfo().title.contains("-"))
+                ? encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), false, true)
+                : encode(URLEncoder.encode(track.getInfo().author, StandardCharsets.UTF_8).toLowerCase(), false, true);
 
 
         String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + artistName + "&track=" + songName + "&api_key=" + APIKEY + "&format=json";
@@ -78,7 +81,7 @@ public class LastFMManager {
 
 
 
-    public static String encode(String str, boolean isTitle) {
+    public static String encode(String str, boolean isTitle, boolean shouldCheck) {
         switch(str) {
             case "%28": str = str.split("%28")[0]; // (
             case "(": str = str.split("\\(")[0];
@@ -91,8 +94,12 @@ public class LastFMManager {
 
         str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "");
 
-        String[] split = str.split("-");
-        return isTitle ? split[1].trim() : split[0].trim();
+        if (shouldCheck && str.contains("-")) {
+            String[] split = str.split("-");
+            return isTitle ? split[1].trim() : split[0].trim();
+        } else {
+            return str;
+        }
     }
 
     private static String extractTracks(String rawJson, long guildID) {
