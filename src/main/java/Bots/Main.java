@@ -183,7 +183,6 @@ public class Main extends ListenerAdapter {
         try {
             List<Class<?>> classes = new ArrayList<>();
             String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            System.out.println(tempJarPath);
             JarFile jarFile = null;
             boolean jarFileCheck = false;
             try {

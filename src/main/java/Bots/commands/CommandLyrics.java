@@ -15,7 +15,8 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
+import static Bots.Main.createQuickError;
 
 public class CommandLyrics extends BaseCommand {
     @Override

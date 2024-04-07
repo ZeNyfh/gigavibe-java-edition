@@ -8,7 +8,8 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
+import static Bots.Main.registerButtonInteraction;
 
 public class CommandDevTests extends BaseCommand {
     private void HandleButtonEvent(ButtonInteractionEvent event) {

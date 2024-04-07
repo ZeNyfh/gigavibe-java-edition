@@ -40,7 +40,7 @@ public class CommandNowPlaying extends BaseCommand {
         EmbedBuilder embed = new EmbedBuilder();
 
         long trackPos = track.getPosition();
-        if (!track.getInfo().isStream){
+        if (!track.getInfo().isStream) {
             double totalTime = track.getDuration();
             TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale);
             if (timescale != null) {

@@ -38,7 +38,6 @@ public class LastFMManager {
         APIKEY = key;
     }
     public static String getSimilarSongs(AudioTrack track, Long guildID) {
-        System.out.println(track.getInfo().uri);
         String songName = track.getInfo().title;
         String artistName = track.getInfo().author;
 
@@ -110,8 +109,6 @@ public class LastFMManager {
         }
         artistName = artistName.toLowerCase().replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
         encodedStr = encodedStr.toLowerCase().replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
-        System.out.println(artistName);
-        System.out.println(encodedStr);
         return new String[]{encodedStr, artistName};
     }
 
@@ -133,7 +130,6 @@ public class LastFMManager {
                 break;
             }
         }
-        System.out.println(builder);
         return builder.toString();
     }
 }

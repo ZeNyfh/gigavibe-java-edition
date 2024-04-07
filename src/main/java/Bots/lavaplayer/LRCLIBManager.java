@@ -66,7 +66,6 @@ public class LRCLIBManager {
 
         urlBuilder.append(java.net.URLEncoder.encode(title, StandardCharsets.UTF_8));
         String url = urlBuilder.toString();
-        System.out.println(url);
         if (url.contains("+%28")) {
             url = url.split("\\+%28")[0].trim();
         }

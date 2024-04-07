@@ -24,6 +24,21 @@ import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
     private static final Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+    HashMap<String, String> radioLists = new HashMap<>() {{
+        put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
+        put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
+        put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
+        put("Beats n Breaks", "http://83.137.145.141:14280/;");
+        put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
+        put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
+        put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
+        put("Nova DK", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
+        put("Pro FM", "https://player.profm.nl/proxy/profm?mp=/stream");
+        put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
+        put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
+        put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
+        put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
+    }};
 
     public static String getRadio(String search) throws IOException {
         URL url;
@@ -50,22 +65,6 @@ public class CommandRadio extends BaseCommand {
             return "None";
         }
     }
-
-    HashMap<String, String> radioLists = new HashMap<>() {{
-        put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
-        put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
-        put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
-        put("Beats n Breaks", "http://83.137.145.141:14280/;");
-        put("Hardcore", "http://cc5.beheerstream.com:8022/stream");
-        put("USA Country", "https://ais-sa2.cdnstream1.com/1976_128.mp3");
-        put("USA Classic Rock", "https://hdradioclassicrock-rfritschka.radioca.st/stream");
-        put("Nova DK", "https://live-bauerdk.sharp-stream.com/nova_dk_mp3");
-        put("Pro FM", "https://player.profm.nl/proxy/profm?mp=/stream");
-        put("Radio Comercial", "https://media3.mcr.iol.pt/livefm/comercial.mp3/icecast.audio");
-        put("RMF FM", "https://rs6-krk2-cyfronet.rmfstream.pl/RMFFM48");
-        put("M1 Plius", "https://radio.m-1.fm/m1plius/aacp64");
-        put("NRK Jazz", "http://lyd.nrk.no:80/nrk_radio_jazz_aac_h");
-    }};
 
     public HashMap<String, String> getRadios() {
         return radioLists;

@@ -74,7 +74,6 @@ public class CommandForceSkip extends BaseCommand {
             }
             if (canPlay) {
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + searchTerm, false);
-                System.out.println(searchTerm);
                 messageBuilder.append("♾️ autoplay queued: ").append(searchTerm).append("\n");
             }
         }
