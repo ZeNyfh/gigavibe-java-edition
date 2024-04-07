@@ -15,13 +15,12 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static Bots.Main.autoPlayedTracks;
-import static Bots.Main.botVersion;
+import static Bots.Main.*;
 
 // Last.fm wish for their API to be used sensibly, I have outlined with comments how it is being used sensibly with attention to their note found at: https://www.last.fm/api/intro
 public class LastFMManager {
     public static boolean hasAPI = false;
-    private static String APIKEY = "";
+    private static String APIKEY = null;
 
     public static void Init() {
         Dotenv dotenv = Dotenv.load();
@@ -36,19 +35,18 @@ public class LastFMManager {
     }
 
     public static String getSimilarSongs(AudioTrack track, Long guildID) {
-        String songName = track.getInfo().title;
-        String artistName = track.getInfo().author;
-
-        String artist = encode(songName)[1];
-        if (!artist.isEmpty()) {
-            artistName = artist;
-        }
-
         if (APIKEY == null) {
             return "noapi";
         }
 
-        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + encode(artistName)[1] + "&track=" + encode(songName)[0] + "&api_key=" + APIKEY + "&format=json";
+        String songName = encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), true);
+        // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
+        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
+                ? encode(URLEncoder.encode(track.getInfo().title, StandardCharsets.UTF_8).toLowerCase(), false)
+                : encode(URLEncoder.encode(track.getInfo().author, StandardCharsets.UTF_8).toLowerCase(), false);
+
+
+        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getSimilar&limit=5&autocorrect=1&artist=" + artistName + "&track=" + songName + "&api_key=" + APIKEY + "&format=json";
         System.out.println(urlString);
 
         StringBuilder response = new StringBuilder();
@@ -70,53 +68,41 @@ public class LastFMManager {
             return "";
         }
 
-        if (response.toString().startsWith("{\"error\":6,\"message\":\"Track not found\"")) {
+        if (response.toString().startsWith("{\"error\":6,\"message\":\"Track not found\"") || response.toString().startsWith("{}")) {
             return "notfound";
         }
 
         String trackToSearch = extractTracks(response.toString(), guildID);
-        if (trackToSearch.isEmpty()) {
-            return "none";
-        } else {
-            return trackToSearch;
-        }
+        return trackToSearch.isEmpty() ? "none" : trackToSearch;
     }
 
-    public static String[] encode(String str) {
-        String encodedStr = URLEncoder.encode(str, StandardCharsets.UTF_8).toLowerCase();
-        if (encodedStr.contains("+%28")) {
-            encodedStr = encodedStr.split("\\+%28")[0];
+
+
+    public static String encode(String str, boolean isTitle) {
+        switch(str) {
+            case "%28": str = str.split("%28")[0]; // (
+            case "(": str = str.split("\\(")[0];
+            case "%5b": str = str.split("%5b")[0]; // [
+            case "[": str = str.split("\\[")[0];
+            case "ft.": str = str.split("ft\\.")[0];
+            case "lyrics": str = str.split("lyrics", 2)[0];
+            return str.trim();
         }
-        if (encodedStr.contains("%5B")) {
-            encodedStr = encodedStr.split("\\+%5b")[0];
-        }
-        if (encodedStr.contains("+ft.")) {
-            encodedStr = encodedStr.split("ft\\.")[0];
-        }
-        String artistName = "";
-        if (encodedStr.contains("-")) {
-            artistName = encodedStr.split("-", 2)[0];
-            encodedStr = encodedStr.split("-", 2)[1];
-        }
-        if (encodedStr.contains("vevo")) {
-            encodedStr = encodedStr.replaceAll("vevo", "");
-        }
-        if (encodedStr.contains("lyrics")) {
-            encodedStr = encodedStr.split("lyrics", 2)[0];
-        }
-        artistName = artistName.replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
-        encodedStr = encodedStr.replaceAll("%2b", "+").replaceAll("\\+", " ").trim().replaceAll(" ", "+");
-        return new String[]{encodedStr, artistName};
+
+        str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "");
+
+        String[] split = str.split("-");
+        return isTitle ? split[1].trim() : split[0].trim();
     }
 
     private static String extractTracks(String rawJson, long guildID) {
         Object object = JSONValue.parse(rawJson);
         JSONArray trackInfoArray = (JSONArray) ((JSONObject) (((JSONObject) object).get("similartracks"))).get("track");
-
         StringBuilder builder = new StringBuilder();
+
         for (Object obj : trackInfoArray) {
-            builder.append(String.valueOf(((JSONObject) ((JSONObject) obj).get("artist")).get("name")).toLowerCase()).append(" - ");
-            builder.append(String.valueOf(((JSONObject) obj).get("name")).toLowerCase());
+            builder.append(((JSONObject) ((JSONObject) obj).get("artist")).get("name")).append(" - ");
+            builder.append(((JSONObject) obj).get("name"));
             if (autoPlayedTracks.get(guildID).contains(builder.toString())) {
                 builder.setLength(0);
             } else {

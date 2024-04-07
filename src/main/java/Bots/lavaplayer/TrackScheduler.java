@@ -15,6 +15,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static Bots.Main.*;
+import static Bots.lavaplayer.LastFMManager.encode;
 
 public class TrackScheduler extends AudioEventAdapter {
 
@@ -99,7 +100,12 @@ public class TrackScheduler extends AudioEventAdapter {
                         canPlay = false;
                     }
                     if (canPlay) {
-                        PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + searchTerm, true);
+                        // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
+                        String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
+                                ? encode((track.getInfo().title).toLowerCase(), false)
+                                : encode(track.getInfo().author.toLowerCase(), false);
+                        String title = encode(track.getInfo().title, true);
+                        PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + artistName + " - " + title, true);
                         messageBuilder.append("♾️ Autoplay queued: ").append(searchTerm).append("\n");
                     }
                 }

@@ -6,6 +6,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
+import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandSkip extends BaseCommand {
 
@@ -80,7 +82,12 @@ public class CommandSkip extends BaseCommand {
                     canPlay = false;
                 }
                 if (canPlay) {
-                    PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + searchTerm, false);
+                    AudioTrack track = audioPlayer.getPlayingTrack();
+                    String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
+                            ? encode((track.getInfo().title).toLowerCase(), false)
+                            : encode(track.getInfo().author.toLowerCase(), false);
+                    String title = encode(track.getInfo().title, true);
+                    PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
                     messageBuilder.append("\n♾️ Autoplay queued: ").append(searchTerm).append("\n");
                 }
             }

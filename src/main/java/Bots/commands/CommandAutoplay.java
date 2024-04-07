@@ -6,10 +6,13 @@ import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
+import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandAutoplay extends BaseCommand {
     @Override
@@ -42,7 +45,11 @@ public class CommandAutoplay extends BaseCommand {
             AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
             if (track != null) {
                 List<String> list = autoPlayedTracks.get(event.getGuild().getIdLong());
-                list.add(LastFMManager.encode(track.getInfo().author)[0] + " - " + LastFMManager.encode(track.getInfo().title)[1]);
+                // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
+                String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
+                        ? encode((track.getInfo().title).toLowerCase(), false)
+                        : encode(track.getInfo().author.toLowerCase(), false);
+                list.add(artistName + " - " + encode(track.getInfo().title, true));
                 autoPlayedTracks.put(event.getGuild().getIdLong(), list);
             }
         }

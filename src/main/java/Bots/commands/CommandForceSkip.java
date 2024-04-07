@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.Main.*;
+import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandForceSkip extends BaseCommand {
 
@@ -73,8 +74,13 @@ public class CommandForceSkip extends BaseCommand {
                 canPlay = false;
             }
             if (canPlay) {
-                PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + searchTerm, false);
-                messageBuilder.append("♾️ Autoplay queued: ").append(searchTerm).append("\n");
+                AudioTrack track = audioPlayer.getPlayingTrack();
+                String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
+                        ? encode((track.getInfo().title).toLowerCase(), false)
+                        : encode(track.getInfo().author.toLowerCase(), false);
+                String title = encode(track.getInfo().title, true);
+                PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
+                messageBuilder.append("♾️ Autoplay queued: ").append(artistName).append(" - ").append(title).append("\n");
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
