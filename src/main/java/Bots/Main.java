@@ -254,7 +254,7 @@ public class Main extends ListenerAdapter {
         ignoreFiles = dataFile.createNewFile();
         FileWriter dataFileWriter = new FileWriter("data.csv", true);
         if (dataFile.length() == 0) {
-            dataFileWriter.write("Timestamp,VCs,PlayingCount,Guilds,Members");
+            dataFileWriter.write("Timestamp,VCs,PlayingCount,Guilds,Members\n");
             dataFileWriter.flush();
         }
         try {
@@ -317,7 +317,6 @@ public class Main extends ListenerAdapter {
                         int vcCount = 0;
                         int playingCount = 0;
                         int memberCount = 0;
-                        LocalDateTime timestamp = LocalDateTime.now();
 
                         for (Guild guild : bot.getGuilds()) {
                             memberCount += guild.getMemberCount();
@@ -330,7 +329,7 @@ public class Main extends ListenerAdapter {
                         }
 
                         StringBuilder builder = new StringBuilder();
-                        builder.append(timestamp).append(",")
+                        builder.append(System.currentTimeMillis()).append(",")
                                 .append(vcCount).append(",")
                                 .append(playingCount).append(",")
                                 .append(bot.getGuilds().size()).append(",")
