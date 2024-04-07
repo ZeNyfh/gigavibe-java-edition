@@ -5,7 +5,6 @@ import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
-import io.github.cdimascio.dotenv.DotenvEntry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,26 +29,21 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import static Bots.ConfigManager.GetConfig;
 import static Bots.ConfigManager.SaveConfigs;
@@ -61,11 +55,6 @@ public class Main extends ListenerAdapter {
     public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
-    private static final PrintStream out = System.out;
-    private static final PrintStream err = System.err;
-    private static final ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-    private static final ByteArrayOutputStream byteArrayErr = new ByteArrayOutputStream();
-    private static FileWriter logger;
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
@@ -108,8 +97,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws Exception {
-        System.setOut(new PrintStream(byteArrayOut));
-        System.setErr(new PrintStream(byteArrayErr));
+        OutputLogger.Init("log.log");
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         ignoreFiles = new File("temp/").mkdir();
@@ -120,28 +108,20 @@ public class Main extends ListenerAdapter {
         File logDir = new File("logs/");
         if (logDir.isDirectory()) {
             File[] logs = logDir.listFiles();
-            if (logs != null && logs.length != 0 && logs.length > 20) {
+            if (logs != null) {
+                int files = logs.length;
                 for (File log : logs) {
+                    if (files <= 20) {
+                        break;
+                    }
                     if (System.currentTimeMillis() - log.lastModified() >= 2419200000L) {
                         ignoreFiles = log.delete();
+                        files -= 1;
                     }
                 }
             }
         }
         commandUsageTracker = GetConfig("usage-stats");
-        ignoreFiles = logDir.mkdir();
-        File logFile = new File("logs/log.log");
-        if (logFile.length() != 0) {
-            String outputZip = logDir + "/log_" + Instant.ofEpochMilli(Uptime).atZone(ZoneId.systemDefault()).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".zip";
-            String logPath = logFile.getAbsolutePath();
-            try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(outputZip))) {
-                File fileToZip = new File(logPath);
-                zipOut.putNextEntry(new ZipEntry(fileToZip.getName()));
-                Files.copy(fileToZip.toPath(), zipOut);
-            }
-        }
-        ignoreFiles = logFile.createNewFile();
-        logger = new FileWriter("logs/log.log");
         Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File env = new File(".env");
@@ -259,6 +239,7 @@ public class Main extends ListenerAdapter {
         }
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
+            Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
             timer = new Timer();
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
@@ -266,37 +247,9 @@ public class Main extends ListenerAdapter {
                 int cleanUpTime = 0;
                 int logTime = 0;
                 final File tempDir = new File("temp/");
-                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
                 @Override
                 public void run() {
-                    // logger code
-                    String outString = byteArrayOut.toString();
-                    String errString = byteArrayErr.toString();
-                    String date = dtf.format(LocalDateTime.now()) + " | ";
-                    try {
-                        // handling for sys.out
-                        if (!outString.isEmpty()) {
-                            // print our string to the real out stream, reset the byte stream, and log the text
-                            outString = date + outString;
-                            out.print(outString);
-                            byteArrayOut.reset();
-                            logger.write(outString);
-                        }
-                        // handling for sys.err
-                        if (!errString.isEmpty()) {
-                            // datetime formatting to add the date and time to sys.err messages
-                            errString = date + errString;
-                            // print our string to the real err stream, reset the byte stream, and log the text
-                            err.print(errString);
-                            byteArrayErr.reset();
-                            logger.write(errString);
-                        }
-                        logger.flush();
-                    } catch (Exception e) {
-                        err.println(e);
-                    }
-
                     // temp directory cleanup
                     cleanUpTime++;
                     // we shouldn't need to check this often or if the directory is empty
