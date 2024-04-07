@@ -106,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter {
                                 : encode(track.getInfo().author.toLowerCase(), false, true);
                         String title = encode(track.getInfo().title, true, false);
                         PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + artistName + " - " + title, true);
-                        messageBuilder.append("♾️ Autoplay queued: ").append(searchTerm).append("\n");
+                        messageBuilder.append("♾️ Autoplay queued: ").append(artistName).append(" - ").append(title).append("\n");
                     }
                 }
             }
