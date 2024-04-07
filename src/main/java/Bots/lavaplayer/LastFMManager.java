@@ -88,7 +88,7 @@ public class LastFMManager {
             encodedStr = encodedStr.split("\\+%28")[0];
         }
         if (encodedStr.contains("%5B")) {
-            encodedStr = encodedStr.split("\\+%5B")[0];
+            encodedStr = encodedStr.split("\\+%5b")[0];
         }
         if (encodedStr.contains("+ft.")) {
             encodedStr = encodedStr.split("ft\\.")[0];
