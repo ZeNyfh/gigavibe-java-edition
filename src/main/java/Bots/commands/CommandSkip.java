@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -62,13 +63,26 @@ public class CommandSkip extends BaseCommand {
         currentVotes.add(event.getMember());
         if (currentVotes.size() >= VCMembers.size() / 2) {
             clearVotes(event.getGuild().getIdLong());
+            StringBuilder messageBuilder = new StringBuilder();
             if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-                if (!audioPlayer.getPlayingTrack().getInfo().uri.toLowerCase().contains("youtube")) {
-                    event.replyEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay."));
+                String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
+                boolean canPlay = true;
+                if (searchTerm.equals("notfound")) {
+                    messageBuilder.append("❌ **Error:**\nAutoplay failed to find ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
+                    canPlay = false;
                 }
-                String trackId = audioPlayer.getPlayingTrack().getInfo().identifier;
-                String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
-                PlayerManager.getInstance().loadAndPlay(event, radioUrl, true);
+                if (searchTerm.equals("none")) {
+                    messageBuilder.append("❌ **Error:**\nAutoplay could not find similar tracks.\n");
+                    canPlay = false;
+                }
+                if (searchTerm.isEmpty()) {
+                    messageBuilder.append("❌ **Error:**\nAn unknown error occurred when trying to autoplay.\n");
+                    canPlay = false;
+                }
+                if (canPlay) {
+                    PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + searchTerm, false);
+                    messageBuilder.append("\n♾️ autoplay queued: ").append(searchTerm).append("\n");
+                }
             }
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
@@ -86,6 +100,7 @@ public class CommandSkip extends BaseCommand {
                     eb.appendDescription("**Channel**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
                 }
                 eb.appendDescription("**Duration**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+                eb.appendDescription(messageBuilder);
                 event.replyEmbeds(eb.build());
             }
         } else {

@@ -45,11 +45,6 @@ public class CommandPlay extends BaseCommand {
             return;
         }
 
-        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            AutoplayGuilds.remove(event.getGuild().getIdLong());
-            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying due to manual track play."));
-        }
-
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
             event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
             return;

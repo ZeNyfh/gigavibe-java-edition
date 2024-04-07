@@ -44,6 +44,7 @@ public class TrackScheduler extends AudioEventAdapter {
         GuildMessageChannelUnion originalEventChannel = originalEvent.getChannel();
         long guildId = originalEvent.getGuild().getIdLong();
         clearVotes(guildId);
+        StringBuilder messageBuilder = new StringBuilder();
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);
             if (guildFailCount.get(guildId) == 1) {
@@ -84,14 +85,24 @@ public class TrackScheduler extends AudioEventAdapter {
                     return;
                 }
                 if (AutoplayGuilds.contains(guildId)) {
-                    if (!track.getInfo().uri.toLowerCase().contains("youtube")) {
-                        originalEventChannel.sendMessageEmbeds(createQuickError("Autoplay is on, but the track is not supported by autoplay!\n\nUse **" + botPrefix + " autoplay** to stop autoplay.")).queue();
-                        return;
+                    String searchTerm = LastFMManager.getSimilarSongs(track, guildId);
+                    boolean canPlay = true;
+                    if (searchTerm.equals("notfound")) {
+                        messageBuilder.append("❌ **Error:**\nAutoplay failed to find ").append(track.getInfo().title).append("\n");
+                        canPlay = false;
                     }
-                    String trackId = track.getInfo().identifier;
-                    String radioUrl = "https://www.youtube.com/watch?v=" + trackId + "&list=" + "RD" + trackId;
-                    PlayerManager.getInstance().loadAndPlay(originalEvent, radioUrl, true);
-                    return;
+                    if (searchTerm.equals("none")) {
+                        messageBuilder.append("❌ **Error:**\nAutoplay could not find similar tracks.\n");
+                        canPlay = false;
+                    }
+                    if (searchTerm.isEmpty()) {
+                        messageBuilder.append("❌ **Error:**\nAn unknown error occurred when trying to autoplay.\n");
+                        canPlay = false;
+                    }
+                    if (canPlay) {
+                        PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + searchTerm, true);
+                        messageBuilder.append("♾️ autoplay queued: ").append(searchTerm).append("\n");
+                    }
                 }
             }
         }
@@ -106,11 +117,10 @@ public class TrackScheduler extends AudioEventAdapter {
                 } else {
                     eb.setTitle("Now playing: " + nextTrack.getInfo().uri);
                 }
+                eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
                 if (nextTrack.getInfo().length <= 432000000) {
-                    eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
                     eb.addField("**Duration**\n", toSimpleTimestamp(nextTrack.getInfo().length), true);
                 } else {
-                    eb.setDescription("**Channel**\n" + nextTrack.getInfo().author);
                     eb.addField("**Duration**\n", "Unknown", true);
                 }
                 if (PlayerManager.getInstance().getThumbURL(nextTrack) != null)

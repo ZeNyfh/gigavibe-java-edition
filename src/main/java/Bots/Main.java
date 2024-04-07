@@ -1,9 +1,11 @@
 package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvEntry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -71,6 +73,7 @@ public class Main extends ListenerAdapter {
     public static String botVersion = ""; // YY.MM.DD
     public static List<Long> LoopGuilds = new ArrayList<>();
     public static List<Long> AutoplayGuilds = new ArrayList<>();
+    public static HashMap<Long, List<String>> autoPlayedTracks = new HashMap<>();
     public static List<Long> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static List<SlashCommandData> slashCommands = new ArrayList<>();
@@ -146,7 +149,7 @@ public class Main extends ListenerAdapter {
             System.out.println(env.getName() + " doesn't exist, creating now.");
             ignoreFiles = env.createNewFile();
             FileWriter writer = new FileWriter(".env");
-            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=\n# this is the last.fm API key for some functions of zenvibe\nLASTFMTOKEN=");
             writer.flush();
             writer.close();
         }
@@ -177,7 +180,6 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return;
         }
-
         try {
             List<Class<?>> classes = new ArrayList<>();
             String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -231,6 +233,7 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
         }
         ConfigManager.Init();
+        LastFMManager.Init();
         PlayerManager.getInstance();
 
         JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
@@ -246,6 +249,7 @@ public class Main extends ListenerAdapter {
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
         for (Guild guild : bot.getGuilds()) {
             trackLoops.put(guild.getIdLong(), 0);
+            autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
         }
 
         try {

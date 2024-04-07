@@ -142,7 +142,12 @@ public class PlayerManager {
                             if (getThumbURL(track) != null) embed.setThumbnail(getThumbURL(track));
                             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                            event.replyEmbeds(embed.build());
+                            if (autoplaying) {
+                                event.getChannel().sendMessageEmbeds(embed.build()).queue();
+                            } else {
+                                event.replyEmbeds(embed.build());
+                            }
+
                         }
                     } else {
                         long lengthSeconds = 0;
