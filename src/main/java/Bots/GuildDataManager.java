@@ -18,7 +18,7 @@ import java.util.TimerTask;
 /**
  * Central manager used to handle the reading, saving, and management of JSON files
  */
-public class ConfigManager {
+public class GuildDataManager {
     public final static String configFolder = "config";
     public final static HashMap<Object, JSONObject> Configs = new HashMap<>();
 
@@ -39,7 +39,7 @@ public class ConfigManager {
             }
         };
         timer.scheduleAtFixedRate(task, 60000, 120000); //Actively save every 2 minutes
-        System.out.println("Config manager initialised");
+        System.out.println("Guild Data manager initialised");
     }
 
     private static JSONObject CreateGuildObject() { //Useful base-plate config

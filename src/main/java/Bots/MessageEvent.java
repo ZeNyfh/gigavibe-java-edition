@@ -56,7 +56,7 @@ public class MessageEvent {
         this.args = this.rawContent.split(" ");
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.attachments = event.getMessage().getAttachments();
-        this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());
+        this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
     }
 
     public MessageEvent(SlashCommandInteractionEvent event) {
@@ -84,7 +84,7 @@ public class MessageEvent {
         this.args = this.rawContent.split(" "); //Ensure parallel interpretation to a regular message (also just easier)
 
         if (event.getGuild() != null) {
-            this.config = ConfigManager.GetGuildConfig(event.getGuild().getIdLong());
+            this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
         } else {
             this.config = new JSONObject();
         }

@@ -45,8 +45,8 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static Bots.ConfigManager.GetConfig;
-import static Bots.ConfigManager.SaveConfigs;
+import static Bots.GuildDataManager.GetConfig;
+import static Bots.GuildDataManager.SaveConfigs;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -211,7 +211,7 @@ public class Main extends ListenerAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ConfigManager.Init();
+        GuildDataManager.Init();
         LastFMManager.Init();
         PlayerManager.getInstance();
 
@@ -238,7 +238,7 @@ public class Main extends ListenerAdapter {
             dataFileWriter.flush();
         }
         try {
-            Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::SaveConfigs));
+            Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
             Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
             timer = new Timer();
             task = new TimerTask() {
@@ -409,7 +409,7 @@ public class Main extends ListenerAdapter {
     }
 
     public static boolean IsChannelBlocked(Guild guild, GuildMessageChannelUnion commandChannel) {
-        JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
+        JSONObject config = GuildDataManager.GetGuildConfig(guild.getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (Object blockedChannel : blockedChannels) {
             if (commandChannel.getId().equals(blockedChannel)) {
@@ -435,7 +435,7 @@ public class Main extends ListenerAdapter {
                 }
             }
         }
-        JSONObject config = ConfigManager.GetGuildConfig(guild.getIdLong());
+        JSONObject config = GuildDataManager.GetGuildConfig(guild.getIdLong());
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
         boolean check = false;
