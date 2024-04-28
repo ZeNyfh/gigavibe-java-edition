@@ -50,7 +50,7 @@ import static Bots.ConfigManager.SaveConfigs;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-    public static final long Uptime = currentTimeMillis();
+    public static final long BootTime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
     public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
