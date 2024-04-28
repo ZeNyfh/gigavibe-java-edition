@@ -299,14 +299,8 @@ public class Main extends ListenerAdapter {
 
 
                     // updater code
-                    boolean isInAnyVc = false;
-                    for (Guild guild : bot.getGuilds()) {
-                        if (guild.getAudioManager().isConnected()) {
-                            isInAnyVc = true;
-                            break;
-                        }
-                    }
-                    if (!isInAnyVc) { // not in vc
+                    boolean isPlaying = bot.getGuilds().stream().anyMatch(guild -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack() != null);
+                    if (!isPlaying) { // not playing something for 60 seconds
                         VCTime++;
                         if (VCTime >= 60 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
                             // leeway for upload past the time limit
