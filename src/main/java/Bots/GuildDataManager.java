@@ -2,6 +2,8 @@ package Bots;
 
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.JDA;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static Bots.Main.*;
 
 /**
  * Central manager used to handle the reading, saving, and management of JSON files
@@ -232,6 +236,17 @@ public class GuildDataManager {
                 writer.write(channel.getId() + "\n"); // channel id
                 writer.write(Objects.requireNonNull(Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel()).getId() + "\n"); // vc id
                 writer.write(player.getPlayingTrack().getPosition() + "\n"); // track now position
+                // track states
+                writer.write(player.isPaused() + "\n"); // is paused
+                writer.write(LoopGuilds.contains(guild.getIdLong()) + "\n"); // is looping
+                writer.write(LoopQueueGuilds.contains(guild.getIdLong()) + "\n"); // is queue looping
+                writer.write(AutoplayGuilds.contains(guild.getIdLong()) + "\n"); // is autoplaying
+                // track modifiers
+                writer.write(player.getVolume() + "\n"); // volume
+                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getSpeed() + "\n"); // speed
+                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getPitch() + "\n"); // pitch
+                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getFrequency() + "\n"); // vibrato freq
+                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getDepth() + "\n"); // vibrato depth
                 writer.write(player.getPlayingTrack().getInfo().uri + "\n"); // track now url
                 if (!musicManager.scheduler.queue.isEmpty()) {
                     for (AudioTrack track : musicManager.scheduler.queue) writer.write(track.getInfo().uri + "\n"); // queue urls

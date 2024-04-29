@@ -3,6 +3,9 @@ package Bots;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -268,6 +271,17 @@ public class Main extends ListenerAdapter {
                 String channelID = scanner.nextLine();
                 String vcID = scanner.nextLine();
                 String trackPos = scanner.nextLine();
+                // track states
+                boolean paused = Boolean.parseBoolean(scanner.nextLine());
+                boolean looping = Boolean.parseBoolean(scanner.nextLine());
+                boolean queueLooping = Boolean.parseBoolean(scanner.nextLine());
+                boolean autoplaying = Boolean.parseBoolean(scanner.nextLine());
+                // track modifiers
+                int volume = Integer.parseInt(scanner.nextLine());
+                double speed = Double.parseDouble(scanner.nextLine());
+                double pitch = Double.parseDouble(scanner.nextLine());
+                float frequency = Float.parseFloat(scanner.nextLine());
+                float depth = Float.parseFloat(scanner.nextLine());
                 try {
                     Guild guild = bot.getGuildById(guildID);
                     GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
@@ -278,6 +292,7 @@ public class Main extends ListenerAdapter {
                     guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
                     String line;
                     boolean first = true;
+                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
                     while (scanner.hasNextLine()) {
                         line = scanner.nextLine();
                         if (first) {
@@ -287,7 +302,17 @@ public class Main extends ListenerAdapter {
                             PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {}, channelUnion);
                         }
                     }
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue has been restored!")).queue();
+                    AudioPlayer player = musicManager.audioPlayer;
+                    // setting player states
+                    player.setPaused(paused);
+                    if (looping) LoopGuilds.add(Long.valueOf(guildID));
+                    if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
+                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
+                    // setting track modifiers
+                    player.setVolume(volume);
+                    // TODO: audio filters to be added here.
+
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue and parameters have been restored!")).queue();
                     scanner.close();
                     ignoreFiles = file.delete();
                 } catch (Exception e) {
