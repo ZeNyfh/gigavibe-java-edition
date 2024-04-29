@@ -6,6 +6,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -216,12 +218,19 @@ public class GuildDataManager {
             try {
                 if (guildQueueFile.exists()) {
                     guildQueueFile.delete();
+                    guildQueueFile.createNewFile();
                 }
-                guildQueueFile.createNewFile();
                 FileWriter writer = new FileWriter(guildQueueFile);
+                System.err.println(guildQueueFile.exists());
                 writer.write(System.currentTimeMillis() + "\n"); // time now
-                writer.write(((MessageEvent) player.getPlayingTrack().getUserData()).getChannel().getGuild().getId() + "\n"); // guild id
-                writer.write(((MessageEvent) player.getPlayingTrack().getUserData()).getChannel().getId() + "\n"); // channel id
+                GuildMessageChannelUnion channel;
+                if ((((Object[]) player.getPlayingTrack().getUserData())[0]) == null) { // event is null
+                    channel = (GuildMessageChannelUnion) bot.getGuildChannelById(String.valueOf(((Object[]) player.getPlayingTrack().getUserData())[1]));
+                } else {
+                    channel = ((MessageEvent) ((Object[]) player.getPlayingTrack().getUserData())[0]).channel;
+                }
+                writer.write(Objects.requireNonNull(channel).getGuild().getId() + "\n"); // guild id
+                writer.write(channel.getId() + "\n"); // channel id
                 writer.write(Objects.requireNonNull(Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel()).getId() + "\n"); // vc id
                 writer.write(player.getPlayingTrack().getPosition() + "\n"); // track now position
                 writer.write(player.getPlayingTrack().getInfo().uri + "\n"); // track now url
@@ -230,6 +239,7 @@ public class GuildDataManager {
                 }
                 writer.close();
             } catch (Exception e) {
+                System.err.println("why");
                 e.printStackTrace();
             }
         }

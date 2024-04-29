@@ -40,7 +40,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        MessageEvent originalEvent = (MessageEvent) track.getUserData();
+        MessageEvent originalEvent = (MessageEvent) ((Object[]) track.getUserData())[0];
         GuildMessageChannelUnion originalEventChannel = originalEvent.getChannel();
         long guildId = originalEvent.getGuild().getIdLong();
         clearVotes(guildId);
@@ -138,7 +138,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        Guild guild = ((MessageEvent) track.getUserData()).getGuild();
+        Guild guild = ((MessageEvent) ((Object[]) track.getUserData())[0]).getGuild();
         System.out.println("AudioPlayer in " + guild.getIdLong() + guild.getName() + " threw friendly exception on track: " + track.getInfo().uri);
         System.err.println(exception.getMessage());
     }

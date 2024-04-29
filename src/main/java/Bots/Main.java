@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
@@ -33,7 +32,6 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -267,7 +266,6 @@ public class Main extends ListenerAdapter {
                 String channelID = scanner.nextLine();
                 String vcID = scanner.nextLine();
                 String trackPos = scanner.nextLine();
-
                 try {
                     Guild guild = bot.getGuildById(guildID);
                     GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
@@ -276,7 +274,6 @@ public class Main extends ListenerAdapter {
                         continue;
                     }
                     guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
-
                     String line;
                     boolean first = true;
                     while (scanner.hasNextLine()) {
@@ -284,19 +281,20 @@ public class Main extends ListenerAdapter {
                         if (first) {
                             PlayerManager.getInstance().loadAndPlay(null, line, false, () -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos)), channelUnion);
                             first = false;
+                        } else {
+                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {}, channelUnion);
                         }
-                        PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {}, channelUnion);
                     }
                     Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue has been restored!")).queue();
                     scanner.close();
-                    file.delete();
+                    ignoreFiles = file.delete();
                 } catch (Exception e) {
                     scanner.close();
-                    file.delete();
+                    ignoreFiles = file.delete();
                     e.printStackTrace();
                 }
                 scanner.close();
-                file.delete();
+                ignoreFiles = file.delete();
             }
         }
 

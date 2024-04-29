@@ -23,10 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,7 +99,7 @@ public class PlayerManager {
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(event);
+                audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
                     EmbedBuilder embed = new EmbedBuilder();
@@ -122,7 +119,11 @@ public class PlayerManager {
                         embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
                     }
                     embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
-                    event.replyEmbeds(embed.build());
+                    if (event != null) {
+                        event.replyEmbeds(embed.build());
+                    } else {
+                        commandChannel.sendMessageEmbeds(embed.build()).queue();
+                    }
                 }
                 OnCompletion.run();
             }
@@ -154,7 +155,11 @@ public class PlayerManager {
                             if (autoplaying) {
                                 event.getChannel().sendMessageEmbeds(embed.build()).queue();
                             } else {
-                                event.replyEmbeds(embed.build());
+                                if (event != null) {
+                                    event.replyEmbeds(embed.build());
+                                } else {
+                                    commandChannel.sendMessageEmbeds(embed.build()).queue();
+                                }
                             }
                         }
                     } else {
@@ -180,10 +185,14 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         if (getThumbURL(tracks.get(0)) != null) embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        event.replyEmbeds(embed.build());
+                        if (event != null) {
+                            event.replyEmbeds(embed.build());
+                        } else {
+                            commandChannel.sendMessageEmbeds(embed.build()).queue();
+                        }
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(event);
+                        audioTrack.setUserData(new Object[]{event, Objects.requireNonNull(event).getChannel()});
                     }
                 }
                 OnCompletion.run();
