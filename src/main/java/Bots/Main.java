@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -31,6 +33,7 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -130,7 +133,6 @@ public class Main extends ListenerAdapter {
             ignoreFiles = env.createNewFile();
             FileWriter writer = new FileWriter(".env");
             writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# Feel free to change the prefix to anything else.\nPREFIX=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the hex value for the bot colour\nCOLOUR=\n# this is the last.fm API key for some functions of zenvibe\nLASTFMTOKEN=");
-            writer.flush();
             writer.close();
         }
         if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -237,7 +239,69 @@ public class Main extends ListenerAdapter {
             dataFileWriter.write("Timestamp,VCs,PlayingCount,Guilds,Members\n");
             dataFileWriter.flush();
         }
+
+        // queue recovery
+        File queueDir = new File(GuildDataManager.configFolder + "/queues/");
+        if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                file.delete();
+            }
+        } else {
+            System.out.println("restoring queues");
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                Scanner scanner = new Scanner(file);
+                String time;
+                try {
+                    time = scanner.nextLine();
+                } catch (Exception e) {
+                    scanner.close();
+                    file.delete();
+                    continue;
+                }
+                if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
+                    scanner.close();
+                    break;
+                }
+
+                String guildID = scanner.nextLine();
+                String channelID = scanner.nextLine();
+                String vcID = scanner.nextLine();
+                String trackPos = scanner.nextLine();
+
+                try {
+                    Guild guild = bot.getGuildById(guildID);
+                    GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
+                    VoiceChannel vc = guild.getVoiceChannelById(vcID);
+                    if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
+                        continue;
+                    }
+                    guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
+
+                    String line;
+                    boolean first = true;
+                    while (scanner.hasNextLine()) {
+                        line = scanner.nextLine();
+                        if (first) {
+                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos)), channelUnion);
+                            first = false;
+                        }
+                        PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {}, channelUnion);
+                    }
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue has been restored!")).queue();
+                    scanner.close();
+                    file.delete();
+                } catch (Exception e) {
+                    scanner.close();
+                    file.delete();
+                    e.printStackTrace();
+                }
+                scanner.close();
+                file.delete();
+            }
+        }
+
         try {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
             Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
             Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
             timer = new Timer();

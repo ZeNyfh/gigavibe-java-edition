@@ -15,6 +15,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,8 +85,13 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
-        GuildMessageChannelUnion commandChannel = event.getChannel();
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion... channel) {
+        GuildMessageChannelUnion commandChannel;
+        if (event == null) {
+            commandChannel = channel[0];
+        } else {
+            commandChannel = event.getChannel();
+        }
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
@@ -150,7 +156,6 @@ public class PlayerManager {
                             } else {
                                 event.replyEmbeds(embed.build());
                             }
-
                         }
                     } else {
                         long lengthSeconds = 0;

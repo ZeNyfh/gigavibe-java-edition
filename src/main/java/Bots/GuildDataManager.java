@@ -1,10 +1,17 @@
 package Bots;
 
+import Bots.lavaplayer.GuildMusicManager;
+import Bots.lavaplayer.PlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,13 +31,17 @@ public class GuildDataManager {
     public final static HashMap<Object, JSONObject> Configs = new HashMap<>();
 
     public static void Init() {
-        boolean madeNewConfig = Paths.get(configFolder).toFile().mkdir();
-        if (madeNewConfig) {
+        boolean madeFolder = Paths.get(configFolder).toFile().mkdir();
+        if (madeFolder) {
             System.out.println("Created new config folder");
         }
-        boolean madeNewFailContainer = Paths.get(configFolder + "/failed").toFile().mkdir();
-        if (madeNewFailContainer) {
+        madeFolder = Paths.get(configFolder + "/failed").toFile().mkdir();
+        if (madeFolder) {
             System.out.println("Created new config failure folder");
+        }
+        madeFolder = Paths.get(configFolder + "/queues").toFile().mkdir();
+        if (madeFolder) {
+            System.out.println("Created new guild queue recovery folder");
         }
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -189,7 +201,38 @@ public class GuildDataManager {
                 }
             }
         }
-        throw new NullPointerException(); // I guess?
+        throw new NullPointerException();
+    }
+
+    public static void SaveQueues(JDA bot) { // queue restoration can only occur once because this here does NOT give the tracks their data.
+        for (Guild guild : bot.getGuilds()) {
+            AudioPlayer player = PlayerManager.getInstance().getMusicManager(guild).audioPlayer;
+            if (player.getPlayingTrack() == null) { // the track being null means there is no queue 99% of the time.
+                continue;
+            }
+            GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
+            String fileName = guild.getId() + ".txt";
+            File guildQueueFile = new File(configFolder + "/queues/" + fileName);
+            try {
+                if (guildQueueFile.exists()) {
+                    guildQueueFile.delete();
+                }
+                guildQueueFile.createNewFile();
+                FileWriter writer = new FileWriter(guildQueueFile);
+                writer.write(System.currentTimeMillis() + "\n"); // time now
+                writer.write(((MessageEvent) player.getPlayingTrack().getUserData()).getChannel().getGuild().getId() + "\n"); // guild id
+                writer.write(((MessageEvent) player.getPlayingTrack().getUserData()).getChannel().getId() + "\n"); // channel id
+                writer.write(Objects.requireNonNull(Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel()).getId() + "\n"); // vc id
+                writer.write(player.getPlayingTrack().getPosition() + "\n"); // track now position
+                writer.write(player.getPlayingTrack().getInfo().uri + "\n"); // track now url
+                if (!musicManager.scheduler.queue.isEmpty()) {
+                    for (AudioTrack track : musicManager.scheduler.queue) writer.write(track.getInfo().uri + "\n"); // queue urls
+                }
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void SaveConfigs() { //Saves all configs. Should ideally be run just before shutdown

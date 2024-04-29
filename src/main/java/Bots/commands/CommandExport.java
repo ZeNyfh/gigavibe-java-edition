@@ -36,7 +36,6 @@ public class CommandExport extends BaseCommand {
                 writer.write(track.getInfo().uri + " | " + track.getInfo().title + "\n");
             }
         }
-        writer.flush();
         writer.close();
         event.replyFiles(FileUpload.fromData(text));
     }
