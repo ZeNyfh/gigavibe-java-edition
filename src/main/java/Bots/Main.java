@@ -363,21 +363,15 @@ public class Main extends ListenerAdapter {
 
 
                     // updater code
-                    boolean isPlaying = bot.getGuilds().stream().anyMatch(guild -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack() != null);
-                    if (!isPlaying) { // not playing something for 60 seconds
-                        VCTime++;
-                        if (VCTime >= 60 && updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
-                            // leeway for upload past the time limit
-                            if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
-                                System.out.println("It's update time!");
-                                File botJar = new File("bot.jar");
-                                ignoreFiles = botJar.delete();
-                                ignoreFiles = updateFile.renameTo(botJar);
-                                killMain();
-                            }
+                    if (updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                        // leeway for upload past the time limit
+                        if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
+                            System.out.println("It's update time!");
+                            File botJar = new File("bot.jar");
+                            ignoreFiles = botJar.delete();
+                            ignoreFiles = updateFile.renameTo(botJar);
+                            killMain();
                         }
-                    } else { // in a vc
-                        VCTime = 0;
                     }
                 }
             };
