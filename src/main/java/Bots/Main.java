@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -71,6 +72,7 @@ public class Main extends ListenerAdapter {
     public static boolean ignoreFiles = false;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    private static JDA bot;
 
     public enum audioFilters {
         Vibrato, Timescale
@@ -216,7 +218,7 @@ public class Main extends ListenerAdapter {
         LastFMManager.Init();
         PlayerManager.getInstance();
 
-        JDA bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
+        bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
                 .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
                 .addEventListeners(new Main())
@@ -459,6 +461,10 @@ public class Main extends ListenerAdapter {
         }
         totalSet.add(finalSeconds);
         return String.join("", totalSet);
+    }
+
+    public static GuildChannel getGuildChannelFromID(Long ID) {
+        return bot.getGuildChannelById(ID);
     }
 
     public static void clearVotes(Long guildID) {

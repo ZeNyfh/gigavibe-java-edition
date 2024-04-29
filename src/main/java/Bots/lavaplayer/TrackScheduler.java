@@ -40,9 +40,19 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        MessageEvent originalEvent = (MessageEvent) ((Object[]) track.getUserData())[0];
-        GuildMessageChannelUnion originalEventChannel = originalEvent.getChannel();
-        long guildId = originalEvent.getGuild().getIdLong();
+        MessageEvent originalEvent = null;
+        GuildMessageChannelUnion originalEventChannel;
+        long guildId;
+        if ((((Object[]) track.getUserData())[0]) != null) {
+            originalEvent = (MessageEvent) ((Object[]) track.getUserData())[0];
+            originalEventChannel = originalEvent.getChannel();
+            guildId = originalEvent.getGuild().getIdLong();
+        } else {
+            guildId = (long) ((Object[]) track.getUserData())[1];
+            originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(guildId);
+            guildId = originalEventChannel.getGuild().getIdLong();
+        }
+
         clearVotes(guildId);
         StringBuilder messageBuilder = new StringBuilder();
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
@@ -138,7 +148,14 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        Guild guild = ((MessageEvent) ((Object[]) track.getUserData())[0]).getGuild();
+        Guild guild;
+        if ((((Object[]) track.getUserData())[0]) != null) {
+            guild = ((MessageEvent) ((Object[]) track.getUserData())[0]).getGuild();
+        } else {
+            long guildId = (long) ((Object[]) track.getUserData())[1];
+            guild = getGuildChannelFromID(guildId).getGuild();
+        }
+
         System.out.println("AudioPlayer in " + guild.getIdLong() + guild.getName() + " threw friendly exception on track: " + track.getInfo().uri);
         System.err.println(exception.getMessage());
     }

@@ -221,7 +221,6 @@ public class GuildDataManager {
                     guildQueueFile.createNewFile();
                 }
                 FileWriter writer = new FileWriter(guildQueueFile);
-                System.err.println(guildQueueFile.exists());
                 writer.write(System.currentTimeMillis() + "\n"); // time now
                 GuildMessageChannelUnion channel;
                 if ((((Object[]) player.getPlayingTrack().getUserData())[0]) == null) { // event is null
@@ -239,7 +238,6 @@ public class GuildDataManager {
                 }
                 writer.close();
             } catch (Exception e) {
-                System.err.println("why");
                 e.printStackTrace();
             }
         }
