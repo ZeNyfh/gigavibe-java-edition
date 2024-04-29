@@ -48,7 +48,7 @@ public class TrackScheduler extends AudioEventAdapter {
             originalEventChannel = originalEvent.getChannel();
             guildId = originalEvent.getGuild().getIdLong();
         } else {
-            guildId = (long) ((Object[]) track.getUserData())[1];
+            guildId = Long.parseLong ((String) ((Object[]) track.getUserData())[1]);
             originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(guildId);
             guildId = originalEventChannel.getGuild().getIdLong();
         }
@@ -152,7 +152,7 @@ public class TrackScheduler extends AudioEventAdapter {
         if ((((Object[]) track.getUserData())[0]) != null) {
             guild = ((MessageEvent) ((Object[]) track.getUserData())[0]).getGuild();
         } else {
-            long guildId = (long) ((Object[]) track.getUserData())[1];
+            long guildId = Long.parseLong((String) ((Object[]) track.getUserData())[1]);
             guild = getGuildChannelFromID(guildId).getGuild();
         }
 
