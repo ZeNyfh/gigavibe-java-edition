@@ -107,7 +107,7 @@ public class CommandStateChecker {
             return new CheckResult(false, "You aren't in a VC.");
         }
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
-            //QUESTION: Should we also check if its actively playing anything? -9382
+            //TODO: Don't prevent joining if nothing is actively playing (maybe also check queue to prevent abuse by timing?)
             return new CheckResult(false, "The bot is already busy in another VC.");
         }
         try {
