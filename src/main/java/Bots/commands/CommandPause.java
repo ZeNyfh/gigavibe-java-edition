@@ -50,7 +50,7 @@ public class CommandPause extends BaseCommand {
         }
         if (audioPlayer.isPaused()) {
             audioPlayer.setPaused(false);
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", "The track is now unpaused."));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", "The track is now playing."));
         } else {
             audioPlayer.setPaused(true);
             event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", "The track is now paused."));
