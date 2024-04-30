@@ -110,11 +110,15 @@ public class CommandStateChecker {
             //TODO: Don't prevent joining if nothing is actively playing (maybe also check queue to prevent abuse by timing?)
             return new CheckResult(false, "The bot is already busy in another VC.");
         }
-        try {
-            audioManager.openAudioConnection(memberState.getChannel());
+        if (memberState.getChannel() != selfState.getChannel()) {
+            try {
+                audioManager.openAudioConnection(memberState.getChannel());
+                return success;
+            } catch (InsufficientPermissionException e) {
+                return new CheckResult(false, "The bot is unable to join the VC.");
+            }
+        } else {
             return success;
-        } catch (InsufficientPermissionException e) {
-            return new CheckResult(false, "The bot is unable to join the VC.");
         }
     }
 
