@@ -11,7 +11,7 @@ import static Bots.Main.*;
 public class CommandClearQueue extends BaseCommand {
     @Override
     public Check[] getChecks() {
-        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING}; //QUESTION: Do we care if it's playing? -9382
+        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC};
     }
 
     @Override
