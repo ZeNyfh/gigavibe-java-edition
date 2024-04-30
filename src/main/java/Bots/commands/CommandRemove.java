@@ -12,7 +12,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandRemove extends BaseCommand {
     @Override

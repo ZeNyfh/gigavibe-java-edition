@@ -15,7 +15,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static Bots.Main.*;
+import static Bots.Main.autoPlayedTracks;
+import static Bots.Main.botVersion;
 
 // Last.fm wish for their API to be used sensibly, I have outlined with comments how it is being used sensibly with attention to their note found at: https://www.last.fm/api/intro
 public class LastFMManager {
@@ -40,7 +41,7 @@ public class LastFMManager {
         }
 
         String songName;
-        if (track.getInfo().title.contains("-")){
+        if (track.getInfo().title.contains("-")) {
             songName = encode(track.getInfo().title.toLowerCase(), true, true);
         } else {
             songName = encode(track.getInfo().title.toLowerCase(), true, false);
@@ -49,7 +50,6 @@ public class LastFMManager {
         String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null || track.getInfo().title.contains("-"))
                 ? encode((track.getInfo().title).toLowerCase(), false, true)
                 : encode((track.getInfo().author).toLowerCase(), false, true);
-
 
 
         StringBuilder urlStringBuilder = new StringBuilder();
@@ -86,14 +86,13 @@ public class LastFMManager {
     }
 
 
-
     public static String encode(String str, boolean isTitle, boolean shouldCheck) {
         str = URLEncoder.encode(str, StandardCharsets.UTF_8).toLowerCase();
         if (str.contains("%28")) str = str.split("%28")[0];
         if (str.contains("%5b")) str = str.split("%5b")[0];
         if (str.contains("ft.")) str = str.split("ft\\.")[0];
         if (str.contains("lyric")) str = str.split("lyric", 2)[0];
-        if (str.contains("official")) str = str.split("official",  2)[0];
+        if (str.contains("official")) str = str.split("official", 2)[0];
         str = !str.startsWith("vevo") ? str.split("vevo", 2)[0] : str.replaceAll("vevo", "").trim();
         if (str.contains("+")) str = str.replaceAll("\\+", " ").trim();
         if (shouldCheck && str.contains("-")) {

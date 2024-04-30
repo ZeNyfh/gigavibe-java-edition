@@ -1,8 +1,8 @@
 package Bots;
 
-import static Bots.CommandStateChecker.*;
-
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+
+import static Bots.CommandStateChecker.*;
 
 // Custom base command class used by all commands
 // Structured in the recommended order of a command, ignoring the var and enum at the top

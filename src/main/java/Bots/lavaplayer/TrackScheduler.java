@@ -48,7 +48,7 @@ public class TrackScheduler extends AudioEventAdapter {
             originalEventChannel = originalEvent.getChannel();
             guildId = originalEvent.getGuild().getIdLong();
         } else {
-            guildId = Long.parseLong ((String) ((Object[]) track.getUserData())[1]);
+            guildId = Long.parseLong((String) ((Object[]) track.getUserData())[1]);
             originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(guildId);
             guildId = originalEventChannel.getGuild().getIdLong();
         }

@@ -4,7 +4,8 @@ import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 
-import static Bots.Main.*;
+import static Bots.Main.LoopGuilds;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandLoop extends BaseCommand {
     @Override

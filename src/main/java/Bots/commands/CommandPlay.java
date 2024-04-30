@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandPlay extends BaseCommand {
     final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"};

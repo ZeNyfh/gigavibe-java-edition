@@ -33,6 +33,7 @@ public class CommandStateChecker {
             return this.message;
         }
     }
+
     private static final CheckResult success = new CheckResult(true, "(You should never see this message)");
 
     public enum Check {

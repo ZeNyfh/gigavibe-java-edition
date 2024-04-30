@@ -14,6 +14,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class CommandInfo extends BaseCommand {
     final int CommandCount = commandNames.size();
+
     @Override
     public void execute(MessageEvent event) {
         int vcCount = 0;

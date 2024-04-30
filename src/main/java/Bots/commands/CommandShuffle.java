@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandShuffle extends BaseCommand {
     @Override

@@ -8,7 +8,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -249,7 +248,8 @@ public class GuildDataManager {
                 writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getDepth() + "\n"); // vibrato depth
                 writer.write(player.getPlayingTrack().getInfo().uri + "\n"); // track now url
                 if (!musicManager.scheduler.queue.isEmpty()) {
-                    for (AudioTrack track : musicManager.scheduler.queue) writer.write(track.getInfo().uri + "\n"); // queue urls
+                    for (AudioTrack track : musicManager.scheduler.queue)
+                        writer.write(track.getInfo().uri + "\n"); // queue urls
                 }
                 writer.close();
             } catch (Exception e) {

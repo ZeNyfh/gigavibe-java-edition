@@ -294,7 +294,8 @@ public class Main extends ListenerAdapter {
                             PlayerManager.getInstance().loadAndPlay(null, line, false, () -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos)), channelUnion);
                             first = false;
                         } else {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {}, channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {
+                            }, channelUnion);
                         }
                     }
                     AudioPlayer player = musicManager.audioPlayer;
@@ -327,7 +328,6 @@ public class Main extends ListenerAdapter {
             timer = new Timer();
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
-                int VCTime = 0;
                 int cleanUpTime = 0;
                 int logTime = 0;
                 final File tempDir = new File("temp/");

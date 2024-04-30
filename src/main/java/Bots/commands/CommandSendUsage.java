@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
+import static Bots.Main.commandUsageTracker;
 
 public class CommandSendUsage extends BaseCommand {
     @Override

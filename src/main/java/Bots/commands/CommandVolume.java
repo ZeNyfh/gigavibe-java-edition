@@ -8,7 +8,8 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 
 public class CommandVolume extends BaseCommand {
     @Override

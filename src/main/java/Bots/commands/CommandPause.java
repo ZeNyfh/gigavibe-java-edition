@@ -7,7 +7,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
 
 public class CommandPause extends BaseCommand {
     @Override
