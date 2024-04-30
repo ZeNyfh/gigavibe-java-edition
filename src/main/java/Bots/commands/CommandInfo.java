@@ -16,7 +16,6 @@ public class CommandInfo extends BaseCommand {
     final int CommandCount = commandNames.size();
     @Override
     public void execute(MessageEvent event) {
-        System.err.println(commands);
         int vcCount = 0;
         int memberCount = 0;
         int playingCount = 0;
