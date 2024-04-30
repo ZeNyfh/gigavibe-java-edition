@@ -20,9 +20,7 @@ import static Bots.Main.*;
 public class CommandInsert extends BaseCommand {
     @Override
     public Check[] getChecks() {
-        return new Check[]{Check.IS_DJ, Check.IS_CHANNEL_BLOCKED, Check.IS_USER_IN_ANY_VC, Check.IS_PLAYING};
-        // QUESTION: Should we support insert when nothing is playing? shouldn't be unreasonable to support -9382
-        // (If we do, make sure to change IS_USER_IN_ANY_VC and IS_PLAYING to TRY_JOIN_VC)
+        return new Check[]{Check.IS_DJ, Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
     }
 
     @Override
@@ -59,9 +57,9 @@ public class CommandInsert extends BaseCommand {
         }
         int position = Integer.parseInt(args[1]) - 1;
         tracksToPlay.add(args[2]);
-        boolean sendEmbedBool = true;
         // queue is empty or the argument was larger than or equal to the queue size, simply load and play like usual.
         if (position + 1 >= queue.size() || queue.isEmpty()) {
+            boolean sendEmbedBool = true;
             for (String track : tracksToPlay) {
                 try {
                     PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
