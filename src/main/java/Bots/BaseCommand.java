@@ -1,13 +1,11 @@
 package Bots;
 
+import static Bots.CommandStateChecker.*;
+
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-/**
- * Custom base command class used by all commands
- *
- * @author 9382
- * @version 1.2
- */
+// Custom base command class used by all commands
+// Structured in the recommended order of a command, ignoring the var and enum at the top
 public abstract class BaseCommand {
     public SlashCommandData slashCommand;
 
@@ -15,9 +13,22 @@ public abstract class BaseCommand {
         General, Music, DJ, Admin, Dev
     }
 
+    public void Init() { //Optional initialisation stuff if something is required on start for a command
+    }
+
+    public Check[] getChecks() { //Common checks like IsDJ to make sure everything is fine
+        return new Check[0];
+    }
+
     public abstract void execute(MessageEvent event) throws Exception; //The main event loop
 
-    public void Init() { //Optional initialisation stuff if something is required on start for a command
+    public final void executeWithChecks(MessageEvent event) throws Exception { //For main - do not override
+        CheckResult checkResult = PerformChecks(event, this.getChecks());
+        if (!checkResult.Succeeded()) {
+            event.replyEmbeds(Main.createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));
+        } else {
+            this.execute(event);
+        }
     }
 
     public abstract String[] getNames(); //The first name in the list is treated as the primary name by cmds
@@ -26,9 +37,9 @@ public abstract class BaseCommand {
 
     public abstract String getDescription(); //The description, used by cmds
 
-    public String getOptions() {
+    public String getOptions() { //The options text used by help / cmds. Purely decorative
         return "";
-    } //The options text used by help / cmds. Purely decorative
+    }
 
     public void ProvideOptions(SlashCommandData slashCommand) { //Provides options for a slash command
     }
