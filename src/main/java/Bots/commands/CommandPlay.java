@@ -1,17 +1,14 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,34 +25,15 @@ public class CommandPlay extends BaseCommand {
     final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"};
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
-        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
-            return;
-        }
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
+    }
 
+    @Override
+    public void execute(MessageEvent event) throws IOException {
         event.deferReply(); //expect to take a while
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
-        final AudioManager audioManager = event.getGuild().getAudioManager();
-        GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
-        GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
-        final VoiceChannel memberChannel = (VoiceChannel) memberState.getChannel();
-        if (!memberState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You aren't in a vc."));
-            return;
-        }
-
-        if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
-            event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
-            return;
-        }
-
-        try {
-            audioManager.openAudioConnection(memberChannel);
-        } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError("The bot can't access your channel"));
-            return;
-        }
 
         if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
             if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {

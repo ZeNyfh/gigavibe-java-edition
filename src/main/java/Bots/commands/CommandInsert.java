@@ -1,12 +1,12 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -14,28 +14,19 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandInsert extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_CHANNEL_BLOCKED, Check.IS_USER_IN_ANY_VC, Check.IS_PLAYING};
+        // QUESTION: Should we support insert when nothing is playing? shouldn't be unreasonable to support -9382
+        // (If we do, make sure to change IS_USER_IN_ANY_VC and IS_PLAYING to TRY_JOIN_VC)
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
-            return;
-        }
-        GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
-        if (!memberState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You aren't in a vc."));
-            return;
-        }
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("Nothing is playing right now."));
-            return;
-        }
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {

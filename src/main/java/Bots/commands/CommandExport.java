@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
@@ -12,21 +13,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static Bots.Main.createQuickError;
-
 public class CommandExport extends BaseCommand {
+    @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_BOT_IN_ANY_VC, Check.IS_PLAYING};
+    }
+
     @Override
     public void execute(MessageEvent event) throws IOException {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("The bot is not in a VC."));
-            return;
-        }
-        if (audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("The bot is not playing anything."));
-            return;
-        }
         String fileName = "temp/" + System.currentTimeMillis() + ".txt";
         File text = new File(fileName);
         FileWriter writer = new FileWriter(text);

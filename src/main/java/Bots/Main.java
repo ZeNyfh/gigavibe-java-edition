@@ -3,8 +3,6 @@ package Bots;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
-import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
-import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -14,7 +12,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -30,7 +27,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
@@ -46,7 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -493,59 +488,6 @@ public class Main extends ListenerAdapter {
     public static List<Member> getVotes(Long guildID) {
         skips.putIfAbsent(guildID, new ArrayList<>());
         return skips.get(guildID);
-    }
-
-    public static boolean IsChannelBlocked(Guild guild, GuildMessageChannelUnion commandChannel) {
-        JSONObject config = GuildDataManager.GetGuildConfig(guild.getIdLong());
-        JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
-        for (Object blockedChannel : blockedChannels) {
-            if (commandChannel.getId().equals(blockedChannel)) {
-                commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Blocked channel**", "you cannot use this command in this channel.")).queue();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean IsDJ(Guild guild, GuildMessageChannelUnion commandChannel, Member member) {
-        if (member.getVoiceState() != null && member.getVoiceState().getChannel() != null) {
-            AudioChannelUnion botChannel = Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel();
-            if (botChannel == null || botChannel == member.getVoiceState().getChannel()) {
-                int people = 0;
-                for (Member vcMember : member.getVoiceState().getChannel().getMembers()) {
-                    if (!vcMember.getUser().isBot()) {
-                        people++;
-                    }
-                }
-                if (people == 1) { //People alone in a VC are allowed to use VC DJ commands
-                    return true;
-                }
-            }
-        }
-        JSONObject config = GuildDataManager.GetGuildConfig(guild.getIdLong());
-        JSONArray DJRoles = (JSONArray) config.get("DJRoles");
-        JSONArray DJUsers = (JSONArray) config.get("DJUsers");
-        boolean check = false;
-        for (Object DJRole : DJRoles) {
-            if ((long) DJRole == guild.getIdLong() || member.getRoles().contains(guild.getJDA().getRoleById((Long) DJRole))) {
-                check = true;
-                break;
-            }
-        }
-        if (!check) {
-            for (Object DJUser : DJUsers) {
-                if (DJUser.equals(member.getIdLong())) {
-                    check = true;
-                    break;
-                }
-            }
-        }
-        if (check) {
-            return true;
-        } else {
-            commandChannel.sendMessageEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have a DJ role.")).queue();
-            return false;
-        }
     }
 
     public static void deleteFiles(String filePrefix) { // ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING

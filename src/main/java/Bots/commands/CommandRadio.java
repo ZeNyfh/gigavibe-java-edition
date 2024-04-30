@@ -1,15 +1,14 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
+import Bots.CommandStateChecker.CheckResult;
 import Bots.MessageEvent;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Bots.CommandStateChecker.PerformChecks;
 import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
@@ -71,11 +71,12 @@ public class CommandRadio extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
-        if (IsChannelBlocked(event.getGuild(), event.getChannel())) {
-            return;
-        }
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_CHANNEL_BLOCKED};
+    }
 
+    @Override
+    public void execute(MessageEvent event) throws IOException {
         if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
@@ -91,25 +92,14 @@ public class CommandRadio extends BaseCommand {
             return;
         }
 
-        final AudioManager audioManager = event.getGuild().getAudioManager();
-        GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
-        GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
-        if (!memberState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("you arent in a vc."));
+        // We have to do this later manually since a 1-arg version (see above) shouldn't invoke VC joining
+        CheckResult checkResult = PerformChecks(event, Check.TRY_JOIN_VC);
+        if (!checkResult.Succeeded()) {
+            event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));
             return;
         }
-        if (selfState.getChannel() != null && selfState.getChannel() != memberState.getChannel()) {
-            event.replyEmbeds(createQuickError("The bot is already busy in another vc"));
-            return;
-        }
-        try {
-            audioManager.openAudioConnection(memberState.getChannel());
-        } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError("The bot can't access your channel"));
-            return;
-        }
-        event.deferReply(); //Give us time to think
 
+        event.deferReply(); //Give us time to think
         String radioURL = null;
         StringBuilder radioSearchTerm = new StringBuilder();
         if (event.getArgs()[1].equalsIgnoreCase("search")) {

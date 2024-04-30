@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
@@ -8,8 +9,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -66,15 +65,12 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
-        final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_BOT_IN_ANY_VC};
+    }
 
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
-            return;
-        }
+    @Override
+    public void execute(MessageEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);

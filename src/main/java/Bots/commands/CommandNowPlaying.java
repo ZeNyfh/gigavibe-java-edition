@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
@@ -9,34 +10,22 @@ import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 
 import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandNowPlaying extends BaseCommand {
+    @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_BOT_IN_ANY_VC, Check.IS_PLAYING};
+    }
 
     @Override
     public void execute(MessageEvent event) {
-        final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
-
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
-            return;
-        }
-
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         final AudioTrack track = audioPlayer.getPlayingTrack();
-
-        if (track == null) {
-            event.replyEmbeds(createQuickError("No tracks are playing right now."));
-            return;
-        }
         EmbedBuilder embed = new EmbedBuilder();
 
         long trackPos = track.getPosition();

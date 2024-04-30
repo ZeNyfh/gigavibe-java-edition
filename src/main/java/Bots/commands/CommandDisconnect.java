@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
@@ -9,14 +10,12 @@ import static Bots.Main.*;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_BOT_IN_ANY_VC};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("I'm not in a voice channel."));
-            return;
-        }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();

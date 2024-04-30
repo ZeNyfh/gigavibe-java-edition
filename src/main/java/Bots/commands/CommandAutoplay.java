@@ -1,37 +1,25 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandAutoplay extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            event.replyEmbeds(createQuickError("I'm not in a vc."));
-            return;
-        }
-        if (event.getGuild().getAudioManager().getConnectedChannel() != Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()) {
-            event.replyEmbeds(createQuickError("You aren't in the same vc as me."));
-            return;
-        }
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("Nothing is playing right now."));
-            return;
-        }
         if (!LastFMManager.hasAPI) {
             event.replyEmbeds(createQuickError("The bot has not been given an API key for LastFM, this command does not work without it."));
             return;

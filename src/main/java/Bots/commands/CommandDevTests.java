@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -25,29 +26,32 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DEV};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (event.getUser().getIdLong() == 211789389401948160L || event.getUser().getIdLong() == 260016427900076033L) {
-            System.out.println("Its dev time");
-            String[] args = event.getArgs();
-            if (args.length == 1) {
-                event.reply("No dev command provided");
+        System.out.println("Its dev time");
+        String[] args = event.getArgs();
+        if (args.length == 1) {
+            event.reply("No dev command provided");
+        } else {
+            String command = args[1];
+            if (command.equalsIgnoreCase("dirty-config")) { //Adds an illegal object to the json to invalidate it
+                event.getConfig().put("bad-value", new Exception());
+                event.reply("Added something nonsensical to the config");
+            } else if (command.equalsIgnoreCase("test-buttons")) { //Testing for the button registration system
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(botColour);
+                eb.setDescription("description text");
+                event.getChannel().sendMessageEmbeds(eb.build()).queue(
+                        message -> message.editMessageComponents().setActionRow(
+                                Button.secondary("dev-button", "Me"), Button.secondary("not-dev-button", "Not Me")
+                        ).queue()
+                );
             } else {
-                String command = args[1];
-                if (command.equalsIgnoreCase("dirty-config")) { //Adds an illegal object to the json to invalidate it
-                    event.getConfig().put("bad-value", new Exception());
-                    event.reply("Added something nonsensical to the config");
-                } else if (command.equalsIgnoreCase("test-buttons")) { //Testing for the button registration system
-                    EmbedBuilder eb = new EmbedBuilder();
-                    eb.setColor(botColour);
-                    eb.setDescription("description text");
-                    event.getChannel().sendMessageEmbeds(eb.build()).queue(
-                            message -> message.editMessageComponents().setActionRow(
-                                    Button.secondary("dev-button", "Me"), Button.secondary("not-dev-button", "Not Me")
-                            ).queue()
-                    );
-                } else {
-                    event.reply("Unrecognised dev command " + command);
-                }
+                event.reply("Unrecognised dev command " + command);
             }
         }
     }

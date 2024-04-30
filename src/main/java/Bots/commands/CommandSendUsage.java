@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -13,11 +14,12 @@ import static Bots.Main.*;
 
 public class CommandSendUsage extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DEV};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (event.getUser().getIdLong() != 211789389401948160L && event.getUser().getIdLong() != 260016427900076033L) {
-            event.replyEmbeds(createQuickError("You do not have the permissions for this."));
-            return;
-        }
         Long[] values = (Long[]) commandUsageTracker.values().toArray(new Long[0]);
         Arrays.sort(values);
         HashMap<Long, List<String>> InverseReference = new HashMap<>();

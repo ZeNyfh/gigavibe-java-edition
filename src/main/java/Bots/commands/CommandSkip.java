@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
@@ -19,36 +20,17 @@ import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandSkip extends BaseCommand {
+    @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};
+    }
 
     @Override
     public void execute(MessageEvent event) {
         final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
-
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
-            return;
-        }
-        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-
-        assert memberVoiceState != null;
-        if (!memberVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
-            return;
-        }
-
-        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
-            return;
-        }
-
+        final GuildVoiceState selfVoiceState = Objects.requireNonNull(self.getVoiceState());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-        if (audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("Nothing is playing right now."));
-            return;
-        }
 
         List<Member> VCMembers = new ArrayList<>(); //Filter to remove bots
         List<Member> UnfilteredMembers = Objects.requireNonNull(selfVoiceState.getChannel()).getMembers();

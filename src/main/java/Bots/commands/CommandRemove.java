@@ -1,41 +1,27 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandRemove extends BaseCommand {
     @Override
-    public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
-        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-        assert memberVoiceState != null;
-        if (!memberVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
-            return;
-        }
-        assert selfVoiceState != null;
-        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
-            return;
-        }
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC};
+    }
 
+    @Override
+    public void execute(MessageEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {

@@ -1,23 +1,19 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
-import Bots.lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import static Bots.Main.*;
 
 public class CommandLoopQueue extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        final AudioManager audioManager = event.getGuild().getAudioManager();
-
-
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("Nothing is playing right now."));
-            return;
-        }
-
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue."));
             LoopQueueGuilds.remove(event.getGuild().getIdLong());

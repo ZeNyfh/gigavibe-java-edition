@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -20,12 +21,12 @@ import static Bots.Main.createQuickError;
 
 public class CommandSendLogs extends BaseCommand {
     @Override
-    public void execute(MessageEvent event) throws IOException {
-        if (event.getUser().getIdLong() != 211789389401948160L && event.getUser().getIdLong() != 260016427900076033L) {
-            event.replyEmbeds(createQuickError("You do not have the permissions for this."));
-            return;
-        }
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DEV};
+    }
 
+    @Override
+    public void execute(MessageEvent event) throws IOException {
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError("No arguments specified"));
             return;

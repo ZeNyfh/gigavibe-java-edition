@@ -1,6 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
@@ -10,16 +11,15 @@ import static Bots.Main.*;
 
 public class CommandJoin extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_USER_IN_ANY_VC};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You are not in a vc."));
-            return;
-        }
+        // Don't use the check system since we want to specifically allow this even if the bot is active in another VC
         try {
-            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+            event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
         } catch (InsufficientPermissionException e) {
             event.replyEmbeds(createQuickError("The bot can't access your channel"));
             return;

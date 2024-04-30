@@ -1,52 +1,24 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-
-import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandSpeed extends BaseCommand {
+    @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
+    }
 
     @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
-
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("Im not in a vc."));
-            return;
-        }
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            event.replyEmbeds(createQuickError("Nothing is playing right now."));
-            return;
-        }
-
-        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-
-        assert memberVoiceState != null;
-        if (!memberVoiceState.inAudioChannel()) {
-            event.replyEmbeds(createQuickError("You need to be in a voice channel to use this command."));
-            return;
-        }
-
-        if (!Objects.equals(memberVoiceState.getChannel(), selfVoiceState.getChannel())) {
-            event.replyEmbeds(createQuickError("You need to be in the same voice channel to use this command."));
-            return;
-        }
-
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale); // this needs to be redefined many times due to how it works.
 

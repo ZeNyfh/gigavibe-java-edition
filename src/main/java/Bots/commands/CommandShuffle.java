@@ -1,42 +1,26 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static Bots.Main.*;
 
 public class CommandShuffle extends BaseCommand {
     @Override
+    public Check[] getChecks() {
+        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC};
+    }
+
+    @Override
     public void execute(MessageEvent event) {
-        if (!IsDJ(event.getGuild(), event.getChannel(), event.getMember())) {
-            return;
-        }
-        final Member self = event.getGuild().getSelfMember();
-        final GuildVoiceState selfVoiceState = self.getVoiceState();
-        assert selfVoiceState != null;
-        if (!selfVoiceState.inAudioChannel()) {
-            event.replyEmbeds((createQuickError("Im not in a vc.")));
-            return;
-        }
-
-        final GuildVoiceState memberVoiceState = Objects.requireNonNull(event.getMember()).getVoiceState();
-
-        assert memberVoiceState != null;
-        if (!memberVoiceState.inAudioChannel()) {
-            event.replyEmbeds((createQuickError("You need to be in a voice channel to use this command.")));
-            return;
-        }
-
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
