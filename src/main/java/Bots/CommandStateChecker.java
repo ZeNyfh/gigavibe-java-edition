@@ -1,6 +1,7 @@
 package Bots;
 
 import Bots.lavaplayer.PlayerManager;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 // A simple checker designed to check common cases in commands
@@ -182,11 +184,17 @@ public class CommandStateChecker {
         );
     }
 
-    private static CheckResult IsDev(MessageEvent event) {
-        //TODO: This should be dynamic, probably based on .env? Can't have others hosting it without them being a dev
-        return new CheckResult(
-                event.getUser().getIdLong() == 211789389401948160L || event.getUser().getIdLong() == 260016427900076033L,
-                "This command is for developers only."
-        );
-    }
+	private static CheckResult IsDev(MessageEvent event) { // Would BOT_ADMINS be more appropriate?
+		Dotenv dotenv = Dotenv.load();
+		var matchesAny = false;
+		
+		long[] developers = Arrays.stream(dotenv.get("DEVELOPERS", "211789389401948160,260016427900076033").split(","))
+				.mapToLong(Long::parseLong).toArray(); // Preserve original IDs unless explicitly set by hoster
+		
+		for (long l : developers)
+			if (l == event.getUser().getIdLong())
+				matchesAny = true;
+
+		return new CheckResult(matchesAny, "This command is for developers only.");
+	}
 }
