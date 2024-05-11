@@ -21,6 +21,7 @@ public class OutputLogger {
     private static TimerTask logTask;
     public static final PrintStream out = System.out;
     public static final PrintStream err = System.err;
+    private static boolean ReadyForTimestamp = true; // This is an awkward static with how its used but its needed
 
     // IMPLEMENTATION NOTES
     // Both TimestampedOutputStream and DualChannelOutputStream are proxy streams
@@ -60,8 +61,15 @@ public class OutputLogger {
         public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
             // Safe to assume byte arrays are unique messages
             // At this point we apply the timestamp since it probably makes sense
-            byte[] ts = this.getTimestamp();
-            this.original.write(ts, off, ts.length);
+            if (ReadyForTimestamp) {
+                byte[] ts = this.getTimestamp();
+                this.original.write(ts, off, ts.length);
+                ReadyForTimestamp = false;
+            }
+            if (len > 0 && b[len-1] == 10) {
+                // Don't add further timestamps until we actually end up on a new line
+                ReadyForTimestamp = true;
+            }
             this.original.write(b, off, len);
         }
 
