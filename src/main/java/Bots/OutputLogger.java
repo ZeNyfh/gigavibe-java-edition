@@ -31,6 +31,9 @@ public class OutputLogger {
     // We behave like this since we need to still send data successfully to the original sys out/err
     // while getting a hold of the data ourselves to send elsewhere
 
+    //TODO: err/out should be forced onto new lines if printing on top of a non-newline of the other type
+    // (Makes it easier to understand the log and would allow us to prefix logs with LOG/ERR for neatness)
+
     private static class TimestampedOutputStream extends OutputStream {
         private final DateTimeFormatter dtf;
         private final OutputStream original;
@@ -51,26 +54,38 @@ public class OutputLogger {
             return (dtf.format(LocalDateTime.now()) + " | ").getBytes();
         }
 
+        private synchronized void considerTimestamp(int off) throws IOException {
+            if (ReadyForTimestamp) {
+                byte[] ts = getTimestamp();
+                original.write(ts, off, ts.length);
+            }
+        }
+
         @Override
         public synchronized void write(int b) throws IOException {
-            // Don't hook a single byte write since it isn't explicitly a "new message" in our context
-            this.original.write(b);
+            write(new byte[]{(byte) b}, 0, 1);
         }
 
         @Override
         public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
-            // Safe to assume byte arrays are unique messages
-            // At this point we apply the timestamp since it probably makes sense
-            if (ReadyForTimestamp) {
-                byte[] ts = this.getTimestamp();
-                this.original.write(ts, off, ts.length);
+            // Force timestamps at every newline even if part of the same buffer
+            int lastNewline = -1;
+            byte[] d = new byte[len];
+            for (int i = 0; i < len; i++) {
+                if (b[i] == 10) { // Arrived at a newline
+                    considerTimestamp(off);
+                    System.arraycopy(b, lastNewline+1, d, 0, i-lastNewline);
+                    original.write(d, off, i-lastNewline);
+                    ReadyForTimestamp = true;
+                    lastNewline = i;
+                }
+            }
+            if (lastNewline+1 != len) { // Content after the last seen newline
+                considerTimestamp(off);
+                System.arraycopy(b, lastNewline+1, d, 0, len-lastNewline-1);
+                original.write(d, off, len-lastNewline-1);
                 ReadyForTimestamp = false;
             }
-            if (len > 0 && b[len-1] == 10) {
-                // Don't add further timestamps until we actually end up on a new line
-                ReadyForTimestamp = true;
-            }
-            this.original.write(b, off, len);
         }
 
         @Override
