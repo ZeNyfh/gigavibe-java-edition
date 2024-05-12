@@ -81,10 +81,11 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion... channel) {
+    // TODO: That's a lot of seemingly random arguments, this could use some cleanup
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion channel) {
         GuildMessageChannelUnion commandChannel;
         if (event == null) {
-            commandChannel = channel[0];
+            commandChannel = channel;
         } else {
             commandChannel = event.getChannel();
         }
@@ -152,7 +153,7 @@ public class PlayerManager {
                             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                             if (autoplaying) {
-                                event.getChannel().sendMessageEmbeds(embed.build()).queue();
+                                commandChannel.sendMessageEmbeds(embed.build()).queue();
                             } else {
                                 if (event != null) {
                                     event.replyEmbeds(embed.build());
@@ -208,7 +209,7 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(event.getGuild().getIdLong());
+                clearVotes(commandChannel.getGuild().getIdLong());
 
                 if (e.getCause().getMessage().toLowerCase().contains("search response: 400")) {
                     loadFailedBuilder.append("An error with the youtube search API has occurred.\n");
@@ -223,9 +224,13 @@ public class PlayerManager {
         });
     }
 
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
+        loadAndPlay(event, trackUrl, sendEmbed, OnCompletion, null);
+    }
+
     public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
         loadAndPlay(event, trackUrl, sendEmbed, () -> {
-        });
+        }, null);
     }
 
     @Nullable
