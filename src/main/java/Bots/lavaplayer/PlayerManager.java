@@ -162,10 +162,7 @@ public class PlayerManager {
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
                         embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
 
-                        for (int i = 0; i < tracks.size(); i++) {
-                            if (i > 4 || tracks.get(i) == null) {
-                                break;
-                            }
+                        for (int i = 0; i < tracks.size() && i < 5; i++) {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
                             } else {
@@ -198,16 +195,15 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
+                System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
                 clearVotes(commandChannel.getGuild().getIdLong());
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
-                if (e.getCause().getMessage().toLowerCase().contains("search response: 400")) {
-                    loadFailedBuilder.append("An error with the youtube search API has occurred.\n");
+                if (e.getMessage().toLowerCase().contains("search response: 400")) {
+                    loadFailedBuilder.append("An error with the youtube search API has occurred. ");
                 }
-                loadFailedBuilder.append(e.getMessage()).append("\n");
-                event.replyEmbeds(createQuickError("```The track failed to load.\n\n```\n" + loadFailedBuilder));
-                System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"");
-                e.printStackTrace();
+                loadFailedBuilder.append(e.getMessage());
+                event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
                 OnCompletion.run();
             }
         });
