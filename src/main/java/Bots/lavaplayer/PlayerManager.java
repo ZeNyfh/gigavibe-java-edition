@@ -180,7 +180,7 @@ public class PlayerManager {
                         }
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new Object[]{event, Objects.requireNonNull(event).getChannel()});
+                        audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
                     }
                 }
                 OnCompletion.run();
