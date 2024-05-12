@@ -103,7 +103,7 @@ public class PlayerManager {
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
                     EmbedBuilder embed = new EmbedBuilder();
-                    if (getThumbURL(audioTrack) != null) embed.setThumbnail(getThumbURL(audioTrack));
+                    embed.setThumbnail(getThumbURL(audioTrack));
                     String length;
                     if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
                         length = "Unknown";
@@ -149,7 +149,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            if (getThumbURL(track) != null) embed.setThumbnail(getThumbURL(track));
+                            embed.setThumbnail(getThumbURL(track));
                             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
                             embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
                             if (autoplaying) {
@@ -184,7 +184,7 @@ public class PlayerManager {
                         if (tracks.size() > 5) {
                             embed.appendDescription("...");
                         }
-                        if (getThumbURL(tracks.get(0)) != null) embed.setThumbnail(getThumbURL(tracks.get(0)));
+                        embed.setThumbnail(getThumbURL(tracks.get(0)));
                         if (event != null) {
                             event.replyEmbeds(embed.build());
                         } else {
