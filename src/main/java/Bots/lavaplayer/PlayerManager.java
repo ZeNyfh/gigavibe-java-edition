@@ -81,10 +81,32 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion... channel) {
+    public EmbedBuilder createTrackEmbed(AudioTrack audioTrack) {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setColor(botColour);
+        embed.setThumbnail(getThumbURL(audioTrack));
+        if (audioTrack.getInfo().title.isEmpty()) { // Local file
+            String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
+            String trackName = trackNameArray[trackNameArray.length - 1];
+            embed.setTitle(trackName, audioTrack.getInfo().uri);
+        } else {
+            embed.setTitle(audioTrack.getInfo().title, audioTrack.getInfo().uri);
+        }
+        String length;
+        if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
+            length = "Unknown";
+        } else {
+            length = toTimestamp((audioTrack.getInfo().length));
+        }
+        embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+        return embed;
+    }
+
+    // TODO: That's a lot of seemingly random arguments, this could use some cleanup
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion channel) {
         GuildMessageChannelUnion commandChannel;
         if (event == null) {
-            commandChannel = channel[0];
+            commandChannel = channel;
         } else {
             commandChannel = event.getChannel();
         }
@@ -101,23 +123,7 @@ public class PlayerManager {
                 audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
-                    EmbedBuilder embed = new EmbedBuilder();
-                    if (getThumbURL(audioTrack) != null) embed.setThumbnail(getThumbURL(audioTrack));
-                    String length;
-                    if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
-                        length = "Unknown";
-                    } else {
-                        length = toTimestamp((audioTrack.getInfo().length));
-                    }
-                    embed.setColor(botColour);
-                    if (audioTrack.getInfo().title.isEmpty()) {
-                        String[] trackNameArray = audioTrack.getInfo().identifier.split("/");
-                        String trackName = trackNameArray[trackNameArray.length - 1];
-                        embed.setTitle((trackName), (audioTrack.getInfo().uri));
-                    } else {
-                        embed.setTitle(audioTrack.getInfo().title, (audioTrack.getInfo().uri));
-                    }
-                    embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+                    EmbedBuilder embed = createTrackEmbed(audioTrack);
                     if (event != null) {
                         event.replyEmbeds(embed.build());
                     } else {
@@ -127,41 +133,27 @@ public class PlayerManager {
                 OnCompletion.run();
             }
 
-
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                EmbedBuilder embed = new EmbedBuilder();
-                embed.setColor(botColour);
                 boolean autoplaying = AutoplayGuilds.contains(commandChannel.getGuild().getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
                     if (autoplaying)
                         track = tracks.get(ThreadLocalRandom.current().nextInt(2, 4)); // this is to prevent looping tracks
-                    String author = (track.getInfo().author);
-                    String length;
-                    if (track.getInfo().length > 432000000 || track.getInfo().length <= 1) { // 5 days
-                        length = "Unknown";
-                    } else {
-                        length = toTimestamp((track.getInfo().length));
-                    }
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            if (getThumbURL(track) != null) embed.setThumbnail(getThumbURL(track));
-                            embed.setTitle((track.getInfo().title), (track.getInfo().uri));
-                            embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + author + "`");
-                            if (autoplaying) {
-                                event.getChannel().sendMessageEmbeds(embed.build()).queue();
+                            EmbedBuilder embed = createTrackEmbed(track);
+                            if (!autoplaying && event != null) {
+                                event.replyEmbeds(embed.build());
                             } else {
-                                if (event != null) {
-                                    event.replyEmbeds(embed.build());
-                                } else {
-                                    commandChannel.sendMessageEmbeds(embed.build()).queue();
-                                }
+                                commandChannel.sendMessageEmbeds(embed.build()).queue();
                             }
                         }
                     } else {
+                        EmbedBuilder embed = new EmbedBuilder();
+                        embed.setColor(botColour);
                         long lengthSeconds = 0;
                         for (AudioTrack audioTrack : tracks) {
                             lengthSeconds = (lengthSeconds + audioTrack.getInfo().length);
@@ -170,10 +162,7 @@ public class PlayerManager {
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
                         embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
 
-                        for (int i = 0; i < tracks.size(); i++) {
-                            if (i > 4 || tracks.get(i) == null) {
-                                break;
-                            }
+                        for (int i = 0; i < tracks.size() && i < 5; i++) {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
                             } else {
@@ -183,7 +172,7 @@ public class PlayerManager {
                         if (tracks.size() > 5) {
                             embed.appendDescription("...");
                         }
-                        if (getThumbURL(tracks.get(0)) != null) embed.setThumbnail(getThumbURL(tracks.get(0)));
+                        embed.setThumbnail(getThumbURL(tracks.get(0)));
                         if (event != null) {
                             event.replyEmbeds(embed.build());
                         } else {
@@ -191,7 +180,7 @@ public class PlayerManager {
                         }
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new Object[]{event, Objects.requireNonNull(event).getChannel()});
+                        audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
                     }
                 }
                 OnCompletion.run();
@@ -204,28 +193,29 @@ public class PlayerManager {
                 OnCompletion.run();
             }
 
-            final StringBuilder loadFailedBuilder = new StringBuilder();
-
             @Override
             public void loadFailed(FriendlyException e) {
-                clearVotes(event.getGuild().getIdLong());
+                System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
+                clearVotes(commandChannel.getGuild().getIdLong());
 
-                if (e.getCause().getMessage().toLowerCase().contains("search response: 400")) {
-                    loadFailedBuilder.append("An error with the youtube search API has occurred.\n");
+                final StringBuilder loadFailedBuilder = new StringBuilder();
+                if (e.getMessage().toLowerCase().contains("search response: 400")) {
+                    loadFailedBuilder.append("An error with the youtube search API has occurred. ");
                 }
-                loadFailedBuilder.append(e.getMessage()).append("\n");
-                event.replyEmbeds(createQuickError("```The track failed to load.\n\n```\n" + loadFailedBuilder));
-                System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"");
-                e.printStackTrace();
+                loadFailedBuilder.append(e.getMessage());
+                event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
                 OnCompletion.run();
-                loadFailedBuilder.setLength(0);
             }
         });
     }
 
+    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
+        loadAndPlay(event, trackUrl, sendEmbed, OnCompletion, null);
+    }
+
     public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
         loadAndPlay(event, trackUrl, sendEmbed, () -> {
-        });
+        }, null);
     }
 
     @Nullable
