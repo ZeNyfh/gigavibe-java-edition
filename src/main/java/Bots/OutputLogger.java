@@ -182,15 +182,17 @@ public class OutputLogger {
     // Removes all active hooks and saves the log file
     // This could be called in fragile contexts (shutdown) so handle the IOException locally
     public static void Close() {
-        logTask.cancel();
-        System.setOut(out);
-        System.setErr(err);
-        try {
-            WriteLogs();
-            logger.close();
-        } catch (IOException e) {
-            err.println("Failed to handle hooked logs on close: " + e);
+        if (INITIALISED) {
+            logTask.cancel();
+            System.setOut(out);
+            System.setErr(err);
+            try {
+                WriteLogs();
+                logger.close();
+            } catch (IOException e) {
+                err.println("Failed to handle hooked logs on close: " + e);
+            }
+            INITIALISED = false;
         }
-        INITIALISED = false;
     }
 }
