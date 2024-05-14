@@ -3,14 +3,9 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
+import Bots.lavaplayer.AutoplayHelper;
 import Bots.lavaplayer.LastFMManager;
-import Bots.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
-import java.util.List;
-
 import static Bots.Main.*;
-import static Bots.lavaplayer.LastFMManager.encode;
 
 public class CommandAutoplay extends BaseCommand {
     @Override
@@ -20,28 +15,17 @@ public class CommandAutoplay extends BaseCommand {
 
     @Override
     public void execute(MessageEvent event) {
-        if (!LastFMManager.hasAPI) {
+        if (!LastFMManager.isInitialized()) {
             event.replyEmbeds(createQuickError("The bot has not been given an API key for LastFM, this command does not work without it."));
             return;
         }
-        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+        if (AutoplayHelper.includes(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying."));
-            AutoplayGuilds.remove(event.getGuild().getIdLong());
+            AutoplayHelper.remove(event.getGuild().getIdLong());
         } else {
             event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", "Now autoplaying."));
-            AutoplayGuilds.add(event.getGuild().getIdLong());
-            AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
-            if (track != null) {
-                List<String> list = autoPlayedTracks.get(event.getGuild().getIdLong());
-                // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-                String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                        ? encode((track.getInfo().title).toLowerCase(), false, true)
-                        : encode(track.getInfo().author.toLowerCase(), false, true);
-                list.add(artistName + " - " + encode(track.getInfo().title, true, false));
-                autoPlayedTracks.put(event.getGuild().getIdLong(), list);
-            }
+            AutoplayHelper.add(event.getGuild().getIdLong());
         }
-
     }
 
     @Override

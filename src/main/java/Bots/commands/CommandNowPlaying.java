@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
+import Bots.lavaplayer.AutoplayHelper;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
@@ -98,7 +99,7 @@ public class CommandNowPlaying extends BaseCommand {
         } else {
             embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
         }
-        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
+        if (AutoplayHelper.includes(event.getGuild().getIdLong())) {
             embed.addField("♾️ Auto playing:", "✅ **True**", true);
         } else {
             embed.addField("♾️ Auto playing:", "❌ **False**", true);

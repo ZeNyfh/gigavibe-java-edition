@@ -49,7 +49,7 @@ public class CommandSkip extends BaseCommand {
         if (currentVotes.size() >= VCMembers.size() / 2) {
             clearVotes(event.getGuild().getIdLong());
             StringBuilder messageBuilder = new StringBuilder();
-            if (AutoplayGuilds.contains(event.getGuild().getIdLong()))
+            if (AutoplayHelper.includes(event.getGuild().getIdLong()))
             	AutoplayHelper.doAutoplay(messageBuilder, audioPlayer, event);
             
             musicManager.scheduler.nextTrack();

@@ -1,5 +1,6 @@
 package Bots;
 
+import Bots.lavaplayer.AutoplayHelper;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
@@ -239,7 +240,7 @@ public class GuildDataManager {
                 writer.write(player.isPaused() + "\n"); // is paused
                 writer.write(LoopGuilds.contains(guild.getIdLong()) + "\n"); // is looping
                 writer.write(LoopQueueGuilds.contains(guild.getIdLong()) + "\n"); // is queue looping
-                writer.write(AutoplayGuilds.contains(guild.getIdLong()) + "\n"); // is autoplaying
+                writer.write(AutoplayHelper.includes(guild.getIdLong()) + "\n"); // is autoplaying
                 // track modifiers
                 writer.write(player.getVolume() + "\n"); // volume
                 writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getSpeed() + "\n"); // speed

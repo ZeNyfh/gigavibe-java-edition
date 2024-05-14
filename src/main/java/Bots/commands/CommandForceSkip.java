@@ -32,7 +32,7 @@ public class CommandForceSkip extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         StringBuilder messageBuilder = new StringBuilder();
         
-        if (AutoplayGuilds.contains(event.getGuild().getIdLong())) 
+        if (AutoplayHelper.includes(event.getGuild().getIdLong())) 
             AutoplayHelper.doAutoplay(messageBuilder, audioPlayer, event);
         
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here

@@ -94,7 +94,7 @@ public class TrackScheduler extends AudioEventAdapter {
                     queue(loopTrack);
                     return;
                 }
-                if (AutoplayGuilds.contains(guildId)) {
+                if (AutoplayHelper.includes(guildId)) {
                     AutoplayHelper.doAutoplay(messageBuilder, player, originalEvent);
                 }
             }

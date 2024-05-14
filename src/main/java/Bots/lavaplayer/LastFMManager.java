@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static Bots.Main.autoPlayedTracks;
 import static Bots.Main.botVersion;
 
 /**
@@ -34,15 +33,6 @@ import static Bots.Main.botVersion;
  */
 public class LastFMManager {
 	private static String APIKEY = null;
-	
-	@Deprecated(forRemoval = true)
-	@DeprecatedSince(value = "pr-autoplay")
-	/**
-	 * @implNote Do NOT use this - starting with pr-autoplay, use
-	 *           {@link LastFMManager#isInitialized()} instead! This boolean will be
-	 *           removed soon and will ALWAYS return false until its removal!
-	 */
-	public static final boolean hasAPI = false;
 	private static Pattern undesirableWordsInQuery;
 	
 	static {
@@ -167,14 +157,14 @@ public class LastFMManager {
         for (Object obj : trackInfoArray) {
             builder.append(((JSONObject) ((JSONObject) obj).get("artist")).get("name")).append(" - ");
             builder.append(((JSONObject) obj).get("name"));
-            if (autoPlayedTracks.get(guildID).contains(builder.toString())) {
-                builder.setLength(0);
-            } else {
-                List<String> list = autoPlayedTracks.get(guildID);
-                list.add(builder.toString().toLowerCase());
-                autoPlayedTracks.put(guildID, list);
-                break;
-            }
+//            if (AutoplayHelper.autoPlayedTracks.get(guildID).contains(builder.toString())) {
+//                builder.setLength(0);
+//            } else {
+//                List<String> list = AutoplayHelper.autoPlayedTracks.get(guildID);
+//                list.add(builder.toString().toLowerCase());
+//                AutoplayHelper.autoPlayedTracks.put(guildID, list);
+//                break;
+//            }
         }
         return builder.toString();
     }
@@ -185,7 +175,7 @@ public class LastFMManager {
 	
 	public static String asEncoded(String string) {
 	    try {
-	        return URLEncoder.encode(string, StandardCharsets.UTF_8.toString());
+	        return URLEncoder.encode(string.toLowerCase().trim(), StandardCharsets.UTF_8.toString());
 	    } catch (UnsupportedEncodingException e) {
 	        throw new RuntimeException("Error encoding String: " + e.getMessage());
 	    }
@@ -196,7 +186,9 @@ public class LastFMManager {
 			System.out.printf("[LastFMManager#filter] Uninitialized LastFM instance doesn't have a pattern matcher to filter '%s'. Restart this application with at least LASTFMTOKEN present in your .env file.", string);
 			return string;
 		}
-		return undesirableWordsInQuery.matcher(string).replaceAll("");
+		var result = undesirableWordsInQuery.matcher(string.trim()).replaceAll("").trim();
+		System.out.printf("LastFMManager#filter] Passing \"%s\" through the filter: \"%s\"", string, result); //TODO Remove
+		return result;
 	}
 
 	/**
@@ -217,8 +209,6 @@ public class LastFMManager {
 		var strArtist = args.length > 0 ? args[0] : "";
 		var strTitle = args.length > 1 ? args[1] : "";
 		var iLimit = args.length > 2 ? args[2] : 5;
-
-		System.err.printf("performQuery 1: %1$s 2: %2$s 3: %3$o",strArtist,strTitle,iLimit); //TODO Remove
 
 		switch (type) { // TODO Implement more here when QueryType gets more types
 		case TRACK_SIMILAR: {
@@ -262,7 +252,7 @@ public class LastFMManager {
 	}
 
 	private static String[] parseJsonResponse(QueryType type, String data) {
-		System.out.printf("%n [Debug] parseJsonResponse %s %s", type.toString(), data);
+		System.out.printf("[Debug] parseJsonResponse %s %s%n", type.toString(), data);
 		switch (type) {
 		case TRACK_SIMILAR: {
 			JSONArray dataArray = null;
@@ -282,7 +272,7 @@ public class LastFMManager {
 			for (int i = 0; i < returnable.length; i++) {
 				returnable[i] = ((JSONObject) ((JSONObject) dataArray.get(i)).get("artist")).get("name") + " - "
 						+ ((JSONObject) dataArray.get(i)).get("name");
-				System.out.printf("%n[LastFMManager#parseJsonResponse] foreach: %o %s", i, returnable[i]);
+				System.out.printf("[LastFMManager#parseJsonResponse] foreach: %o %s%n", i, returnable[i]);
 			}
 			return returnable;
 		}
@@ -304,22 +294,17 @@ public class LastFMManager {
 		if (!isInitialized())
 			return new String[] { "noapi" };
 		
-		System.out.println("[pr-autoplay] Passing %2$s through the filter (%1$s) ..."); //TODO Remove
 		title = filter(title);
 		
-		System.out.println("[pr-autoplay] Encoding %1$s - %2$s to be URL friendly ..."); //TODO Remove
+		System.out.printf("[LastFMManager#findSimilarSongs] Encoding %1$s - %2$s to be URL friendly ...%n", artist, title); //TODO Remove
 		artist = asEncoded(artist);
 		title = asEncoded(title);
+		System.out.printf("[LastFMManager#findSimilarSongs] Encoded: %1$s - %2$s ...%n", artist, title); //TODO Remove
 
 		var jsonResponse = performQuery(LastFMManager.QueryType.TRACK_SIMILAR, artist, title);
 
 		if (jsonResponse != null) {
-			var strArraySongs = parseJsonResponse(LastFMManager.QueryType.TRACK_SIMILAR, "" + jsonResponse);
-
-			for (String string : strArraySongs)
-				System.out.println("LastFMManager.findSimilarSong() " + string);
-
-			return strArraySongs;
+			return parseJsonResponse(LastFMManager.QueryType.TRACK_SIMILAR, "" + jsonResponse);
 		} else
 			return new String[] { "" };
 

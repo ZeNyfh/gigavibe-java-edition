@@ -135,7 +135,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                boolean autoplaying = AutoplayGuilds.contains(commandChannel.getGuild().getIdLong());
+                boolean autoplaying = AutoplayHelper.includes(commandChannel.getGuild().getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
