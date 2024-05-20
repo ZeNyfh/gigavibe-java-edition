@@ -13,18 +13,21 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
 
 public class CommandPlay extends BaseCommand {
-    final public String[] audioFiles = {"mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"};
-
+    final public Set<String> audioFiles = Set.of(
+            "mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"
+    );
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
@@ -36,62 +39,64 @@ public class CommandPlay extends BaseCommand {
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
 
-        if (!event.getAttachments().isEmpty() && Arrays.toString(audioFiles).contains(Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).toLowerCase())) {
-            if (Objects.requireNonNull(event.getAttachments().get(0).getFileExtension()).equalsIgnoreCase("txt")) {
-                // txt file custom playlists
-                URL url = new URL(event.getAttachments().get(0).getUrl());
+        // figure out if there are actually attachments that can be played
+        List<Message.Attachment> attachments = event.getAttachments();
+        boolean playAttachments = false;
+        for (Message.Attachment attachment : attachments) {
+            if (attachment.getFileExtension() == null || !audioFiles.contains(attachment.getFileExtension().toLowerCase())) {
+                attachments.remove(attachment); // invalid file extension, remove the attachment from the list.
+            } else {
+                playAttachments = true;
+            }
+        }
+
+        // play attachments
+        if (playAttachments) {
+            Message.Attachment att = attachments.get(0);
+            String fileExtension = att.getFileExtension() != null ? att.getFileExtension().toLowerCase() : "";
+
+            if (fileExtension.equals("txt")) {
+                URL url = new URL(att.getUrl());
                 URLConnection connection = url.openConnection();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
                 try {
+                    String line;
                     while ((line = reader.readLine()) != null) {
                         PlayerManager.getInstance().loadAndPlay(event, line.split(" ", 2)[0], false);
                     }
-                    event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + event.getAttachments().get(0).getFileName() + "**"));
-                } catch (Exception ignored) {
-                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks."));
+                    event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued **" + att.getFileName() + "**"));
+                } catch (Exception e) {
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from the file.\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
                 }
             } else {
-                // normal audio/video attachments
-                List<Message.Attachment> links = event.getAttachments();
-                boolean sendEmbedBool = true;
-                if (links.size() > 1) {
-                    event.reply("Queued " + links.size() + " tracks from attachments.");
-                    sendEmbedBool = false;
-                }
                 try {
-                    for (Message.Attachment attachment : links) {
-                        PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), sendEmbedBool);
-                        sendEmbedBool = false;
+                    for (Message.Attachment attachment : attachments) {
+                        PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
                     }
-                } catch (Exception ignored) {
-                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks."));
+                    event.reply("Queued " + attachments.size() + " tracks from attachments.");
+                } catch (Exception e) {
+                    event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from attachments.\n```\n" + e.getMessage() + "\n```"));
                 }
             }
-        } else {
-            if (args.length == 1) {
+        } else { // no valid attachments to play, check for args.
+            if (args.length < 2) {
                 event.replyEmbeds(createQuickError("No arguments given."));
                 return;
             }
             String link = String.valueOf(args[1]);
             if (link.contains("https://") || link.contains("http://")) {
-                if (link.contains("youtube.com/shorts/")) {
-                    link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
-                }
-                if (link.contains("youtu.be/")) {
-                    link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
-                }
+                link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
+                link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
             } else {
                 link = "ytsearch: " + link;
             }
             try {
                 PlayerManager.getInstance().loadAndPlay(event, link, true);
-            } catch (FriendlyException ignored) {
-                event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
+            } catch (FriendlyException e) {
+                event.replyEmbeds(createQuickError("Something went wrong when decoding the track.\n```\n" + e.getMessage() + "\n```"));
             }
         }
     }
-
     @Override
     public Category getCategory() {
         return Category.Music;
