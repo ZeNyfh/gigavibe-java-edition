@@ -38,7 +38,7 @@ public class CommandSendLogs extends BaseCommand {
             for (Path file : stream.toList()) {
                 String filename = file.getFileName().toString().split("\\.")[0];
                 if (!filename.equalsIgnoreCase("log"))
-                    builder.append("* `").append(filename).append("`\n");
+                    builder.append("* `").append(filename).append(" | ").append(file.toFile().length()).append("KB`\n");
             }
             event.replyEmbeds(createQuickEmbed("Log files", builder.toString()));
         } else if (event.getArgs()[1].equalsIgnoreCase("send")) {
