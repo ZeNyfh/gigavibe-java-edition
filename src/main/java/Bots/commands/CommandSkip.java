@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
+import Bots.lavaplayer.AutoplayHelper;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
@@ -48,32 +49,9 @@ public class CommandSkip extends BaseCommand {
         if (currentVotes.size() >= VCMembers.size() / 2) {
             clearVotes(event.getGuild().getIdLong());
             StringBuilder messageBuilder = new StringBuilder();
-            if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-                String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
-                boolean canPlay = true;
-                if (searchTerm.equals("notfound")) {
-                    messageBuilder.append("❌ **Error:**\nAutoplay failed to find ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
-                    canPlay = false;
-                }
-                if (searchTerm.equals("none")) {
-                    messageBuilder.append("❌ **Error:**\nAutoplay could not find similar tracks.\n");
-                    canPlay = false;
-                }
-                if (searchTerm.isEmpty()) {
-                    messageBuilder.append("❌ **Error:**\nAn unknown error occurred when trying to autoplay.\n");
-                    canPlay = false;
-                }
-                if (canPlay) {
-                    AudioTrack track = audioPlayer.getPlayingTrack();
-                    // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-                    String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                            ? encode((track.getInfo().title).toLowerCase(), false, true)
-                            : encode(track.getInfo().author.toLowerCase(), false, true);
-                    String title = encode(track.getInfo().title, true, false);
-                    PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                    messageBuilder.append("♾️ Autoplay queued: ").append(artistName).append(" - ").append(title).append("\n");
-                }
-            }
+            if (AutoplayHelper.includes(event.getGuild().getIdLong()))
+            	AutoplayHelper.doAutoplay(messageBuilder, audioPlayer, event);
+            
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the track."));

@@ -1,5 +1,6 @@
 package Bots;
 
+import Bots.lavaplayer.AutoplayHelper;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
@@ -62,8 +63,6 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, List<Member>> skips = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
     public static List<Long> LoopGuilds = new ArrayList<>();
-    public static List<Long> AutoplayGuilds = new ArrayList<>();
-    public static HashMap<Long, List<String>> autoPlayedTracks = new HashMap<>();
     public static List<Long> LoopQueueGuilds = new ArrayList<>();
     public static List<BaseCommand> commands = new ArrayList<>();
     public static List<SlashCommandData> slashCommands = new ArrayList<>();
@@ -71,7 +70,7 @@ public class Main extends ListenerAdapter {
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
     private static JDA bot;
-
+    public static final Random random = new Random();
     public enum audioFilters {
         Vibrato, Timescale
     }
@@ -227,10 +226,9 @@ public class Main extends ListenerAdapter {
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
-        for (Guild guild : bot.getGuilds()) {
+        for (Guild guild : bot.getGuilds())
             trackLoops.put(guild.getIdLong(), 0);
-            autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
-        }
+
         final File dataFile = new File("data.csv");
         ignoreFiles = dataFile.createNewFile();
         FileWriter dataFileWriter = new FileWriter("data.csv", true);
@@ -303,7 +301,7 @@ public class Main extends ListenerAdapter {
                     player.setPaused(paused);
                     if (looping) LoopGuilds.add(Long.valueOf(guildID));
                     if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
-                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
+                    if (autoplaying) AutoplayHelper.add(Long.valueOf(guildID));
                     // setting track modifiers
                     player.setVolume(volume);
                     // TODO: audio filters to be added here.
@@ -604,7 +602,7 @@ public class Main extends ListenerAdapter {
         GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
         LoopGuilds.remove(id);
         LoopQueueGuilds.remove(id);
-        AutoplayGuilds.remove(id);
+        AutoplayHelper.remove(id);
         manager.audioPlayer.setVolume(100);
         manager.scheduler.queue.clear();
         manager.audioPlayer.destroy();

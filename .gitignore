@@ -13,3 +13,6 @@ out/artifacts/bot_jar/bot.jar
 logs/*
 start.sh
 data.csv
+*.prefs
+.project
+.classpath
