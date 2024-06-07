@@ -6,8 +6,8 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.clearVotes;
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.skips;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
@@ -21,7 +21,7 @@ public class CommandDisconnect extends BaseCommand {
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
-        clearVotes(event.getGuild().getIdLong());
+        skips.remove(event.getGuild().getIdLong());
         event.replyEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue."));
     }
 

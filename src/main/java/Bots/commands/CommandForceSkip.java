@@ -93,7 +93,7 @@ public class CommandForceSkip extends BaseCommand {
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track\n\n" + messageBuilder).trim()));
             }
         }
-        clearVotes(event.getGuild().getIdLong());
+        skips.remove(event.getGuild().getIdLong());
     }
 
     @Override

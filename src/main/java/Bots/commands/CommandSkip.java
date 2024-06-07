@@ -2,6 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
+import Bots.Main;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
@@ -32,21 +33,29 @@ public class CommandSkip extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
-        List<Member> VCMembers = new ArrayList<>(); //Filter to remove bots
-        List<Member> UnfilteredMembers = Objects.requireNonNull(selfVoiceState.getChannel()).getMembers();
-        for (Member member : UnfilteredMembers) {
-            if (!member.getUser().isBot()) {
-                VCMembers.add(member);
-            }
-        }
-        List<Member> currentVotes = getVotes(event.getGuild().getIdLong());
-        if (currentVotes.contains(event.getMember())) {
+        skips.putIfAbsent(event.getGuild().getIdLong(), new ArrayList<>()); // required, otherwise there is a nullPointerException
+
+        List<Member> votes = skips.get(event.getGuild().getIdLong());
+        if (votes.contains(event.getMember())) {
             event.replyEmbeds(createQuickError("You have already voted to skip."));
             return;
+        } else {
+            votes.add(event.getMember());
+            skips.put(event.getGuild().getIdLong(), votes);
         }
-        currentVotes.add(event.getMember());
-        if (currentVotes.size() >= VCMembers.size() / 2) {
-            clearVotes(event.getGuild().getIdLong());
+
+        int effectiveMemberCount = 0;
+        int votedMemberCount = 0;
+        for (Member member : Objects.requireNonNull(selfVoiceState.getChannel()).getMembers()) {
+            if (!member.getUser().isBot()) {
+                effectiveMemberCount++;
+            }
+            if (votes.contains(member)) {
+                votedMemberCount++;
+            }
+        }
+
+        if (votedMemberCount >= effectiveMemberCount / 2) {
             StringBuilder messageBuilder = new StringBuilder();
             if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
                 String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
@@ -94,7 +103,7 @@ public class CommandSkip extends BaseCommand {
                 event.replyEmbeds(eb.build());
             }
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ Voted to skip the track", currentVotes.size() + " of " + VCMembers.size() / 2 + " needed to skip."));
+            event.replyEmbeds(createQuickEmbed("✅ Voted to skip the track", votedMemberCount + " of " + effectiveMemberCount / 2 + " needed to skip."));
         }
     }
 

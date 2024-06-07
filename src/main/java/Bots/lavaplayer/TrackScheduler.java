@@ -53,7 +53,7 @@ public class TrackScheduler extends AudioEventAdapter {
             guildId = originalEventChannel.getGuild().getIdLong();
         }
 
-        clearVotes(guildId);
+        skips.remove(guildId);
         StringBuilder messageBuilder = new StringBuilder();
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             guildFailCount.compute(guildId, (guild, fails) -> fails == null ? 1 : fails + 1);

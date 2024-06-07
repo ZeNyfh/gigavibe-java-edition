@@ -196,7 +196,7 @@ public class PlayerManager {
             @Override
             public void loadFailed(FriendlyException e) {
                 System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
-                clearVotes(commandChannel.getGuild().getIdLong());
+                skips.remove(commandChannel.getGuild().getIdLong());
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
                 if (e.getMessage().toLowerCase().contains("search response: 400")) {
