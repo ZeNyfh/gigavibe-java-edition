@@ -1,5 +1,6 @@
 package Bots;
 
+import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Guild;
@@ -110,7 +111,10 @@ public class CommandStateChecker {
             return new CheckResult(false, "You aren't in a VC.");
         }
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
-            //TODO: Don't prevent joining if nothing is actively playing (maybe also check queue to prevent abuse by timing?)
+            GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(selfState.getGuild());
+            if (manager.audioPlayer.getPlayingTrack() == null && manager.scheduler.queue == null) {
+                return new CheckResult(true, "The bot was not playing anything in the other VC, I am joining you now!");
+            }
             return new CheckResult(false, "The bot is already busy in another VC.");
         }
         if (memberState.getChannel() != selfState.getChannel()) {
