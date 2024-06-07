@@ -231,13 +231,6 @@ public class Main extends ListenerAdapter {
             trackLoops.put(guild.getIdLong(), 0);
             autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
         }
-        final File dataFile = new File("data.csv");
-        ignoreFiles = dataFile.createNewFile();
-        FileWriter dataFileWriter = new FileWriter("data.csv", true);
-        if (dataFile.length() == 0) {
-            dataFileWriter.write("Timestamp,VCs,PlayingCount,Guilds,Members\n");
-            dataFileWriter.flush();
-        }
 
         // queue recovery
         File queueDir = new File(GuildDataManager.configFolder + "/queues/");
@@ -329,7 +322,6 @@ public class Main extends ListenerAdapter {
             task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
                 int cleanUpTime = 0;
-                int logTime = 0;
                 final File tempDir = new File("temp/");
 
                 @Override
@@ -347,40 +339,6 @@ public class Main extends ListenerAdapter {
                             cleanUpTime = 0;
                         }
                     }
-
-
-                    // data collection code (graph stuff)
-                    if (logTime > 900) {
-                        int vcCount = 0;
-                        int playingCount = 0;
-                        int memberCount = 0;
-
-                        for (Guild guild : bot.getGuilds()) {
-                            memberCount += guild.getMemberCount();
-                            if (guild.getAudioManager().isConnected()) {
-                                vcCount++;
-                            }
-                            if (PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack() != null) {
-                                playingCount++;
-                            }
-                        }
-
-                        StringBuilder builder = new StringBuilder();
-                        builder.append(System.currentTimeMillis()).append(",")
-                                .append(vcCount).append(",")
-                                .append(playingCount).append(",")
-                                .append(bot.getGuilds().size()).append(",")
-                                .append(memberCount).append("\n");
-                        try {
-                            dataFileWriter.write(builder.toString());
-                            dataFileWriter.flush();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        logTime = 0;
-                    }
-                    logTime++;
-
 
                     // updater code
                     if (updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
