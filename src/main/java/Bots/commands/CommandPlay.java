@@ -16,10 +16,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
@@ -84,6 +81,32 @@ public class CommandPlay extends BaseCommand {
                 return;
             }
             String link = String.valueOf(args[1]);
+            String[] links = link.split("http");
+            List<String> linksList = new ArrayList<>();
+            for (String str : links) {
+                linksList.add(("http"+str)
+                        .replace("youtube.com/shorts/", "youtube.com/watch?v=")
+                        .replace("youtu.be/", "www.youtube.com/watch?v=").trim()
+                );
+            }
+            int actualListSize = 0;
+            if (linksList.size() > 2) {
+                boolean antiSpam = false;
+                for (String url : linksList) {
+                    if (url.equals("http")) continue;
+                    actualListSize++;
+                    try {
+                        PlayerManager.getInstance().loadAndPlay(event, url, false);
+                    } catch (FriendlyException e) {
+                        if (!antiSpam) {
+                            antiSpam = true;
+                            event.replyEmbeds(createQuickError("Something went wrong when decoding one of the tracks.\n```\n" + e.getMessage() + "\n```"));
+                        }
+                    }
+                }
+                event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + actualListSize + " songs!"));
+                return;
+            }
             if (link.contains("https://") || link.contains("http://")) {
                 link = link.replace("youtube.com/shorts/", "youtube.com/watch?v=");
                 link = link.replace("youtu.be/", "www.youtube.com/watch?v=");
