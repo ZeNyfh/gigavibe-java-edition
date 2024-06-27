@@ -9,8 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import static Bots.Main.botColour;
-import static Bots.Main.registerButtonInteraction;
+import static Bots.Main.*;
 
 public class CommandDevTests extends BaseCommand {
     private void HandleButtonEvent(ButtonInteractionEvent event) {
@@ -31,8 +30,7 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
-        System.out.println("Its dev time");
+    public void execute(MessageEvent event) throws Exception {
         String[] args = event.getArgs();
         if (args.length == 1) {
             event.reply("No dev command provided");
@@ -50,6 +48,13 @@ public class CommandDevTests extends BaseCommand {
                                 Button.secondary("dev-button", "Me"), Button.secondary("not-dev-button", "Not Me")
                         ).queue()
                 );
+            } else if (command.equalsIgnoreCase("threads")) {
+                event.reply("Command thread count: " + commandThreads.getPoolSize() + " threads (" + commandThreads.getActiveCount() + " active)");
+            } else if (command.equalsIgnoreCase("sleep")) {
+                final long sleepTime = args.length > 2 ? Long.parseLong(args[2]) : 5000;
+                event.reply("Sleeping for " + sleepTime + "ms...");
+                Thread.sleep(sleepTime);
+                event.reply("Finished sleeping");
             } else {
                 event.reply("Unrecognised dev command " + command);
             }
@@ -73,11 +78,11 @@ public class CommandDevTests extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "(dirty-config | test-buttons)"; //(Command1 | Command2 | Command3) - add them here once they exist
+        return "(dirty-config | test-buttons | threads | sleep)"; //(Command1 | Command2 | Command3) - add them here once they exist
     }
 
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
-        slashCommand.addOption(OptionType.STRING, "tool", "The tool to use", true);
+        slashCommand.addOption(OptionType.STRING, "query", "The query", true);
     }
 }

@@ -41,6 +41,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
@@ -70,6 +72,7 @@ public class Main extends ListenerAdapter {
     public static boolean ignoreFiles = false;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
     private static JDA bot;
 
     public enum audioFilters {
@@ -580,11 +583,13 @@ public class Main extends ListenerAdapter {
                 //run command
                 String primaryName = Command.getNames()[0];
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-                try {
-                    Command.executeWithChecks(new MessageEvent(event));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                commandThreads.submit(() -> {
+                    try {
+                        Command.executeWithChecks(new MessageEvent(event));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
             }
             return true;
         }
@@ -609,11 +614,13 @@ public class Main extends ListenerAdapter {
                 //run command
                 String primaryName = Command.getNames()[0];
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-                try {
-                    Command.executeWithChecks(new MessageEvent(event));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                commandThreads.submit(() -> {
+                    try {
+                        Command.executeWithChecks(new MessageEvent(event));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
             }
             return true;
         }
