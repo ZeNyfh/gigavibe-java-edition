@@ -4,11 +4,14 @@ import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 
-import static Bots.Main.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.LoopGuilds;
+import static Bots.Main.createQuickEmbed;
 public class CommandLoop extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};

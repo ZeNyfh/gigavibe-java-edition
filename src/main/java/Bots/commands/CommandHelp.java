@@ -14,12 +14,13 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Bots.Main.*;
-
 public class CommandHelp extends BaseCommand implements Runnable {
     private static MessageEvent event;
-    final List<ItemComponent> CategoryButtons = new ArrayList<>();
+    private static final ExecutorService executor = Executors.newCachedThreadPool();    final List<ItemComponent> CategoryButtons = new ArrayList<>();
 
     public String getCommands(Category category) {
         StringBuilder Commands = new StringBuilder();

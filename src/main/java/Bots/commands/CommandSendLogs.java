@@ -14,13 +14,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
-import static Bots.Main.*;
-
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 public class CommandSendLogs extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DEV};

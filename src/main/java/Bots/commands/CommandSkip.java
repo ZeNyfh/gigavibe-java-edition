@@ -15,13 +15,14 @@ import net.dv8tion.jda.api.entities.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
-
 public class CommandSkip extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};

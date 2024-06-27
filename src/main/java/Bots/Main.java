@@ -41,8 +41,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
@@ -72,7 +70,6 @@ public class Main extends ListenerAdapter {
     public static boolean ignoreFiles = false;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
-    public static ExecutorService executor;
     private static JDA bot;
 
     public enum audioFilters {
@@ -212,7 +209,6 @@ public class Main extends ListenerAdapter {
                     e.printStackTrace();
                 }
             }
-            executor = Executors.newFixedThreadPool(classes.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -577,19 +573,22 @@ public class Main extends ListenerAdapter {
 
     private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
-            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
-            if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
-            } else {
-                //run command
-                String primaryName = Command.getNames()[0];
-                commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-                try {
-                    Command.executeWithChecks(new MessageEvent(event));
-                } catch (Exception e) {
-                    e.printStackTrace();
+            // multi-threading of commands
+            new Thread(() -> {
+                float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
+                if (ratelimitTime > 0) {
+                    event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
+                } else {
+                    //run command
+                    String primaryName = Command.getNames()[0];
+                    commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                    try {
+                        Command.executeWithChecks(new MessageEvent(event));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+            }).start();
             return true;
         }
         return false;
@@ -605,20 +604,22 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            //ratelimit code. ratelimit is per-user per-guild
-            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
-            if (ratelimitTime > 0) {
-                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
-            } else {
-                //run command
-                String primaryName = Command.getNames()[0];
-                commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
-                try {
-                    Command.executeWithChecks(new MessageEvent(event));
-                } catch (Exception e) {
-                    e.printStackTrace();
+            new Thread(() -> {
+                //ratelimit code. ratelimit is per-user per-guild
+                float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
+                if (ratelimitTime > 0) {
+                    event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+                } else {
+                    //run command
+                    String primaryName = Command.getNames()[0];
+                    commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                    try {
+                        Command.executeWithChecks(new MessageEvent(event));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+            }).start();
             return true;
         }
         return false;

@@ -12,12 +12,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Bots.Main.*;
-
 public class CommandNowPlaying extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_BOT_IN_ANY_VC, Check.IS_PLAYING};

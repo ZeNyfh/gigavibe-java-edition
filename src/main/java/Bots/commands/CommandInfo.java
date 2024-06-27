@@ -8,13 +8,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Bots.Main.*;
 import static java.lang.System.currentTimeMillis;
-
 public class CommandInfo extends BaseCommand implements Runnable {
     private static MessageEvent event;
-    final int CommandCount = commandNames.size();
+    private static final ExecutorService executor = Executors.newCachedThreadPool();    final int CommandCount = commandNames.size();
 
     @Override
     public void run() {

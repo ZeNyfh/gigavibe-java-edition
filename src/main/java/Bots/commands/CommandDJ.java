@@ -13,14 +13,15 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.Main.*;
-
 public class CommandDJ extends BaseCommand implements Runnable {
     private static MessageEvent event;
-    Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
+    private static final ExecutorService executor = Executors.newCachedThreadPool();    Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
 
     @Override
     public void run() {

@@ -17,12 +17,14 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import static Bots.Main.*;
-
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.createQuickError;
 public class CommandPlay extends BaseCommand implements Runnable {
     private static MessageEvent event;
-    final public Set<String> audioFiles = Set.of(
+    private static final ExecutorService executor = Executors.newCachedThreadPool();    final public Set<String> audioFiles = Set.of(
             "mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"
     );
 

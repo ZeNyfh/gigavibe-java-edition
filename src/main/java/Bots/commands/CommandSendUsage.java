@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import static Bots.Main.*;
-
+import static Bots.Main.botColour;
+import static Bots.Main.commandUsageTracker;
 public class CommandSendUsage extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DEV};

@@ -19,16 +19,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.CommandStateChecker.PerformChecks;
 import static Bots.Main.*;
-
 public class CommandRadio extends BaseCommand implements Runnable {
     private static final Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
     private static MessageEvent event;
-    HashMap<String, String> radioLists = new HashMap<>() {{
+    private static final ExecutorService executor = Executors.newCachedThreadPool();    HashMap<String, String> radioLists = new HashMap<>() {{
         put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
         put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
         put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");

@@ -9,11 +9,13 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.Main.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.*;
 public class CommandVibrato extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};

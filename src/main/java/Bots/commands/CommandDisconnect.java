@@ -6,11 +6,14 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.skips;
 public class CommandDisconnect extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_BOT_IN_ANY_VC};

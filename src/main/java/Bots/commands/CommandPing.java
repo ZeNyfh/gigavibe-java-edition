@@ -3,17 +3,18 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
-import static Bots.Main.executor;
-import static java.lang.System.currentTimeMillis;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static java.lang.System.currentTimeMillis;
 public class CommandPing extends BaseCommand implements Runnable {
     private static MessageEvent event;
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
 
     @Override
     public void run() {
         long time = currentTimeMillis();
         event.reply(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time), ".");
-
     }
 
     @Override
@@ -40,6 +41,5 @@ public class CommandPing extends BaseCommand implements Runnable {
     public void execute(MessageEvent e) throws InterruptedException {
         event = e;
         executor.submit(new CommandPing());
-
     }
 }

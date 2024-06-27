@@ -12,14 +12,15 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.Main.*;
-
 public class CommandBlockChannel extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
 
     @Override

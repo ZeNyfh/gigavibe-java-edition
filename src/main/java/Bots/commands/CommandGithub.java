@@ -3,12 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.createQuickEmbed;
 public class CommandGithub extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public void run() {
         event.replyEmbeds(createQuickEmbed(" ", "❕ Use this for bug reports and feature requests ONLY.\n\n❕ When making an issue, make sure to specify what the bug is and how to recreate it.\n\nhttps://github.com/ZeNyfh/gigavibe-java-edition"));

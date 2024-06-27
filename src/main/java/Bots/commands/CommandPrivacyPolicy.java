@@ -3,12 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.createQuickEmbed;
 public class CommandPrivacyPolicy extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     @Override
     public void run() {
         event.replyEmbeds(createQuickEmbed("Privacy Policy", "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));

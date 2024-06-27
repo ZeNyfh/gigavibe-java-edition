@@ -17,6 +17,9 @@ import java.util.Objects;
 
 // A simple checker designed to check common cases in commands
 // Can either be called manually or handled automatically by overriding getChecks
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 public class CommandStateChecker {
     public static final class CheckResult {
         private final boolean succeeded;

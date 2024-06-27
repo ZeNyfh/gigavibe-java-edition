@@ -9,11 +9,14 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import static Bots.Main.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import static Bots.Main.botColour;
+import static Bots.Main.registerButtonInteraction;
 public class CommandDevTests extends BaseCommand implements Runnable {
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);

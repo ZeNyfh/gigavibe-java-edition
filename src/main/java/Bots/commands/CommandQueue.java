@@ -21,13 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Bots.Main.*;
-
 public class CommandQueue extends BaseCommand implements Runnable {
     private static final HashMap<Long, Integer> queuePages = new HashMap<>();
     private static MessageEvent event;
-
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
         final AudioTrack track = manager.audioPlayer.getPlayingTrack();
