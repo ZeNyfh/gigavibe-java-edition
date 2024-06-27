@@ -3,14 +3,17 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.MessageEvent;
 
+import static Bots.Main.executor;
 import static java.lang.System.currentTimeMillis;
 
-public class CommandPing extends BaseCommand {
+public class CommandPing extends BaseCommand implements Runnable {
+    private static MessageEvent event;
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         long time = currentTimeMillis();
         event.reply(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time), ".");
+
     }
 
     @Override
@@ -31,5 +34,12 @@ public class CommandPing extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandPing());
+
     }
 }

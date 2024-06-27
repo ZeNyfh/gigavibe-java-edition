@@ -9,10 +9,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import static Bots.Main.botColour;
-import static Bots.Main.registerButtonInteraction;
+import static Bots.Main.*;
 
-public class CommandDevTests extends BaseCommand {
+public class CommandDevTests extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
@@ -31,7 +32,7 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         System.out.println("Its dev time");
         String[] args = event.getArgs();
         if (args.length == 1) {
@@ -79,5 +80,12 @@ public class CommandDevTests extends BaseCommand {
     @Override
     public void ProvideOptions(SlashCommandData slashCommand) {
         slashCommand.addOption(OptionType.STRING, "tool", "The tool to use", true);
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandDevTests());
+
     }
 }

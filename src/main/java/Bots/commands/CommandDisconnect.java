@@ -6,17 +6,18 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.skips;
+import static Bots.Main.*;
 
-public class CommandDisconnect extends BaseCommand {
+public class CommandDisconnect extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_BOT_IN_ANY_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
@@ -43,5 +44,12 @@ public class CommandDisconnect extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 5000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandDisconnect());
+
     }
 }

@@ -12,11 +12,12 @@ import java.util.Objects;
 import static Bots.Main.*;
 import static java.lang.System.currentTimeMillis;
 
-public class CommandInfo extends BaseCommand {
+public class CommandInfo extends BaseCommand implements Runnable {
+    private static MessageEvent event;
     final int CommandCount = commandNames.size();
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         int vcCount = 0;
         int memberCount = 0;
         int playingCount = 0;
@@ -51,7 +52,6 @@ public class CommandInfo extends BaseCommand {
         }, eb.build());
     }
 
-
     @Override
     public String[] getNames() {
         return new String[]{"info"};
@@ -65,5 +65,12 @@ public class CommandInfo extends BaseCommand {
     @Override
     public String getDescription() {
         return "Tells you bot info.";
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandInfo());
+
     }
 }

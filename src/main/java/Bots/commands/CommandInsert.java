@@ -15,17 +15,18 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
-public class CommandInsert extends BaseCommand {
+public class CommandInsert extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
@@ -122,5 +123,12 @@ public class CommandInsert extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandInsert());
+
     }
 }

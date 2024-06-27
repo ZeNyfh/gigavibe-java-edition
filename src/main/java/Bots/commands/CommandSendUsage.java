@@ -10,17 +10,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static Bots.Main.botColour;
-import static Bots.Main.commandUsageTracker;
+import static Bots.Main.*;
 
-public class CommandSendUsage extends BaseCommand {
+public class CommandSendUsage extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DEV};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         Long[] values = (Long[]) commandUsageTracker.values().toArray(new Long[0]);
         Arrays.sort(values);
         HashMap<Long, List<String>> InverseReference = new HashMap<>();
@@ -59,5 +60,12 @@ public class CommandSendUsage extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 10000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandSendUsage());
+
     }
 }

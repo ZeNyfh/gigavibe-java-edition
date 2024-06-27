@@ -17,11 +17,13 @@ import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
-public class CommandBlockChannel extends BaseCommand {
+public class CommandBlockChannel extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
             event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have permission to use this command."));
             return;
@@ -117,5 +119,12 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandBlockChannel());
+
     }
 }

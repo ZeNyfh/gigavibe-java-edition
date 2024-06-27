@@ -17,7 +17,8 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandHelp extends BaseCommand {
+public class CommandHelp extends BaseCommand implements Runnable {
+    private static MessageEvent event;
     final List<ItemComponent> CategoryButtons = new ArrayList<>();
 
     public String getCommands(Category category) {
@@ -92,7 +93,7 @@ public class CommandHelp extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         Category userCategory = null;
         if (event.getArgs().length > 1) {
             for (Category category : Category.values()) {
@@ -154,5 +155,12 @@ public class CommandHelp extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandHelp());
+
     }
 }

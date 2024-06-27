@@ -11,27 +11,28 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
-public class CommandPlay extends BaseCommand {
+public class CommandPlay extends BaseCommand implements Runnable {
+    private static MessageEvent event;
     final public Set<String> audioFiles = Set.of(
             "mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"
     );
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void run() {
         event.deferReply(); //expect to take a while
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
@@ -53,10 +54,10 @@ public class CommandPlay extends BaseCommand {
             String fileExtension = att.getFileExtension() != null ? att.getFileExtension().toLowerCase() : "";
 
             if (fileExtension.equals("txt")) {
-                URL url = new URL(att.getUrl());
-                URLConnection connection = url.openConnection();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 try {
+                    URL url = new URL(att.getUrl());
+                    URLConnection connection = url.openConnection();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     String line;
                     while ((line = reader.readLine()) != null) {
                         PlayerManager.getInstance().loadAndPlay(event, line.split(" ", 2)[0], false);
@@ -84,7 +85,7 @@ public class CommandPlay extends BaseCommand {
             String[] links = link.split("http");
             List<String> linksList = new ArrayList<>();
             for (String str : links) {
-                linksList.add(("http"+str)
+                linksList.add(("http" + str)
                         .replace("youtube.com/shorts/", "youtube.com/watch?v=")
                         .replace("youtu.be/", "www.youtube.com/watch?v=").trim()
                 );
@@ -120,6 +121,7 @@ public class CommandPlay extends BaseCommand {
             }
         }
     }
+
     @Override
     public Category getCategory() {
         return Category.Music;
@@ -151,5 +153,11 @@ public class CommandPlay extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandPlay());
     }
 }

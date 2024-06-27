@@ -41,6 +41,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.jar.JarEntry;
@@ -70,6 +72,7 @@ public class Main extends ListenerAdapter {
     public static boolean ignoreFiles = false;
     public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+    public static ExecutorService executor;
     private static JDA bot;
 
     public enum audioFilters {
@@ -209,6 +212,7 @@ public class Main extends ListenerAdapter {
                     e.printStackTrace();
                 }
             }
+            executor = Executors.newFixedThreadPool(classes.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

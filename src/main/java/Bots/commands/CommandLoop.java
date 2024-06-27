@@ -4,17 +4,18 @@ import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.MessageEvent;
 
-import static Bots.Main.LoopGuilds;
-import static Bots.Main.createQuickEmbed;
+import static Bots.Main.*;
 
-public class CommandLoop extends BaseCommand {
+public class CommandLoop extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track."));
             LoopGuilds.remove(event.getGuild().getIdLong());
@@ -42,5 +43,12 @@ public class CommandLoop extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandLoop());
+
     }
 }

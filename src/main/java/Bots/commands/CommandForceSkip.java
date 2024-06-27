@@ -19,14 +19,16 @@ import java.util.List;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
-public class CommandForceSkip extends BaseCommand {
+public class CommandForceSkip extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         StringBuilder messageBuilder = new StringBuilder();
@@ -124,5 +126,12 @@ public class CommandForceSkip extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandForceSkip());
+
     }
 }

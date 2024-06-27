@@ -9,15 +9,18 @@ import java.io.*;
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
+import static Bots.Main.executor;
 
-public class CommandGetDump extends BaseCommand {
+public class CommandGetDump extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DEV};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         new File("temp/dump.txt").delete();
         event.deferReply();
         try {
@@ -71,4 +74,10 @@ public class CommandGetDump extends BaseCommand {
         return "Returns a dump of jstack.";
     }
 
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandGetDump());
+
+    }
 }

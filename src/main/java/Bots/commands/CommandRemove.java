@@ -12,17 +12,18 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
-public class CommandRemove extends BaseCommand {
+public class CommandRemove extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
@@ -74,5 +75,12 @@ public class CommandRemove extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandRemove());
+
     }
 }

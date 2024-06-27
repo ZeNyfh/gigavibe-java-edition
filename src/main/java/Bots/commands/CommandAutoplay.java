@@ -12,14 +12,16 @@ import java.util.List;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
-public class CommandAutoplay extends BaseCommand {
+public class CommandAutoplay extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         if (!LastFMManager.hasAPI) {
             event.replyEmbeds(createQuickError("The bot has not been given an API key for LastFM, this command does not work without it."));
             return;
@@ -62,5 +64,11 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandAutoplay());
     }
 }

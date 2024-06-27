@@ -11,14 +11,16 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import static Bots.Main.*;
 
-public class CommandVibrato extends BaseCommand {
+public class CommandVibrato extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato);
 
@@ -81,5 +83,12 @@ public class CommandVibrato extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandVibrato());
+
     }
 }

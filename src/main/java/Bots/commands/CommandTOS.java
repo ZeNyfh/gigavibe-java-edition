@@ -4,11 +4,13 @@ import Bots.BaseCommand;
 import Bots.MessageEvent;
 
 import static Bots.Main.createQuickEmbed;
+import static Bots.Main.executor;
 
-public class CommandTOS extends BaseCommand {
+public class CommandTOS extends BaseCommand implements Runnable {
+    private static MessageEvent event;
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         event.replyEmbeds(createQuickEmbed("Terms of Service", "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
     }
 
@@ -30,5 +32,12 @@ public class CommandTOS extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 10000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandTOS());
+
     }
 }

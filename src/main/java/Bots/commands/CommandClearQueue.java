@@ -8,14 +8,16 @@ import Bots.lavaplayer.PlayerManager;
 
 import static Bots.Main.*;
 
-public class CommandClearQueue extends BaseCommand {
+public class CommandClearQueue extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         skips.remove(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
@@ -42,5 +44,12 @@ public class CommandClearQueue extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 5000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandClearQueue());
+
     }
 }

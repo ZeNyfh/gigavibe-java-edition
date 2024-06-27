@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.Main;
 import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
@@ -20,14 +19,16 @@ import java.util.Objects;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
-public class CommandSkip extends BaseCommand {
+public class CommandSkip extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = Objects.requireNonNull(self.getVoiceState());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -125,5 +126,12 @@ public class CommandSkip extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandSkip());
+
     }
 }

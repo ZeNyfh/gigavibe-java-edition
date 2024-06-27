@@ -16,24 +16,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
-public class CommandSendLogs extends BaseCommand {
+public class CommandSendLogs extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DEV};
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void run() {
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError("No arguments specified"));
             return;
         }
 
         if (event.getArgs()[1].equalsIgnoreCase("list")) {
-            Stream<Path> stream = Files.list(Paths.get(new File("logs/").toURI()));
+            Stream<Path> stream = null;
+            try {
+                stream = Files.list(Paths.get(new File("logs/").toURI()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             StringBuilder builder = new StringBuilder();
             for (Path file : stream.toList()) {
                 String filename = file.getFileName().toString().split("\\.")[0];
@@ -86,5 +92,12 @@ public class CommandSendLogs extends BaseCommand {
                         new OptionData(OptionType.STRING, "name", "The name of the log. None for current.", false)
                 )
         );
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandSendLogs());
+
     }
 }

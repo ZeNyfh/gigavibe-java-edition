@@ -24,8 +24,9 @@ import java.util.concurrent.BlockingQueue;
 
 import static Bots.Main.*;
 
-public class CommandQueue extends BaseCommand {
+public class CommandQueue extends BaseCommand implements Runnable {
     private static final HashMap<Long, Integer> queuePages = new HashMap<>();
+    private static MessageEvent event;
 
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
@@ -70,7 +71,7 @@ public class CommandQueue extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
@@ -152,5 +153,12 @@ public class CommandQueue extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandQueue());
+
     }
 }

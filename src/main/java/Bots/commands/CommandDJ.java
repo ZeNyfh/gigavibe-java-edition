@@ -18,11 +18,12 @@ import java.util.regex.Pattern;
 
 import static Bots.Main.*;
 
-public class CommandDJ extends BaseCommand {
+public class CommandDJ extends BaseCommand implements Runnable {
+    private static MessageEvent event;
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         JSONObject config = event.getConfig();
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
@@ -169,5 +170,12 @@ public class CommandDJ extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandDJ()); //TODO: is this a worry as it does IO?
+
     }
 }

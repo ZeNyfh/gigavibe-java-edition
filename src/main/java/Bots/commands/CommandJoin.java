@@ -7,17 +7,18 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Objects;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
-public class CommandJoin extends BaseCommand {
+public class CommandJoin extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_DJ, Check.IS_USER_IN_ANY_VC};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         // Don't use the check system since we want to specifically allow this even if the bot is active in another VC
         try {
             event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
@@ -47,5 +48,12 @@ public class CommandJoin extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 5000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandJoin());
+
     }
 }

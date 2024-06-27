@@ -25,8 +25,9 @@ import java.util.regex.Pattern;
 import static Bots.CommandStateChecker.PerformChecks;
 import static Bots.Main.*;
 
-public class CommandRadio extends BaseCommand {
+public class CommandRadio extends BaseCommand implements Runnable {
     private static final Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
+    private static MessageEvent event;
     HashMap<String, String> radioLists = new HashMap<>() {{
         put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
         put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
@@ -79,7 +80,7 @@ public class CommandRadio extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void run() {
         if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
@@ -122,7 +123,11 @@ public class CommandRadio extends BaseCommand {
                     radioSearchTerm.append(string);
                 }
             }
-            radioURL = getRadio(radioSearchTerm.toString());
+            try {
+                radioURL = getRadio(radioSearchTerm.toString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         if (radioURL != null) {
             if (radioURL.equals("None")) {
@@ -172,5 +177,12 @@ public class CommandRadio extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandRadio());
+
     }
 }

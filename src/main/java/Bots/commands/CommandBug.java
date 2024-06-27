@@ -8,11 +8,14 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
+import static Bots.Main.executor;
 
-public class CommandBug extends BaseCommand {
+public class CommandBug extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError("Please provide something to report."));
@@ -50,5 +53,12 @@ public class CommandBug extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 60000;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandBug());
+
     }
 }

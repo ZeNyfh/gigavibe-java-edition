@@ -15,14 +15,16 @@ import java.util.Objects;
 
 import static Bots.Main.*;
 
-public class CommandNowPlaying extends BaseCommand {
+public class CommandNowPlaying extends BaseCommand implements Runnable {
+    private static MessageEvent event;
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_BOT_IN_ANY_VC, Check.IS_PLAYING};
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void run() {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         final AudioTrack track = audioPlayer.getPlayingTrack();
@@ -126,5 +128,12 @@ public class CommandNowPlaying extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 2500;
+    }
+
+    @Override
+    public void execute(MessageEvent e) throws InterruptedException {
+        event = e;
+        executor.submit(new CommandNowPlaying());
+
     }
 }
