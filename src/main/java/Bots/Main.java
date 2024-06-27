@@ -574,12 +574,12 @@ public class Main extends ListenerAdapter {
     private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             // multi-threading of commands
-            new Thread(() -> {
-                float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
-                if (ratelimitTime > 0) {
-                    event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
-                } else {
-                    //run command
+            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
+            if (ratelimitTime > 0) {
+                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
+            } else {
+                //run command
+                new Thread(() -> {
                     String primaryName = Command.getNames()[0];
                     commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
                     try {
@@ -587,8 +587,8 @@ public class Main extends ListenerAdapter {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-            }).start();
+                }).start();
+            }
             return true;
         }
         return false;
@@ -604,13 +604,13 @@ public class Main extends ListenerAdapter {
                     return false;
                 }
             }
-            new Thread(() -> {
-                //ratelimit code. ratelimit is per-user per-guild
-                float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
-                if (ratelimitTime > 0) {
-                    event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
-                } else {
-                    //run command
+            //ratelimit code. ratelimit is per-user per-guild
+            float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
+            if (ratelimitTime > 0) {
+                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+            } else {
+                //run command
+                new Thread(() -> {
                     String primaryName = Command.getNames()[0];
                     commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
                     try {
@@ -618,8 +618,8 @@ public class Main extends ListenerAdapter {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-            }).start();
+                }).start();
+            }
             return true;
         }
         return false;
