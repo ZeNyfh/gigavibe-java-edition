@@ -279,7 +279,7 @@ public class Main extends ListenerAdapter {
                     while (scanner.hasNextLine()) {
                         String line = scanner.nextLine();
                         if (first) {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, channelUnion).whenComplete((loadResult, throwable) -> {
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
                                 if (loadResult.songWasPlayed) {
                                     PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
                                 } else {
@@ -288,7 +288,7 @@ public class Main extends ListenerAdapter {
                             });
                             first = false;
                         } else {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
                         }
                     }
                     AudioPlayer player = musicManager.audioPlayer;

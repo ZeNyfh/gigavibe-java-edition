@@ -40,18 +40,9 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        MessageEvent originalEvent = null;
-        GuildMessageChannelUnion originalEventChannel;
-        long guildId;
-        if ((((Object[]) track.getUserData())[0]) != null) {
-            originalEvent = (MessageEvent) ((Object[]) track.getUserData())[0];
-            originalEventChannel = originalEvent.getChannel();
-            guildId = originalEvent.getGuild().getIdLong();
-        } else {
-            guildId = Long.parseLong((String) ((Object[]) track.getUserData())[1]);
-            originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(guildId);
-            guildId = originalEventChannel.getGuild().getIdLong();
-        }
+        PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
+        GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
+        long guildId = trackUserData.guildId;
 
         skips.remove(guildId);
         StringBuilder messageBuilder = new StringBuilder();
@@ -112,10 +103,10 @@ public class TrackScheduler extends AudioEventAdapter {
                     if (canPlay) {
                         // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
                         String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                                ? encode((track.getInfo().title).toLowerCase(), false, true)
+                                ? encode(track.getInfo().title.toLowerCase(), false, true)
                                 : encode(track.getInfo().author.toLowerCase(), false, true);
                         String title = encode(track.getInfo().title, true, false);
-                        PlayerManager.getInstance().loadAndPlay(originalEvent, "ytsearch:" + artistName + " - " + title, true);
+                        PlayerManager.getInstance().loadAndPlay(trackUserData.eventOrChannel, "ytsearch:" + artistName + " - " + title, true);
                         messageBuilder.append("♾️ Autoplay queued: ").append(artistName).append(" - ").append(title).append("\n");
                     }
                 }
@@ -148,15 +139,10 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        Guild guild;
-        if ((((Object[]) track.getUserData())[0]) != null) {
-            guild = ((MessageEvent) ((Object[]) track.getUserData())[0]).getGuild();
-        } else {
-            long guildId = Long.parseLong((String) ((Object[]) track.getUserData())[1]);
-            guild = getGuildChannelFromID(guildId).getGuild();
-        }
+        PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
+        Guild guild = getGuildChannelFromID(trackUserData.channelId).getGuild();
 
-        System.out.println("AudioPlayer in " + guild.getIdLong() + guild.getName() + " threw friendly exception on track: " + track.getInfo().uri);
+        System.err.println("AudioPlayer in " + guild.getIdLong() + " (" + guild.getName() + ") threw friendly exception on track " + track.getInfo().uri);
         System.err.println(exception.getMessage());
     }
 }

@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -212,7 +212,8 @@ public class GuildDataManager {
     public static void SaveQueues(JDA bot) { // queue restoration can only occur once because this here does NOT give the tracks their data.
         for (Guild guild : bot.getGuilds()) {
             AudioPlayer player = PlayerManager.getInstance().getMusicManager(guild).audioPlayer;
-            if (player.getPlayingTrack() == null) { // the track being null means there is no queue 99% of the time.
+            AudioTrack playingTrack = player.getPlayingTrack();
+            if (playingTrack == null) { // the track being null means there is no queue 99% of the time.
                 continue;
             }
             GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
@@ -225,16 +226,12 @@ public class GuildDataManager {
                 }
                 FileWriter writer = new FileWriter(guildQueueFile);
                 writer.write(System.currentTimeMillis() + "\n"); // time now
-                GuildMessageChannelUnion channel;
-                if ((((Object[]) player.getPlayingTrack().getUserData())[0]) == null) { // event is null
-                    channel = (GuildMessageChannelUnion) bot.getGuildChannelById(String.valueOf(((Object[]) player.getPlayingTrack().getUserData())[1]));
-                } else {
-                    channel = ((MessageEvent) ((Object[]) player.getPlayingTrack().getUserData())[0]).channel;
-                }
+                PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) playingTrack.getUserData();
+                GuildChannel channel = bot.getGuildChannelById(trackUserData.channelId);
                 writer.write(Objects.requireNonNull(channel).getGuild().getId() + "\n"); // guild id
                 writer.write(channel.getId() + "\n"); // channel id
                 writer.write(Objects.requireNonNull(Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel()).getId() + "\n"); // vc id
-                writer.write(player.getPlayingTrack().getPosition() + "\n"); // track now position
+                writer.write(playingTrack.getPosition() + "\n"); // track now position
                 // track states
                 writer.write(player.isPaused() + "\n"); // is paused
                 writer.write(LoopGuilds.contains(guild.getIdLong()) + "\n"); // is looping
@@ -246,7 +243,7 @@ public class GuildDataManager {
                 writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getPitch() + "\n"); // pitch
                 writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getFrequency() + "\n"); // vibrato freq
                 writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getDepth() + "\n"); // vibrato depth
-                writer.write(player.getPlayingTrack().getInfo().uri + "\n"); // track now url
+                writer.write(playingTrack.getInfo().uri + "\n"); // track now url
                 if (!musicManager.scheduler.queue.isEmpty()) {
                     for (AudioTrack track : musicManager.scheduler.queue)
                         writer.write(track.getInfo().uri + "\n"); // queue urls

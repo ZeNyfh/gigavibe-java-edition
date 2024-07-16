@@ -16,6 +16,7 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +52,24 @@ public class PlayerManager {
 
         LoadResult(boolean songWasPlayed) {
             this.songWasPlayed = songWasPlayed;
+        }
+    }
+
+    public static class TrackUserData {
+        public final Object eventOrChannel;
+        public final Long channelId;
+        public final Long guildId;
+
+        public TrackUserData(Object eventOrChannel) {
+            this.eventOrChannel = eventOrChannel;
+            GuildMessageChannelUnion channel;
+            if (eventOrChannel instanceof MessageEvent) {
+                channel = ((MessageEvent) eventOrChannel).getChannel();
+            } else {
+                channel = (GuildMessageChannelUnion) eventOrChannel;
+            }
+            this.channelId = channel.getIdLong();
+            this.guildId = channel.getGuild().getIdLong();
         }
     }
 
@@ -118,42 +137,54 @@ public class PlayerManager {
         return embed;
     }
 
-    // TODO: That's a lot of seemingly random arguments, this could use some cleanup
-    public CompletableFuture<LoadResult> loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, GuildMessageChannelUnion channel) {
-        CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
-        GuildMessageChannelUnion commandChannel;
-        if (event == null) {
-            commandChannel = channel;
+    private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed, boolean forceSendChannel) {
+        if (eventOrChannel instanceof MessageEvent) {
+            if (forceSendChannel) {
+                ((MessageEvent) eventOrChannel).getChannel().sendMessageEmbeds(embed).queue();
+            } else {
+                ((MessageEvent) eventOrChannel).replyEmbeds(embed);
+            }
         } else {
-            commandChannel = event.getChannel();
+            ((GuildMessageChannelUnion) eventOrChannel).sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed) {
+        replyWithEmbed(eventOrChannel, embed, false);
+    }
+
+    public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, Boolean sendEmbed) {
+        assert (eventOrChannel instanceof MessageEvent || eventOrChannel instanceof GuildMessageChannelUnion);
+        CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
+        Guild commandGuild;
+        if (eventOrChannel instanceof MessageEvent) {
+            commandGuild = ((MessageEvent) eventOrChannel).getGuild();
+        } else {
+            commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
+                if (sendEmbed)
+                    replyWithEmbed(eventOrChannel, createQuickError("The bot is unable to play spotify tracks right now"));
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
                 return loadResultFuture;
             }
         }
-        final GuildMusicManager musicManager = this.getMusicManager(commandChannel.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(commandGuild);
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
+                audioTrack.setUserData(new TrackUserData(eventOrChannel));
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
-                    EmbedBuilder embed = createTrackEmbed(audioTrack);
-                    if (event != null) {
-                        event.replyEmbeds(embed.build());
-                    } else {
-                        commandChannel.sendMessageEmbeds(embed.build()).queue();
-                    }
+                    replyWithEmbed(eventOrChannel, createTrackEmbed(audioTrack).build());
                 }
                 loadResultFuture.complete(LoadResult.TRACK_LOADED);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                boolean autoplaying = AutoplayGuilds.contains(commandChannel.getGuild().getIdLong());
+                boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
@@ -162,12 +193,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            EmbedBuilder embed = createTrackEmbed(track);
-                            if (!autoplaying && event != null) {
-                                event.replyEmbeds(embed.build());
-                            } else {
-                                commandChannel.sendMessageEmbeds(embed.build()).queue();
-                            }
+                            replyWithEmbed(eventOrChannel, createTrackEmbed(track).build(), autoplaying);
                         }
                     } else {
                         EmbedBuilder embed = new EmbedBuilder();
@@ -191,14 +217,10 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        if (event != null) {
-                            event.replyEmbeds(embed.build());
-                        } else {
-                            commandChannel.sendMessageEmbeds(embed.build()).queue();
-                        }
+                        replyWithEmbed(eventOrChannel, embed.build());
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
+                        audioTrack.setUserData(new TrackUserData(eventOrChannel));
                     }
                 }
                 loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
@@ -207,7 +229,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 if (sendEmbed)
-                    event.replyEmbeds(createQuickError("No matches found for the track."));
+                    replyWithEmbed(eventOrChannel, createQuickError("No matches found for the track."));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
@@ -215,7 +237,7 @@ public class PlayerManager {
             @Override
             public void loadFailed(FriendlyException e) {
                 System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
-                skips.remove(commandChannel.getGuild().getIdLong());
+                skips.remove(commandGuild.getIdLong());
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
                 if (e.getMessage().toLowerCase().contains("search response: 400")) {
@@ -223,15 +245,11 @@ public class PlayerManager {
                 }
                 loadFailedBuilder.append(e.getMessage());
                 if (sendEmbed)
-                    event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
+                    replyWithEmbed(eventOrChannel, createQuickError("The track failed to load: " + loadFailedBuilder));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
         return loadResultFuture;
-    }
-
-    public CompletableFuture<LoadResult> loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
-        return loadAndPlay(event, trackUrl, sendEmbed, null);
     }
 
     @Nullable
