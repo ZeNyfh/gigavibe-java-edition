@@ -76,10 +76,6 @@ public class Main extends ListenerAdapter {
         Vibrato, Timescale
     }
 
-    public static TimerTask task;
-
-    public static Timer timer;
-
     public static void registerCommand(BaseCommand command) {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
@@ -318,8 +314,8 @@ public class Main extends ListenerAdapter {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
             Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
             Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
-            timer = new Timer();
-            task = new TimerTask() {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
                 int cleanUpTime = 0;
                 final File tempDir = new File("temp/");
