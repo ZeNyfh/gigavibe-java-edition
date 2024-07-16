@@ -206,7 +206,8 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                event.replyEmbeds(createQuickError("No matches found for the track."));
+                if (sendEmbed)
+                    event.replyEmbeds(createQuickError("No matches found for the track."));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
@@ -221,7 +222,8 @@ public class PlayerManager {
                     loadFailedBuilder.append("An error with the youtube search API has occurred. ");
                 }
                 loadFailedBuilder.append(e.getMessage());
-                event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
+                if (sendEmbed)
+                    event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
