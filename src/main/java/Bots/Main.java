@@ -274,17 +274,21 @@ public class Main extends ListenerAdapter {
                         continue;
                     }
                     guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
-                    String line;
                     boolean first = true;
                     GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
                     while (scanner.hasNextLine()) {
-                        line = scanner.nextLine();
+                        String line = scanner.nextLine();
                         if (first) {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos)), channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(null, line, false, channelUnion).whenComplete((loadResult, throwable) -> {
+                                if (loadResult.songWasPlayed) {
+                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
+                                } else {
+                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
+                                }
+                            });
                             first = false;
                         } else {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {
-                            }, channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(null, line, false, channelUnion);
                         }
                     }
                     AudioPlayer player = musicManager.audioPlayer;

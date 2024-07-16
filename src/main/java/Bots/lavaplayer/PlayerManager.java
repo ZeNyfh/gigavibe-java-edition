@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,19 @@ public class PlayerManager {
     private static boolean hasSpotify;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
+
+    public enum LoadResult {
+        TRACK_LOADED(true),
+        PLAYLIST_LOADED(true),
+        NO_MATCHES(false),
+        LOAD_FAILED(false);
+
+        public final boolean songWasPlayed;
+
+        LoadResult(boolean songWasPlayed) {
+            this.songWasPlayed = songWasPlayed;
+        }
+    }
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -105,7 +119,8 @@ public class PlayerManager {
     }
 
     // TODO: That's a lot of seemingly random arguments, this could use some cleanup
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion channel) {
+    public CompletableFuture<LoadResult> loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, GuildMessageChannelUnion channel) {
+        CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
         GuildMessageChannelUnion commandChannel;
         if (event == null) {
             commandChannel = channel;
@@ -115,7 +130,8 @@ public class PlayerManager {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
-                return;
+                loadResultFuture.complete(LoadResult.NO_MATCHES);
+                return loadResultFuture;
             }
         }
         final GuildMusicManager musicManager = this.getMusicManager(commandChannel.getGuild());
@@ -132,7 +148,7 @@ public class PlayerManager {
                         commandChannel.sendMessageEmbeds(embed.build()).queue();
                     }
                 }
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.TRACK_LOADED);
             }
 
             @Override
@@ -185,14 +201,14 @@ public class PlayerManager {
                         audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
                     }
                 }
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
             }
 
             @Override
             public void noMatches() {
                 event.replyEmbeds(createQuickError("No matches found for the track."));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
 
             @Override
@@ -206,18 +222,14 @@ public class PlayerManager {
                 }
                 loadFailedBuilder.append(e.getMessage());
                 event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
+        return loadResultFuture;
     }
 
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
-        loadAndPlay(event, trackUrl, sendEmbed, OnCompletion, null);
-    }
-
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
-        loadAndPlay(event, trackUrl, sendEmbed, () -> {
-        }, null);
+    public CompletableFuture<LoadResult> loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
+        return loadAndPlay(event, trackUrl, sendEmbed, null);
     }
 
     @Nullable
