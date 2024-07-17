@@ -34,17 +34,17 @@ import static Bots.Main.createQuickError;
  * @version 2.1.1
  */
 public class MessageEvent {
-    final Object coreEvent;
-    final JDA JDA;
-    final Guild guild;
-    final GuildMessageChannelUnion channel;
-    final Member member;
-    final User user;
-    final String[] args;
-    final OptionMapping[] options;
-    final String rawContent;
-    final List<Message.Attachment> attachments;
-    final JSONObject config;
+    private final Object coreEvent;
+    private final JDA JDA;
+    private final Guild guild;
+    private final GuildMessageChannelUnion channel;
+    private final Member member;
+    private final User user;
+    private final String[] args;
+    private final OptionMapping[] options;
+    private final String rawContent;
+    private final List<Message.Attachment> attachments;
+    private final JSONObject config;
 
     public MessageEvent(MessageReceivedEvent event) {
         this.coreEvent = event;
@@ -229,7 +229,7 @@ public class MessageEvent {
 
     public static class Response {
         //Bad type conversion practices, the sequel
-        final Object coreObject;
+        private final Object coreObject;
 
         public Response(InteractionHook interaction) {
             this.coreObject = interaction;
@@ -237,6 +237,11 @@ public class MessageEvent {
 
         public Response(Message message) {
             this.coreObject = message;
+        }
+
+        @Deprecated
+        public Object getCoreObject() {
+            return this.coreObject;
         }
 
         public boolean isSlash() {
