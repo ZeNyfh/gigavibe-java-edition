@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
@@ -130,6 +131,7 @@ public class MessageEvent {
         return this.rawContent;
     }
 
+    @Deprecated
     public Object getCoreEvent() { //Use in commands as little as you can, since this gets hacky fast
         return this.coreEvent;
     }
@@ -279,6 +281,17 @@ public class MessageEvent {
             } else {
                 ((Message) this.coreObject).editMessageAttachments(files).queue();
             }
+        }
+
+        public void setActionRow(ItemComponent... actionRow) {
+            if (isSlash()) {
+                ((InteractionHookImpl) this.coreObject).editOriginalComponents().setActionRow(actionRow).queue();
+            } else {
+                ((Message) this.coreObject).editMessageComponents().setActionRow(actionRow).queue();
+            }
+        }
+        public void setActionRow(List<ItemComponent> actionRow) {
+            setActionRow(actionRow.toArray(new ItemComponent[0]));
         }
     }
 }

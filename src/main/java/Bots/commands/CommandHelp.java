@@ -115,15 +115,7 @@ public class CommandHelp extends BaseCommand {
             }
             embed.setFooter("Click the buttons to get more information on a group.");
         }
-        if (!event.isSlash()) { //Incredibly hacky fix because I don't want to implement all the backend just for this
-            ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
-                    a -> a.editMessageComponents().setActionRow(CategoryButtons).queue()
-            );
-        } else {
-            ((SlashCommandInteractionEvent) event.getCoreEvent()).replyEmbeds(embed.build()).queue(
-                    a -> a.editOriginalComponents().setActionRow(CategoryButtons).queue()
-            );
-        }
+        event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }
 
     @Override
