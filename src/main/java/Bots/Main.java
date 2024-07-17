@@ -244,6 +244,7 @@ public class Main extends ListenerAdapter {
                 } catch (Exception e) {
                     scanner.close();
                     file.delete();
+                    e.printStackTrace();
                     continue;
                 }
                 if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
