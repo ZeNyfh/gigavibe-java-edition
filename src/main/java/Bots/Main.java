@@ -79,10 +79,6 @@ public class Main extends ListenerAdapter {
         Vibrato, Timescale
     }
 
-    public static TimerTask task;
-
-    public static Timer timer;
-
     public static void registerCommand(BaseCommand command) {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
@@ -251,6 +247,7 @@ public class Main extends ListenerAdapter {
                 } catch (Exception e) {
                     scanner.close();
                     file.delete();
+                    e.printStackTrace();
                     continue;
                 }
                 if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
@@ -281,17 +278,21 @@ public class Main extends ListenerAdapter {
                         continue;
                     }
                     guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
-                    String line;
                     boolean first = true;
                     GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
                     while (scanner.hasNextLine()) {
-                        line = scanner.nextLine();
+                        String line = scanner.nextLine();
                         if (first) {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos)), channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
+                                if (loadResult.songWasPlayed) {
+                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
+                                } else {
+                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
+                                }
+                            });
                             first = false;
                         } else {
-                            PlayerManager.getInstance().loadAndPlay(null, line, false, () -> {
-                            }, channelUnion);
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
                         }
                     }
                     AudioPlayer player = musicManager.audioPlayer;
@@ -321,8 +322,8 @@ public class Main extends ListenerAdapter {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
             Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
             Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
-            timer = new Timer();
-            task = new TimerTask() {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
                 int cleanUpTime = 0;
                 final File tempDir = new File("temp/");

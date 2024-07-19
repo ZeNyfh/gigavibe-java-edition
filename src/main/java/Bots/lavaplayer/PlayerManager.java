@@ -12,9 +12,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,9 +42,41 @@ public class PlayerManager {
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
 
+    public enum LoadResult {
+        TRACK_LOADED(true),
+        PLAYLIST_LOADED(true),
+        NO_MATCHES(false),
+        LOAD_FAILED(false);
+
+        public final boolean songWasPlayed;
+
+        LoadResult(boolean songWasPlayed) {
+            this.songWasPlayed = songWasPlayed;
+        }
+    }
+
+    public static class TrackUserData {
+        public final Object eventOrChannel;
+        public final Long channelId;
+        public final Long guildId;
+
+        public TrackUserData(Object eventOrChannel) {
+            this.eventOrChannel = eventOrChannel;
+            GuildMessageChannelUnion channel;
+            if (eventOrChannel instanceof MessageEvent) {
+                channel = ((MessageEvent) eventOrChannel).getChannel();
+            } else {
+                channel = (GuildMessageChannelUnion) eventOrChannel;
+            }
+            this.channelId = channel.getIdLong();
+            this.guildId = channel.getGuild().getIdLong();
+        }
+    }
+
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
+        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager());
 
         String spotifyClientID = Dotenv.load().get("SPOTIFYCLIENTID");
         String spotifyClientSecret = Dotenv.load().get("SPOTIFYCLIENTSECRET");
@@ -102,40 +137,54 @@ public class PlayerManager {
         return embed;
     }
 
-    // TODO: That's a lot of seemingly random arguments, this could use some cleanup
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion, GuildMessageChannelUnion channel) {
-        GuildMessageChannelUnion commandChannel;
-        if (event == null) {
-            commandChannel = channel;
+    private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed, boolean forceSendChannel) {
+        if (eventOrChannel instanceof MessageEvent) {
+            if (forceSendChannel) {
+                ((MessageEvent) eventOrChannel).getChannel().sendMessageEmbeds(embed).queue();
+            } else {
+                ((MessageEvent) eventOrChannel).replyEmbeds(embed);
+            }
         } else {
-            commandChannel = event.getChannel();
+            ((GuildMessageChannelUnion) eventOrChannel).sendMessageEmbeds(embed).queue();
+        }
+    }
+
+    private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed) {
+        replyWithEmbed(eventOrChannel, embed, false);
+    }
+
+    public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, Boolean sendEmbed) {
+        assert (eventOrChannel instanceof MessageEvent || eventOrChannel instanceof GuildMessageChannelUnion);
+        CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
+        Guild commandGuild;
+        if (eventOrChannel instanceof MessageEvent) {
+            commandGuild = ((MessageEvent) eventOrChannel).getGuild();
+        } else {
+            commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                commandChannel.sendMessageEmbeds(createQuickError("The bot had complications during initialisation and is unable to play spotify tracks")).queue();
-                return;
+                if (sendEmbed)
+                    replyWithEmbed(eventOrChannel, createQuickError("The bot is unable to play spotify tracks right now"));
+                loadResultFuture.complete(LoadResult.NO_MATCHES);
+                return loadResultFuture;
             }
         }
-        final GuildMusicManager musicManager = this.getMusicManager(commandChannel.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(commandGuild);
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
+                audioTrack.setUserData(new TrackUserData(eventOrChannel));
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
-                    EmbedBuilder embed = createTrackEmbed(audioTrack);
-                    if (event != null) {
-                        event.replyEmbeds(embed.build());
-                    } else {
-                        commandChannel.sendMessageEmbeds(embed.build()).queue();
-                    }
+                    replyWithEmbed(eventOrChannel, createTrackEmbed(audioTrack).build());
                 }
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.TRACK_LOADED);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
-                boolean autoplaying = AutoplayGuilds.contains(commandChannel.getGuild().getIdLong());
+                boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
@@ -144,12 +193,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            EmbedBuilder embed = createTrackEmbed(track);
-                            if (!autoplaying && event != null) {
-                                event.replyEmbeds(embed.build());
-                            } else {
-                                commandChannel.sendMessageEmbeds(embed.build()).queue();
-                            }
+                            replyWithEmbed(eventOrChannel, createTrackEmbed(track).build(), autoplaying);
                         }
                     } else {
                         EmbedBuilder embed = new EmbedBuilder();
@@ -173,49 +217,39 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        if (event != null) {
-                            event.replyEmbeds(embed.build());
-                        } else {
-                            commandChannel.sendMessageEmbeds(embed.build()).queue();
-                        }
+                        replyWithEmbed(eventOrChannel, embed.build());
                     }
                     for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new Object[]{event, commandChannel.getId()});
+                        audioTrack.setUserData(new TrackUserData(eventOrChannel));
                     }
                 }
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
             }
 
             @Override
             public void noMatches() {
-                event.replyEmbeds(createQuickError("No matches found for the track."));
+                if (sendEmbed)
+                    replyWithEmbed(eventOrChannel, createQuickError("No matches found for the track."));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
-                OnCompletion.run();
+                loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
                 System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
-                skips.remove(commandChannel.getGuild().getIdLong());
+                skips.remove(commandGuild.getIdLong());
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
                 if (e.getMessage().toLowerCase().contains("search response: 400")) {
                     loadFailedBuilder.append("An error with the youtube search API has occurred. ");
                 }
                 loadFailedBuilder.append(e.getMessage());
-                event.replyEmbeds(createQuickError("The track failed to load: " + loadFailedBuilder));
-                OnCompletion.run();
+                if (sendEmbed)
+                    replyWithEmbed(eventOrChannel, createQuickError("The track failed to load: " + loadFailedBuilder));
+                loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
-    }
-
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed, Runnable OnCompletion) {
-        loadAndPlay(event, trackUrl, sendEmbed, OnCompletion, null);
-    }
-
-    public void loadAndPlay(MessageEvent event, String trackUrl, Boolean sendEmbed) {
-        loadAndPlay(event, trackUrl, sendEmbed, () -> {
-        }, null);
+        return loadResultFuture;
     }
 
     @Nullable

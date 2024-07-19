@@ -113,15 +113,7 @@ public class CommandQueue extends BaseCommand {
         embed.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
-        if (!event.isSlash()) { //Incredibly hacky fix because @9382 doesn't want to implement all the backend just for this
-            ((MessageReceivedEvent) event.getCoreEvent()).getMessage().replyEmbeds(embed.build()).queue(
-                    message -> message.editMessageComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue()
-            );
-        } else {
-            ((SlashCommandInteractionEvent) event.getCoreEvent()).replyEmbeds(embed.build()).queue(
-                    message -> message.editOriginalComponents().setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")).queue()
-            );
-        }
+        event.replyEmbeds(message -> message.setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")), embed.build());
     }
 
     @Override
