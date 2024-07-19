@@ -67,10 +67,14 @@ public class CommandPlay extends BaseCommand {
                 }
             } else {
                 try {
-                    for (Message.Attachment attachment : attachments) {
-                        PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
+                    if (attachments.size() == 1) {
+                        PlayerManager.getInstance().loadAndPlay(event, attachments.get(0).getUrl(), true);
+                    } else {
+                        for (Message.Attachment attachment : attachments) {
+                            PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
+                        }
+                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + attachments.size() + " tracks from attachments."));
                     }
-                    event.reply("Queued " + attachments.size() + " tracks from attachments.");
                 } catch (Exception e) {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from attachments.\n```\n" + e.getMessage() + "\n```"));
                 }
