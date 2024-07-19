@@ -217,7 +217,9 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        replyWithEmbed(eventOrChannel, embed.build());
+                        if (sendEmbed) {
+                            replyWithEmbed(eventOrChannel, embed.build());
+                        }
                     }
                     for (AudioTrack audioTrack : tracks) {
                         audioTrack.setUserData(new TrackUserData(eventOrChannel));
