@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -46,8 +47,7 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static Bots.GuildDataManager.GetConfig;
-import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.GuildDataManager.*;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -639,6 +639,15 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         // nothing to do
+    }
+
+    @Override
+    public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+        if (event.getUser() == bot.getSelfUser()) {
+            File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
+            boolean isDeleted = jsonFile.delete();
+            if (!isDeleted) jsonFile.deleteOnExit();
+        }
     }
 
     @Override
