@@ -16,7 +16,9 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -516,6 +518,10 @@ public class Main extends ListenerAdapter {
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         trackLoops.remove(event.getGuild().getIdLong());
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
+        File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
+        GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
+        boolean isDeleted = jsonFile.delete();
+        if (!isDeleted) jsonFile.deleteOnExit();
     }
 
     @Override
@@ -635,16 +641,6 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         // nothing to do
-    }
-
-    @Override
-    public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
-        if (event.getUser() == bot.getSelfUser()) {
-            File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
-            GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
-            boolean isDeleted = jsonFile.delete();
-            if (!isDeleted) jsonFile.deleteOnExit();
-        }
     }
 
     @Override
