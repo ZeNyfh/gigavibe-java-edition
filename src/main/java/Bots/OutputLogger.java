@@ -15,12 +15,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class OutputLogger {
+    public static final PrintStream out = System.out;
+    public static final PrintStream err = System.err;
     private static final ByteArrayOutputStream MergedLogStream = new ByteArrayOutputStream();
     private static boolean INITIALISED = false;
     private static FileWriter logger;
     private static TimerTask logTask;
-    public static final PrintStream out = System.out;
-    public static final PrintStream err = System.err;
     private static boolean ReadyForTimestamp = true; // This is an awkward static with how its used but its needed
 
     // IMPLEMENTATION NOTES
@@ -33,96 +33,6 @@ public class OutputLogger {
 
     //TODO: err/out should be forced onto new lines if printing on top of a non-newline of the other type
     // (Makes it easier to understand the log and would allow us to prefix logs with LOG/ERR for neatness)
-
-    private static class TimestampedOutputStream extends OutputStream {
-        private final DateTimeFormatter dtf;
-        private final OutputStream original;
-
-        public TimestampedOutputStream(@NotNull OutputStream original) {
-            super();
-            this.dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            this.original = original;
-        }
-
-        public TimestampedOutputStream(@NotNull OutputStream original, DateTimeFormatter dtf) {
-            super();
-            this.dtf = dtf;
-            this.original = original;
-        }
-
-        private byte[] getTimestamp() {
-            return (dtf.format(LocalDateTime.now()) + " | ").getBytes();
-        }
-
-        private synchronized void considerTimestamp(int off) throws IOException {
-            if (ReadyForTimestamp) {
-                byte[] ts = getTimestamp();
-                original.write(ts, off, ts.length);
-            }
-        }
-
-        @Override
-        public synchronized void write(int b) throws IOException {
-            write(new byte[]{(byte) b}, 0, 1);
-        }
-
-        @Override
-        public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
-            // Force timestamps at every newline even if part of the same buffer
-            int lastNewline = -1;
-            byte[] d = new byte[len];
-            for (int i = 0; i < len; i++) {
-                if (b[i] == 10) { // Arrived at a newline
-                    considerTimestamp(off);
-                    System.arraycopy(b, lastNewline+1, d, 0, i-lastNewline);
-                    original.write(d, off, i-lastNewline);
-                    ReadyForTimestamp = true;
-                    lastNewline = i;
-                }
-            }
-            if (lastNewline+1 != len) { // Content after the last seen newline
-                considerTimestamp(off);
-                System.arraycopy(b, lastNewline+1, d, 0, len-lastNewline-1);
-                original.write(d, off, len-lastNewline-1);
-                ReadyForTimestamp = false;
-            }
-        }
-
-        @Override
-        public synchronized void flush() throws IOException {
-            this.original.flush();
-        }
-    }
-
-    private static class DualChannelOutputStream extends OutputStream {
-        private final OutputStream original;
-        private final OutputStream listener;
-
-        // This stream is never written to itself, it only serves as an interface for 2 different streams
-        public DualChannelOutputStream(@NotNull OutputStream original, @NotNull OutputStream listener) {
-            super();
-            this.original = original;
-            this.listener = listener;
-        }
-
-        @Override
-        public synchronized void write(int b) throws IOException {
-            this.original.write(b);
-            this.listener.write(b);
-        }
-
-        @Override
-        public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
-            this.original.write(b, off, len);
-            this.listener.write(b, off, len);
-        }
-
-        @Override
-        public synchronized void flush() throws IOException {
-            this.original.flush();
-            this.listener.flush();
-        }
-    }
 
     private synchronized static void WriteLogs() throws IOException {
         String logText = MergedLogStream.toString();
@@ -193,6 +103,96 @@ public class OutputLogger {
                 err.println("Failed to handle hooked logs on close: " + e);
             }
             INITIALISED = false;
+        }
+    }
+
+    private static class TimestampedOutputStream extends OutputStream {
+        private final DateTimeFormatter dtf;
+        private final OutputStream original;
+
+        public TimestampedOutputStream(@NotNull OutputStream original) {
+            super();
+            this.dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            this.original = original;
+        }
+
+        public TimestampedOutputStream(@NotNull OutputStream original, DateTimeFormatter dtf) {
+            super();
+            this.dtf = dtf;
+            this.original = original;
+        }
+
+        private byte[] getTimestamp() {
+            return (dtf.format(LocalDateTime.now()) + " | ").getBytes();
+        }
+
+        private synchronized void considerTimestamp(int off) throws IOException {
+            if (ReadyForTimestamp) {
+                byte[] ts = getTimestamp();
+                original.write(ts, off, ts.length);
+            }
+        }
+
+        @Override
+        public synchronized void write(int b) throws IOException {
+            write(new byte[]{(byte) b}, 0, 1);
+        }
+
+        @Override
+        public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
+            // Force timestamps at every newline even if part of the same buffer
+            int lastNewline = -1;
+            byte[] d = new byte[len];
+            for (int i = 0; i < len; i++) {
+                if (b[i] == 10) { // Arrived at a newline
+                    considerTimestamp(off);
+                    System.arraycopy(b, lastNewline + 1, d, 0, i - lastNewline);
+                    original.write(d, off, i - lastNewline);
+                    ReadyForTimestamp = true;
+                    lastNewline = i;
+                }
+            }
+            if (lastNewline + 1 != len) { // Content after the last seen newline
+                considerTimestamp(off);
+                System.arraycopy(b, lastNewline + 1, d, 0, len - lastNewline - 1);
+                original.write(d, off, len - lastNewline - 1);
+                ReadyForTimestamp = false;
+            }
+        }
+
+        @Override
+        public synchronized void flush() throws IOException {
+            this.original.flush();
+        }
+    }
+
+    private static class DualChannelOutputStream extends OutputStream {
+        private final OutputStream original;
+        private final OutputStream listener;
+
+        // This stream is never written to itself, it only serves as an interface for 2 different streams
+        public DualChannelOutputStream(@NotNull OutputStream original, @NotNull OutputStream listener) {
+            super();
+            this.original = original;
+            this.listener = listener;
+        }
+
+        @Override
+        public synchronized void write(int b) throws IOException {
+            this.original.write(b);
+            this.listener.write(b);
+        }
+
+        @Override
+        public synchronized void write(@NotNull byte[] b, int off, int len) throws IOException {
+            this.original.write(b, off, len);
+            this.listener.write(b, off, len);
+        }
+
+        @Override
+        public synchronized void flush() throws IOException {
+            this.original.flush();
+            this.listener.flush();
         }
     }
 }

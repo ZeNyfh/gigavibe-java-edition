@@ -24,7 +24,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -41,37 +44,6 @@ public class PlayerManager {
     private static boolean hasSpotify;
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
-
-    public enum LoadResult {
-        TRACK_LOADED(true),
-        PLAYLIST_LOADED(true),
-        NO_MATCHES(false),
-        LOAD_FAILED(false);
-
-        public final boolean songWasPlayed;
-
-        LoadResult(boolean songWasPlayed) {
-            this.songWasPlayed = songWasPlayed;
-        }
-    }
-
-    public static class TrackUserData {
-        public final Object eventOrChannel;
-        public final Long channelId;
-        public final Long guildId;
-
-        public TrackUserData(Object eventOrChannel) {
-            this.eventOrChannel = eventOrChannel;
-            GuildMessageChannelUnion channel;
-            if (eventOrChannel instanceof MessageEvent) {
-                channel = ((MessageEvent) eventOrChannel).getChannel();
-            } else {
-                channel = (GuildMessageChannelUnion) eventOrChannel;
-            }
-            this.channelId = channel.getIdLong();
-            this.guildId = channel.getGuild().getIdLong();
-        }
-    }
 
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
@@ -304,5 +276,36 @@ public class PlayerManager {
             return null;
         }
         return null;
+    }
+
+    public enum LoadResult {
+        TRACK_LOADED(true),
+        PLAYLIST_LOADED(true),
+        NO_MATCHES(false),
+        LOAD_FAILED(false);
+
+        public final boolean songWasPlayed;
+
+        LoadResult(boolean songWasPlayed) {
+            this.songWasPlayed = songWasPlayed;
+        }
+    }
+
+    public static class TrackUserData {
+        public final Object eventOrChannel;
+        public final Long channelId;
+        public final Long guildId;
+
+        public TrackUserData(Object eventOrChannel) {
+            this.eventOrChannel = eventOrChannel;
+            GuildMessageChannelUnion channel;
+            if (eventOrChannel instanceof MessageEvent) {
+                channel = ((MessageEvent) eventOrChannel).getChannel();
+            } else {
+                channel = (GuildMessageChannelUnion) eventOrChannel;
+            }
+            this.channelId = channel.getIdLong();
+            this.guildId = channel.getGuild().getIdLong();
+        }
     }
 }

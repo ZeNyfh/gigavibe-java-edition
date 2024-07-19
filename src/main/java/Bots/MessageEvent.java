@@ -295,6 +295,7 @@ public class MessageEvent {
                 ((Message) this.coreObject).editMessageComponents().setActionRow(actionRow).queue();
             }
         }
+
         public void setActionRow(List<ItemComponent> actionRow) {
             setActionRow(actionRow.toArray(new ItemComponent[0]));
         }
