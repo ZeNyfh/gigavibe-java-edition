@@ -641,6 +641,7 @@ public class Main extends ListenerAdapter {
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
         if (event.getUser() == bot.getSelfUser()) {
             File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
+            GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
             boolean isDeleted = jsonFile.delete();
             if (!isDeleted) jsonFile.deleteOnExit();
         }
