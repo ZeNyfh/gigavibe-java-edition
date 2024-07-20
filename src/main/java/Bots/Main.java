@@ -606,7 +606,8 @@ public class Main extends ListenerAdapter {
 
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
-        commandLower = commandLower.replaceFirst(botPrefix, "").trim();
+        commandLower = commandLower.replaceFirst(botPrefix, "").trim().replaceAll(" +", " ");
+        System.out.println("\""+commandLower+"\"");
         if (commandLower.startsWith(matchTerm)) {
             if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
