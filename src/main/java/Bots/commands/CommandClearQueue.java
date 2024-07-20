@@ -6,7 +6,8 @@ import Bots.MessageEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.skips;
 
 public class CommandClearQueue extends BaseCommand {
     @Override

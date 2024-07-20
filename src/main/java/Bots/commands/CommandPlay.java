@@ -13,10 +13,11 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
@@ -25,6 +26,7 @@ public class CommandPlay extends BaseCommand {
     final public Set<String> audioFiles = Set.of(
             "mp3", "mp4", "wav", "ogg", "flac", "mov", "wmv", "m4a", "aac", "webm", "opus", "m3u", "txt"
     );
+
     @Override
     public Check[] getChecks() {
         return new Check[]{Check.IS_CHANNEL_BLOCKED, Check.TRY_JOIN_VC};
@@ -67,10 +69,14 @@ public class CommandPlay extends BaseCommand {
                 }
             } else {
                 try {
-                    for (Message.Attachment attachment : attachments) {
-                        PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
+                    if (attachments.size() == 1) {
+                        PlayerManager.getInstance().loadAndPlay(event, attachments.get(0).getUrl(), true);
+                    } else {
+                        for (Message.Attachment attachment : attachments) {
+                            PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
+                        }
+                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + attachments.size() + " tracks from attachments."));
                     }
-                    event.reply("Queued " + attachments.size() + " tracks from attachments.");
                 } catch (Exception e) {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from attachments.\n```\n" + e.getMessage() + "\n```"));
                 }
@@ -84,7 +90,7 @@ public class CommandPlay extends BaseCommand {
             String[] links = link.split("http");
             List<String> linksList = new ArrayList<>();
             for (String str : links) {
-                linksList.add(("http"+str)
+                linksList.add(("http" + str)
                         .replace("youtube.com/shorts/", "youtube.com/watch?v=")
                         .replace("youtu.be/", "www.youtube.com/watch?v=").trim()
                 );
@@ -120,6 +126,7 @@ public class CommandPlay extends BaseCommand {
             }
         }
     }
+
     @Override
     public Category getCategory() {
         return Category.Music;

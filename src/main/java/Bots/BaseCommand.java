@@ -9,10 +9,6 @@ import static Bots.CommandStateChecker.*;
 public abstract class BaseCommand {
     public SlashCommandData slashCommand;
 
-    public enum Category {
-        General, Music, DJ, Admin, Dev
-    }
-
     public void Init() { //Optional initialisation stuff if something is required on start for a command
     }
 
@@ -46,5 +42,9 @@ public abstract class BaseCommand {
 
     public long getRatelimit() { //Ratelimit in milliseconds
         return 0;
+    }
+
+    public enum Category {
+        General, Music, DJ, Admin, Dev
     }
 }

@@ -16,6 +16,9 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -48,16 +51,15 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static Bots.GuildDataManager.GetConfig;
-import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.GuildDataManager.*;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     public static final long BootTime = currentTimeMillis();
     public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
-    public static JSONObject commandUsageTracker;
     private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+    public static JSONObject commandUsageTracker;
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
@@ -74,10 +76,6 @@ public class Main extends ListenerAdapter {
     public static HashMap<Long, Integer> trackLoops = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
     private static JDA bot;
-
-    public enum audioFilters {
-        Vibrato, Timescale
-    }
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
@@ -325,8 +323,8 @@ public class Main extends ListenerAdapter {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 final File updateFile = new File("update/bot.jar");
-                int cleanUpTime = 0;
                 final File tempDir = new File("temp/");
+                int cleanUpTime = 0;
 
                 @Override
                 public void run() {
@@ -488,6 +486,31 @@ public class Main extends ListenerAdapter {
         ButtonInteractionMappings.put(name, func);
     }
 
+    public static void cleanUpAudioPlayer(Guild guild) {
+        Long id = guild.getIdLong();
+        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
+        LoopGuilds.remove(id);
+        LoopQueueGuilds.remove(id);
+        AutoplayGuilds.remove(id);
+        manager.audioPlayer.setVolume(100);
+        manager.scheduler.queue.clear();
+        manager.audioPlayer.destroy();
+        manager.audioPlayer.setPaused(false);
+        manager.audioPlayer.checkCleanup(0);
+        guild.getAudioManager().closeAudioConnection();
+        skips.remove(guild.getIdLong());
+    }
+
+    public static void killMain() {
+        SaveConfigs();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         trackLoops.put(event.getGuild().getIdLong(), 0);
@@ -498,6 +521,10 @@ public class Main extends ListenerAdapter {
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         trackLoops.remove(event.getGuild().getIdLong());
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
+        File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
+        GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
+        boolean isDeleted = jsonFile.delete();
+        if (!isDeleted) jsonFile.deleteOnExit();
     }
 
     @Override
@@ -547,21 +574,6 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static void cleanUpAudioPlayer(Guild guild) {
-        Long id = guild.getIdLong();
-        GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(guild);
-        LoopGuilds.remove(id);
-        LoopQueueGuilds.remove(id);
-        AutoplayGuilds.remove(id);
-        manager.audioPlayer.setVolume(100);
-        manager.scheduler.queue.clear();
-        manager.audioPlayer.destroy();
-        manager.audioPlayer.setPaused(false);
-        manager.audioPlayer.checkCleanup(0);
-        guild.getAudioManager().closeAudioConnection();
-        skips.remove(guild.getIdLong());
-    }
-
     private float handleRateLimit(BaseCommand Command, Member member) {
         long ratelimit = Command.getRatelimit();
         long lastRatelimit = ratelimitTracker.get(Command).getOrDefault(member.getIdLong(), 0L);
@@ -599,7 +611,8 @@ public class Main extends ListenerAdapter {
 
     private boolean processCommand(String matchTerm, BaseCommand Command, MessageReceivedEvent event) {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
-        commandLower = commandLower.replaceFirst(botPrefix, "").trim();
+        commandLower = commandLower.replaceFirst(botPrefix, "").trim().replaceAll(" +", " ");
+        System.out.println("\""+commandLower+"\"");
         if (commandLower.startsWith(matchTerm)) {
             if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
@@ -626,16 +639,6 @@ public class Main extends ListenerAdapter {
             return true;
         }
         return false;
-    }
-
-    public static void killMain() {
-        SaveConfigs();
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.exit(0);
     }
 
     @Override
@@ -673,5 +676,9 @@ public class Main extends ListenerAdapter {
                 }
             }
         }
+    }
+
+    public enum audioFilters {
+        Vibrato, Timescale
     }
 }
