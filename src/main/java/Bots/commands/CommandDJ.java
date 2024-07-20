@@ -20,15 +20,12 @@ import static Bots.Main.*;
 
 public class CommandDJ extends BaseCommand {
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
-    private JSONObject config;
-    private JSONArray DJRoles;
-    private JSONArray DJUsers;
 
     @Override
     public void execute(MessageEvent event) {
-        config = event.getConfig();
-        DJRoles = (JSONArray) config.get("DJRoles");
-        DJUsers = (JSONArray) config.get("DJUsers");
+        JSONObject config = event.getConfig();
+        JSONArray DJRoles = (JSONArray) config.get("DJRoles");
+        JSONArray DJUsers = (JSONArray) config.get("DJUsers");
 
         boolean isAdding = event.getArgs()[1].equalsIgnoreCase("add");
         boolean isRemoving = event.getArgs()[1].equalsIgnoreCase("remove");
@@ -97,20 +94,20 @@ public class CommandDJ extends BaseCommand {
             if (isAdding) {
                 for (long member : FoundMembers) {
                     if (!DJUsers.contains(member)) {
-                        modifyDJ(guildObjectType.member.ordinal(), member, true);
+                        modifyDJ(guildObjectType.member.ordinal(), member, true, config);
                     }
                 }
                 for (long role : FoundRoles) {
                     if (!DJRoles.contains(role)) {
-                        modifyDJ(guildObjectType.role.ordinal(), role, true);
+                        modifyDJ(guildObjectType.role.ordinal(), role, true, config);
                     }
                 }
             } else { // Removing instead
                 for (long member : FoundMembers) {
-                    modifyDJ(guildObjectType.member.ordinal(), member, false);
+                    modifyDJ(guildObjectType.member.ordinal(), member, false, config);
                 }
                 for (long role : FoundRoles) {
-                    modifyDJ(guildObjectType.role.ordinal(), role, false);
+                    modifyDJ(guildObjectType.role.ordinal(), role, false, config);
                 }
             }
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
@@ -139,14 +136,16 @@ public class CommandDJ extends BaseCommand {
         role, member
     }
 
-    private synchronized void modifyDJ(int type, long id, boolean isAdding) {
+    private synchronized void modifyDJ(int type, long id, boolean isAdding, JSONObject config) {
         if (type == 0) { // role
+            JSONArray DJRoles = (JSONArray) config.get("DJRoles");
             if (isAdding) { // is adding
                 DJRoles.add(id);
             } else { // is removing
                 DJRoles.remove(id);
             }
         } else { // member
+            JSONArray DJUsers = (JSONArray) config.get("DJUsers");
             if (isAdding) { // is adding
                 DJUsers.add(id);
             } else { // is removing
