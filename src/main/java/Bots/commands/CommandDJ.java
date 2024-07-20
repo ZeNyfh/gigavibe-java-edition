@@ -20,12 +20,15 @@ import static Bots.Main.*;
 
 public class CommandDJ extends BaseCommand {
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
+    private JSONObject config;
+    private JSONArray DJRoles;
+    private JSONArray DJUsers;
 
     @Override
     public void execute(MessageEvent event) {
-        JSONObject config = event.getConfig();
-        JSONArray DJRoles = (JSONArray) config.get("DJRoles");
-        JSONArray DJUsers = (JSONArray) config.get("DJUsers");
+        config = event.getConfig();
+        DJRoles = (JSONArray) config.get("DJRoles");
+        DJUsers = (JSONArray) config.get("DJUsers");
 
         boolean isAdding = event.getArgs()[1].equalsIgnoreCase("add");
         boolean isRemoving = event.getArgs()[1].equalsIgnoreCase("remove");
@@ -90,23 +93,24 @@ public class CommandDJ extends BaseCommand {
                 event.replyEmbeds(createQuickError("No members or roles were specified."));
                 return;
             }
+
             if (isAdding) {
                 for (long member : FoundMembers) {
                     if (!DJUsers.contains(member)) {
-                        DJUsers.add(member);
+                        modifyDJ(guildObjectType.member.ordinal(), member, true);
                     }
                 }
                 for (long role : FoundRoles) {
                     if (!DJRoles.contains(role)) {
-                        DJRoles.add(role);
+                        modifyDJ(guildObjectType.role.ordinal(), role, true);
                     }
                 }
             } else { // Removing instead
                 for (long member : FoundMembers) {
-                    DJUsers.remove(member);
+                    modifyDJ(guildObjectType.member.ordinal(), member, false);
                 }
                 for (long role : FoundRoles) {
-                    DJRoles.remove(role);
+                    modifyDJ(guildObjectType.role.ordinal(), role, false);
                 }
             }
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
@@ -128,6 +132,26 @@ public class CommandDJ extends BaseCommand {
             }
         } else {
             event.replyEmbeds(createQuickError("Invalid arguments."));
+        }
+    }
+
+    private enum guildObjectType {
+        role, member
+    }
+
+    private synchronized void modifyDJ(int type, long id, boolean isAdding) {
+        if (type == 0) { // role
+            if (isAdding) { // is adding
+                DJRoles.add(id);
+            } else { // is removing
+                DJRoles.remove(id);
+            }
+        } else { // member
+            if (isAdding) { // is adding
+                DJUsers.add(id);
+            } else { // is removing
+                DJUsers.remove(id);
+            }
         }
     }
 
