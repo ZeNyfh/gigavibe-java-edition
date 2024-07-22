@@ -81,7 +81,8 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
-                if (trackInfo.isStream) {
+                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch"));
+                if (trackInfo.isStream && !isHTTP) {
                     String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
