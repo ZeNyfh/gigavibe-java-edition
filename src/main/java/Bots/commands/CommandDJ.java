@@ -90,23 +90,24 @@ public class CommandDJ extends BaseCommand {
                 event.replyEmbeds(createQuickError("No members or roles were specified."));
                 return;
             }
+
             if (isAdding) {
                 for (long member : FoundMembers) {
                     if (!DJUsers.contains(member)) {
-                        DJUsers.add(member);
+                        modifyDJ(guildObjectType.member.ordinal(), member, true, config);
                     }
                 }
                 for (long role : FoundRoles) {
                     if (!DJRoles.contains(role)) {
-                        DJRoles.add(role);
+                        modifyDJ(guildObjectType.role.ordinal(), role, true, config);
                     }
                 }
             } else { // Removing instead
                 for (long member : FoundMembers) {
-                    DJUsers.remove(member);
+                    modifyDJ(guildObjectType.member.ordinal(), member, false, config);
                 }
                 for (long role : FoundRoles) {
-                    DJRoles.remove(role);
+                    modifyDJ(guildObjectType.role.ordinal(), role, false, config);
                 }
             }
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
@@ -128,6 +129,28 @@ public class CommandDJ extends BaseCommand {
             }
         } else {
             event.replyEmbeds(createQuickError("Invalid arguments."));
+        }
+    }
+
+    private enum guildObjectType {
+        role, member
+    }
+
+    private synchronized void modifyDJ(int type, long id, boolean isAdding, JSONObject config) {
+        if (type == 0) { // role
+            JSONArray DJRoles = (JSONArray) config.get("DJRoles");
+            if (isAdding) { // is adding
+                DJRoles.add(id);
+            } else { // is removing
+                DJRoles.remove(id);
+            }
+        } else { // member
+            JSONArray DJUsers = (JSONArray) config.get("DJUsers");
+            if (isAdding) { // is adding
+                DJUsers.add(id);
+            } else { // is removing
+                DJUsers.remove(id);
+            }
         }
     }
 
