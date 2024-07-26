@@ -523,8 +523,7 @@ public class Main extends ListenerAdapter {
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
         File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
         GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
-        boolean isDeleted = jsonFile.delete();
-        if (!isDeleted) jsonFile.deleteOnExit();
+        jsonFile.delete();
     }
 
     @Override
