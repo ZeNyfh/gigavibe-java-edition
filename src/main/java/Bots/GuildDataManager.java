@@ -97,7 +97,7 @@ public class GuildDataManager {
         return CreateConfig(Filename, new JSONObject());
     }
 
-    private static JSONObject CreateGuildConfig(long GuildID) throws IOException { //Guild-based config, ensures it has the normal guild content
+    public static JSONObject CreateGuildConfig(long GuildID) throws IOException { //Guild-based config, ensures it has the normal guild content
         return CreateConfig(String.valueOf(GuildID), CreateGuildObject());
     }
 
@@ -206,6 +206,19 @@ public class GuildDataManager {
             }
         }
         throw new NullPointerException();
+    }
+
+    public static void RemoveConfig(Object identifier) {
+        JSONObject config = Configs.get(identifier);
+        if (config == null) {
+            System.err.println("Attempted to remove the config " + identifier + " but no such config exists");
+            return;
+        }
+        String filePath = configFolder + "/" + identifier + ".json";
+        if (!new File(filePath).delete()) {
+            System.err.println("Unable to delete the config file for " + identifier); // In the context of guilds leaving, this isn't an issue
+        }
+        Configs.remove(identifier);
     }
 
     public static void SaveQueues(JDA bot) { // queue restoration can only occur once because this here does NOT give the tracks their data.

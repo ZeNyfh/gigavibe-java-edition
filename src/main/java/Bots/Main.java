@@ -36,6 +36,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -515,15 +516,18 @@ public class Main extends ListenerAdapter {
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         trackLoops.put(event.getGuild().getIdLong(), 0);
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
+        try {
+            GuildDataManager.CreateGuildConfig(event.getGuild().getIdLong());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         trackLoops.remove(event.getGuild().getIdLong());
         event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
-        File jsonFile = new File(configFolder + File.separator + event.getGuild().getId() + ".json");
-        GuildDataManager.GetGuildConfig(event.getGuild().getIdLong()).clear();
-        jsonFile.delete();
+        GuildDataManager.RemoveConfig(event.getGuild().getIdLong());
     }
 
     @Override
