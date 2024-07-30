@@ -21,10 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static Bots.Main.*;
 
@@ -61,7 +58,6 @@ public class GuildDataManager {
 
     private static JSONObject CreateGuildObject() { //Useful base-plate config
         JSONObject defaultConfig = new JSONObject();
-        defaultConfig.put("announcementChannels", new JSONArray());
         defaultConfig.put("BlockedChannels", new JSONArray());
         defaultConfig.put("DJRoles", new JSONArray());
         defaultConfig.put("DJUsers", new JSONArray());
@@ -149,10 +145,11 @@ public class GuildDataManager {
                 }
             }
         }
-        for (Object key : config.keySet()) {
+        for (Iterator it = config.keySet().iterator(); it.hasNext(); ) {
+            Object key = it.next();
             if (!baseConfig.containsKey(key)) {
                 System.err.println("Config " + GuildID + " has unrecognised key " + key);
-                config.remove(key); //Remove
+                it.remove(); //Remove
             }
         }
 
