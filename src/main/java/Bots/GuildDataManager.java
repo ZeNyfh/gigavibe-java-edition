@@ -56,7 +56,7 @@ public class GuildDataManager {
         System.out.println("Guild Data manager initialised");
     }
 
-    private static JSONObject CreateGuildObject() { //Useful base-plate config
+    private static JSONObject CreateGuildObject() { //Base guild config
         JSONObject defaultConfig = new JSONObject();
         defaultConfig.put("BlockedChannels", new JSONArray());
         defaultConfig.put("DJRoles", new JSONArray());
@@ -98,7 +98,7 @@ public class GuildDataManager {
         return CreateConfig(String.valueOf(GuildID), CreateGuildObject());
     }
 
-    private static JSONObject ReadConfig(String Filename) throws IOException { //Helper to GetConfig, safely fetches a guild's config
+    private static JSONObject ReadConfig(String Filename) throws IOException { //Helper to GetConfig, safely fetches a config
         String filePath = configFolder + "/" + Filename + ".json";
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader(filePath);
@@ -116,7 +116,7 @@ public class GuildDataManager {
         return config;
     }
 
-    private static JSONObject ReadGuildConfig(long GuildID) throws IOException { //Helper to GetConfig, safely fetches a guild's config
+    private static JSONObject ReadGuildConfig(long GuildID) throws IOException { //Helper to GetGuildConfig, safely fetches a guild's config
         //Get the config
         String filePath = configFolder + "/" + GuildID + ".json";
         JSONParser parser = new JSONParser();
@@ -158,7 +158,7 @@ public class GuildDataManager {
         return config;
     }
 
-    public static JSONObject GetConfig(String Filename) { //Gets the config for the requested GuildID
+    public static JSONObject GetConfig(String Filename) {
         if (Configs.containsKey(Filename)) { //Already loaded
             return Configs.get(Filename);
         } else { //Need to load it
