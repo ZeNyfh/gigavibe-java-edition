@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 
 import static Bots.Main.LoopQueueGuilds;
 import static Bots.Main.createQuickEmbed;
@@ -14,7 +14,7 @@ public class CommandLoopQueue extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue."));
             LoopQueueGuilds.remove(event.getGuild().getIdLong());

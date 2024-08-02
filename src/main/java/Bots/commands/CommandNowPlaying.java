@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
@@ -22,7 +22,7 @@ public class CommandNowPlaying extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         final AudioTrack track = audioPlayer.getPlayingTrack();

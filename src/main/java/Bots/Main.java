@@ -514,7 +514,7 @@ public class Main extends ListenerAdapter {
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
                 commandThreads.submit(() -> {
                     try {
-                        Command.executeWithChecks(new MessageEvent(event));
+                        Command.executeWithChecks(new CommandEvent(event));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -545,7 +545,7 @@ public class Main extends ListenerAdapter {
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
                 commandThreads.submit(() -> {
                     try {
-                        Command.executeWithChecks(new MessageEvent(event));
+                        Command.executeWithChecks(new CommandEvent(event));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

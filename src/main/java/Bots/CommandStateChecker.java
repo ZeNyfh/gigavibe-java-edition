@@ -20,7 +20,7 @@ import java.util.Objects;
 public class CommandStateChecker {
     private static final CheckResult success = new CheckResult(true, "(You should never see this message)");
 
-    public static CheckResult PerformChecks(MessageEvent event, Check... checks) {
+    public static CheckResult PerformChecks(CommandEvent event, Check... checks) {
         CheckResult result = success;
         for (Check check : checks) {
             switch (check) {
@@ -40,7 +40,7 @@ public class CommandStateChecker {
         return result;
     }
 
-    private static CheckResult IsUserInAnyVc(MessageEvent event) {
+    private static CheckResult IsUserInAnyVc(CommandEvent event) {
         return new CheckResult(
                 Objects.requireNonNull(event.getMember().getVoiceState()).inAudioChannel(),
                 "You aren't in a VC."
@@ -56,7 +56,7 @@ public class CommandStateChecker {
     // IS_PLAYING -> Checks if the bot is currently playing any audio
     // IS_DEV -> Checks if the user invoking the command is defined as a developer
 
-    private static CheckResult IsBotInAnyVc(MessageEvent event) {
+    private static CheckResult IsBotInAnyVc(CommandEvent event) {
         return new CheckResult(
                 Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel(),
                 "The bot isn't in a VC."
@@ -65,7 +65,7 @@ public class CommandStateChecker {
 
     //-- The actual testing methods --//
 
-    private static CheckResult IsInSameVc(MessageEvent event) {
+    private static CheckResult IsInSameVc(CommandEvent event) {
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
 
@@ -79,7 +79,7 @@ public class CommandStateChecker {
     }
 
     // This will cause the bot to join the VC if checks pass, so make sure this occurs later on
-    private static CheckResult TryJoinVc(MessageEvent event) {
+    private static CheckResult TryJoinVc(CommandEvent event) {
         AudioManager audioManager = event.getGuild().getAudioManager();
         GuildVoiceState memberState = Objects.requireNonNull(event.getMember().getVoiceState());
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
@@ -106,7 +106,7 @@ public class CommandStateChecker {
         }
     }
 
-    private static CheckResult IsDJ(MessageEvent event) {
+    private static CheckResult IsDJ(CommandEvent event) {
         Member member = event.getMember();
         Guild guild = event.getGuild();
         if (member.getVoiceState() != null && member.getVoiceState().getChannel() != null) {
@@ -147,7 +147,7 @@ public class CommandStateChecker {
         return new CheckResult(check, "You do not have a DJ permissions.");
     }
 
-    private static CheckResult IsChannelBlocked(MessageEvent event) {
+    private static CheckResult IsChannelBlocked(CommandEvent event) {
         JSONObject config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (Object blockedChannel : blockedChannels) {
@@ -158,14 +158,14 @@ public class CommandStateChecker {
         return success;
     }
 
-    private static CheckResult IsPlaying(MessageEvent event) {
+    private static CheckResult IsPlaying(CommandEvent event) {
         return new CheckResult(
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null,
                 "The bot is not currently playing anything."
         );
     }
 
-    private static CheckResult IsDev(MessageEvent event) { // Would BOT_ADMINS be more appropriate?
+    private static CheckResult IsDev(CommandEvent event) { // Would BOT_ADMINS be more appropriate?
         Dotenv dotenv = Dotenv.load();
         var matchesAny = false;
 

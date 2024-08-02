@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -90,7 +90,7 @@ public class CommandHelp extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         Category userCategory = null;
         if (event.getArgs().length > 1) {
             for (Category category : Category.values()) {

@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.*;
@@ -17,7 +17,7 @@ public class CommandGetDump extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         new File("temp/dump.txt").delete();
         event.deferReply();
         try {

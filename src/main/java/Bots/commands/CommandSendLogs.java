@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -26,7 +26,7 @@ public class CommandSendLogs extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(CommandEvent event) throws IOException {
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError("No arguments specified"));
             return;

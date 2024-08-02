@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
@@ -26,7 +26,7 @@ public class CommandSkip extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = Objects.requireNonNull(self.getVoiceState());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

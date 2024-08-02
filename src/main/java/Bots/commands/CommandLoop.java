@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 
 import static Bots.Main.LoopGuilds;
 import static Bots.Main.createQuickEmbed;
@@ -14,7 +14,7 @@ public class CommandLoop extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
             event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track."));
             LoopGuilds.remove(event.getGuild().getIdLong());

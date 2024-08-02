@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import net.dv8tion.jda.api.entities.Message;
@@ -35,7 +35,7 @@ public class CommandPlay extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(CommandEvent event) throws IOException {
         event.deferReply(); //expect to take a while
         String string = event.getContentRaw();
         String[] args = string.split(" ", 2);
@@ -95,7 +95,7 @@ public class CommandPlay extends BaseCommand {
         }
     }
 
-    private static boolean playFromTXT(MessageEvent event, boolean isAttachment) throws IOException {
+    private static boolean playFromTXT(CommandEvent event, boolean isAttachment) throws IOException {
         URL url;
         if (isAttachment) {
             Message.Attachment att = event.getAttachments().get(0);

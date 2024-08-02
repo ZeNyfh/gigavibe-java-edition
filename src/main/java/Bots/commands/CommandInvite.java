@@ -1,13 +1,13 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 
 import static Bots.Main.createQuickEmbed;
 
 public class CommandInvite extends BaseCommand {
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         event.replyEmbeds(createQuickEmbed("**Have fun!**", "http://zenvibe.ddns.net/"));
     }
 

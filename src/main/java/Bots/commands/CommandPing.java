@@ -1,14 +1,14 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 
 import static java.lang.System.currentTimeMillis;
 
 public class CommandPing extends BaseCommand {
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         long time = currentTimeMillis();
         event.reply(response -> response.editMessageFormat("ping: %dms", currentTimeMillis() - time), ".");
     }

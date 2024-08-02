@@ -1,6 +1,6 @@
 package Bots.lavaplayer;
 
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
@@ -112,11 +112,11 @@ public class PlayerManager {
     }
 
     private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed, boolean forceSendChannel) {
-        if (eventOrChannel instanceof MessageEvent) {
+        if (eventOrChannel instanceof CommandEvent) {
             if (forceSendChannel) {
-                ((MessageEvent) eventOrChannel).getChannel().sendMessageEmbeds(embed).queue();
+                ((CommandEvent) eventOrChannel).getChannel().sendMessageEmbeds(embed).queue();
             } else {
-                ((MessageEvent) eventOrChannel).replyEmbeds(embed);
+                ((CommandEvent) eventOrChannel).replyEmbeds(embed);
             }
         } else {
             ((GuildMessageChannelUnion) eventOrChannel).sendMessageEmbeds(embed).queue();
@@ -128,11 +128,11 @@ public class PlayerManager {
     }
 
     public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, Boolean sendEmbed) {
-        assert (eventOrChannel instanceof MessageEvent || eventOrChannel instanceof GuildMessageChannelUnion);
+        assert (eventOrChannel instanceof CommandEvent || eventOrChannel instanceof GuildMessageChannelUnion);
         CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
         Guild commandGuild;
-        if (eventOrChannel instanceof MessageEvent) {
-            commandGuild = ((MessageEvent) eventOrChannel).getGuild();
+        if (eventOrChannel instanceof CommandEvent) {
+            commandGuild = ((CommandEvent) eventOrChannel).getGuild();
         } else {
             commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
@@ -301,8 +301,8 @@ public class PlayerManager {
         public TrackUserData(Object eventOrChannel) {
             this.eventOrChannel = eventOrChannel;
             GuildMessageChannelUnion channel;
-            if (eventOrChannel instanceof MessageEvent) {
-                channel = ((MessageEvent) eventOrChannel).getChannel();
+            if (eventOrChannel instanceof CommandEvent) {
+                channel = ((CommandEvent) eventOrChannel).getChannel();
             } else {
                 channel = (GuildMessageChannelUnion) eventOrChannel;
             }

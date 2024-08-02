@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.Main;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,7 +16,7 @@ public class CommandInfo extends BaseCommand {
     final int CommandCount = commandNames.size();
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         int vcCount = 0;
         int memberCount = 0;
         int playingCount = 0;

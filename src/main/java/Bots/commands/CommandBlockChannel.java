@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -21,7 +21,7 @@ public class CommandBlockChannel extends BaseCommand {
     Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
             event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have permission to use this command."));
             return;

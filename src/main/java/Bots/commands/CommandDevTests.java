@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -30,7 +30,7 @@ public class CommandDevTests extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws Exception {
+    public void execute(CommandEvent event) throws Exception {
         String[] args = event.getArgs();
         if (args.length == 1) {
             event.reply("No dev command provided");

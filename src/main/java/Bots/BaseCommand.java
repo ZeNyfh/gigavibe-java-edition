@@ -16,9 +16,9 @@ public abstract class BaseCommand {
         return new Check[0];
     }
 
-    public abstract void execute(MessageEvent event) throws Exception; //The main event loop
+    public abstract void execute(CommandEvent event) throws Exception; //The main event loop
 
-    public final void executeWithChecks(MessageEvent event) throws Exception { //For main - do not override
+    public final void executeWithChecks(CommandEvent event) throws Exception { //For main - do not override
         CheckResult checkResult = PerformChecks(event, this.getChecks());
         if (!checkResult.Succeeded()) {
             event.replyEmbeds(Main.createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));

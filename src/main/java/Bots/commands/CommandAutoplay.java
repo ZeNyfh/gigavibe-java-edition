@@ -2,7 +2,7 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -19,7 +19,7 @@ public class CommandAutoplay extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
             event.replyEmbeds(createQuickError("The bot has not been given an API key for LastFM, this command does not work without it."));
             return;

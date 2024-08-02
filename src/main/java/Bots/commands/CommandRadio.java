@@ -3,7 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.CommandStateChecker.CheckResult;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -79,7 +79,7 @@ public class CommandRadio extends BaseCommand {
     }
 
     @Override
-    public void execute(MessageEvent event) throws IOException {
+    public void execute(CommandEvent event) throws IOException {
         if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);

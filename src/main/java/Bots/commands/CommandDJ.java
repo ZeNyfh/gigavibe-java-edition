@@ -1,7 +1,7 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.MessageEvent;
+import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -22,7 +22,7 @@ public class CommandDJ extends BaseCommand {
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
 
     @Override
-    public void execute(MessageEvent event) {
+    public void execute(CommandEvent event) {
         JSONObject config = event.getConfig();
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
