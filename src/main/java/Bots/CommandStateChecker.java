@@ -90,7 +90,7 @@ public class CommandStateChecker {
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
             GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(selfState.getGuild());
             if (manager.audioPlayer.getPlayingTrack() == null && manager.scheduler.queue == null) {
-                return new CheckResult(true, "The bot was not playing anything in the other VC, I am joining you now!");
+                return success;
             }
             return new CheckResult(false, "The bot is already busy in another VC.");
         }
