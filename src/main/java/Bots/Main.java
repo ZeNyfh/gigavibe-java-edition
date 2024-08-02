@@ -229,94 +229,7 @@ public class Main extends ListenerAdapter {
             trackLoops.put(guild.getIdLong(), 0);
             autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
         }
-
-        // queue recovery
-        File queueDir = new File(GuildDataManager.configFolder + "/queues/");
-        if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
-            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
-                file.delete();
-            }
-        } else {
-            System.out.println("restoring queues");
-            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
-                Scanner scanner = new Scanner(file);
-                String time;
-                try {
-                    time = scanner.nextLine();
-                } catch (Exception e) {
-                    scanner.close();
-                    file.delete();
-                    e.printStackTrace();
-                    continue;
-                }
-                if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
-                    scanner.close();
-                    break;
-                }
-
-                String guildID = scanner.nextLine();
-                String channelID = scanner.nextLine();
-                String vcID = scanner.nextLine();
-                String trackPos = scanner.nextLine();
-                // track states
-                boolean paused = Boolean.parseBoolean(scanner.nextLine());
-                boolean looping = Boolean.parseBoolean(scanner.nextLine());
-                boolean queueLooping = Boolean.parseBoolean(scanner.nextLine());
-                boolean autoplaying = Boolean.parseBoolean(scanner.nextLine());
-                // track modifiers
-                int volume = Integer.parseInt(scanner.nextLine());
-                double speed = Double.parseDouble(scanner.nextLine());
-                double pitch = Double.parseDouble(scanner.nextLine());
-                float frequency = Float.parseFloat(scanner.nextLine());
-                float depth = Float.parseFloat(scanner.nextLine());
-                try {
-                    Guild guild = bot.getGuildById(guildID);
-                    GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
-                    VoiceChannel vc = guild.getVoiceChannelById(vcID);
-                    if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
-                        continue;
-                    }
-                    guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
-                    boolean first = true;
-                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        if (first) {
-                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
-                                if (loadResult.songWasPlayed) {
-                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
-                                } else {
-                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
-                                }
-                            });
-                            first = false;
-                        } else {
-                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
-                        }
-                    }
-                    AudioPlayer player = musicManager.audioPlayer;
-                    // setting player states
-                    player.setPaused(paused);
-                    if (looping) LoopGuilds.add(Long.valueOf(guildID));
-                    if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
-                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
-                    // setting track modifiers
-                    player.setVolume(volume);
-                    // TODO: audio filters to be added here.
-
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue and parameters have been restored!")).queue();
-                    scanner.close();
-                    ignoreFiles = file.delete();
-                } catch (Exception e) {
-                    scanner.close();
-                    ignoreFiles = file.delete();
-                    e.printStackTrace();
-                }
-                scanner.close();
-                ignoreFiles = file.delete();
-            }
-        }
-
+        recoverQueues();
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
             Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
@@ -682,5 +595,93 @@ public class Main extends ListenerAdapter {
 
     public enum audioFilters {
         Vibrato, Timescale
+    }
+
+    private static void recoverQueues() throws FileNotFoundException {
+    File queueDir = new File(GuildDataManager.configFolder + "/queues/");
+        if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
+        for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+            file.delete();
+        }
+    } else {
+            System.out.println("restoring queues");
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                Scanner scanner = new Scanner(file);
+                String time;
+                try {
+                    time = scanner.nextLine();
+                } catch (Exception e) {
+                    scanner.close();
+                    file.delete();
+                    e.printStackTrace();
+                    continue;
+                }
+                if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
+                    scanner.close();
+                    break;
+                }
+
+                String guildID = scanner.nextLine();
+                String channelID = scanner.nextLine();
+                String vcID = scanner.nextLine();
+                String trackPos = scanner.nextLine();
+                // track states
+                boolean paused = Boolean.parseBoolean(scanner.nextLine());
+                boolean looping = Boolean.parseBoolean(scanner.nextLine());
+                boolean queueLooping = Boolean.parseBoolean(scanner.nextLine());
+                boolean autoplaying = Boolean.parseBoolean(scanner.nextLine());
+                // track modifiers
+                int volume = Integer.parseInt(scanner.nextLine());
+                double speed = Double.parseDouble(scanner.nextLine());
+                double pitch = Double.parseDouble(scanner.nextLine());
+                float frequency = Float.parseFloat(scanner.nextLine());
+                float depth = Float.parseFloat(scanner.nextLine());
+                try {
+                    Guild guild = bot.getGuildById(guildID);
+                    GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
+                    VoiceChannel vc = guild.getVoiceChannelById(vcID);
+                    if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
+                        continue;
+                    }
+                    guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
+                    boolean first = true;
+                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine();
+                        if (first) {
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
+                                if (loadResult.songWasPlayed) {
+                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
+                                } else {
+                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
+                                }
+                            });
+                            first = false;
+                        } else {
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
+                        }
+                    }
+                    AudioPlayer player = musicManager.audioPlayer;
+                    // setting player states
+                    player.setPaused(paused);
+                    if (looping) LoopGuilds.add(Long.valueOf(guildID));
+                    if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
+                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
+                    // setting track modifiers
+                    player.setVolume(volume);
+                    // TODO: audio filters to be added here.
+
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue and parameters have been restored!")).queue();
+                    scanner.close();
+                    ignoreFiles = file.delete();
+                } catch (Exception e) {
+                    scanner.close();
+                    ignoreFiles = file.delete();
+                    e.printStackTrace();
+                }
+                scanner.close();
+                ignoreFiles = file.delete();
+            }
+        }
     }
 }
