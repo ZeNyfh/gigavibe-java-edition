@@ -36,7 +36,7 @@ public class CommandLyrics extends BaseCommand {
         EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter("Lyrics sourced from lrclib.net");
         String title = audioPlayer.getPlayingTrack().getInfo().title;
         if (audioPlayer.getPlayingTrack().getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
-            title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri);
+            title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri)[0];
         }
 
         title = "Lyrics for: " + title;

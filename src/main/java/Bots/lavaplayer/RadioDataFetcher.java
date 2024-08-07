@@ -14,9 +14,10 @@ import java.util.Objects;
 
 public class RadioDataFetcher {
 
-    public static String getStreamSongNow(String url) {
+    public static String[] getStreamSongNow(String url) {
         try {
             List<String> metadata = getMetadata(url);
+            ArrayList<String> dataList = new ArrayList<>();
             if (!Objects.requireNonNull(metadata).get(1).isEmpty()) {
                 int metaInt = Integer.parseInt(metadata.get(1));
                 URL audioURL = new URL(url);
@@ -36,17 +37,19 @@ public class RadioDataFetcher {
                         String title = meta.substring("StreamTitle=".length(), meta.indexOf(';'));
                         connection.disconnect();
                         inputStream.close();
-                        return title.substring(1, title.length() - 1);
+                        dataList.add(title.substring(1, title.length() - 1));
                     }
+                    // TODO: add track author/artist here and in LRCLIBMANAGER
+                    return dataList.toArray(new String[1]);
                 }
-                return "Unknown title";
+                return new String[]{"Unknown title"};
             } else {
-                return "Unknown title";
+                return new String[]{"Unknown title"};
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return new String[]{"Unknown title"};
     }
 
     private static String readMetaData(InputStream stream) throws IOException {

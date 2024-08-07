@@ -51,20 +51,20 @@ public class LRCLIBManager {
 
     private static String createURL(AudioTrack track) {
         StringBuilder urlBuilder = new StringBuilder();
-        String duration = "";
         urlBuilder.append("https://lrclib.net/api/search?q=");
-
-        if (!(track.getInfo().length > 432000000) || !(track.getInfo().length <= 1)) {
-            duration = "&duration=" + (int) (track.getInfo().length / 1000);
-        }
 
         String title = track.getInfo().title;
         if (track.getInfo().isStream && Objects.equals(track.getSourceManager().getSourceName(), "http")) {
-            duration = "";
-            title = RadioDataFetcher.getStreamSongNow(track.getInfo().uri);
+            title = RadioDataFetcher.getStreamSongNow(track.getInfo().uri)[0];
         }
 
-        urlBuilder.append(java.net.URLEncoder.encode(title, StandardCharsets.UTF_8));
+        String artist = track.getInfo().author;
+        if (track.getInfo().isStream && Objects.equals(track.getSourceManager().getSourceName(), "http")) {
+            artist = "";
+        }
+        // add stream author/artist here.
+
+        urlBuilder.append(java.net.URLEncoder.encode( artist + " " + title, StandardCharsets.UTF_8).trim());
         String url = urlBuilder.toString();
         if (url.contains("+%28")) {
             url = url.split("\\+%28")[0].trim();
@@ -75,7 +75,6 @@ public class LRCLIBManager {
         if (url.toLowerCase().contains("+ft.")) {
             url = url.split("\\+ft\\.")[0].trim();
         }
-        url = url + duration;
         return url;
     }
 
