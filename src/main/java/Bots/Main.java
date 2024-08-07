@@ -598,12 +598,12 @@ public class Main extends ListenerAdapter {
     }
 
     private static void recoverQueues() throws FileNotFoundException {
-    File queueDir = new File(GuildDataManager.configFolder + "/queues/");
+        File queueDir = new File(GuildDataManager.configFolder + "/queues/");
         if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
-        for (File file : Objects.requireNonNull(queueDir.listFiles())) {
-            file.delete();
-        }
-    } else {
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                file.delete();
+            }
+        } else {
             System.out.println("restoring queues");
             for (File file : Objects.requireNonNull(queueDir.listFiles())) {
                 Scanner scanner = new Scanner(file);
@@ -616,9 +616,10 @@ public class Main extends ListenerAdapter {
                     e.printStackTrace();
                     continue;
                 }
-                if (System.currentTimeMillis() - Long.parseLong(time) > 30000) { // 30 seconds feels half-reasonable for not restoring a queue
+                if (System.currentTimeMillis() - Long.parseLong(time) > 60000) { // 60 seconds feels more reasonable for not restoring a queue
                     scanner.close();
-                    break;
+                    ignoreFiles = file.delete();
+                    continue;
                 }
 
                 String guildID = scanner.nextLine();
