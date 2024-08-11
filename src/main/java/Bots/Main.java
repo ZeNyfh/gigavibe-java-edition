@@ -58,7 +58,7 @@ public class Main extends ListenerAdapter {
     public static final GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
     public static Color botColour = new Color(0, 0, 0);
     public static String botVersion = ""; // YY.MM.DD
-    public static JSONObject commandUsageTracker;
+    public static JSONObject commandUsageTracker = new JSONObject();
     private static JDA bot;
 
     // config
