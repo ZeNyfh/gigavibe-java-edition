@@ -7,7 +7,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.skips;
+import static Bots.Main.skipCountGuilds;
 
 public class CommandClearQueue extends BaseCommand {
     @Override
@@ -18,7 +18,7 @@ public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        skips.remove(event.getGuild().getIdLong());
+        skipCountGuilds.remove(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();

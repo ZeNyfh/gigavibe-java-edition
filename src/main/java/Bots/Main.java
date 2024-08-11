@@ -16,9 +16,6 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -64,7 +61,7 @@ public class Main extends ListenerAdapter {
     public static Color botColour = new Color(0, 0, 0);
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
-    public static HashMap<Long, List<Member>> skips = new HashMap<>();
+    public static HashMap<Long, List<Member>> skipCountGuilds = new HashMap<>();
     public static String botVersion = ""; // YY.MM.DD
     public static List<Long> LoopGuilds = new ArrayList<>();
     public static List<Long> AutoplayGuilds = new ArrayList<>();
@@ -283,6 +280,15 @@ public class Main extends ListenerAdapter {
         return eb.build();
     }
 
+    public static MessageEmbed createQuickEmbed(String title, String description, String footer) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setTitle(title);
+        eb.setColor(botColour);
+        eb.setDescription(description);
+        eb.setFooter(footer);
+        return eb.build();
+    }
+
     public static MessageEmbed createQuickError(String description) {
         return createQuickEmbed("❌ **Error**", description);
     }
@@ -412,7 +418,7 @@ public class Main extends ListenerAdapter {
         manager.audioPlayer.setPaused(false);
         manager.audioPlayer.checkCleanup(0);
         guild.getAudioManager().closeAudioConnection();
-        skips.remove(guild.getIdLong());
+        skipCountGuilds.remove(guild.getIdLong());
     }
 
     public static void killMain() {

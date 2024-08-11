@@ -32,15 +32,15 @@ public class CommandSkip extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
-        skips.putIfAbsent(event.getGuild().getIdLong(), new ArrayList<>()); // required, otherwise there is a nullPointerException
+        skipCountGuilds.putIfAbsent(event.getGuild().getIdLong(), new ArrayList<>()); // required, otherwise there is a nullPointerException
 
-        List<Member> votes = skips.get(event.getGuild().getIdLong());
+        List<Member> votes = skipCountGuilds.get(event.getGuild().getIdLong());
         if (votes.contains(event.getMember())) {
             event.replyEmbeds(createQuickError("You have already voted to skip."));
             return;
         } else {
             votes.add(event.getMember());
-            skips.put(event.getGuild().getIdLong(), votes);
+            skipCountGuilds.put(event.getGuild().getIdLong(), votes);
         }
 
         int effectiveMemberCount = 0;
