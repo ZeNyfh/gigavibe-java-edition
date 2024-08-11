@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -84,26 +85,42 @@ public class Main extends ListenerAdapter {
     // Event Mappings
     private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
 
-    public static void registerCommand(BaseCommand command) {
-        command.Init();
-        ratelimitTracker.put(command, new HashMap<>());
-        commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
-        commands.add(command);
-        SlashCommandData slashCommand = Commands.slash(command.getNames()[0], command.getDescription());
-        command.ProvideOptions(slashCommand);
-        command.slashCommand = slashCommand;
-        slashCommands.add(slashCommand);
-        for (String name : command.getNames()) {
-            if (commandNames.contains(name)) {
-                System.err.println("Command conflict - 2 commands are attempting to use the name " + name);
-            } else {
-                commandNames.add(name);
-            }
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         OutputLogger.Init("log.log");
+
+        Dotenv dotenv = Dotenv.load();
+        String botToken = dotenv.get("TOKEN");
+        if (botToken == null) {
+            throw new NullPointerException("TOKEN is not set in the .env file");
+        }
+        prepareEnvironment();
+        loadCommandClasses();
+        GuildDataManager.Init();
+        LastFMManager.Init();
+        PlayerManager.getInstance();
+
+        Message.suppressContentIntentWarning();
+        bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
+                .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
+                .addEventListeners(new Main())
+                .build();
+        bot.awaitReady();
+        bot.updateCommands().addCommands(slashCommands).queue();
+        System.out.println("bot is now running, have fun ig");
+        botPrefix = "<@" + bot.getSelfUser().getId() + ">";
+        readableBotPrefix = "@" + bot.getSelfUser().getName();
+        bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
+        for (Guild guild : bot.getGuilds()) {
+            trackLoops.put(guild.getIdLong(), 0);
+            autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
+        }
+        setupTasks();
+        recoverQueues();
+    }
+
+    // Ensure all folders and files exist, or create them where applicable, and load most .env settings
+    private static void prepareEnvironment() throws IOException, URISyntaxException {
         ignoreFiles = new File("config/").mkdir();
         ignoreFiles = new File("update/").mkdir();
         ignoreFiles = new File("temp/").mkdir();
@@ -127,7 +144,6 @@ public class Main extends ListenerAdapter {
                 }
             }
         }
-        Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File env = new File(".env");
         if (!env.exists()) {
@@ -148,135 +164,126 @@ public class Main extends ListenerAdapter {
             }
         }
         Dotenv dotenv = Dotenv.load();
-        if (dotenv.get("TOKEN") == null) {
-            System.err.println("TOKEN is not set in " + new File(".env").getAbsolutePath());
-        }
-        String botToken = dotenv.get("TOKEN");
-
         if (dotenv.get("COLOUR") == null) {
             System.err.println("Hex value COLOUR is not set in " + new File(".env").getAbsolutePath() + " example: #FFCCEE");
-            return;
+            throw new NullPointerException("COLOUR is not set in the .env file");
         }
         try {
             botColour = Color.decode(dotenv.get("COLOUR"));
-        } catch (NumberFormatException e) {
-            System.err.println("Colour was invalid.");
-            e.printStackTrace();
-            return;
+        } catch (NumberFormatException exception) {
+            throw new NumberFormatException("Unable to successfully parse the COLOUR from the .env as a colour"); // Provide a more descriptive message
         }
-        try {
-            List<Class<?>> classes = new ArrayList<>();
-            String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            JarFile jarFile = null;
-            boolean jarFileCheck = false;
-            try {
-                jarFile = new JarFile(tempJarPath.substring(5));
-            } catch (FileNotFoundException ignored) {
-                System.out.println("detected process in IDE, registering commands in a different way...");
-                Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
-                while (resources.hasMoreElements()) {
-                    URL url = resources.nextElement();
-                    if (url.getPath().contains("classes")) {
-                        url = new URL("file:" + url.getPath() + "Bots/commands/");
-                    }
-                    try {
-                        for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
-                            if (classFile.getName().endsWith(".class") && !classFile.getName().contains("$")) {
-                                classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
-                            }
-                        }
-                        break;
-                    } catch (Exception ignored1) {
-                    }
-                }
-                jarFileCheck = true;
-            }
-            if (!jarFileCheck) {
-                Enumeration<JarEntry> resources = jarFile.entries();
-                while (resources.hasMoreElements()) {
-                    JarEntry url = resources.nextElement();
-                    if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command") && !url.toString().contains("$")) {
-                        classes.add(ClassLoader.getSystemClassLoader().loadClass(url.getName().substring(0, url.getName().length() - 6).replaceAll("/", ".")));
-                    }
-                }
-                jarFile.close();
-            }
+    }
 
-            // registering all the commands
-            for (Class<?> commandClass : classes) {
+    // Load all the command classes and register them
+    private static void loadCommandClasses() throws IOException, URISyntaxException, ClassNotFoundException {
+        List<Class<?>> classes = new ArrayList<>();
+        String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        JarFile jarFile = null;
+        boolean jarFileCheck = false;
+        try {
+            jarFile = new JarFile(tempJarPath.substring(5));
+        } catch (FileNotFoundException ignored) {
+            System.out.println("detected process in IDE, registering commands in a different way...");
+            Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                if (url.getPath().contains("classes")) {
+                    url = new URL("file:" + url.getPath() + "Bots/commands/");
+                }
                 try {
-                    registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
-                    System.out.println("loaded command: " + commandClass.getSimpleName().substring(7));
-                } catch (Exception e) {
-                    System.err.println("Unable to load command: " + commandClass);
-                    e.printStackTrace();
+                    for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
+                        if (classFile.getName().endsWith(".class") && !classFile.getName().contains("$")) {
+                            classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                        }
+                    }
+                    break;
+                } catch (Exception ignored1) {
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            jarFileCheck = true;
         }
-        GuildDataManager.Init();
-        LastFMManager.Init();
-        PlayerManager.getInstance();
-
-        bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
-                .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
-                .addEventListeners(new Main())
-                .build();
-        bot.awaitReady();
-        bot.updateCommands().addCommands(slashCommands).queue();
-        System.out.println("bot is now running, have fun ig");
-        botPrefix = "<@" + bot.getSelfUser().getId() + ">";
-        readableBotPrefix = "@" + bot.getSelfUser().getName();
-        bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
-        for (Guild guild : bot.getGuilds()) {
-            trackLoops.put(guild.getIdLong(), 0);
-            autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
+        if (!jarFileCheck) {
+            Enumeration<JarEntry> resources = jarFile.entries();
+            while (resources.hasMoreElements()) {
+                JarEntry url = resources.nextElement();
+                if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command") && !url.toString().contains("$")) {
+                    classes.add(ClassLoader.getSystemClassLoader().loadClass(url.getName().substring(0, url.getName().length() - 6).replaceAll("/", ".")));
+                }
+            }
+            jarFile.close();
         }
-        recoverQueues();
-        try {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
-            Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
-            Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                final File updateFile = new File("update/bot.jar");
-                final File tempDir = new File("temp/");
-                int cleanUpTime = 0;
 
-                @Override
-                public void run() {
-                    // temp directory cleanup
-                    cleanUpTime++;
-                    // we shouldn't need to check this often or if the directory is empty
-                    if (cleanUpTime > 300) {
-                        File[] contents = tempDir.listFiles();
-                        if (contents != null && contents.length != 0) {
-                            // we don't want to delete something as it is being written to.
-                            Path fullDir = Paths.get("temp/").toAbsolutePath();
-                            if (System.currentTimeMillis() - tempDir.lastModified() > 2000)
-                                deleteFiles(fullDir.toAbsolutePath().toString());
-                            cleanUpTime = 0;
-                        }
-                    }
+        // registering all the commands
+        for (Class<?> commandClass : classes) {
+            try {
+                registerCommand((BaseCommand) commandClass.getDeclaredConstructor().newInstance());
+                System.out.println("loaded command: " + commandClass.getSimpleName().substring(7));
+            } catch (Exception e) {
+                System.err.println("Unable to load command: " + commandClass);
+                e.printStackTrace();
+            }
+        }
+    }
 
-                    // updater code
-                    if (updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
-                        // leeway for upload past the time limit
-                        if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
-                            System.out.println("It's update time!");
-                            File botJar = new File("bot.jar");
-                            ignoreFiles = botJar.delete();
-                            ignoreFiles = updateFile.renameTo(botJar);
-                            killMain();
-                        }
+    // Register hooks and timers as required
+    private static void setupTasks() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
+        Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
+        Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            final File updateFile = new File("update/bot.jar");
+            final File tempDir = new File("temp/");
+            int cleanUpTime = 0;
+
+            @Override
+            public void run() {
+                // temp directory cleanup
+                cleanUpTime++;
+                // we shouldn't need to check this often or if the directory is empty
+                if (cleanUpTime > 300) {
+                    File[] contents = tempDir.listFiles();
+                    if (contents != null && contents.length != 0) {
+                        // we don't want to delete something as it is being written to.
+                        Path fullDir = Paths.get("temp/").toAbsolutePath();
+                        if (System.currentTimeMillis() - tempDir.lastModified() > 2000)
+                            deleteFiles(fullDir.toAbsolutePath().toString());
+                        cleanUpTime = 0;
                     }
                 }
-            };
-            timer.scheduleAtFixedRate(task, 0, 1000);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+                // updater code
+                if (updateFile.exists() && !System.getProperty("os.name").toLowerCase().contains("windows")) { // auto-updater only works on linux
+                    // leeway for upload past the time limit
+                    if (System.currentTimeMillis() - updateFile.lastModified() >= 10000) {
+                        System.out.println("It's update time!");
+                        File botJar = new File("bot.jar");
+                        ignoreFiles = botJar.delete();
+                        ignoreFiles = updateFile.renameTo(botJar);
+                        killMain();
+                    }
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0, 1000);
+    }
+
+    private static void registerCommand(BaseCommand command) {
+        command.Init();
+        ratelimitTracker.put(command, new HashMap<>());
+        commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
+        commands.add(command);
+        SlashCommandData slashCommand = Commands.slash(command.getNames()[0], command.getDescription());
+        command.ProvideOptions(slashCommand);
+        command.slashCommand = slashCommand;
+        slashCommands.add(slashCommand);
+        for (String name : command.getNames()) {
+            if (commandNames.contains(name)) {
+                System.err.println("Command conflict - 2 commands are attempting to use the name " + name);
+            } else {
+                commandNames.add(name);
+            }
         }
     }
 
