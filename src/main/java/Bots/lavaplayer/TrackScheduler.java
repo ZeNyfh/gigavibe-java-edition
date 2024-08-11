@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
@@ -61,10 +62,18 @@ public class TrackScheduler extends AudioEventAdapter {
                 eb.setDescription("Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.");
                 eb.setFooter("If this issue persists with specific audio sources, please file a /bug report");
                 eb.setColor(botColour);
-                originalEventChannel.sendMessageEmbeds(eb.build()).queue();
+                try {
+                    originalEventChannel.sendMessageEmbeds(eb.build()).queue();
+                } catch (InsufficientPermissionException ignored) {
+                    // this should not be logged.
+                }
                 return;
             } else {
-                originalEventChannel.sendMessageEmbeds(createQuickError("The track failed to load due to an unknown reason. Skipping...")).queue();
+                try {
+                    originalEventChannel.sendMessageEmbeds(createQuickError("The track failed to load due to an unknown reason. Skipping...")).queue();
+                } catch (InsufficientPermissionException ignored) {
+                    // this should not be logged.
+                }
                 if (queue.isEmpty()) {
                     guildFailCount.put(guildId, 0);
                 }
@@ -131,7 +140,11 @@ public class TrackScheduler extends AudioEventAdapter {
                 if (PlayerManager.getInstance().getThumbURL(nextTrack) != null)
                     eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
                 eb.setColor(botColour);
-                originalEventChannel.sendMessageEmbeds(eb.build()).queue();
+                try {
+                    originalEventChannel.sendMessageEmbeds(eb.build()).queue();
+                } catch (InsufficientPermissionException ignored) {
+                    // this should not be logged.
+                }
             }
         }
     }
