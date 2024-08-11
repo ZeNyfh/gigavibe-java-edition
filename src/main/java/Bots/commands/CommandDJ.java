@@ -91,23 +91,14 @@ public class CommandDJ extends BaseCommand {
                 return;
             }
 
-            if (isAdding) {
-                for (long member : FoundMembers) {
-                    if (!DJUsers.contains(member)) {
-                        modifyDJ(GuildObjectType.member.ordinal(), member, true, config);
-                    }
+            for (long member : FoundMembers) {
+                if (!DJUsers.contains(member)) {
+                    modifyDJ(GuildObjectType.member.ordinal(), member, isAdding, config);
                 }
-                for (long role : FoundRoles) {
-                    if (!DJRoles.contains(role)) {
-                        modifyDJ(GuildObjectType.role.ordinal(), role, true, config);
-                    }
-                }
-            } else { // Removing instead
-                for (long member : FoundMembers) {
-                    modifyDJ(GuildObjectType.member.ordinal(), member, false, config);
-                }
-                for (long role : FoundRoles) {
-                    modifyDJ(GuildObjectType.role.ordinal(), role, false, config);
+            }
+            for (long role : FoundRoles) {
+                if (!DJRoles.contains(role)) {
+                    modifyDJ(GuildObjectType.role.ordinal(), role, isAdding, config);
                 }
             }
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
