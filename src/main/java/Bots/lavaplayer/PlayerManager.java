@@ -127,6 +127,9 @@ public class PlayerManager {
     }
 
     public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, Boolean sendEmbed) {
+        if (sendEmbed == null) {
+            sendEmbed = false;
+        }
         assert (eventOrChannel instanceof CommandEvent || eventOrChannel instanceof GuildMessageChannelUnion);
         CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
         Guild commandGuild;
