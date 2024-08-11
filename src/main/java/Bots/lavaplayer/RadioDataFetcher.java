@@ -16,7 +16,7 @@ public class RadioDataFetcher {
 
     public static String[] getStreamSongNow(String url) {
         try {
-            List<String> metadata = getMetadata(url);
+            List<String> metadata = Objects.requireNonNull(getMetadata(url));
             ArrayList<String> dataList = new ArrayList<>();
             if (!Objects.requireNonNull(metadata).get(1).isEmpty()) {
                 int metaInt = Integer.parseInt(metadata.get(1));
@@ -66,7 +66,7 @@ public class RadioDataFetcher {
         return Objects.requireNonNull(getMetadata(url)).get(0);
     }
 
-    private static List<String> getMetadata(String url) { // length of 7 done
+    private static List<String> getMetadata(String url) {
         try {
             // get all generic metadata
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -110,7 +110,7 @@ public class RadioDataFetcher {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
 }
