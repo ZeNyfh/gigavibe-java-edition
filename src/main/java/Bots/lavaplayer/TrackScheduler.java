@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -22,7 +23,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
-    private final HashMap<Long, Integer> guildFailCount = new HashMap<>();
+    private final Map<Long, Integer> guildFailCount = new HashMap<>();
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;

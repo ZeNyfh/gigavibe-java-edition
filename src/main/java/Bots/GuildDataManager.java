@@ -30,7 +30,7 @@ import static Bots.Main.*;
  */
 public class GuildDataManager {
     public final static String configFolder = "config";
-    public final static HashMap<Object, JSONObject> Configs = new HashMap<>();
+    public final static Map<Object, JSONObject> Configs = new HashMap<>();
 
     public static void Init() {
         boolean madeFolder = Paths.get(configFolder).toFile().mkdir();

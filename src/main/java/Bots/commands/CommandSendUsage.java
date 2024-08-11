@@ -5,10 +5,7 @@ import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static Bots.Main.botColour;
 import static Bots.Main.commandUsageTracker;
@@ -23,7 +20,7 @@ public class CommandSendUsage extends BaseCommand {
     public void execute(CommandEvent event) {
         Long[] values = (Long[]) commandUsageTracker.values().toArray(new Long[0]);
         Arrays.sort(values);
-        HashMap<Long, List<String>> InverseReference = new HashMap<>();
+        Map<Long, List<String>> InverseReference = new HashMap<>();
         for (Object name : commandUsageTracker.keySet()) {
             Object value = commandUsageTracker.get(name);
             InverseReference.putIfAbsent((Long) value, new ArrayList<>());

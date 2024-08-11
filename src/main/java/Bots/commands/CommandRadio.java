@@ -27,7 +27,7 @@ import static Bots.Main.*;
 
 public class CommandRadio extends BaseCommand {
     private static final Pattern pattern = Pattern.compile("ga\\('send', 'event', 'tunein', 'playm3u', '([^']+)'\\);");
-    HashMap<String, String> radioLists = new HashMap<>() {{
+    Map<String, String> radioLists = new HashMap<>() {{
         put("Heart", "https://media-ssl.musicradio.com/HeartLondon");
         put("1Mix Trance", "http://fr3.1mix.co.uk:8060/320");
         put("1Mix EDM", "http://fr1.1mix.co.uk:8060/320h");
@@ -69,7 +69,7 @@ public class CommandRadio extends BaseCommand {
         }
     }
 
-    public HashMap<String, String> getRadios() {
+    public Map<String, String> getRadios() {
         return radioLists;
     }
 

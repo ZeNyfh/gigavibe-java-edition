@@ -14,16 +14,13 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 import static Bots.Main.*;
 
 public class CommandQueue extends BaseCommand {
-    private static final HashMap<Long, Integer> queuePages = new HashMap<>();
+    private static final Map<Long, Integer> queuePages = new HashMap<>();
 
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));

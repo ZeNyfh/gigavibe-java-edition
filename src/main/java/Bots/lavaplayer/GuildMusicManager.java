@@ -6,12 +6,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GuildMusicManager {
 
     public final AudioPlayer audioPlayer;
     public final TrackScheduler scheduler;
-    public final HashMap<Main.AudioFilters, AudioFilter> filters;
+    public final Map<Main.AudioFilters, AudioFilter> filters;
     private final AudioPlayerSendHandler sendHandler;
 
     public GuildMusicManager(AudioPlayerManager manager) {

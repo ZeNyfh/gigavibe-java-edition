@@ -70,19 +70,19 @@ public class Main extends ListenerAdapter {
     public static final List<BaseCommand> commands = new ArrayList<>();
     public static final List<SlashCommandData> slashCommands = new ArrayList<>();
     public static final List<String> commandNames = new ArrayList<>(); // Purely for conflict detection
-    public static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
+    public static final Map<BaseCommand, Map<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     // guild management
-    public static final HashMap<Long, List<Member>> skipCountGuilds = new HashMap<>();
+    public static final Map<Long, List<Member>> skipCountGuilds = new HashMap<>();
     public static final List<Long> AutoplayGuilds = new ArrayList<>();
     public static final List<Long> LoopGuilds = new ArrayList<>();
     public static final List<Long> LoopQueueGuilds = new ArrayList<>();
-    public static final HashMap<Long, Integer> trackLoops = new HashMap<>();
-    public static final HashMap<Long, List<String>> autoPlayedTracks = new HashMap<>();
+    public static final Map<Long, Integer> trackLoops = new HashMap<>();
+    public static final Map<Long, List<String>> autoPlayedTracks = new HashMap<>();
 
     // Event Mappings
-    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+    private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
