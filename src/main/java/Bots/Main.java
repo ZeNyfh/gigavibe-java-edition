@@ -58,7 +58,6 @@ public class Main extends ListenerAdapter {
     public static final GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
     public static Color botColour = new Color(0, 0, 0);
     public static String botVersion = ""; // YY.MM.DD
-    public static JSONObject commandUsageTracker = new JSONObject();
     private static JDA bot;
 
     // config
@@ -72,6 +71,7 @@ public class Main extends ListenerAdapter {
     public static final List<String> commandNames = new ArrayList<>(); // Purely for conflict detection
     public static final Map<BaseCommand, Map<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
 
     // guild management
     public static final Map<Long, List<Member>> skipCountGuilds = new HashMap<>();
@@ -127,7 +127,6 @@ public class Main extends ListenerAdapter {
                 }
             }
         }
-        commandUsageTracker = GetConfig("usage-stats");
         Message.suppressContentIntentWarning();
         botVersion = new SimpleDateFormat("yy.MM.dd").format(new Date(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).lastModified()));
         File env = new File(".env");
