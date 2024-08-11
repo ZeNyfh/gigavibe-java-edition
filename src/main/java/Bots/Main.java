@@ -593,7 +593,7 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public enum audioFilters {
+    public enum AudioFilters {
         Vibrato, Timescale
     }
 

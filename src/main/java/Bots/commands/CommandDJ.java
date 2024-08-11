@@ -94,20 +94,20 @@ public class CommandDJ extends BaseCommand {
             if (isAdding) {
                 for (long member : FoundMembers) {
                     if (!DJUsers.contains(member)) {
-                        modifyDJ(guildObjectType.member.ordinal(), member, true, config);
+                        modifyDJ(GuildObjectType.member.ordinal(), member, true, config);
                     }
                 }
                 for (long role : FoundRoles) {
                     if (!DJRoles.contains(role)) {
-                        modifyDJ(guildObjectType.role.ordinal(), role, true, config);
+                        modifyDJ(GuildObjectType.role.ordinal(), role, true, config);
                     }
                 }
             } else { // Removing instead
                 for (long member : FoundMembers) {
-                    modifyDJ(guildObjectType.member.ordinal(), member, false, config);
+                    modifyDJ(GuildObjectType.member.ordinal(), member, false, config);
                 }
                 for (long role : FoundRoles) {
-                    modifyDJ(guildObjectType.role.ordinal(), role, false, config);
+                    modifyDJ(GuildObjectType.role.ordinal(), role, false, config);
                 }
             }
             String memberText = FoundMembers.size() == 1 ? "member" : "members";
@@ -132,7 +132,7 @@ public class CommandDJ extends BaseCommand {
         }
     }
 
-    private enum guildObjectType {
+    private enum GuildObjectType {
         role, member
     }
 

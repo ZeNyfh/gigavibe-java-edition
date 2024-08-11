@@ -20,7 +20,7 @@ public class CommandVibrato extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato);
+        VibratoPcmAudioFilter vibrato = (VibratoPcmAudioFilter) musicManager.filters.get(AudioFilters.Vibrato);
 
         if (event.getArgs().length == 1) {
             vibrato.setFrequency(2);

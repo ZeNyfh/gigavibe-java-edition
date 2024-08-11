@@ -249,10 +249,10 @@ public class GuildDataManager {
                 writer.write(AutoplayGuilds.contains(guild.getIdLong()) + "\n"); // is autoplaying
                 // track modifiers
                 writer.write(player.getVolume() + "\n"); // volume
-                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getSpeed() + "\n"); // speed
-                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale)).getPitch() + "\n"); // pitch
-                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getFrequency() + "\n"); // vibrato freq
-                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(audioFilters.Vibrato)).getDepth() + "\n"); // vibrato depth
+                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(AudioFilters.Timescale)).getSpeed() + "\n"); // speed
+                writer.write(((TimescalePcmAudioFilter) musicManager.filters.get(AudioFilters.Timescale)).getPitch() + "\n"); // pitch
+                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(AudioFilters.Vibrato)).getFrequency() + "\n"); // vibrato freq
+                writer.write(((VibratoPcmAudioFilter) musicManager.filters.get(AudioFilters.Vibrato)).getDepth() + "\n"); // vibrato depth
                 writer.write(playingTrack.getInfo().uri + "\n"); // track now url
                 if (!musicManager.scheduler.queue.isEmpty()) {
                     for (AudioTrack track : musicManager.scheduler.queue)

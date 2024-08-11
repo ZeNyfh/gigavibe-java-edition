@@ -20,7 +20,7 @@ public class CommandPitch extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(audioFilters.Timescale); // this needs to be redefined many times due to how it works.
+        TimescalePcmAudioFilter timescale = (TimescalePcmAudioFilter) musicManager.filters.get(AudioFilters.Timescale); // this needs to be redefined many times due to how it works.
 
         if (event.getArgs().length == 1) {
             timescale.setPitch(1);

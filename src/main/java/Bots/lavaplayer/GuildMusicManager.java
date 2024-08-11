@@ -11,7 +11,7 @@ public class GuildMusicManager {
 
     public final AudioPlayer audioPlayer;
     public final TrackScheduler scheduler;
-    public final HashMap<Main.audioFilters, AudioFilter> filters;
+    public final HashMap<Main.AudioFilters, AudioFilter> filters;
     private final AudioPlayerSendHandler sendHandler;
 
     public GuildMusicManager(AudioPlayerManager manager) {

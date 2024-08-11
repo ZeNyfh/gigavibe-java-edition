@@ -80,8 +80,8 @@ public class PlayerManager {
             guildMusicManager.audioPlayer.setFilterFactory((track, format, output) -> {
                 VibratoPcmAudioFilter vibrato = new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate);
                 TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(vibrato, format.channelCount, format.sampleRate);
-                guildMusicManager.filters.put(audioFilters.Vibrato, vibrato);
-                guildMusicManager.filters.put(audioFilters.Timescale, timescale);
+                guildMusicManager.filters.put(AudioFilters.Vibrato, vibrato);
+                guildMusicManager.filters.put(AudioFilters.Timescale, timescale);
                 //Just make sure the items are in the reverse order they were made and all will be good
                 return Arrays.asList(new AudioFilter[]{timescale, vibrato});
             });
