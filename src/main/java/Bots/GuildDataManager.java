@@ -280,7 +280,7 @@ public class GuildDataManager {
                     if (Filename.getClass() == String.class) {
                         ReadConfig((String) Filename);
                     } else {
-                        ReadGuildConfig((Long) Filename);
+                        ReadGuildConfig((long) Filename);
                     }
                 } catch (IOException exception) {
                     System.err.println("Unable to load the existing non-screwed version for Config " + Filename);
