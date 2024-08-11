@@ -126,10 +126,7 @@ public class PlayerManager {
         replyWithEmbed(eventOrChannel, embed, false);
     }
 
-    public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, Boolean sendEmbed) {
-        if (sendEmbed == null) {
-            sendEmbed = false;
-        }
+    public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, boolean sendEmbed) {
         assert (eventOrChannel instanceof CommandEvent || eventOrChannel instanceof GuildMessageChannelUnion);
         CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
         Guild commandGuild;
@@ -147,13 +144,12 @@ public class PlayerManager {
             }
         }
         final GuildMusicManager musicManager = this.getMusicManager(commandGuild);
-        Boolean finalSendEmbed = sendEmbed;
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 audioTrack.setUserData(new TrackUserData(eventOrChannel));
                 musicManager.scheduler.queue(audioTrack);
-                if (finalSendEmbed) {
+                if (sendEmbed) {
                     replyWithEmbed(eventOrChannel, createTrackEmbed(audioTrack).build());
                 }
                 loadResultFuture.complete(LoadResult.TRACK_LOADED);
@@ -169,7 +165,7 @@ public class PlayerManager {
                         track = tracks.get(ThreadLocalRandom.current().nextInt(2, 4)); // this is to prevent looping tracks
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
-                        if (finalSendEmbed) {
+                        if (sendEmbed) {
                             replyWithEmbed(eventOrChannel, createTrackEmbed(track).build(), autoplaying);
                         }
                     } else {
@@ -194,7 +190,7 @@ public class PlayerManager {
                             embed.appendDescription("...");
                         }
                         embed.setThumbnail(getThumbURL(tracks.get(0)));
-                        if (finalSendEmbed) {
+                        if (sendEmbed) {
                             replyWithEmbed(eventOrChannel, embed.build());
                         }
                     }
@@ -207,7 +203,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                if (finalSendEmbed)
+                if (sendEmbed)
                     replyWithEmbed(eventOrChannel, createQuickError("No matches found for the track."));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
@@ -223,7 +219,7 @@ public class PlayerManager {
                     loadFailedBuilder.append("An error with the youtube search API has occurred. ");
                 }
                 loadFailedBuilder.append(e.getMessage());
-                if (finalSendEmbed)
+                if (sendEmbed)
                     replyWithEmbed(eventOrChannel, createQuickError("The track failed to load: " + loadFailedBuilder));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
