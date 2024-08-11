@@ -35,14 +35,13 @@ public class OutputLogger {
     // (Makes it easier to understand the log and would allow us to prefix logs with LOG/ERR for neatness)
 
     private synchronized static void WriteLogs() throws IOException {
-        if (logger == null) {
-            Init("log.log");
-        }
-        String logText = MergedLogStream.toString();
-        if (logText.length() >= 1) {
-            MergedLogStream.reset();
-            logger.write(logText);
-            logger.flush();
+        if (INITIALISED) {
+            String logText = MergedLogStream.toString();
+            if (logText.length() >= 1) {
+                MergedLogStream.reset();
+                logger.write(logText);
+                logger.flush();
+            }
         }
     }
 
