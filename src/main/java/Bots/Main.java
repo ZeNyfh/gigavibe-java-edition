@@ -53,27 +53,36 @@ import static Bots.GuildDataManager.*;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
-    public static final long BootTime = currentTimeMillis();
-    public final static GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
-    private static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
-    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
-    public static JSONObject commandUsageTracker;
+    // constants*
+    public static final long startupTime = currentTimeMillis();
+    public static final GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
     public static Color botColour = new Color(0, 0, 0);
+    public static String botVersion = ""; // YY.MM.DD
+    public static JSONObject commandUsageTracker;
+    private static JDA bot;
+
+    // config
     public static String botPrefix = "";
     public static String readableBotPrefix = "";
-    public static HashMap<Long, List<Member>> skipCountGuilds = new HashMap<>();
-    public static String botVersion = ""; // YY.MM.DD
-    public static List<Long> LoopGuilds = new ArrayList<>();
-    public static List<Long> AutoplayGuilds = new ArrayList<>();
-    public static HashMap<Long, List<String>> autoPlayedTracks = new HashMap<>();
-    public static List<Long> LoopQueueGuilds = new ArrayList<>();
-    public static List<BaseCommand> commands = new ArrayList<>();
-    public static List<SlashCommandData> slashCommands = new ArrayList<>();
     public static boolean ignoreFiles = false;
-    public static List<String> commandNames = new ArrayList<>(); //Purely for conflict detection
-    public static HashMap<Long, Integer> trackLoops = new HashMap<>();
+
+    // command management
+    public static final List<BaseCommand> commands = new ArrayList<>();
+    public static final List<SlashCommandData> slashCommands = new ArrayList<>();
+    public static final List<String> commandNames = new ArrayList<>(); // Purely for conflict detection
+    public static final HashMap<BaseCommand, HashMap<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-    private static JDA bot;
+
+    // guild management
+    public static final HashMap<Long, List<Member>> skipCountGuilds = new HashMap<>();
+    public static final List<Long> AutoplayGuilds = new ArrayList<>();
+    public static final List<Long> LoopGuilds = new ArrayList<>();
+    public static final List<Long> LoopQueueGuilds = new ArrayList<>();
+    public static final HashMap<Long, Integer> trackLoops = new HashMap<>();
+    public static final HashMap<Long, List<String>> autoPlayedTracks = new HashMap<>();
+
+    // Event Mappings
+    private static final HashMap<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
 
     public static void registerCommand(BaseCommand command) {
         command.Init();
