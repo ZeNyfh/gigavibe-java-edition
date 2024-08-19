@@ -34,12 +34,12 @@ public class CommandInfo extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(event.getJDA().getSelfUser().getName() + " Info", null);
         eb.setColor(botColour);
-        eb.appendDescription("\uD83D\uDD27  **Ram usage:** " + memoryUsed / 1024 / 1024 + "MB\n\n");
+        eb.appendDescription("\uD83D\uDD27  **Ram usage:** " + String.format("%,d", memoryUsed / 1024 / 1024) + "MB\n\n");
         long finalUptime = currentTimeMillis() - Main.startupTime;
         String finalTime = toTimestamp(finalUptime);
         eb.appendDescription("⏰ **Uptime:** " + finalTime + "\n\n");
-        eb.appendDescription("\uD83D\uDCE1 **Guilds:** " + event.getJDA().getGuilds().size() + "\n\n");
-        eb.appendDescription("\uD83D\uDC64 **Users:** " + memberCount + "\n\n");
+        eb.appendDescription("\uD83D\uDCE1 **Guilds:** " + String.format("%,d", event.getJDA().getGuilds().size()) + "\n\n");
+        eb.appendDescription("\uD83D\uDC64 **Users:** " + String.format("%,d", memberCount) + "\n\n");
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
         eb.appendDescription("\uD83C\uDFB5 **VCs: ** " + vcCount + "\n\n");
         eb.appendDescription("\uD83D\uDD0A **Playing Count: ** " + playingCount + "\n\n");
