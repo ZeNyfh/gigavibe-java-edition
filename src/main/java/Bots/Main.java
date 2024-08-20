@@ -72,7 +72,7 @@ public class Main extends ListenerAdapter {
     public static final List<String> commandNames = new ArrayList<>(); // Purely for conflict detection
     public static final Map<BaseCommand, Map<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-    public static final JSONObject commandUsageTracker = GetConfig("usage-stats");
+    public static JSONObject commandUsageTracker;
 
     // guild management
     public static final Map<Long, List<Member>> skipCountGuilds = new HashMap<>();
@@ -88,16 +88,17 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         OutputLogger.Init("log.log");
 
+        prepareEnvironment();
         Dotenv dotenv = Dotenv.load();
         String botToken = dotenv.get("TOKEN");
         if (botToken == null) {
             throw new NullPointerException("TOKEN is not set in the .env file");
         }
-        prepareEnvironment();
-        loadCommandClasses();
         GuildDataManager.Init();
+        commandUsageTracker = GetConfig("usage-stats");
         LastFMManager.Init();
         PlayerManager.getInstance();
+        loadCommandClasses();
 
         Message.suppressContentIntentWarning();
         bot = JDABuilder.create(botToken, Arrays.asList(INTENTS))
