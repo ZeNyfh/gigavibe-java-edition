@@ -85,7 +85,8 @@ public class OutputLogger {
                     }
                 }
             };
-            new Timer().scheduleAtFixedRate(logTask, 0, 5000);
+            new Timer(true).scheduleAtFixedRate(logTask, 0, 5000);
+            Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
         } else {
             err.println("Unexpected double call to OutputLogger.Init");
         }

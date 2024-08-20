@@ -231,7 +231,6 @@ public class Main extends ListenerAdapter {
     private static void setupTasks() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> GuildDataManager.SaveQueues(bot)));
         Runtime.getRuntime().addShutdownHook(new Thread(GuildDataManager::SaveConfigs));
-        Runtime.getRuntime().addShutdownHook(new Thread(OutputLogger::Close));
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             final File updateFile = new File("update/bot.jar");
