@@ -9,6 +9,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -589,6 +590,14 @@ public class Main extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (!event.isFromGuild()) {
+            event.replyEmbeds(createQuickError("I don't currently work outside of guilds.")).queue();
+            return;
+        }
+        if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) {
+            event.replyEmbeds(createQuickError("I don't have permission to read or send messages to this channel.")).setEphemeral(true).queue();
+            return;
+        }
         for (BaseCommand Command : commands) {
             if (processSlashCommand(Command, event)) {
                 return;
