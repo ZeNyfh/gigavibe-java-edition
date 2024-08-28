@@ -208,15 +208,19 @@ public class GuildDataManager {
 
     public static void RemoveConfig(Object identifier) {
         JSONObject config = Configs.get(identifier);
-        if (config == null) {
+        boolean isConfigNull = (config == null);
+        if (isConfigNull) {
             System.err.println("Attempted to remove the config " + identifier + " but no such config exists");
-            return;
+        } else {
+            Configs.remove(identifier);
         }
-        String filePath = configFolder + "/" + identifier + ".json";
+
+        String filePath = configFolder + File.separator + identifier + ".json";
         if (!new File(filePath).delete()) {
-            System.err.println("Unable to delete the config file for " + identifier); // In the context of guilds leaving, this isn't an issue
+            System.err.println("Unable to delete the config file for " + identifier);
+        } else if (isConfigNull) {
+            System.err.println("Deleted the config file for \"" + identifier + "\" despite JSONObject config was null.");
         }
-        Configs.remove(identifier);
     }
 
     public static void SaveQueues(JDA bot) { // queue restoration can only occur once because this here does NOT give the tracks their data.
