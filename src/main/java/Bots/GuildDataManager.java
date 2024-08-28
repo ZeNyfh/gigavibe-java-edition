@@ -207,19 +207,14 @@ public class GuildDataManager {
     }
 
     public static void RemoveConfig(Object identifier) {
-        JSONObject config = Configs.get(identifier);
-        boolean isConfigNull = (config == null);
-        if (isConfigNull) {
-            System.err.println("Attempted to remove the config " + identifier + " but no such config exists");
+        Configs.remove(identifier);
+        File file = new File(configFolder + "/" + identifier + ".json");
+        if (file.exists()) {
+            if (!file.delete()) {
+                System.err.println("Unable to delete the config file for " + identifier);
+            }
         } else {
-            Configs.remove(identifier);
-        }
-
-        String filePath = configFolder + File.separator + identifier + ".json";
-        if (!new File(filePath).delete()) {
-            System.err.println("Unable to delete the config file for " + identifier);
-        } else if (isConfigNull) {
-            System.err.println("Deleted the config file for \"" + identifier + "\" despite JSONObject config was null.");
+            System.err.println("Attempted to delete non-existent config " + identifier);
         }
     }
 
