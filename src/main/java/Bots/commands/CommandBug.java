@@ -20,7 +20,7 @@ public class CommandBug extends BaseCommand {
         }
         String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
         Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("User: `" + event.getUser().getName() + "`\nUserID: `" + event.getUser().getId() + "`\nGuild: `" + event.getGuild().getId() + "`\n\n" + messageContentCleaned).queue());
-        event.reply("Thanks for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\nPlease use the bug command to reply to messages!.");
+        event.reply("Thanks for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\n**Please use the bug command to reply to messages.**");
     }
 
     @Override
