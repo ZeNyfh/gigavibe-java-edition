@@ -24,7 +24,14 @@ public class CommandReplyToMessage extends BaseCommand {
             return;
         }
         String messageContent = event.getContentRaw().split(" ", 3)[2];
-        Objects.requireNonNull(event.getJDA().getUserById(Long.parseLong(event.getArgs()[1]))).openPrivateChannel().queue(a -> a.sendMessage(messageContent).queue());
+        try {
+            Objects.requireNonNull(event.getJDA().getUserById(Long.parseLong(event.getArgs()[1]))).openPrivateChannel().queue(a -> a.sendMessage(messageContent).queue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            event.reply("Something went wrong when trying to send the message, check the console.");
+            return;
+        }
+        event.reply("\uD83D\uDC4D");
     }
 
     @Override
