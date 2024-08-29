@@ -18,13 +18,14 @@ public class CommandBug extends BaseCommand {
             event.replyEmbeds(createQuickError("Please provide something to report."));
             return;
         }
-        Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("------------------------------\n" + event.getUser().getName() + "\n\n" + event.getContentRaw().split(" ", 2)[1]).queue());
-        event.reply("Thanks for sending in a bug report!");
+        String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
+        Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("User: `" + event.getUser().getName() + "`\nUserID: `" + event.getUser().getId() + "`\nGuild: `" + event.getGuild().getId() + "`\n\n" + messageContentCleaned).queue());
+        event.reply("Thanks for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\nPlease use the bug command to reply to messages!.");
     }
 
     @Override
     public String[] getNames() {
-        return new String[]{"bug"};
+        return new String[]{"bug", "issue"};
     }
 
     @Override
