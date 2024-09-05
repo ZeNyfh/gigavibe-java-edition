@@ -4,10 +4,17 @@ import Bots.BaseCommand;
 import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 import static Bots.Main.*;
 
@@ -55,10 +62,34 @@ public class CommandDevTests extends BaseCommand {
                 event.reply("Sleeping for " + sleepTime + "ms...");
                 Thread.sleep(sleepTime);
                 event.reply("Finished sleeping");
+            } else if (command.equalsIgnoreCase("guilds")) {
+                writeGuilds(event);
+                event.reply("File made guilds.csv.");
             } else {
                 event.reply("Unrecognised dev command " + command);
             }
         }
+    }
+
+    private static void writeGuilds(CommandEvent event) {
+        JDA bot = event.getJDA();
+        List<Guild> guilds = bot.getGuilds();
+        StringBuilder builder = new StringBuilder();
+        for (Guild g : guilds) {
+            builder.append(g.getName()).append(",").append(g.getMemberCount()).append("\n");
+        }
+        File file = new File("guilds.csv");
+        try {
+            file.delete();
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            writer.write(String.valueOf(builder));
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(builder);
     }
 
     @Override
