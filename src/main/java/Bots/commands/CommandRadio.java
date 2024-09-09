@@ -86,8 +86,8 @@ public class CommandRadio extends BaseCommand {
             eb.setColor(botColour);
             eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
             getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
-            eb.appendDescription("\n*Or use `" + readableBotPrefix + "radio search <String>`*");
-            eb.setFooter("Use \"" + readableBotPrefix + "radio <Radio Name>\" to play a radio station.");
+            eb.appendDescription("\n*Or use `" + readableBotPrefix + " radio search <String>`*");
+            eb.setFooter("Use \"" + readableBotPrefix + " radio <Radio Name>\" to play a radio station.");
             if (event.getArgs().length == 1) {
                 event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"), eb.build());
             } else {
