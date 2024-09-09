@@ -43,7 +43,7 @@ public class CommandInfo extends BaseCommand {
         eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
         eb.appendDescription("\uD83C\uDFB5 **VCs: ** " + vcCount + "\n\n");
         eb.appendDescription("\uD83D\uDD0A **Playing Count: ** " + playingCount + "\n\n");
-        eb.appendDescription("⏱️ **Gateway Ping: **" + event.getJDA().getGatewayPing() + "\n\n");
+        eb.appendDescription("⏱️ **Gateway Ping: **" + event.getJDA().getGatewayPing() + "ms\n\n");
         eb.setFooter("Version: " + botVersion);
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
