@@ -82,6 +82,7 @@ public class Main extends ListenerAdapter {
     public static final List<Long> LoopQueueGuilds = new ArrayList<>();
     public static final Map<Long, Integer> trackLoops = new HashMap<>();
     public static final Map<Long, List<String>> autoPlayedTracks = new HashMap<>();
+    public static final Map<Long, HashMap<String, String>> guildLocales = new HashMap<>();
 
     // Event Mappings
     private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
