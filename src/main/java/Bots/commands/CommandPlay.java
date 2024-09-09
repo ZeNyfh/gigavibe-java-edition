@@ -42,31 +42,31 @@ public class CommandPlay extends BaseCommand {
 
         // figure out if there are actually attachments that can be played
         List<Message.Attachment> attachments = event.getAttachments();
-        boolean playAttachments = false;
-        for (Message.Attachment attachment : attachments) {
-            if (attachment.getFileExtension() == null || !audioFiles.contains(attachment.getFileExtension().toLowerCase())) {
-                attachments.remove(attachment); // invalid file extension, remove the attachment from the list.
-            } else {
-                playAttachments = true;
+        List<Message.Attachment> playableAttachments = new ArrayList<>();
+
+        for (int i = 0; i < attachments.size(); i++) {
+            Message.Attachment attachment = attachments.get(i);
+            if (attachment.getFileExtension() != null && audioFiles.contains(attachment.getFileExtension().toLowerCase())) {
+                playableAttachments.add(attachment);
             }
         }
 
         // play attachments
-        if (playAttachments) {
-            Message.Attachment att = attachments.get(0);
+        if (!playableAttachments.isEmpty()) {
+            Message.Attachment att = playableAttachments.get(0);
             String fileExtension = att.getFileExtension() != null ? att.getFileExtension().toLowerCase() : "";
 
             if (fileExtension.equals("txt")) {
                 playFromTXT(event, true);
             } else {
                 try {
-                    if (attachments.size() == 1) {
-                        PlayerManager.getInstance().loadAndPlay(event, attachments.get(0).getUrl(), true);
+                    if (playableAttachments.size() == 1) {
+                        PlayerManager.getInstance().loadAndPlay(event, playableAttachments.get(0).getUrl(), true);
                     } else {
-                        for (Message.Attachment attachment : attachments) {
+                        for (Message.Attachment attachment : playableAttachments) {
                             PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
                         }
-                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + attachments.size() + " tracks from attachments."));
+                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + playableAttachments.size() + " tracks from attachments."));
                     }
                 } catch (Exception e) {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from attachments.\n```\n" + e.getMessage() + "\n```"));
@@ -74,6 +74,11 @@ public class CommandPlay extends BaseCommand {
             }
         } else { // no valid attachments to play, check for url/s in message content.
             if (args.length < 2) {
+                // error for no valid attachments found
+                if (!attachments.isEmpty()){
+                    event.replyEmbeds(createQuickError("The track failed to load: Unknown file format."));
+                    return;
+                }
                 event.replyEmbeds(createQuickError("No arguments given."));
                 return;
             }
