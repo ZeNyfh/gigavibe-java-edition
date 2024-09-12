@@ -44,7 +44,7 @@ public class CommandQueue extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         for (int j = 5 * newPageNumber - 5; j < 5 * newPageNumber && j < Queue.size(); j++) {
             AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
-            eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+            eb.appendDescription(j + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
         eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
         eb.setFooter(Queue.size() + " songs queued | Page " + newPageNumber + "/" + maxPage + " | Length: " + toTimestamp(queueTimeLength));
@@ -102,7 +102,7 @@ public class CommandQueue extends BaseCommand {
         queuePages.put(event.getGuild().getIdLong(), pageNumber);
         for (int i = 5 * pageNumber - 5; i < 5 * pageNumber && i < queueLength; i++) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
-            embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+            embed.appendDescription(i + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
         embed.setFooter(queueLength + " songs queued | Page " + pageNumber + "/" + ((queueLength + 4) / 5) + " | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);

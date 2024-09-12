@@ -130,7 +130,7 @@ public class CommandRadio extends BaseCommand {
                 event.replyEmbeds(createQuickError("Couldn't find a radio station with the given name"));
             } else {
                 PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
-                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + RadioDataFetcher.getStreamTitle(radioURL) + "](" + radioURL + ")**"));
+                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
             }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();

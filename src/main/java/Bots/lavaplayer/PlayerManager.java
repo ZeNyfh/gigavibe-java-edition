@@ -183,7 +183,7 @@ public class PlayerManager {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
                             } else {
-                                embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().title + "](" + tracks.get(i).getInfo().uri + ")\n");
+                                embed.appendDescription(i + 1 + ". [" + sanitise(tracks.get(i).getInfo().title) + "](" + tracks.get(i).getInfo().uri + ")\n");
                             }
                         }
                         if (tracks.size() > 5) {
