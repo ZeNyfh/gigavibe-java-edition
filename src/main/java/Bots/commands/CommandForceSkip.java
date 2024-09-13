@@ -74,7 +74,7 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + title + "](" + trackInfo.uri + ")**__"));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + sanitise(title) + "](" + trackInfo.uri + ")**__"));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
@@ -88,7 +88,7 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track to __**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track to __**[" + sanitise(title) + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim()));
             } else {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track\n\n" + messageBuilder).trim()));

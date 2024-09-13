@@ -374,6 +374,17 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
+    public static String sanitise(String str) {
+        String[] chars = new String[]{"_", "*", "`", "#", ">", "[", "]", "(", ")", "~"};
+
+        for (String c : chars) {
+            if (str.contains(c)) {
+                str = str.replaceAll(c, String.format("\\%s", c));
+            }
+        }
+        return str;
+    }
+
     public static GuildChannel getGuildChannelFromID(Long ID) {
         return bot.getGuildChannelById(ID);
     }

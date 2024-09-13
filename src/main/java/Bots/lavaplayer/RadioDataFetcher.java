@@ -25,30 +25,33 @@ public class RadioDataFetcher {
                 connection.setRequestProperty("Icy-Metadata", "1");
                 connection.connect();
                 InputStream inputStream = connection.getInputStream();
-                int i = 0;
-                while (true) {
-                    i++;
-                    if (i > 10) {
-                        break;
-                    }
+                for (int i = 0; i < 10; i++) {
                     inputStream.skip(metaInt);
                     String meta = readMetaData(inputStream);
+
                     if (meta.startsWith("StreamTitle")) {
                         String title = meta.substring("StreamTitle=".length(), meta.indexOf(';'));
-                        connection.disconnect();
-                        inputStream.close();
                         dataList.add(title.substring(1, title.length() - 1));
                     }
                     // TODO: add track author/artist here and in LRCLIBMANAGER
-                    return dataList.toArray(new String[1]);
                 }
-                return new String[]{"Unknown title"};
+
+                connection.disconnect();
+                inputStream.close();
+
+                // If no titles found, return "Unknown title"
+                if (dataList.isEmpty()) {
+                    return new String[]{"Unknown title"};
+                }
+
+                return dataList.toArray(new String[0]); // Return all found titles
             } else {
                 return new String[]{"Unknown title"};
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return new String[]{"Unknown title"};
     }
 
