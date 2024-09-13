@@ -21,8 +21,9 @@ public class LocaleManager {
     public static void init(JDA bot) {
         languages.put("english", readLocale("locales/en.txt"));
         languages.put("polish", readLocale("locales/pl.txt"));
+        languages.put("dutch", readLocale("locales/nl.txt"));
         for (Guild g : bot.getGuilds()) {
-            guildLocales.putIfAbsent(g.getIdLong(), languages.get("polish"));
+            guildLocales.putIfAbsent(g.getIdLong(), languages.get("dutch"));
         }
     }
 
