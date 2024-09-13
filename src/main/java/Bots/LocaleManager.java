@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.Main.guildLocales;
+import static Bots.Main.sanitise;
 
 public class LocaleManager {
     File file = new File("locales/en.txt");
@@ -31,14 +32,19 @@ public class LocaleManager {
         HashMap<String, String> localeMap = new HashMap<>();
 
         for (String line : lines) {
-            String[] lineSplit = line.split("=");
-            Objects.requireNonNull(english).put(lineSplit[0], lineSplit[1]);
+            if (line.equals("\n") || line.startsWith("/") || !line.contains("=")) continue;
+
+            String[] lineSplit = line.split("=", 1);
+            Objects.requireNonNull(english).put(lineSplit[0], serializeString(lineSplit[1]));
         }
         return localeMap;
     }
 
     Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
     public String serializeString(String localeInput) {
+        localeInput = localeInput.split("//", 1)[0];
+        localeInput = sanitise(localeInput).trim();
+
         Matcher matcher = serializePattern.matcher(localeInput);
         for (int i = 0; i > matcher.groupCount(); i++) {
             localeInput = localeInput.replaceAll(matcher.group(i), "%" + matcher.group(i) + "$s");
