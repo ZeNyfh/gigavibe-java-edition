@@ -16,11 +16,11 @@ import static Bots.Main.guildLocales;
 import static Bots.Main.sanitise;
 
 public class LocaleManager {
-    File file = new File("locales/en.txt");
-    HashMap<String, String> english = readLocale("locales/en.txt");
+    public static final HashMap<String, String> english = readLocale("locales/en.txt");
+    public static final HashMap<String, String> polish = readLocale("locales/pl.txt");
 
 
-    public HashMap<String, String> readLocale(String localeFile) {
+    private static HashMap<String, String> readLocale(String localeFile) {
         File file = new File(localeFile);
         List<String> lines = new ArrayList<>();
         try {
@@ -35,13 +35,13 @@ public class LocaleManager {
             if (line.equals("\n") || line.startsWith("/") || !line.contains("=")) continue;
 
             String[] lineSplit = line.split("=", 1);
-            Objects.requireNonNull(english).put(lineSplit[0], serializeString(lineSplit[1]));
+            localeMap.put(lineSplit[0], serializeString(lineSplit[1]));
         }
         return localeMap;
     }
 
-    Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
-    public String serializeString(String localeInput) {
+    static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
+    private static String serializeString(String localeInput) {
         localeInput = localeInput.split("//", 1)[0];
         localeInput = sanitise(localeInput).trim();
 
