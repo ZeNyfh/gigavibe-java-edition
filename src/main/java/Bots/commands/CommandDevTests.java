@@ -76,7 +76,7 @@ public class CommandDevTests extends BaseCommand {
         List<Guild> guilds = bot.getGuilds();
         StringBuilder builder = new StringBuilder();
         for (Guild g : guilds) {
-            builder.append(g.getName()).append(",").append(g.getMemberCount()).append("\n");
+            builder.append(g.getName().replaceAll(",", "")).append(",").append(g.getMemberCount()).append(",").append(g.getLocale().getLanguageName()).append("\n");
         }
         File file = new File("guilds.csv");
         try {
