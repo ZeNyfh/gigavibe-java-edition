@@ -213,8 +213,6 @@ TrackScheduler.criticalFailure.description=Tracks have now failed to load 3 time
 TrackScheduler.criticalFailure.footer=If this issue persists with specific audio sources, please file a bug report using /bug
 
 TrackScheduler.nextTrack.nowPlaying=Now playing: {1}
-TrackScheduler.nextTrack.
-
 
 Main.success=Success // any messages with Success "✅ **Success**"
 Main.noPermission=You do not have the permission to use this command.
