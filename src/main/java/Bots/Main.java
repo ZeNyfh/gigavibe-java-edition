@@ -109,11 +109,13 @@ public class Main extends ListenerAdapter {
                 .addEventListeners(new Main())
                 .build();
         bot.awaitReady();
+        LocaleManager.init(bot);
         bot.updateCommands().addCommands(slashCommands).queue();
         System.out.println("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
+
         for (Guild guild : bot.getGuilds()) {
             trackLoops.put(guild.getIdLong(), 0);
             autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
@@ -374,12 +376,29 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
+    public static String replaceAllNoRegex(String input, String toReplace, String replacement) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+
+        while (i < input.length()) {
+            if (i + toReplace.length() <= input.length() && input.substring(i, i + toReplace.length()).equals(toReplace)) {
+                result.append(replacement);
+                i += toReplace.length();
+            } else {
+                result.append(input.charAt(i));
+                i++;
+            }
+        }
+        return result.toString();
+    }
+
     public static String sanitise(String str) {
-        String[] chars = new String[]{"_", "*", "`", "#", ">", "[", "]", "(", ")", "~"};
+        String[] chars = new String[]{"_", "`", "#", "(", ")", "~"};
 
         for (String c : chars) {
             if (str.contains(c)) {
-                str = str.replaceAll(c, String.format("\\%s", c));
+                System.err.println(str);
+                str = replaceAllNoRegex(str, c, String.format("\\%s", c));
             }
         }
         return str;
