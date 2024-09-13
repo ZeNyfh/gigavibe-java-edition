@@ -1,4 +1,4 @@
-// Locale made by ZeNyfh.
+// Tłumaczenie stworzone przez ZeNyfh.
 // Any line starting with "//" will be ignored.
 // Any newlines will also be ignored.
 // Trailing spaces will be removed.
@@ -11,7 +11,7 @@ CommandAutoplay.noAPI=Bot nie otrzymał klucza API dla LastFM, ta komenda nie dz
 CommandAutoplay.notAutoplaying=Autoodtwarzanie zostało wyłączone.
 CommandAutoplay.isAutoplaying=Autoodtwarzanie zostało włączone.
 
-CommandBlockChannel.invalidUsage=Poprawne użycie to: {1} lub {2}
+CommandBlockChannel.invalidUsage=Poprawne użycie to: {1} <kanał>{2} lub {3}
 CommandBlockChannel.alreadyBlocked=Ten kanał został zablokowany.
 CommandBlockChannel.notBlocked=Ten kanał został odblokowany.
 CommandBlockChannel.added=Dodano {1} do listy.
