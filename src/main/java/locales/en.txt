@@ -1,1 +1,224 @@
-CommandForceSkip.skippedToPos=Skipped {1} tracks to {2}{3}
+// Locale made by ZeNyfh.
+// Any line starting with "//" will be ignored.
+// Any newlines will also be ignored.
+// Trailing spaces will be removed.
+// Use this english one as a template.
+// Comments can be added to the messages via a preceding //.
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
+// please preserve the capitalisation and any punctuation if applicable.
+
+CommandAutoplay.noAPI=The bot has not been given an API key for LastFM, this command does not work without it.
+CommandAutoplay.notAutoplaying=No longer autoplaying.
+CommandAutoplay.isAutoplaying=Now autoplaying.
+
+CommandBlockChannel.invalidUsage=The valid usage is: {1} or {2}
+CommandBlockChannel.alreadyBlocked=This channel is already blocked.
+CommandBlockChannel.notBlocked=This channel is not blocked.
+CommandBlockChannel.added=Added {1} to the list.
+CommandBlockChannel.removed=Removed {1} from the list.
+CommandBlockChannel.notFound=This channel was not found in this discord server.
+CommandBlockChannel.channelList=Blocked channels for {1}
+CommandBlockChannel.noChannels=None
+
+CommandBug.noReport=Please provide something to report.
+CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{2}
+
+CommandClearQueue.cleared=Cleared the queue
+
+CommandDisconnect.disconnected=Disconnected from the voice channel and cleared the queue.
+
+CommandDJ.roleList=Roles:
+CommandDJ.userList=Users:
+CommandDJ.roleListEmpty=None.
+CommandDJ.guildDJs=DJs for {1}
+CommandDJ.notGiven=No members or roles were specified.
+CommandDJ.member=member
+CommandDJ.member.plural=members
+CommandDJ.role=role
+CommandDJ.role.plural=roles
+CommandDJ.and=and
+CommandDJ.added=Added {1} to the DJ list.
+CommandDJ.removed=Removed {1} from the DJ list.
+
+CommandForceSkip.failedToFind=Autoplay failed to find {1}
+CommandForceSkip.couldNotFind=Autoplay could not find similar tracks.
+CommandForceSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
+CommandForceSkip.autoplayQueued=Autoplay queued:
+CommandForceSkip.skippedQueue=Skipped the entire queue
+CommandForceSkip.skippedToPos=Skipped {1} tracks to {2}
+CommandForceSkip.skippedToTrack=Skipped the current track to {2}
+CommandForceSkip.skipped=Skipped the current track
+
+CommandGithub.message={1}Use this for bug reports and feature requests ONLY.{2}When making an issue, make sure to specify what the bug is and how to recreate it.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+
+CommandHelp.category.general=General
+CommandHelp.category.music=Music
+CommandHelp.category.DJ=DJ
+CommandHelp.category.admin=Admin
+CommandHelp.category.dev=Dev
+CommandHelp.category.unknown=Unrecognised category for help title: {1}
+CommandHelp.alias=Alias
+commandHelp.alias.plural=Aliases
+CommandHelp.originalFooter=Click the buttons to get more information on a group.
+CommandHelp.footer=Syntax: {1} is a required argument, {2} is an optional argument. {3} is an alternate word for the command.
+CommandHelp.embedTitle=Commands
+
+CommandInfo.info=Info
+CommandInfo.ramUsage=Ram usage: {1}
+CommandInfo.upTime=Uptime: {1}
+CommandInfo.discordServers=Guilds: {1}
+CommandInfo.registeredCommands=Registered Commands: {1}
+CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
+CommandInfo.playingCount=Playing Count: {1}
+CommandInfo.gatewayPing=Gateway Ping: {1}
+CommandInfo.version=Version: {1}
+CommandInfo.ping=Ping {1} ms // ms here being short for milliseconds
+
+CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}
+CommandInsert.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4}
+CommandInsert.decodingError=Something went wrong when decoding the track.
+CommandInsert.addedToPos=Added the track to position: {1}
+CommandInsert.queueError=There was an error while adding the track to the queue: {1}
+
+CommandInvite.haveFun=Have fun!
+
+CommandJoin.noAccess=The bot can't access your channel
+CommandJoin.joined=Joined your vc.
+
+CommandLoop.notLooping=No longer looping the current track.
+CommandLoop.looping=Looping the current track.
+
+CommandLoopQueue.notLooping=No longer looping the current queue.
+CommandLoopQueue.looping=Looping the current queue.
+
+CommandLyrics.notFound=No results found or the song title was unknown.
+CommandLyrics.source=Lyrics sourced from lrclib.net
+CommandLyrics.lyricsForTrack=Lyrics for: {1}
+CommandLyrics.tooLong=Lyrics were too long, uploading them as a file.
+
+CommandNowPlaying.livestreamDuration=Live stream duration {1}
+CommandNowPlaying.channel=Channel: {1}
+CommandNowPlaying.next=Up next:
+CommandNowPlaying.paused=Track paused:
+CommandNowPlaying.true=True
+CommandNowPlaying.false=False
+CommandNowPlaying.queueLooping=Queue looping:
+CommandNowPlaying.autoplaying=Auto playing:
+
+CommandPause.resumed=The track is now playing.
+CommandPause.paused=The track is now paused.
+
+CommandPing.ping=ping: {1}ms // ms here being short for milliseconds
+CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
+
+CommandPitch.defaulted=Set the pitch back to 1.
+CommandPitch.range=The pitch must be between 0.25 and 5
+CommandPitch.changed=Set the pitch of the track to {1}x // x here is like 5x or 2x, aka a multiplier
+
+CommandPlay.queuedFromAtt=Queued {1} tracks from attachments.
+CommandPlay.queuedFromAtt.error=Something went wrong when loading the tracks from attachments.
+CommandPlay.wrongFormat=The track failed to load: Unknown file format.
+CommandPlay.noArgs=No arguments given.
+CommandPlay.decodeError=Something went wrong when decoding the track.
+CommandPlay.queuedManySongs=Queued {1} songs!
+CommandPlay.fileError=Something went wrong when loading the tracks from the file.
+
+CommandPrivacyPolicy.privacyPolicy=Privacy Policy
+
+CommandQueue.nowPlaying=Now playing:
+CommandQueue.queueInfoFooter={1} songs queued {2} Page {3} Length: {4}
+CommandQueue.empty=The queue is empty.
+CommandQueue.unknownTitle=Unknown title
+CommandQueue.didYouMean=Did you mean to use {1}?
+CommandQueue.integerError=The page must be a positive integer.
+
+CommandRadio.list=Radio list:
+CommandRadio.alternativeList=Or use {1} radio search <String> // keep the <>
+CommandRadio.useForPlay=Use {1} radio <Radio Name>{2} to play a radio station.
+CommandRadio.noArgsList=No arguments given, heres some radio stations to choose from:
+CommandRadio.noSearchTerm=No search term given.
+CommandRadio.notFound=Couldn't find a radio station with the given name
+CommandRadio.queued=Queued Radio station:
+CommandRadio.invalid=Not a valid radio station.
+
+CommandRemove.noSongs=There are no songs in the queue to remove.
+CommandRemove.invalidArgs=Invalid arguments, integers only.
+CommandRemove.tooLarge=The provided number was larger than the size of the queue.
+CommandRemove.removed=Skipped queued track {1} successfully.
+
+CommandSeek.invalidArg=Argument is invalid, use the format {1}[HOURS]:[MINUTES]:<SECONDS>{2}" // keep the [] and <>
+CommandSeek.timeTooLow=The time provided is lower than or equal to 0.
+CommandSeek.cannotSeek=You cannot seek with this track.
+CommandSeek.noArg=No argument given.
+
+CommandShuffle.emptyQueue=There is nothing in the queue.
+CommandShuffle.shuffled=Shuffled the queue!
+
+CommandSkip.alreadyVoted=You have already voted to skip.
+CommandSkip.autoplay.failedToFind=Autoplay failed to find
+CommandSkip.failedToFind=Autoplay failed to find {1}
+CommandSkip.couldNotFind=Autoplay could not find similar tracks.
+CommandSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
+CommandSkip.autoplayQueued=Autoplay queued:
+CommandSkip.skippedTo=Skipped the track to {1}
+CommandSkip.skippedTo.unknown=Skipped the track to {1}Unknown Title{2}
+CommandSkip.nowPlaying=Now playing: {1}
+CommandSkip.voted=Voted to skip the track {1} of {2} needed to skip.
+
+CommandSpeed.defaulted=Set the speed back to 1.
+CommandSpeed.rangeError=The speed must be between 0.2 and 5
+CommandSpeed.success=Set the playback speed of the track to {1}x. // x here is a multiplier, for example 3x
+
+CommandTOS.TermsOfService=Terms of Service
+
+CommandVibrato.defaulted=Set the parameters to their default values.
+CommandVibrato.incorrectArgs=The valid usage is: {1}vibrato <Frequency> <Depth>{2} // keep the <>
+CommandVibrato.rangeError.frequency=The frequency must be between 0.1 and 14
+CommandVibrato.rangeError.depth=The depth must be between 0.05 and 1
+CommandVibrato.success=Set the vibrato frequency to {1}Hz.{2}Set the vibrato depth to {3}
+
+CommandVolume.defaulted=Set volume to the default of {1}.
+CommandVolume.incorrectArg=The volume must be an integer.
+CommandVolume.tooHigh=The volume can not be higher than 500.
+CommandVolume.tooLow=The volume can not be lower than 0.
+CommandVolume.success=Changed the volume to {1}.
+CommandVolume.invalidValue=Invalid value.
+
+BaseCommand.notAllowed=Not Allowed
+
+CommandStateChecker.notInVC=You aren't in a VC. // VC is voice channel
+CommandStateChecker.botNotInVC=The bot isn't in a VC.
+CommandStateChecker.botNotInYourVC=The bot isn't in your VC.
+CommandStateChecker.botBusy=The bot is already busy in another VC.
+CommandStateChecker.cannotJoin=The bot is unable to join the VC.
+CommandStateChecker.noDJ=You do not have a DJ permissions.
+CommandStateChecker.commandBlocked=This command is blocked in this channel.
+CommandStateChecker.isNotPlaying=The bot is not currently playing anything.
+CommandStateChecker.devOnly=This command is for developers only.
+
+PlayerManager.noSpotify=The bot is unable to play spotify tracks right now
+PlayerManager.playlistQueued=Size: {1} tracks.{2}Length: {3}
+PlayerManager.APIError=An error with the YouTube search API has occurred.
+PlayerManager.loadFailed=The track failed to load: {1}
+
+TrackScheduler.autoplay.notFound=Autoplay failed to find {1}
+TrackScheduler.autoplay.noSimilar=Autoplay could not find similar tracks.
+TrackScheduler.autoplay.unknownError=An unknown error occurred when trying to autoplay.
+TrackScheduler.autoplay.queued=Autoplay queued: {1}
+
+TrackScheduler.regularFailure=The track failed to load due to an unknown reason. Skipping...
+
+TrackScheduler.criticalFailure.title=Critical Error
+TrackScheduler.criticalFailure.description=Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.
+TrackScheduler.criticalFailure.footer=If this issue persists with specific audio sources, please file a bug report using /bug
+
+TrackScheduler.nextTrack.nowPlaying=Now playing: {1}
+TrackScheduler.nextTrack.
+
+
+Main.success=Success // any messages with Success "✅ **Success**"
+Main.noPermission=You do not have the permission to use this command.
+Main.error=Error
+Main.unknown=Unknown
+Main.channel=Channel {1}
+Main.duration=Duration {1}
