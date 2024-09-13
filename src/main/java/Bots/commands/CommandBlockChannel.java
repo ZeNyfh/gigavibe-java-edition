@@ -23,13 +23,13 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have permission to use this command."));
+            event.replyEmbeds(createQuickError("You do not have permission to use this command."));
             return;
         }
         String[] args = event.getArgs();
         if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
             if (args.length < 3) {
-                event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments**", "The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
+                event.replyEmbeds(createQuickError("The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
                 return;
             }
         }
@@ -77,7 +77,7 @@ public class CommandBlockChannel extends BaseCommand {
             }
             event.replyEmbeds(eb.build());
         } else {
-            event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments**", "The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
+            event.replyEmbeds(createQuickError("The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
         }
     }
 
