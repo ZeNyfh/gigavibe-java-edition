@@ -1,0 +1,223 @@
+// Locale made by ZeNyfh.
+// Any line starting with "//" will be ignored.
+// Any newlines will also be ignored.
+// Trailing spaces will be removed.
+// Use this english one as a template.
+// Comments can be added to the messages via a preceding //.
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
+// please preserve the capitalisation and any punctuation if applicable.
+
+CommandAutoplay.noAPI=Bot nie otrzymał klucza API dla LastFM, ta komenda nie działa bez niego.
+CommandAutoplay.notAutoplaying=Autoodtwarzanie zostało wyłączone.
+CommandAutoplay.isAutoplaying=Autoodtwarzanie zostało włączone.
+
+CommandBlockChannel.invalidUsage=Poprawne użycie to: {1} lub {2}
+CommandBlockChannel.alreadyBlocked=Ten kanał został zablokowany.
+CommandBlockChannel.notBlocked=Ten kanał został odblokowany.
+CommandBlockChannel.added=Dodano {1} do listy.
+CommandBlockChannel.removed=Usunięto {1} z listy.
+CommandBlockChannel.notFound=Nie znaleziono tego kanału na tym serwerze Discord.
+CommandBlockChannel.channelList=Zablokowane kanały dla {1}
+CommandBlockChannel.noChannels=Brak
+
+CommandBug.noReport=Podaj coś do zgłoszenia.
+CommandBug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{1}Programista skontaktuje się z Tobą przez DM bota.{2}Proszę użyć komendy bug, aby odpowiedzieć na wiadomości.{2}
+
+CommandClearQueue.cleared=Kolejka została wyczyszczona.
+
+CommandDisconnect.disconnected=Rozłączono z kanałem głosowym i wyczyszczono kolejkę.
+
+CommandDJ.roleList=Role:
+CommandDJ.userList=Użytkownicy:
+CommandDJ.roleListEmpty=Brak.
+CommandDJ.guildDJs=DJe dla {1}
+CommandDJ.notGiven=Nie podano członków ani ról.
+CommandDJ.member=członek
+CommandDJ.member.plural=członkowie
+CommandDJ.role=rola
+CommandDJ.role.plural=role
+CommandDJ.and=i
+CommandDJ.added=Dodano {1} do listy DJ-ów.
+CommandDJ.removed=Usunięto {1} z listy DJ-ów.
+
+CommandForceSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
+CommandForceSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+CommandForceSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+CommandForceSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
+CommandForceSkip.skippedQueue=Pominięto całą kolejkę.
+CommandForceSkip.skippedToPos=Pominięto {1} utworów do {2}
+CommandForceSkip.skippedToTrack=Pominięto bieżący utwór do {2}
+CommandForceSkip.skipped=Pominięto bieżący utwór.
+
+CommandGithub.message={1}Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{2}Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+
+CommandHelp.category.general=Ogólne
+CommandHelp.category.music=Muzyka
+CommandHelp.category.DJ=DJ
+CommandHelp.category.admin=Admin
+CommandHelp.category.dev=Dev
+CommandHelp.category.unknown=Nieznana kategoria dla tytułu pomocy: {1}
+CommandHelp.alias=Alias
+commandHelp.alias.plural=Aliasy
+CommandHelp.originalFooter=Kliknij guziki, aby uzyskać więcej informacji o grupie.
+CommandHelp.footer=Składnia: {1} to argument wymagany, {2} to argument opcjonalny. {3} to alternatywne słowo dla komendy.
+CommandHelp.embedTitle=Komendy
+
+CommandInfo.info=Informacje
+CommandInfo.ramUsage=Zużycie RAM: {1}
+CommandInfo.upTime=Czas działania: {1}
+CommandInfo.discordServers=Serwery: {1}
+CommandInfo.registeredCommands=Zarejestrowane komendy: {1}
+CommandInfo.voiceChannels=Kanały głosowe: {1} 
+CommandInfo.playingCount=Liczba odtwarzanych: {1}
+CommandInfo.gatewayPing=Ping bramy: {1}
+CommandInfo.version=Wersja: {1}
+CommandInfo.ping=Ping {1} ms 
+
+CommandInsert.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}
+CommandInsert.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
+CommandInsert.decodingError=Wystąpił błąd podczas dekodowania utworu.
+CommandInsert.addedToPos=Dodano utwór na pozycję: {1}
+CommandInsert.queueError=Wystąpił błąd podczas dodawania utworu do kolejki: {1}
+
+CommandInvite.haveFun=Miłej zabawy!
+
+CommandJoin.noAccess=Bot nie ma dostępu do Twojego kanału.
+CommandJoin.joined=Bot dołączył do Twojego kanału głosowego.
+
+CommandLoop.notLooping=Nie powtarza już bieżącego utworu.
+CommandLoop.looping=Powtarza bieżący utwór.
+
+CommandLoopQueue.notLooping=Nie powtarza już bieżącej kolejki.
+CommandLoopQueue.looping=Powtarza bieżącą kolejkę.
+
+CommandLyrics.notFound=Nie znaleziono wyników lub tytuł utworu był nieznany.
+CommandLyrics.source=Teksty pochodzą z lrclib.net
+CommandLyrics.lyricsForTrack=Tekst dla: {1}
+CommandLyrics.tooLong=Tekst był za długi, przesyłam jako plik.
+
+CommandNowPlaying.livestreamDuration=Czas trwania transmisji na żywo {1}
+CommandNowPlaying.channel=Kanał: {1}
+CommandNowPlaying.next=Następne:
+CommandNowPlaying.paused=Utwór wstrzymany:
+CommandNowPlaying.true=Tak
+CommandNowPlaying.false=
+CommandNowPlaying.queueLooping=Powtarzanie kolejki:
+CommandNowPlaying.autoplaying=Autoodtwarzanie:
+
+CommandPause.resumed=Utwór jest teraz odtwarzany.
+CommandPause.paused=Utwór jest teraz wstrzymany.
+
+CommandPing.ping=ping: {1}ms 
+CommandPing.gatewayPing=ping bramy: {1}ms 
+
+CommandPitch.defaulted=Przywrócono ton dźwięku do 1.
+CommandPitch.range=Ton dźwięku musi wynosić od 0.25 do 5
+CommandPitch.changed=Ustawiono Ton dźwięku utworu na {1}x
+
+CommandPlay.queuedFromAtt=Dodano do kolejki {1} utworów z załączników.
+CommandPlay.queuedFromAtt.error=Wystąpił błąd podczas ładowania utworów z załączników.
+CommandPlay.wrongFormat=Utwór nie został załadowany: Nieznany format pliku.
+CommandPlay.noArgs=Nie podano argumentów.
+CommandPlay.decodeError=Wystąpił błąd podczas dekodowania utworu.
+CommandPlay.queuedManySongs=Dodano do kolejki {1} utworów!
+CommandPlay.fileError=Wystąpił błąd podczas ładowania utworów z pliku.
+
+CommandPrivacyPolicy.privacyPolicy=Polityka Prywatności
+
+CommandQueue.nowPlaying=Teraz odtwarzane:
+CommandQueue.queueInfoFooter={1} utworów w kolejce {2} Strona {3} Długość: {4}
+CommandQueue.empty=Kolejka jest pusta.
+CommandQueue.unknownTitle=Nieznany tytuł
+CommandQueue.didYouMean=Czy chodziło o {1}?
+CommandQueue.integerError=Strona musi być liczbą całkowitą dodatnią.
+
+CommandRadio.list=Lista stacji radiowych:
+CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a> 
+CommandRadio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
+CommandRadio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
+CommandRadio.noSearchTerm=Nie podano terminu wyszukiwania.
+CommandRadio.notFound=Nie znaleziono stacji radiowej o podanej nazwie.
+CommandRadio.queued=Dodano do kolejki stację radiową:
+CommandRadio.invalid=Nieprawidłowa stacja radiowa.
+
+CommandRemove.noSongs=Brak utworów w kolejce do usunięcia.
+CommandRemove.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.
+CommandRemove.tooLarge=Podana liczba jest większa niż rozmiar kolejki.
+CommandRemove.removed=Usunięto z kolejki utwór {1} pomyślnie.
+
+CommandSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}" 
+CommandSeek.timeTooLow=Podany czas jest mniejszy lub równy 0.
+CommandSeek.cannotSeek=Nie można przewinąć tego utworu.
+CommandSeek.noArg=Nie podano argumentu.
+
+CommandShuffle.emptyQueue=Kolejka jest pusta.
+CommandShuffle.shuffled=Kolejka została przetasowana!
+
+CommandSkip.alreadyVoted=Już oddałeś głos na pominięcie.
+CommandSkip.autoplay.failedToFind=Autoodtwarzanie nie mogło znaleźć niczego
+CommandSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
+CommandSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+CommandSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+CommandSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
+CommandSkip.skippedTo=Przewinięto utwór do {1}
+CommandSkip.skippedTo.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
+CommandSkip.nowPlaying=Teraz odtwarzane: {1}
+CommandSkip.voted=Oddano głos na pominięcie utworu {1} z {2} potrzebnych do pominięcia.
+
+CommandSpeed.defaulted=Przywrócono prędkość do 1.
+CommandSpeed.rangeError=Prędkość musi wynosić od 0.2 do 5
+CommandSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x. 
+
+CommandTOS.TermsOfService=Regulamin
+
+CommandVibrato.defaulted=Przywrócono domyślne wartości parametrów.
+CommandVibrato.incorrectArgs=Poprawne użycie to: {1}vibrato <Częstotliwość> <Głębokość>{2} 
+CommandVibrato.rangeError.frequency=Częstotliwość musi wynosić od 0.1 do 14
+CommandVibrato.rangeError.depth=Głębokość musi wynosić od 0.05 do 1
+CommandVibrato.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
+
+CommandVolume.defaulted=Ustawiono głośność na domyślną wartość {1}.
+CommandVolume.incorrectArg=Głośność musi być liczbą całkowitą.
+CommandVolume.tooHigh=Głośność nie może być większa niż 500.
+CommandVolume.tooLow=Głośność nie może być mniejsza niż 0.
+CommandVolume.success=Zmieniono głośność na {1}.
+CommandVolume.invalidValue=Nieprawidłowa wartość.
+
+BaseCommand.notAllowed=Brak dostępu
+
+CommandStateChecker.notInVC=Nie jesteś w kanale głosowym.
+CommandStateChecker.botNotInVC=Bot nie jest w kanale głosowym.
+CommandStateChecker.botNotInYourVC=Bot nie jest w Twoim kanale głosowym.
+CommandStateChecker.botBusy=Bot jest zajęty w innym kanale głosowym.
+CommandStateChecker.cannotJoin=Bot nie może dołączyć do kanału głosowego.
+CommandStateChecker.noDJ=Nie masz uprawnień DJ-a.
+CommandStateChecker.commandBlocked=Ta komenda jest zablokowana w tym kanale.
+CommandStateChecker.isNotPlaying=Bot obecnie nic nie odtwarza.
+CommandStateChecker.devOnly=Ta komenda jest tylko dla programistów.
+
+PlayerManager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
+PlayerManager.playlistQueued=Ilość: {1} utworów.{2}Długość: {3}
+PlayerManager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
+PlayerManager.loadFailed=Utwór nie został załadowany: {1}
+
+TrackScheduler.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
+TrackScheduler.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+TrackScheduler.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+TrackScheduler.autoplay.queued=Autoodtwarzanie dodało do kolejki: {1}
+
+TrackScheduler.regularFailure=Utwór nie został załadowany z nieznanego powodu. Pomijam...
+
+TrackScheduler.criticalFailure.title=Błąd krytyczny
+TrackScheduler.criticalFailure.description=Odtworzenie utworów nie powiodło się 3 razy, przypuszczalnie z powodu problemu sieciowego poza naszą kontrolą. Czyszczenie kolejki, aby uniknąć spamu.
+TrackScheduler.criticalFailure.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
+
+TrackScheduler.nextTrack.nowPlaying=Teraz odtwarzane: {1}
+
+Main.success=Sukces
+Main.noPermission=Nie masz uprawnień do użycia tej komendy.
+Main.error=Błąd
+Main.unknown=Nieznany
+Main.channel=Kanał {1}
+Main.duration=Czas trwania {1}
+
