@@ -11,7 +11,7 @@ CommandAutoplay.noAPI=The bot has not been given an API key for LastFM, this com
 CommandAutoplay.notAutoplaying=No longer autoplaying.
 CommandAutoplay.isAutoplaying=Now autoplaying.
 
-CommandBlockChannel.invalidUsage=The valid usage is: {1} <channel> or {2}
+CommandBlockChannel.invalidUsage=The valid usage is: {1} <channel>{2} or {3}
 CommandBlockChannel.alreadyBlocked=This channel is already blocked.
 CommandBlockChannel.notBlocked=This channel is not blocked.
 CommandBlockChannel.added=Added {1} to the list.
