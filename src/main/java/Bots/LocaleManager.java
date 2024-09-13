@@ -1,14 +1,14 @@
 package Bots;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,9 +16,15 @@ import static Bots.Main.guildLocales;
 import static Bots.Main.sanitise;
 
 public class LocaleManager {
-    public static final HashMap<String, String> english = readLocale("locales/en.txt");
-    public static final HashMap<String, String> polish = readLocale("locales/pl.txt");
+    public static HashMap<String, HashMap<String, String>> languages = new HashMap<>();
 
+    public static void init(JDA bot) {
+        languages.put("english", readLocale("locales/en.txt"));
+        languages.put("polish", readLocale("locales/pl.txt"));
+        for (Guild g : bot.getGuilds()) {
+            guildLocales.putIfAbsent(g.getIdLong(), languages.get("polish"));
+        }
+    }
 
     private static HashMap<String, String> readLocale(String localeFile) {
         File file = new File(localeFile);
@@ -34,21 +40,36 @@ public class LocaleManager {
         for (String line : lines) {
             if (line.equals("\n") || line.startsWith("/") || !line.contains("=")) continue;
 
-            String[] lineSplit = line.split("=", 1);
-            localeMap.put(lineSplit[0], serializeString(lineSplit[1]));
+            String[] lineSplit = line.split("=", 2);
+            if (lineSplit.length > 1) {
+                localeMap.put(lineSplit[0], serializeString(lineSplit[1]));
+            } else {
+                System.err.println("Problematic locale: " + line);
+            }
         }
         return localeMap;
     }
 
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
+
     private static String serializeString(String localeInput) {
         localeInput = localeInput.split("//", 1)[0];
-        localeInput = sanitise(localeInput).trim();
+        localeInput = localeInput.trim();
 
         Matcher matcher = serializePattern.matcher(localeInput);
-        for (int i = 0; i > matcher.groupCount(); i++) {
-            localeInput = localeInput.replaceAll(matcher.group(i), "%" + matcher.group(i) + "$s");
+
+        while (matcher.find()) {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                try {
+                    String match = matcher.group(i);
+                    localeInput = localeInput.replace("{" + match + "}", "%" + match + "$s");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("Issue: " + localeInput);
+                }
+            }
         }
         return localeInput;
     }
+
 }
