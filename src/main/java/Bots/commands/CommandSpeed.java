@@ -31,7 +31,7 @@ public class CommandSpeed extends BaseCommand {
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5 && value >= 0.2)) {
-            event.replyEmbeds(createQuickError("This speed must be between 0.2 and 5"));
+            event.replyEmbeds(createQuickError("The speed must be between 0.2 and 5"));
             return;
         }
 
