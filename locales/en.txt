@@ -67,6 +67,7 @@ CommandInfo.info=Info
 CommandInfo.ramUsage=Ram usage: {1}
 CommandInfo.upTime=Uptime: {1}
 CommandInfo.discordServers=Guilds: {1}
+CommandInfo.discordMembers=Users: {1}
 CommandInfo.registeredCommands=Registered Commands: {1}
 CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
 CommandInfo.playingCount=Playing Count: {1}

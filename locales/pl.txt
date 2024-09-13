@@ -67,12 +67,13 @@ CommandInfo.info=Informacje
 CommandInfo.ramUsage=Zużycie RAM: {1}
 CommandInfo.upTime=Czas działania: {1}
 CommandInfo.discordServers=Serwery: {1}
+CommandInfo.discordMembers=Użytkownicy: {1}
 CommandInfo.registeredCommands=Zarejestrowane komendy: {1}
-CommandInfo.voiceChannels=Kanały głosowe: {1} 
+CommandInfo.voiceChannels=Kanały głosowe: {1}
 CommandInfo.playingCount=Liczba odtwarzanych: {1}
 CommandInfo.gatewayPing=Ping bramy: {1}
 CommandInfo.version=Wersja: {1}
-CommandInfo.ping=Ping {1} ms 
+CommandInfo.ping=Ping {1}
 
 CommandInsert.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}
 CommandInsert.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
@@ -220,4 +221,3 @@ Main.error=Błąd
 Main.unknown=Nieznany
 Main.channel=Kanał {1}
 Main.duration=Czas trwania {1}
-
