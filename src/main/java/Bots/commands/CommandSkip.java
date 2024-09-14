@@ -60,15 +60,15 @@ public class CommandSkip extends BaseCommand {
                 String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
                 boolean canPlay = true;
                 if (searchTerm.equals("notfound")) {
-                    messageBuilder.append("❌ **Error:**\nAutoplay failed to find ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
+                    messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\nAutoplay failed to find ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
                     canPlay = false;
                 }
                 if (searchTerm.equals("none")) {
-                    messageBuilder.append("❌ **Error:**\nAutoplay could not find similar tracks.\n");
+                    messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\nAutoplay could not find similar tracks.\n");
                     canPlay = false;
                 }
                 if (searchTerm.isEmpty()) {
-                    messageBuilder.append("❌ **Error:**\nAn unknown error occurred when trying to autoplay.\n");
+                    messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\nAn unknown error occurred when trying to autoplay.\n");
                     canPlay = false;
                 }
                 if (canPlay) {

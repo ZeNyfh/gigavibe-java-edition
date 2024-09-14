@@ -74,15 +74,15 @@ public class TrackScheduler extends AudioEventAdapter {
                 boolean canAutoPlay = true;
 
                 if (searchTerm.equals("notfound")) {
-                    errorBuilder.append("❌ **Error:**\n").append("Autoplay failed to find ").append(track.getInfo().title).append("\n");
+                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("Autoplay failed to find ").append(track.getInfo().title).append("\n");
                     canAutoPlay = false;
                 }
                 if (searchTerm.equals("none")) {
-                    errorBuilder.append("❌ **Error:**\n").append("Autoplay could not find similar tracks.").append("\n");
+                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("Autoplay could not find similar tracks.").append("\n");
                     canAutoPlay = false;
                 }
                 if (searchTerm.isEmpty()) {
-                    errorBuilder.append("❌ **Error:**\n").append("An unknown error occurred when trying to autoplay.").append("\n");
+                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("An unknown error occurred when trying to autoplay.").append("\n");
                     canAutoPlay = false;
                 }
 

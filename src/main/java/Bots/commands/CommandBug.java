@@ -18,12 +18,12 @@ public class CommandBug extends BaseCommand {
         HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError(lang.get("CommandBug.noReport")));
+            event.replyEmbeds(createQuickError(event.getLang("CommandBug.noReport")));
             return;
         }
         String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
         Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("User: `" + event.getUser().getName() + "`\nUserID: `" + event.getUser().getId() + "`\nGuild: `" + event.getGuild().getId() + "`\n\n" + messageContentCleaned).queue());
-        event.reply(String.format(lang.get("CommandBug.successMessage"),"\n","\n","\n"));
+        event.reply(String.format(event.getLang("CommandBug.successMessage"),"\n","\n","\n"));
     }
 
     @Override

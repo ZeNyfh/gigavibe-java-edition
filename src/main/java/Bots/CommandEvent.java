@@ -15,12 +15,12 @@ import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static Bots.Main.botPrefix;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 // TODO: Purge this file and re-make the system to be better
 // (Basically, give the queueing responsibility back to the code that calls this)
@@ -45,6 +45,7 @@ public class CommandEvent {
     private final String rawContent;
     private final List<Message.Attachment> attachments;
     private final JSONObject config;
+    private final HashMap<String, String> lang;
 
     public CommandEvent(MessageReceivedEvent event) {
         this.coreEvent = event;
@@ -58,6 +59,7 @@ public class CommandEvent {
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.attachments = event.getMessage().getAttachments();
         this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
+        this.lang = guildLocales.get(event.getGuild().getIdLong());
     }
 
     public CommandEvent(SlashCommandInteractionEvent event) {
@@ -67,6 +69,7 @@ public class CommandEvent {
         this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getUser();
+        this.lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
@@ -89,6 +92,10 @@ public class CommandEvent {
         } else {
             this.config = new JSONObject();
         }
+    }
+
+    public String getLang(String key) {
+        return lang.get(key);
     }
 
     public boolean isSlash() {

@@ -24,7 +24,7 @@ public class CommandDisconnect extends BaseCommand {
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
         skipCountGuilds.remove(event.getGuild().getIdLong());
-        event.replyEmbeds(createQuickEmbed(" ", "✅ " + lang.get("CommandDisconnect.disconnected")));
+        event.replyEmbeds(createQuickEmbed(" ", "✅ " + event.getLang("CommandDisconnect.disconnected")));
     }
 
     @Override
