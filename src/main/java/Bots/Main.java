@@ -733,7 +733,7 @@ public class Main extends ListenerAdapter {
                     player.setVolume(volume);
                     // TODO: audio filters to be added here.
 
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue and parameters have been restored!\n-# If you wish to see what changed, feel free to join the support server found in the bot's about me.")).queue();
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **" + guildLocales.get(channelUnion.getGuild().getIdLong()).get("Main.success") + "**", "An update to the bot occurred, your queue and parameters have been restored!\n-# If you wish to see what changed, feel free to join the support server found in the bot's about me.")).queue();
                     scanner.close();
                     ignoreFiles = file.delete();
                 } catch (Exception e) {
