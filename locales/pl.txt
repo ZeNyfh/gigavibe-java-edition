@@ -39,6 +39,7 @@ CommandDJ.role.plural=role
 CommandDJ.and=i
 CommandDJ.added=Dodano {1} do listy DJ-ów.
 CommandDJ.removed=Usunięto {1} z listy DJ-ów.
+CommandDJ.invalidArgs=Nieprawidłowe argumenty.
 
 CommandForceSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
 CommandForceSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.

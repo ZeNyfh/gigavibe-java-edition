@@ -39,6 +39,7 @@ CommandDJ.role.plural=rollen
 CommandDJ.and=en
 CommandDJ.added={1} is toegevoegd aan de lijst van DJs.
 CommandDJ.removed={1} is verwijderd van de lijst van DJs.
+CommandDJ.invalidArgs=Ongeldige argumenten.
 
 CommandForceSkip.failedToFind=Autoplay kon {1} niet vinden
 CommandForceSkip.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.
