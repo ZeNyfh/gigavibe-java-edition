@@ -66,7 +66,7 @@ public class CommandPlay extends BaseCommand {
                         for (Message.Attachment attachment : playableAttachments) {
                             PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
                         }
-                        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + playableAttachments.size() + " tracks from attachments."));
+                        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**", "Queued " + playableAttachments.size() + " tracks from attachments."));
                     }
                 } catch (Exception e) {
                     event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from attachments.\n```\n" + e.getMessage() + "\n```"));
@@ -137,7 +137,7 @@ public class CommandPlay extends BaseCommand {
             for (String finalLine : finalURLs) {
                 PlayerManager.getInstance().loadAndPlay(event, finalLine.split("\\|", 2)[0].trim(), false);
             }
-            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Queued " + actualListSize + " songs!"));
+            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**", "Queued " + actualListSize + " songs!"));
         } catch (Exception e) {
             event.replyEmbeds(createQuickError("Something went wrong when loading the tracks from the file.\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
         }

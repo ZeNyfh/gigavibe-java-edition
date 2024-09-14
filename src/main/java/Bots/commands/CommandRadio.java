@@ -99,7 +99,7 @@ public class CommandRadio extends BaseCommand {
         // We have to do this later manually since a 1-arg version (see above) shouldn't invoke VC joining
         CheckResult checkResult = PerformChecks(event, Check.TRY_JOIN_VC);
         if (!checkResult.Succeeded()) {
-            event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));
+            event.replyEmbeds(createQuickEmbed("❌ **" + event.getLang("BaseCommand.notAllowed") + "**", checkResult.GetMessage()));
             return;
         }
 
