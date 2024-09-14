@@ -103,6 +103,7 @@ CommandNowPlaying.next=Volgende nummer:
 CommandNowPlaying.paused=Nummer is gepauzeerd:
 CommandNowPlaying.true=Ja
 CommandNowPlaying.false=Nee
+CommandNowPlaying.trackLooping=Nummer gelooped:
 CommandNowPlaying.queueLooping=Wachtrij word gelooped:
 CommandNowPlaying.autoplaying=Auto playing:
 

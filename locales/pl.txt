@@ -102,7 +102,8 @@ CommandNowPlaying.channel=Kanał: {1}
 CommandNowPlaying.next=Następne:
 CommandNowPlaying.paused=Utwór wstrzymany:
 CommandNowPlaying.true=Tak
-CommandNowPlaying.false=
+CommandNowPlaying.false=Nie
+CommandNowPlaying.trackLooping=Powtarzanie utwóru:
 CommandNowPlaying.queueLooping=Powtarzanie kolejki:
 CommandNowPlaying.autoplaying=Autoodtwarzanie:
 

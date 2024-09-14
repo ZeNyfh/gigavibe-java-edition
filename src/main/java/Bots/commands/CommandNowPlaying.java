@@ -38,7 +38,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             String totalTimeText;
             if (totalTime > 432000000) { // 5 days
-                totalTimeText = "Unknown"; //Assume malformed
+                totalTimeText = event.getLang("Main.unknown"); //Assume malformed
             } else {
                 totalTimeText = toSimpleTimestamp((long) totalTime);
             }
@@ -53,7 +53,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setDescription("```Live stream duration: " + toSimpleTimestamp(trackPos) + "```");
+            embed.setDescription("```" + event.getLang("Live stream duration") + ": " + toSimpleTimestamp(trackPos) + "```");
         }
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
@@ -62,9 +62,9 @@ public class CommandNowPlaying extends BaseCommand {
                 embed.setTitle(streamTitle, track.getInfo().uri);
             }
         } catch (Exception ignored) {
-            embed.setTitle("Unknown");
+            embed.setTitle(event.getLang("Main.unknown"));
         }
-        embed.addField("\uD83D\uDC64 Channel:", track.getInfo().author, true);
+        embed.addField("\uD83D\uDC64 " + event.getLang("CommandNowPlaying.channel"), track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
             if (PlayerManager.getInstance().getThumbURL(track) != null) {
@@ -77,15 +77,15 @@ public class CommandNowPlaying extends BaseCommand {
                     title = streamTitle;
                 }
             }
-            embed.addField("▶️ Up next:", "[" + sanitise(title) + "](" + trackQueue0.getInfo().uri + ")", true);
+            embed.addField("▶️ " + event.getLang("CommandNowPlaying.next"), "[" + sanitise(title) + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
         if (audioPlayer.isPaused()) {
-            embed.addField("⏸️ Track paused:", "✅ **True**", true);
+            embed.addField("⏸️ " + event.getLang("CommandNowPlaying.paused"), "✅ **" + event.getLang("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("⏸️ Track paused:", "❌ **False**", true);
+            embed.addField("⏸️ " + event.getLang("CommandNowPlaying.paused"), "❌ **" + event.getLang("CommandNowPlaying.false") + "**", true);
         }
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
             embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
