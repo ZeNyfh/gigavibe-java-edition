@@ -48,7 +48,6 @@ public class CommandInfo extends BaseCommand {
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
             eb.appendDescription("⏱️  **" + String.format(event.getLang("CommandInfo.ping"), "**" + (currentTimeMillis() - time)));
-            System.out.println(event.getLang("CommandInfo.ping"));
             response.editMessageEmbeds(eb.build());
         }, eb.build());
     }
