@@ -16,10 +16,10 @@ public class CommandLoop extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current track."));
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", event.getLang("CommandLoop.notLooping")));
             LoopGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current track."));
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", event.getLang("CommandLoop.looping")));
             LoopGuilds.add(event.getGuild().getIdLong());
         }
     }
