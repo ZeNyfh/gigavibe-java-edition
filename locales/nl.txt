@@ -71,9 +71,9 @@ CommandInfo.discordMembers=Gebruikers: {1}
 CommandInfo.registeredCommands=Geregistreerde commands: {1}
 CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
 CommandInfo.playingCount=Aantal momentele spelers: {1} 
-CommandInfo.gatewayPing=Gateway Ping: {1}
+CommandInfo.gatewayPing=Gateway Ping: {1}ms
 CommandInfo.version=Versie: {1}
-CommandInfo.ping=Ping {1} ms // ms here being short for milliseconds
+CommandInfo.ping=Ping {1}ms // ms here being short for milliseconds
 
 CommandInsert.notEnoughArgs=Niet genoeg argumenten gegeven.{1}Gebruik: {2}URL/Zoekterm{4}
 CommandInsert.invalidArgs=Ongeldige argumenten. Gebruik alleen cijfers{1}Gebruik: {2}URL/Zoekterm{4} 
@@ -222,3 +222,4 @@ Main.error=Error
 Main.unknown=Onbekend
 Main.channel=Kanaal {1}
 Main.duration=Tijdsuur {1}
+Main.update=De bot heeft een update gekregen, je wachtrij en parameters zijn hersteld!{1}Als je wilt weten wat er veranderd is, kan je altijd bij de support server aansluiten die te vinden is in de bot's about-me.

@@ -71,9 +71,9 @@ CommandInfo.discordMembers=Użytkownicy: {1}
 CommandInfo.registeredCommands=Zarejestrowane komendy: {1}
 CommandInfo.voiceChannels=Kanały głosowe: {1}
 CommandInfo.playingCount=Liczba odtwarzanych: {1}
-CommandInfo.gatewayPing=Ping bramy: {1}
+CommandInfo.gatewayPing=Ping bramy: {1}ms
 CommandInfo.version=Wersja: {1}
-CommandInfo.ping=Ping {1}
+CommandInfo.ping=Ping {1}ms
 
 CommandInsert.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
 CommandInsert.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
@@ -110,8 +110,8 @@ CommandNowPlaying.autoplaying=Autoodtwarzanie:
 CommandPause.resumed=Utwór jest teraz odtwarzany.
 CommandPause.paused=Utwór jest teraz wstrzymany.
 
-CommandPing.ping=ping: {1}ms 
-CommandPing.gatewayPing=ping bramy: {1}ms 
+CommandPing.ping=ping: {1}ms
+CommandPing.gatewayPing=ping bramy: {1}ms
 
 CommandPitch.defaulted=Przywrócono ton dźwięku do 1.
 CommandPitch.range=Ton dźwięku musi wynosić od 0.25 do 5
@@ -135,7 +135,7 @@ CommandQueue.didYouMean=Czy chodziło o {1}?
 CommandQueue.integerError=Strona musi być liczbą całkowitą dodatnią.
 
 CommandRadio.list=Lista stacji radiowych:
-CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a> 
+CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>
 CommandRadio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
 CommandRadio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
 CommandRadio.noSearchTerm=Nie podano terminu wyszukiwania.
@@ -148,7 +148,7 @@ CommandRemove.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.
 CommandRemove.tooLarge=Podana liczba jest większa niż rozmiar kolejki.
 CommandRemove.removed=Usunięto z kolejki utwór {1} pomyślnie.
 
-CommandSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}" 
+CommandSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}"
 CommandSeek.timeTooLow=Podany czas jest mniejszy lub równy 0.
 CommandSeek.cannotSeek=Nie można przewinąć tego utworu.
 CommandSeek.noArg=Nie podano argumentu.
@@ -169,12 +169,12 @@ CommandSkip.voted=Oddano głos na pominięcie utworu {1} z {2} potrzebnych do po
 
 CommandSpeed.defaulted=Przywrócono prędkość do 1.
 CommandSpeed.rangeError=Prędkość musi wynosić od 0.2 do 5
-CommandSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x. 
+CommandSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x.
 
 CommandTOS.TermsOfService=Regulamin
 
 CommandVibrato.defaulted=Przywrócono domyślne wartości parametrów.
-CommandVibrato.incorrectArgs=Poprawne użycie to: {1}vibrato <Częstotliwość> <Głębokość>{2} 
+CommandVibrato.incorrectArgs=Poprawne użycie to: {1}vibrato <Częstotliwość> <Głębokość>{2}
 CommandVibrato.rangeError.frequency=Częstotliwość musi wynosić od 0.1 do 14
 CommandVibrato.rangeError.depth=Głębokość musi wynosić od 0.05 do 1
 CommandVibrato.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
@@ -222,3 +222,4 @@ Main.error=Błąd
 Main.unknown=Nieznany
 Main.channel=Kanał {1}
 Main.duration=Czas trwania {1}
+Main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!{1}Jeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.

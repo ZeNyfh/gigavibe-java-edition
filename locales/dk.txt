@@ -1,0 +1,226 @@
+// Locale made by SharkRainstorm.
+// Any line starting with "//" will be ignored.
+// Any newlines will also be ignored.
+// Trailing spaces will be removed.
+// Use this english one as a template.
+// Comments can be added to the messages via a preceding //.
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
+// please preserve the capitalisation and any punctuation if applicable.
+
+CommandAutoplay.noAPI=Botten har ikke fået en API key til LastFM, denne kommando duer ikke uden den.
+CommandAutoplay.notAutoplaying=Autoplayer ikke musik.
+CommandAutoplay.isAutoplaying=Autoplayer musik.
+
+CommandBlockChannel.invalidUsage=Den gyldige brug er: {1} <kanal>{2} eller {3}
+CommandBlockChannel.alreadyBlocked=Denne kanal er allerede blokeret.
+CommandBlockChannel.notBlocked=Denne kanal er ikke blokeret.
+CommandBlockChannel.added=Tilføjet {1} til listen.
+CommandBlockChannel.removed=Fjernede {1} fra listen.
+CommandBlockChannel.notFound=Denne kanal var ikke fundet på denne Discord server.
+CommandBlockChannel.channelList=Blokeret kanaler for {1}
+CommandBlockChannel.noChannels=Ingen
+
+CommandBug.noReport=Giv venligst noget at rapportere.
+CommandBug.successMessage=Tak for at sende en bug rapport!{1}Developeren skulle gerne komme i kontakt med dig gennem bottens DMs.{2}Venligst brug bug kommandoen til at svare på beskeder.{2}
+
+CommandClearQueue.cleared=Ryddede køen
+
+CommandDisconnect.disconnected=Forlod kanalen og ryddede køen.
+
+CommandDJ.roleList=Roller:
+CommandDJ.userList=Brugere:
+CommandDJ.roleListEmpty=Ingen.
+CommandDJ.guildDJs=DJs for {1}
+CommandDJ.notGiven=Ingen brugere eller roller specificeret.
+CommandDJ.member=bruger
+CommandDJ.member.plural=brugere
+CommandDJ.role=rolle
+CommandDJ.role.plural=roller
+CommandDJ.and=og
+CommandDJ.added=Tilføjet {1} til DJ listen.
+CommandDJ.removed=Fjernede {1} fra DJ listen.
+CommandDJ.invalidArgs=Ugyldige argumenter.
+
+CommandForceSkip.failedToFind=Autoplay kunne ikke finde {1}
+CommandForceSkip.couldNotFind=Autoplay kunne ikke finde lignende musik.
+CommandForceSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
+CommandForceSkip.autoplayQueued=Autoplay i kø:
+CommandForceSkip.skippedQueue=Sprang over hele køen
+CommandForceSkip.skippedToPos=Sprang {1} sange over til {2}
+CommandForceSkip.skippedToTrack=Sprang det nuværende musik til {1}
+CommandForceSkip.skipped=Sprang over nuværende musik
+
+CommandGithub.message={1}KUN brug til bug rapports og funktionsanmodninger.{2}Når du rapporterer et problem, skal du sørge for at angive hvad fejlen er, og hvordan den genskabes.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+
+CommandHelp.category.general=Generel
+CommandHelp.category.music=Musik
+CommandHelp.category.DJ=DJ
+CommandHelp.category.admin=Admin
+CommandHelp.category.dev=Dev
+CommandHelp.category.unknown=Ukendt kategori for hjælpetitel: {1}
+CommandHelp.alias=Alias
+commandHelp.alias.plural=Aliaser
+CommandHelp.originalFooter=Klik på knapperne for at få flere oplysninger om en gruppe.
+CommandHelp.footer=Syntaks: {1} er et påkrævet argument, {2} er et valgfrit argument. {3} er et alternativt ord for kommandoen.
+CommandHelp.embedTitle=Kommandoer
+
+CommandInfo.info=Info
+CommandInfo.ramUsage=Ram brug: {1}
+CommandInfo.upTime=Uptime: {1}
+CommandInfo.discordServers=Guilds: {1}
+CommandInfo.discordMembers=Brugere: {1}
+CommandInfo.registeredCommands=Registrerede kommandoer: {1}
+CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
+CommandInfo.playingCount=Nuværende servere der bruger denne bot: {1}
+CommandInfo.gatewayPing=Gateway Ping: {1}ms
+CommandInfo.version=Version: {1}
+CommandInfo.ping=Ping {1}ms // ms here being short for milliseconds
+
+CommandInsert.notEnoughArgs=Ikke nok argumenter angivet{1}Brug: {2}Heltal{3}URL/Søgeudtryk{4}
+CommandInsert.invalidArgs=Ugyldige argumenter, kun heltal{1}Brug: {2}Heltal{3}URL/Søgeudtryk{4}
+CommandInsert.decodingError=Noget gik galt da musikken blev afkodet.
+CommandInsert.addedToPos=Føjede musik til position: {1}
+CommandInsert.queueError=Der opstod en fejl under tilføjelse af musik til køen: {1}
+
+CommandInvite.haveFun=God fornøjelse!
+
+CommandJoin.noAccess=Botten kan ikke få adgang til din kanal
+CommandJoin.joined=Botten tilsluttede sig til din kanal.
+
+CommandLoop.notLooping=Gentager ikke længere den nuværende musik.
+CommandLoop.looping=Gentager nuværende musik.
+
+CommandLoopQueue.notLooping=Gentager ikke længere den nuværende kø.
+CommandLoopQueue.looping=Gentager den nuværende kø.
+
+CommandLyrics.notFound=Ingen resultater fundet, eller sangtitlen var ukendt.
+CommandLyrics.source=Lyrik hentet fra lrclib.net
+CommandLyrics.lyricsForTrack=Lyrik for: {1}
+CommandLyrics.tooLong=Lyrik var for lang, uploader dem som en fil.
+
+CommandNowPlaying.livestreamDuration=Livestream varighed {1}
+CommandNowPlaying.channel=Kanal: {1}
+CommandNowPlaying.next=Næste:
+CommandNowPlaying.paused=Sat på pause:
+CommandNowPlaying.true=Ja
+CommandNowPlaying.false=Nej
+CommandNowPlaying.trackLooping=Musik gentager:
+CommandNowPlaying.queueLooping=Kø gentager:
+CommandNowPlaying.autoplaying=Autoplaying:
+
+CommandPause.resumed=Musikken afspiller nu.
+CommandPause.paused=Musikken er sat på pause.
+
+CommandPing.ping=ping: {1}ms // ms here being short for milliseconds
+CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
+
+CommandPitch.defaulted=Satte tonehøjden tilbage til 1.
+CommandPitch.range=Tonehøjden skal være mellem 0,25 og 5
+CommandPitch.changed=Indstil musikkens tonehøjde til {1}x // x here is like 5x or 2x, aka a multiplier
+
+CommandPlay.queuedFromAtt=Sat {1} sange i kø fra vedhæftede filer.
+CommandPlay.queuedFromAtt.error=Noget gik galt under indlæsning af musik fra vedhæftede filer.
+CommandPlay.wrongFormat=Musikken kunne ikke indlæses: Ukendt filformat.
+CommandPlay.noArgs=Ingen argumenter givet.
+CommandPlay.decodeError=Noget gik galt, da musikken blev afkodet.
+CommandPlay.queuedManySongs=Sange i kø: {1}!
+CommandPlay.fileError=Noget gik galt under indlæsning af musik fra filen.
+
+CommandPrivacyPolicy.privacyPolicy=Privatlivspolitik
+
+CommandQueue.nowPlaying=Spiller nu:
+CommandQueue.queueInfoFooter={1} sange i kø {2} Side {3} Længde: {4}
+CommandQueue.empty=Køen er tom.
+CommandQueue.unknownTitle=Ukendt titel
+CommandQueue.didYouMean=Mente du at bruge {1}?
+CommandQueue.integerError=Siden skal være et positivt heltal.
+
+CommandRadio.list=Radioliste:
+CommandRadio.alternativeList=Eller brug {1} radio søgning <Ord> // keep the <>
+CommandRadio.useForPlay=Brug {1} radio <Radio Navn>{2} at afspille en radiostation.
+CommandRadio.noArgsList=Ingen argumenter givet, her er nogle radiostationer at vælge imellem:
+CommandRadio.noSearchTerm=Intet søgeterm angivet.
+CommandRadio.notFound=Kunne ikke finde en radiostation med det givne navn
+CommandRadio.queued=Radiostation i kø:
+CommandRadio.invalid=Ikke en gyldig radiostation.
+
+CommandRemove.noSongs=Der er ingen sange i køen til at fjerne.
+CommandRemove.invalidArgs=Ugyldige argumenter, kun heltal.
+CommandRemove.tooLarge=Det angivne antal var større end køens længde.
+CommandRemove.removed=Sprang sangen {1} i kø over med succes.
+
+CommandSeek.invalidArg=Argumentet er ugyldigt, brug formatet {1}[TIMER]:[MINUTTER]:<SEKUNDER>{2}" // keep the [] and <>
+CommandSeek.timeTooLow=Den angivne tid er mindre end eller lig med 0.
+CommandSeek.cannotSeek=Du kan ikke springe rundt i denne sang.
+CommandSeek.noArg=Intet argument givet.
+
+CommandShuffle.emptyQueue=Der er intet i køen.
+CommandShuffle.shuffled=Blandede køen!
+
+CommandSkip.alreadyVoted=Du har allerede stemt for at springe over.
+CommandSkip.autoplay.failedToFind=Autoplay kunne ikke finde
+CommandSkip.failedToFind=Autoplay kunne ikke finde {1}
+CommandSkip.couldNotFind=Autoplay kunne ikke finde lignende musik.
+CommandSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
+CommandSkip.autoplayQueued=Autoplay i kø:
+CommandSkip.skippedTo=Sprang over til sang {1}
+CommandSkip.skippedTo.unknown=Sprang sporet over til {1}Ukendt titel{2}
+CommandSkip.nowPlaying=Spiller nu: {1}
+CommandSkip.voted=Stemte for at springe over nuværende sang. {1} ud af {2} stemmer.
+
+CommandSpeed.defaulted=Satte hastigheden tilbage til 1.
+CommandSpeed.rangeError=Hastigheden skal være mellem 0,2 og 5
+CommandSpeed.success=Indstil afspilningshastigheden for musikken til {1}x. // x here is a multiplier, for example 3x
+
+CommandTOS.TermsOfService=Servicevilkår
+
+CommandVibrato.defaulted=Satte parametrene til deres standardværdier.
+CommandVibrato.incorrectArgs=The valid usage is: {1}vibrato <Frekvens> <Dybde>{2} // keep the <>
+CommandVibrato.rangeError.frequency=Frekvensen skal være mellem 0,1 og 14
+CommandVibrato.rangeError.depth=Dybden skal være mellem 0,05 og 1
+CommandVibrato.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
+
+CommandVolume.defaulted=Satte lydstyrken til standarden på {1}.
+CommandVolume.incorrectArg=Volumen skal være et heltal.
+CommandVolume.tooHigh=Lydstyrken kan ikke være højere end 500.
+CommandVolume.tooLow=Lydstyrken kan ikke være lavere end 0.
+CommandVolume.success=Ændrede lydstyrken til {1}.
+CommandVolume.invalidValue=Ugyldig værdi.
+
+BaseCommand.notAllowed=Ikke tilladt
+
+CommandStateChecker.notInVC=Du er ikke i en VC. // VC is voice channel
+CommandStateChecker.botNotInVC=Botten er ikke i en VC.
+CommandStateChecker.botNotInYourVC=Botten er ikke i din VC.
+CommandStateChecker.botBusy=Botten er allerede optaget i en anden VC.
+CommandStateChecker.cannotJoin=Botten ​​kan ikke tilslutte sig denne VC.
+CommandStateChecker.noDJ=Du har ikke DJ tilladelser.
+CommandStateChecker.commandBlocked=Denne kommando er blokeret i denne kanal.
+CommandStateChecker.isNotPlaying=Botten ​​spiller ikke noget lige nu.
+CommandStateChecker.devOnly=Denne kommando er kun for developers.
+
+PlayerManager.noSpotify=Botten er ikke i stand til at afspille Spotify musik lige nu
+PlayerManager.playlistQueued=Størrelse: {1} Musik.{2}Længde: {3}
+PlayerManager.APIError=Der er opstået en fejl med YouTubes søge-API.
+PlayerManager.loadFailed=Nummeret kunne ikke indlæses: {1}
+
+TrackScheduler.autoplay.notFound=Autoplay kunne ikke finde {1}
+TrackScheduler.autoplay.noSimilar=Autoplay kunne ikke finde lignende sange.
+TrackScheduler.autoplay.unknownError=Der opstod en ukendt fejl i forsøg på at autoplay.
+TrackScheduler.autoplay.queued=Autoplay i kø: {1}
+
+TrackScheduler.regularFailure=Musikken kunne ikke indlæses på grund af en ukendt årsag. Springer over...
+
+TrackScheduler.criticalFailure.title=Kritisk Fejl
+TrackScheduler.criticalFailure.description=Musikken kunne ikke blevet indlæst 3 gange, sandsynligvis på grund af et upstream-netværksproblem udenfor vores kontrol. Rydning af køen for at undgå spam.
+TrackScheduler.criticalFailure.footer=Hvis dette problem fortsætter med specifikke kilder, bedes du indsende en fejlrapport vha /bug
+
+TrackScheduler.nextTrack.nowPlaying=Spiller nu: {1}
+
+Main.success=Succes // any messages with Success "✅ **Success**"
+Main.noPermission=Du har ikke tilladelse til at bruge denne kommando.
+Main.error=Fejl
+Main.unknown=Ukendt
+Main.channel=Kanal {1}
+Main.duration=Varighed {1}
+Main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!{1}Hvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens About Me.

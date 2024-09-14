@@ -11,17 +11,17 @@ CommandAutoplay.noAPI=The bot has not been given an API key for LastFM, this com
 CommandAutoplay.notAutoplaying=No longer autoplaying.
 CommandAutoplay.isAutoplaying=Now autoplaying.
 
-CommandBlockChannel.invalidUsage=The valid usage is: {1} <channel>{2} or {3}
+CommandBlockChannel.invalidUsage=The valid usage is: {1} <channel>{2} or {3} // 1 here is the command and its arguments, 2 is markdown (dont move from after channel), and 3 is also a command.
 CommandBlockChannel.alreadyBlocked=This channel is already blocked.
 CommandBlockChannel.notBlocked=This channel is not blocked.
-CommandBlockChannel.added=Added {1} to the list.
-CommandBlockChannel.removed=Removed {1} from the list.
+CommandBlockChannel.added=Added {1} to the list. // 1 is a channel name
+CommandBlockChannel.removed=Removed {1} from the list. // 1 is a channel name
 CommandBlockChannel.notFound=This channel was not found in this discord server.
-CommandBlockChannel.channelList=Blocked channels for {1}
+CommandBlockChannel.channelList=Blocked channels for {1} // 1 is the server name
 CommandBlockChannel.noChannels=None
 
 CommandBug.noReport=Please provide something to report.
-CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{3}
+CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{3} // all numbers here are newlines
 
 CommandClearQueue.cleared=Cleared the queue
 
@@ -30,27 +30,27 @@ CommandDisconnect.disconnected=Disconnected from the voice channel and cleared t
 CommandDJ.roleList=Roles:
 CommandDJ.userList=Users:
 CommandDJ.roleListEmpty=None.
-CommandDJ.guildDJs=DJs for {1}
+CommandDJ.guildDJs=DJs for {1} // server name
 CommandDJ.notGiven=No members or roles were specified.
 CommandDJ.member=member
 CommandDJ.member.plural=members
 CommandDJ.role=role
 CommandDJ.role.plural=roles
 CommandDJ.and=and
-CommandDJ.added=Added {1} to the DJ list.
-CommandDJ.removed=Removed {1} from the DJ list.
+CommandDJ.added=Added {1} to the DJ list. // user/role name
+CommandDJ.removed=Removed {1} from the DJ list. // user/role name
 CommandDJ.invalidArgs=Invalid Arguments.
 
-CommandForceSkip.failedToFind=Autoplay failed to find {1}
+CommandForceSkip.failedToFind=Autoplay failed to find {1} // song title
 CommandForceSkip.couldNotFind=Autoplay could not find similar tracks.
 CommandForceSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
 CommandForceSkip.autoplayQueued=Autoplay queued:
 CommandForceSkip.skippedQueue=Skipped the entire queue
-CommandForceSkip.skippedToPos=Skipped {1} tracks to {2}
-CommandForceSkip.skippedToTrack=Skipped the current track to {1}
+CommandForceSkip.skippedToPos=Skipped {1} tracks to {2} // 1 is the amount of tracks it skipped, 2 is a track name
+CommandForceSkip.skippedToTrack=Skipped the current track to {1} // track name
 CommandForceSkip.skipped=Skipped the current track
 
-CommandGithub.message={1}Use this for bug reports and feature requests ONLY.{2}When making an issue, make sure to specify what the bug is and how to recreate it.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+CommandGithub.message={1}Use this for bug reports and feature requests ONLY.{2}When making an issue, make sure to specify what the bug is and how to recreate it.{3}https://github.com/ZeNyfh/gigavibe-java-edition // all numbers here are basically just newlines, you can think of the parts between as new sentences.
 
 CommandHelp.category.general=General
 CommandHelp.category.music=Music
@@ -60,20 +60,20 @@ CommandHelp.category.dev=Dev
 CommandHelp.alias=Alias
 commandHelp.alias.plural=Aliases
 CommandHelp.originalFooter=Click the buttons to get more information on a group.
-CommandHelp.footer=Syntax: {1} is a required argument, {2} is an optional argument. {3} is an alternate word for the command.
+CommandHelp.footer=Syntax: {1} is a required argument, {2} is an optional argument. {3} is an alternate word for the command. // these are commands, they are not language specific.
 CommandHelp.embedTitle=Commands
 
 CommandInfo.info=Info
-CommandInfo.ramUsage=Ram usage: {1}
-CommandInfo.upTime=Uptime: {1}
-CommandInfo.discordServers=Guilds: {1}
-CommandInfo.discordMembers=Users: {1}
-CommandInfo.registeredCommands=Registered Commands: {1}
-CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
-CommandInfo.playingCount=Playing Count: {1}
-CommandInfo.gatewayPing=Gateway Ping: {1}
-CommandInfo.version=Version: {1}
-CommandInfo.ping=Ping {1} ms // ms here being short for milliseconds
+CommandInfo.ramUsage=Ram usage: {1} // 1024MB
+CommandInfo.upTime=Uptime: {1} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
+CommandInfo.discordServers=Guilds: {1} // just the amount of servers
+CommandInfo.discordMembers=Users: {1} // the amount of total users
+CommandInfo.registeredCommands=Registered Commands: {1} // how many commands are registered
+CommandInfo.voiceChannels=VCs: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
+CommandInfo.playingCount=Playing Count: {1} // how many voice channels the bot is actually playing music in
+CommandInfo.gatewayPing=Gateway Ping: {1}ms // 204ms
+CommandInfo.version=Version: {1} // 24.09.13 (a date but its a version number)
+CommandInfo.ping=Ping {1}ms // ms here being short for milliseconds
 
 CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}Integer{3}URL/SearchTerm{4}
 CommandInsert.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4}
@@ -222,3 +222,4 @@ Main.error=Error
 Main.unknown=Unknown
 Main.channel=Channel {1}
 Main.duration=Duration {1}
+Main.update=An update to the bot occurred, your queue and parameters have been restored!{1}If you wish to see what changed, feel free to join the support server found in the bot's about me.
