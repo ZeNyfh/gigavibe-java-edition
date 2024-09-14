@@ -12,7 +12,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +23,6 @@ public class CommandDJ extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         JSONObject config = event.getConfig();
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
@@ -125,10 +123,6 @@ public class CommandDJ extends BaseCommand {
         }
     }
 
-    private enum GuildObjectType {
-        role, member
-    }
-
     private synchronized void modifyDJ(int type, long id, boolean isAdding, JSONObject config) {
         if (type == 0) { // role
             JSONArray DJRoles = (JSONArray) config.get("DJRoles");
@@ -185,5 +179,9 @@ public class CommandDJ extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    private enum GuildObjectType {
+        role, member
     }
 }

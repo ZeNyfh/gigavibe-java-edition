@@ -5,17 +5,14 @@ import Bots.CommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
-import static Bots.Main.guildLocales;
 
 public class CommandBug extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
             event.replyEmbeds(createQuickError(event.getLang("CommandBug.noReport")));
@@ -23,7 +20,7 @@ public class CommandBug extends BaseCommand {
         }
         String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
         Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("User: `" + event.getUser().getName() + "`\nUserID: `" + event.getUser().getId() + "`\nGuild: `" + event.getGuild().getId() + "`\n\n" + messageContentCleaned).queue());
-        event.reply(String.format(event.getLang("CommandBug.successMessage"),"\n","\n","\n"));
+        event.reply(String.format(event.getLang("CommandBug.successMessage"), "\n", "\n", "\n"));
     }
 
     @Override

@@ -1,14 +1,13 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import java.util.HashMap;
-
-import static Bots.Main.*;
+import static Bots.Main.createQuickEmbed;
+import static Bots.Main.skipCountGuilds;
 
 public class CommandClearQueue extends BaseCommand {
     @Override
@@ -18,7 +17,6 @@ public class CommandClearQueue extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         skipCountGuilds.remove(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();

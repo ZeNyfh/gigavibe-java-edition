@@ -1,13 +1,12 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.Main;
 import Bots.CommandEvent;
+import Bots.Main;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import static Bots.Main.*;
@@ -18,7 +17,6 @@ public class CommandInfo extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         int vcCount = 0;
         int memberCount = 0;
         int playingCount = 0;

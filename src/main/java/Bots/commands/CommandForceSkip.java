@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static Bots.Main.*;
@@ -28,7 +27,6 @@ public class CommandForceSkip extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         StringBuilder messageBuilder = new StringBuilder();
