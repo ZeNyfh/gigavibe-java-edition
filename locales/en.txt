@@ -21,7 +21,7 @@ CommandBlockChannel.channelList=Blocked channels for {1}
 CommandBlockChannel.noChannels=None
 
 CommandBug.noReport=Please provide something to report.
-CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{2}
+CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{3}
 
 CommandClearQueue.cleared=Cleared the queue
 

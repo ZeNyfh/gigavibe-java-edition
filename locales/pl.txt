@@ -21,7 +21,7 @@ CommandBlockChannel.channelList=Zablokowane kanały dla {1}
 CommandBlockChannel.noChannels=Brak
 
 CommandBug.noReport=Podaj coś do zgłoszenia.
-CommandBug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{1}Programista skontaktuje się z Tobą przez DM bota.{2}Proszę użyć komendy bug, aby odpowiedzieć na wiadomości.{2}
+CommandBug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{1}Programista skontaktuje się z Tobą przez DM bota.{2}Proszę użyć komendy bug, aby odpowiedzieć na wiadomości.{3}
 
 CommandClearQueue.cleared=Kolejka została wyczyszczona.
 
