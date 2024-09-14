@@ -216,6 +216,16 @@ TrackScheduler.criticalFailure.footer=Jeśli ten problem występuje z konkretnym
 
 TrackScheduler.nextTrack.nowPlaying=Teraz odtwarzane: {1}
 
+
+Main.day=dzień // 1 day
+Main.day.plural=dni // 2 days
+Main.hour=godzina // 1 hour
+Main.hour.plural=godzin(y) // 2 hours
+Main.minute=minuta // 1 minute
+Main.minute.plural=minut(y) // 2 minutes
+Main.second=sekunda // 1 second
+Main.second.plural=sekund(y) // 2 seconds
+
 Main.success=Sukces
 Main.noPermission=Nie masz uprawnień do użycia tej komendy.
 Main.error=Błąd

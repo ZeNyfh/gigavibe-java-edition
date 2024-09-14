@@ -1,9 +1,10 @@
-// Locale made by ZeNyfh.
+// Locale made by ZeNyfh. Feel free to change your name if you are translating.
 // Any line starting with "//" will be ignored.
 // Any newlines will also be ignored.
 // Trailing spaces will be removed.
 // Use this english one as a template.
 // Comments can be added to the messages via a preceding //.
+// Translate everything between <>, [], and ()
 // if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
 // please preserve the capitalisation and any punctuation if applicable.
 
@@ -72,14 +73,14 @@ CommandInfo.registeredCommands=Registered Commands: {1} // how many commands are
 CommandInfo.voiceChannels=VCs: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
 CommandInfo.playingCount=Playing Count: {1} // how many voice channels the bot is actually playing music in
 CommandInfo.gatewayPing=Gateway Ping: {1}ms // 204ms
-CommandInfo.version=Version: {1} // 24.09.13 (a date but its a version number)
+CommandInfo.version=Version: {1} // 24.09.13 (a date but it's a version number)
 CommandInfo.ping=Ping {1}ms // ms here being short for milliseconds
 
-CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}Integer{3}URL/SearchTerm{4}
-CommandInsert.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4}
+CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}Integer{3}URL/SearchTerm{4}// 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
+CommandInsert.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4} 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
 CommandInsert.decodingError=Something went wrong when decoding the track.
-CommandInsert.addedToPos=Added the track to position: {1}
-CommandInsert.queueError=There was an error while adding the track to the queue: {1}
+CommandInsert.addedToPos=Added the track to position: {1} // a position in the queue, a number.
+CommandInsert.queueError=There was an error while adding the track to the queue: {1} // an error message from the code.
 
 CommandInvite.haveFun=Have fun!
 
@@ -94,10 +95,10 @@ CommandLoopQueue.looping=Looping the current queue.
 
 CommandLyrics.notFound=No results found or the song title was unknown.
 CommandLyrics.source=Lyrics sourced from lrclib.net
-CommandLyrics.lyricsForTrack=Lyrics for: {1}
+CommandLyrics.lyricsForTrack=Lyrics for: {1} // a song name
 CommandLyrics.tooLong=Lyrics were too long, uploading them as a file.
 
-CommandNowPlaying.livestreamDuration=Live stream duration {1}
+CommandNowPlaying.livestreamDuration=Live stream duration {1} // a number
 CommandNowPlaying.channel=Channel:
 CommandNowPlaying.next=Up next:
 CommandNowPlaying.paused=Track paused:
@@ -110,33 +111,33 @@ CommandNowPlaying.autoplaying=Auto playing:
 CommandPause.resumed=The track is now playing.
 CommandPause.paused=The track is now paused.
 
-CommandPing.ping=ping: {1}ms // ms here being short for milliseconds
-CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
+CommandPing.ping=ping: {1}ms // ms here being short for milliseconds // as ping number
+CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds // also a ping number
 
 CommandPitch.defaulted=Set the pitch back to 1.
 CommandPitch.range=The pitch must be between 0.25 and 5
 CommandPitch.changed=Set the pitch of the track to {1}x // x here is like 5x or 2x, aka a multiplier
 
-CommandPlay.queuedFromAtt=Queued {1} tracks from attachments.
+CommandPlay.queuedFromAtt=Queued {1} tracks from attachments. // an amount, so like "queued 6 tracks from..."
 CommandPlay.queuedFromAtt.error=Something went wrong when loading the tracks from attachments.
 CommandPlay.wrongFormat=The track failed to load: Unknown file format.
 CommandPlay.noArgs=No arguments given.
 CommandPlay.decodeError=Something went wrong when decoding the track.
-CommandPlay.queuedManySongs=Queued {1} songs!
+CommandPlay.queuedManySongs=Queued {1} songs! // how many songs it queued
 CommandPlay.fileError=Something went wrong when loading the tracks from the file.
 
 CommandPrivacyPolicy.privacyPolicy=Privacy Policy
 
 CommandQueue.nowPlaying=Now playing:
-CommandQueue.queueInfoFooter={1} songs queued {2} Page {3} Length: {4}
+CommandQueue.queueInfoFooter={1} songs queued {2} Page {3} Length: {4} // 1 is amount, 2 is markdown, 3 is page number, 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
 CommandQueue.empty=The queue is empty.
 CommandQueue.unknownTitle=Unknown title
-CommandQueue.didYouMean=Did you mean to use {1}?
+CommandQueue.didYouMean=Did you mean to use {1}? // a different command name: "clear queue"
 CommandQueue.integerError=The page must be a positive integer.
 
 CommandRadio.list=Radio list:
-CommandRadio.alternativeList=Or use {1} radio search <String> // keep the <>
-CommandRadio.useForPlay=Use {1} radio <Radio Name>{2} to play a radio station.
+CommandRadio.alternativeList=Or use {1} <String> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well.
+CommandRadio.useForPlay=Use {1} <Radio Name>{2} to play a radio station. // 1 is a command, {2} is markdown.
 CommandRadio.noArgsList=No arguments given, here's some radio stations to choose from:
 CommandRadio.noSearchTerm=No search term given.
 CommandRadio.notFound=Couldn't find a radio station with the given name
@@ -146,9 +147,9 @@ CommandRadio.invalid=Not a valid radio station.
 CommandRemove.noSongs=There are no songs in the queue to remove.
 CommandRemove.invalidArgs=Invalid arguments, integers only.
 CommandRemove.tooLarge=The provided number was larger than the size of the queue.
-CommandRemove.removed=Skipped queued track {1} successfully.
+CommandRemove.removed=Skipped queued track {1} successfully. // a track name.
 
-CommandSeek.invalidArg=Argument is invalid, use the format {1}[HOURS]:[MINUTES]:<SECONDS>{2}" // keep the [] and <>
+CommandSeek.invalidArg=Argument is invalid, use the format {1}[HOURS]:[MINUTES]:<SECONDS>{2}" // 1 and 2 are markdown. keep the [] and <>, translate everything inside.
 CommandSeek.timeTooLow=The time provided is lower than or equal to 0.
 CommandSeek.cannotSeek=You cannot seek with this track.
 CommandSeek.noArg=No argument given.
@@ -158,14 +159,14 @@ CommandShuffle.shuffled=Shuffled the queue!
 
 CommandSkip.alreadyVoted=You have already voted to skip.
 CommandSkip.autoplay.failedToFind=Autoplay failed to find
-CommandSkip.failedToFind=Autoplay failed to find {1}
+CommandSkip.failedToFind=Autoplay failed to find {1} // a track title.
 CommandSkip.couldNotFind=Autoplay could not find similar tracks.
 CommandSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
 CommandSkip.autoplayQueued=Autoplay queued:
-CommandSkip.skippedTo=Skipped the track to {1}
-CommandSkip.skippedTo.unknown=Skipped the track to {1}Unknown Title{2}
-CommandSkip.nowPlaying=Now playing: {1}
-CommandSkip.voted=Voted to skip the track {1} of {2} needed to skip.
+CommandSkip.skippedTo=Skipped the track to {1} // a track title.
+CommandSkip.skippedTo.unknown=Skipped the track to {1}Unknown Title{2} // both are markdown and should be around unknown title.
+CommandSkip.nowPlaying=Now playing: {1} // track title
+CommandSkip.voted=Voted to skip the track {1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
 
 CommandSpeed.defaulted=Set the speed back to 1.
 CommandSpeed.rangeError=The speed must be between 0.2 and 5
@@ -174,16 +175,16 @@ CommandSpeed.success=Set the playback speed of the track to {1}x. // x here is a
 CommandTOS.TermsOfService=Terms of Service
 
 CommandVibrato.defaulted=Set the parameters to their default values.
-CommandVibrato.incorrectArgs=The valid usage is: {1}vibrato <Frequency> <Depth>{2} // keep the <>
+CommandVibrato.incorrectArgs=The valid usage is: {1}vibrato <Frequency> <Depth>{2} // 1 and 2 are markdown, keep the <>, translate the inside of them.
 CommandVibrato.rangeError.frequency=The frequency must be between 0.1 and 14
 CommandVibrato.rangeError.depth=The depth must be between 0.05 and 1
-CommandVibrato.success=Set the vibrato frequency to {1}Hz.{2}Set the vibrato depth to {3}
+CommandVibrato.success=Set the vibrato frequency to {1}Hz.{2}Set the vibrato depth to {3} // 1 here is a number, like 5Hz (hertz), 2 is markdown, and 3 is also a number.
 
-CommandVolume.defaulted=Set volume to the default of {1}.
+CommandVolume.defaulted=Set volume to the default of {1}. // this is 100, but also has markdown.
 CommandVolume.incorrectArg=The volume must be an integer.
 CommandVolume.tooHigh=The volume can not be higher than 500.
 CommandVolume.tooLow=The volume can not be lower than 0.
-CommandVolume.success=Changed the volume to {1}.
+CommandVolume.success=Changed the volume to {1}. // what the volume was changed to, a number between 1 and 500
 CommandVolume.invalidValue=Invalid value.
 
 BaseCommand.notAllowed=Not Allowed
@@ -199,11 +200,11 @@ CommandStateChecker.isNotPlaying=The bot is not currently playing anything.
 CommandStateChecker.devOnly=This command is for developers only.
 
 PlayerManager.noSpotify=The bot is unable to play spotify tracks right now
-PlayerManager.playlistQueued=Size: {1} tracks.{2}Length: {3}
+PlayerManager.playlistQueued=Size: {1} tracks.{2}Length: {3} // 1 is the amount of tracks, 2 is some markdown, 3 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
 PlayerManager.APIError=An error with the YouTube search API has occurred.
 PlayerManager.loadFailed=The track failed to load: {1}
 
-TrackScheduler.autoplay.notFound=Autoplay failed to find {1}
+TrackScheduler.autoplay.notFound=Autoplay failed to find {1} // a track name
 TrackScheduler.autoplay.noSimilar=Autoplay could not find similar tracks.
 TrackScheduler.autoplay.unknownError=An unknown error occurred when trying to autoplay.
 TrackScheduler.autoplay.queued=Autoplay queued:
@@ -214,12 +215,22 @@ TrackScheduler.criticalFailure.title=Critical Error
 TrackScheduler.criticalFailure.description=Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.
 TrackScheduler.criticalFailure.footer=If this issue persists with specific audio sources, please file a bug report using /bug
 
-TrackScheduler.nextTrack.nowPlaying=Now playing: {1}
+TrackScheduler.nextTrack.nowPlaying=Now playing: {1} // a track name
+
+// if you experience issues with slavic languages specifically, feel free to use something like minut(y) if it can be two forms for plural.
+Main.day=day // 1 day
+Main.day.plural=days // 2 days
+Main.hour=hour // 1 hour
+Main.hour.plural=hours // 2 hours
+Main.minute=minute // 1 minute
+Main.minute.plural=minutes // 2 minutes
+Main.second=second // 1 second
+Main.second.plural=seconds // 2 seconds
 
 Main.success=Success // any messages with Success "✅ **Success**"
 Main.noPermission=You do not have the permission to use this command.
 Main.error=Error
 Main.unknown=Unknown
-Main.channel=Channel {1}
-Main.duration=Duration {1}
-Main.update=An update to the bot occurred, your queue and parameters have been restored!{1}If you wish to see what changed, feel free to join the support server found in the bot's about me.
+Main.channel=Channel {1} // a channel name
+Main.duration=Duration {1} // the duration of a track, will translate itself
+Main.update=An update to the bot occurred, your queue and parameters have been restored!{1}If you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.

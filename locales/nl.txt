@@ -216,6 +216,15 @@ TrackScheduler.criticalFailure.footer=Als dit een probleem blijft met specifieke
 
 TrackScheduler.nextTrack.nowPlaying=Nu: {1}
 
+Main.day=dag // 1 day
+Main.day.plural=dagen // 2 days
+Main.hour=uur // 1 uur
+Main.hour.plural=uren // 2 hours
+Main.minute=minuut // 1 minute
+Main.minute.plural=minuten // 2 minutes
+Main.second=seconde // 1 second
+Main.second.plural=secondes // 2 seconds
+
 Main.success=Success // any messages with Success "✅ **Success**"
 Main.noPermission=Je hebt geen machtigingen om deze command te gebruiken. 
 Main.error=Error
