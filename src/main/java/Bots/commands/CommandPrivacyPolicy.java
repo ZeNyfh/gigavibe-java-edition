@@ -9,7 +9,7 @@ public class CommandPrivacyPolicy extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed("Privacy Policy", "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));
+        event.replyEmbeds(createQuickEmbed(event.getLang("CommandPrivacyPolicy.privacyPolicy"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));
     }
 
     @Override
