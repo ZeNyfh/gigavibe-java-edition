@@ -54,7 +54,7 @@ public class LocaleManager {
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
     private static String serializeString(String localeInput) {
-        localeInput = localeInput.split("//", 1)[0];
+        localeInput = localeInput.split("//")[0];
         localeInput = localeInput.trim();
 
         Matcher matcher = serializePattern.matcher(localeInput);
