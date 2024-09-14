@@ -174,7 +174,7 @@ CommandSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x.
 CommandTOS.TermsOfService=Regulamin
 
 CommandVibrato.defaulted=Przywrócono domyślne wartości parametrów.
-CommandVibrato.incorrectArgs=Poprawne użycie to: {1}vibrato <Częstotliwość> <Głębokość>{2}
+CommandVibrato.incorrectArgs=Poprawne użycie to: {1} <Częstotliwość> <Głębokość>{2}
 CommandVibrato.rangeError.frequency=Częstotliwość musi wynosić od 0.1 do 14
 CommandVibrato.rangeError.depth=Głębokość musi wynosić od 0.05 do 1
 CommandVibrato.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}

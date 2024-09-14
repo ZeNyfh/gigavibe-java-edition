@@ -174,7 +174,7 @@ CommandSpeed.success=De afspeel snelheid van het nummer is veranderd naar {1}x. 
 CommandTOS.TermsOfService=Terms of Service
 
 CommandVibrato.defaulted=Verander de parameters naar hun standaard.
-CommandVibrato.incorrectArgs=De correctie manier van gebruik is: {1}vibrato <Frequentie> <Diepte>{2} // keep the <>
+CommandVibrato.incorrectArgs=De correctie manier van gebruik is: {1} <Frequentie> <Diepte>{2} // keep the <>
 CommandVibrato.rangeError.frequency=De frequentie moet tussen 0.1 en 14 zijn.
 CommandVibrato.rangeError.depth=De diepte moet tussen 0.05 en 1 zijn.
 CommandVibrato.success=De vibrato frequentie is nu {1}Hz.{2}De vibrato diepte is nu {3}

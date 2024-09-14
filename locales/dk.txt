@@ -175,7 +175,7 @@ CommandSpeed.success=Indstil afspilningshastigheden for musikken til {1}x. // x 
 CommandTOS.TermsOfService=Servicevilkår
 
 CommandVibrato.defaulted=Satte parametrene til deres standardværdier.
-CommandVibrato.incorrectArgs=The valid usage is: {1}vibrato <Frekvens> <Dybde>{2} // keep the <>
+CommandVibrato.incorrectArgs=The valid usage is: {1} <Frekvens> <Dybde>{2} // keep the <>
 CommandVibrato.rangeError.frequency=Frekvensen skal være mellem 0,1 og 14
 CommandVibrato.rangeError.depth=Dybden skal være mellem 0,05 og 1
 CommandVibrato.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
