@@ -47,7 +47,7 @@ CommandForceSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtw
 CommandForceSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 CommandForceSkip.skippedQueue=Pominięto całą kolejkę.
 CommandForceSkip.skippedToPos=Pominięto {1} utworów do {2}
-CommandForceSkip.skippedToTrack=Pominięto bieżący utwór do {2}
+CommandForceSkip.skippedToTrack=Pominięto bieżący utwór do {1}
 CommandForceSkip.skipped=Pominięto bieżący utwór.
 
 CommandGithub.message={1}Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{2}Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{3}https://github.com/ZeNyfh/gigavibe-java-edition

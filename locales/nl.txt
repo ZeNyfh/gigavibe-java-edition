@@ -47,7 +47,7 @@ CommandForceSkip.noSearchTerm=Is er een onbekende fout opgetreden terwijl autopl
 CommandForceSkip.autoplayQueued=Autoplay heeft dit op de wachtrij gezet:
 CommandForceSkip.skippedQueue=De hele wachtrij is overgeslagen.
 CommandForceSkip.skippedToPos={1} nummers zijn overgeslagen naar {2} 
-CommandForceSkip.skippedToTrack=Het huidige nummer is overslagen naar {2}
+CommandForceSkip.skippedToTrack=Het huidige nummer is overslagen naar {1}
 CommandForceSkip.skipped=Het huidige nummer is overgeslagen.
 
 CommandGithub.message={1}gebruik dit ALLEEN voor bug reports en functie suggesties.{2}Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt recreeëren.{3}https://github.com/ZeNyfh/gigavibe-java-edition

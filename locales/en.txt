@@ -47,7 +47,7 @@ CommandForceSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
 CommandForceSkip.autoplayQueued=Autoplay queued:
 CommandForceSkip.skippedQueue=Skipped the entire queue
 CommandForceSkip.skippedToPos=Skipped {1} tracks to {2}
-CommandForceSkip.skippedToTrack=Skipped the current track to {2}
+CommandForceSkip.skippedToTrack=Skipped the current track to {1}
 CommandForceSkip.skipped=Skipped the current track
 
 CommandGithub.message={1}Use this for bug reports and feature requests ONLY.{2}When making an issue, make sure to specify what the bug is and how to recreate it.{3}https://github.com/ZeNyfh/gigavibe-java-edition
