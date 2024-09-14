@@ -6,8 +6,9 @@ import Bots.CommandEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.skipCountGuilds;
+import java.util.HashMap;
+
+import static Bots.Main.*;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
@@ -17,12 +18,13 @@ public class CommandDisconnect extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
+        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         musicManager.scheduler.queue.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
         skipCountGuilds.remove(event.getGuild().getIdLong());
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Disconnected from the voice channel and cleared the queue."));
+        event.replyEmbeds(createQuickEmbed(" ", "✅ " + lang.get("CommandDisconnect.disconnected")));
     }
 
     @Override
