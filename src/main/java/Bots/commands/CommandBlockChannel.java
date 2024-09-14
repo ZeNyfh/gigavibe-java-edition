@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.json.simple.JSONArray;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,14 +23,15 @@ public class CommandBlockChannel extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
+        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.replyEmbeds(createQuickError("You do not have permission to use this command."));
+            event.replyEmbeds(createQuickError(lang.get("Main.noPermission")));
             return;
         }
         String[] args = event.getArgs();
         if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
             if (args.length < 3) {
-                event.replyEmbeds(createQuickError("The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
+                event.replyEmbeds(createQuickError(String.format(lang.get("CommandBlockChannel.invalidUsage"), "`blockchannel <remove/add>", "`", "`blockchannel list`")));
                 return;
             }
         }
@@ -46,29 +48,29 @@ public class CommandBlockChannel extends BaseCommand {
                 if (guildChannel.getId().equals(targetChannel)) {
                     if (args[1].equalsIgnoreCase("add")) {
                         if (blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError("This channel is already blocked."));
+                            event.replyEmbeds(createQuickError(lang.get("CommandBlockChannel.alreadyBlocked")));
                             return;
                         }
                         blockedChannels.add(targetChannel);
-                        event.replyEmbeds(createQuickEmbed(" ", "✅ Added <#" + guildChannel.getIdLong() + "> to the list."));
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ " + String.format(lang.get("CommandBlockChannel.added"), "<#" + guildChannel.getIdLong() + ">")));
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         if (!blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError("This channel is not blocked."));
+                            event.replyEmbeds(createQuickError(lang.get("CommandBlockChannel.notBlocked")));
                             return;
                         }
                         blockedChannels.remove(targetChannel);
-                        event.replyEmbeds(createQuickEmbed(" ", "✅ Removed <#" + guildChannel.getIdLong() + "> from the list."));
+                        event.replyEmbeds(createQuickEmbed(" ", "✅ " + String.format(lang.get("CommandBlockChannel.removed"), "<#" + guildChannel.getIdLong() + ">")));
                     }
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError("This channel was not found in this discord server."));
+            event.replyEmbeds(createQuickError(lang.get("CommandBlockChannel.notFound")));
         } else if (args[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
-            eb.setTitle("Blocked channels for " + event.getGuild().getName() + ":");
+            eb.setTitle(String.format(lang.get("CommandBlockChannel.channelList"), event.getGuild().getName()) + ":");
             if (blockedChannels.isEmpty()) {
-                eb.appendDescription("**None**");
+                eb.appendDescription("**" + lang.get("CommandBlockChannel.noChannels") + "**");
                 event.replyEmbeds(eb.build());
                 return;
             }
@@ -77,7 +79,7 @@ public class CommandBlockChannel extends BaseCommand {
             }
             event.replyEmbeds(eb.build());
         } else {
-            event.replyEmbeds(createQuickError("The valid usage is: `blockchannel <remove/add> <channel>` or `blockchannel list`"));
+            event.replyEmbeds(createQuickError(String.format(lang.get("CommandBlockChannel.invalidUsage"), "`blockchannel <remove/add>", "`", "`blockchannel list`")));
         }
     }
 
