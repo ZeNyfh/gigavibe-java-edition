@@ -1,9 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandEvent;
 import Bots.CommandStateChecker.Check;
 import Bots.CommandStateChecker.CheckResult;
-import Bots.CommandEvent;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
 import net.dv8tion.jda.api.EmbedBuilder;

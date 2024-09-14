@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
@@ -36,7 +36,7 @@ public class CommandPitch extends BaseCommand {
         }
 
         timescale.setPitch(value);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**",  String.format(event.getLang("CommandPitch.changed"), value)));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**", String.format(event.getLang("CommandPitch.changed"), value)));
     }
 
     @Override

@@ -8,7 +8,7 @@ import static Bots.Main.createQuickEmbed;
 public class CommandGithub extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(" ", String.format(event.getLang("CommandGithub.message"),"❕ ", "\n\n❕ ", "\n\n")));
+        event.replyEmbeds(createQuickEmbed(" ", String.format(event.getLang("CommandGithub.message"), "❕ ", "\n\n❕ ", "\n\n")));
     }
 
     @Override

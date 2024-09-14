@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -29,11 +29,11 @@ public class CommandInsert extends BaseCommand {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
-            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.notEnoughArgs"),"\n", "`<", "> <", ">`")));
+            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.notEnoughArgs"), "\n", "`<", "> <", ">`")));
             return;
         }
         if (!args[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.invalidArgs"),"\n", "`<", "> <", ">`")));
+            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.invalidArgs"), "\n", "`<", "> <", ">`")));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());

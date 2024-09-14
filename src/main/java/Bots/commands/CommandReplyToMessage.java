@@ -6,7 +6,6 @@ import Bots.CommandStateChecker;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static Bots.Main.createQuickError;
