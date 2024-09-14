@@ -57,7 +57,6 @@ CommandHelp.category.music=Muzyka
 CommandHelp.category.DJ=DJ
 CommandHelp.category.admin=Admin
 CommandHelp.category.dev=Dev
-CommandHelp.category.unknown=Nieznana kategoria dla tytułu pomocy: {1}
 CommandHelp.alias=Alias
 commandHelp.alias.plural=Aliasy
 CommandHelp.originalFooter=Kliknij guziki, aby uzyskać więcej informacji o grupie.
