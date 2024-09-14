@@ -23,7 +23,7 @@ public class LocaleManager {
         languages.put("polski", readLocale("locales/pl.txt"));
         languages.put("nederlands", readLocale("locales/nl.txt"));
         for (Guild g : bot.getGuilds()) {
-            guildLocales.putIfAbsent(g.getIdLong(), languages.get("dutch"));
+            guildLocales.putIfAbsent(g.getIdLong(), languages.get("english"));
         }
     }
 
