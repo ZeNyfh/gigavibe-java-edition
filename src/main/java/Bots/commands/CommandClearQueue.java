@@ -6,8 +6,9 @@ import Bots.CommandEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.skipCountGuilds;
+import java.util.HashMap;
+
+import static Bots.Main.*;
 
 public class CommandClearQueue extends BaseCommand {
     @Override
@@ -17,12 +18,13 @@ public class CommandClearQueue extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
+        HashMap<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         skipCountGuilds.remove(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Cleared the queue"));
+        event.replyEmbeds(createQuickEmbed("✅ **" + lang.get("Main.success") + "**", lang.get("CommandClearQueue.cleared")));
     }
 
     @Override
