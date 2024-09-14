@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,13 +34,14 @@ public class CommandHelp extends BaseCommand {
         }
     }
 
-    private void BuildEmbedFromCategory(EmbedBuilder embed, Category category) {
+    private void BuildEmbedFromCategory(EmbedBuilder embed, Category category, long guildID) {
+        HashMap<String, String> lang = guildLocales.get(guildID);
         switch (category) { //Note: This generates an anonymous reference (CommandHelp$1). I do not know why nor how, nor does it matter, but I'm still confused. -9382
-            case General -> embed.setTitle("\uD83D\uDCD6 **General**");
-            case Music -> embed.setTitle("\uD83D\uDD0A **Music**");
-            case DJ -> embed.setTitle("\uD83C\uDFA7 **DJ**");
-            case Admin -> embed.setTitle("\uD83D\uDCD1 **Admin**");
-            case Dev -> embed.setTitle("\uD83D\uDD28 **Dev**");
+            case General -> embed.setTitle("\uD83D\uDCD6 **" + lang.get("CommandHelp.category.general") + "**");
+            case Music -> embed.setTitle("\uD83D\uDD0A **" + lang.get("CommandHelp.category.music") + "**");
+            case DJ -> embed.setTitle("\uD83C\uDFA7 **" + lang.get("CommandHelp.category.DJ") + "**");
+            case Admin -> embed.setTitle("\uD83D\uDCD1 **" + lang.get("CommandHelp.category.admin") + "**");
+            case Dev -> embed.setTitle("\uD83D\uDD28 **" + lang.get("CommandHelp.category.dev") + "**");
             default -> System.err.println("Unrecognised category for help title: " + category);
         }
         int i = 0;
@@ -47,9 +50,9 @@ public class CommandHelp extends BaseCommand {
                 i++;
                 StringBuilder aliases = new StringBuilder();
                 if (Command.getNames().length == 2) {
-                    aliases.append("\n`Alias:` ");
+                    aliases.append("\n`").append(lang.get("CommandHelp.alias")).append(":` ");
                 } else if (Command.getNames().length > 2) {
-                    aliases.append("\n`Aliases:` ");
+                    aliases.append("\n`").append(lang.get("CommandHelp.alias.plural")).append(":` ");
                 }
                 int j = 0;
                 for (String name : Command.getNames()) {
@@ -73,7 +76,7 @@ public class CommandHelp extends BaseCommand {
         eb.setColor(botColour);
         eb.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
         Category ButtonCategory = Category.valueOf(Objects.requireNonNull(event.getButton().getId()).split("help-")[1]);
-        BuildEmbedFromCategory(eb, ButtonCategory);
+        BuildEmbedFromCategory(eb, ButtonCategory, Objects.requireNonNull(event.getGuild()).getIdLong());
         event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
     }
 
@@ -102,16 +105,16 @@ public class CommandHelp extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
-        embed.setFooter("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.");
+        embed.setFooter(String.format(event.getLang("CommandHelp.footer"), "\"<>\"", "\"[]\"", "\"()\""));
         if (userCategory != null) {
-            BuildEmbedFromCategory(embed, userCategory);
+            BuildEmbedFromCategory(embed, userCategory, event.getGuild().getIdLong());
         } else {
-            embed.setTitle("\uD83D\uDCD4 **Commands**");
+            embed.setTitle("\uD83D\uDCD4 **" + event.getLang("CommandHelp.embedTitle") + "**");
             for (Category category : Category.values()) {
                 if (category != Category.Dev)
                     embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
             }
-            embed.setFooter("Click the buttons to get more information on a group.");
+            embed.setFooter(event.getLang("CommandHelp.originalFooter"));
         }
         event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }
