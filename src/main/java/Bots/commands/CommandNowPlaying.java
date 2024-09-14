@@ -53,7 +53,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setDescription("```" + event.getLang("Live stream duration") + ": " + toSimpleTimestamp(trackPos) + "```");
+            embed.setDescription("```" + event.getLang("CommandNowPlaying.livestreamDuration") + ": " + toSimpleTimestamp(trackPos) + "```");
         }
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
@@ -88,20 +88,20 @@ public class CommandNowPlaying extends BaseCommand {
             embed.addField("⏸️ " + event.getLang("CommandNowPlaying.paused"), "❌ **" + event.getLang("CommandNowPlaying.false") + "**", true);
         }
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD02 Track looping:", "✅ **True**", true);
+            embed.addField("\uD83D\uDD02 " + event.getLang("CommandNowPlaying.trackLooping"), "✅ **" + event.getLang("CommandNowPlaying.true") + "**", true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
-            embed.addField("\uD83D\uDD02 Track looping:", "❌ **False**", true);
+            embed.addField("\uD83D\uDD02 " + event.getLang("CommandNowPlaying.trackLooping"), "❌ **" + event.getLang("CommandNowPlaying.false") + "**", true);
         }
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD01 Queue looping:", "✅ **True**", true);
+            embed.addField("\uD83D\uDD01 " + event.getLang("CommandNowPlaying.queueLooping"), "✅ **" + event.getLang("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("\uD83D\uDD01 Queue looping:", "❌ **False**", true);
+            embed.addField("\uD83D\uDD01 " + event.getLang("CommandNowPlaying.queueLooping"), "❌ **" + event.getLang("CommandNowPlaying.false") + "**", true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("♾️ Auto playing:", "✅ **True**", true);
+            embed.addField("♾️ " + event.getLang("CommandNowPlaying.autoplaying"), "✅ **" + event.getLang("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("♾️ Auto playing:", "❌ **False**", true);
+            embed.addField("♾️ " + event.getLang("CommandNowPlaying.autoplaying"), "❌ **" + event.getLang("CommandNowPlaying.false") + "**", true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
