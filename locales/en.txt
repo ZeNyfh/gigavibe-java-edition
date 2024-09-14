@@ -111,8 +111,8 @@ CommandNowPlaying.autoplaying=Auto playing:
 CommandPause.resumed=The track is now playing.
 CommandPause.paused=The track is now paused.
 
-CommandPing.ping=ping: {1}ms // ms here being short for milliseconds // as ping number
-CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds // also a ping number
+CommandPing.ping=ping: {1}ms // ms here being short for milliseconds 1 as ping number
+CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds 1 also a ping number
 
 CommandPitch.defaulted=Set the pitch back to 1.
 CommandPitch.range=The pitch must be between 0.25 and 5
