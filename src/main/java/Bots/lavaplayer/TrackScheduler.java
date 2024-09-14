@@ -42,9 +42,11 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+
         PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
         GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
         long guildID = trackUserData.guildId;
+        HashMap<String, String> lang = guildLocales.get(guildID);
         guildFailCount.remove(guildID);
 
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
@@ -74,15 +76,15 @@ public class TrackScheduler extends AudioEventAdapter {
                 boolean canAutoPlay = true;
 
                 if (searchTerm.equals("notfound")) {
-                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("Autoplay failed to find ").append(track.getInfo().title).append("\n");
+                    errorBuilder.append("❌ **").append(lang.get("Main.error")).append(":**\n").append(String.format(lang.get("TrackScheduler.autoplay.notFound"), track.getInfo().title)).append("\n");
                     canAutoPlay = false;
                 }
                 if (searchTerm.equals("none")) {
-                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("Autoplay could not find similar tracks.").append("\n");
+                    errorBuilder.append("❌ **").append(lang.get("Main.error")).append(":**\n").append(lang.get("TrackScheduler.autoplay.noSimilar")).append("\n");
                     canAutoPlay = false;
                 }
                 if (searchTerm.isEmpty()) {
-                    errorBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n").append("An unknown error occurred when trying to autoplay.").append("\n");
+                    errorBuilder.append("❌ **").append(lang.get("Main.error")).append(":**\n").append(lang.get("TrackScheduler.autoplay")).append("\n");
                     canAutoPlay = false;
                 }
 
@@ -93,7 +95,7 @@ public class TrackScheduler extends AudioEventAdapter {
                             : encode(track.getInfo().author.toLowerCase(), false, true);
                     String title = encode(track.getInfo().title, true, false);
                     PlayerManager.getInstance().loadAndPlay(trackUserData.eventOrChannel, "ytsearch:" + artistName + " " + title, true);
-                    createQuickEmbed("♾️ Autoplay queued: ", artistName + " - " + title);
+                    createQuickEmbed("♾️ " + lang.get("TrackScheduler.autoplay.queued"), artistName + " - " + title);
                 } else { // cannot autoplay
                     originalEventChannel.sendMessageEmbeds(createQuickError(errorBuilder.toString())).queue();
                     // go to next track in the queue
@@ -126,7 +128,7 @@ public class TrackScheduler extends AudioEventAdapter {
         long guildID = originalEventChannel.getGuild().getIdLong();
 
         try {
-            originalEventChannel.sendMessageEmbeds(createQuickError("The track failed to load due to an unknown reason. Skipping...")).queue();
+            originalEventChannel.sendMessageEmbeds(createQuickError(guildLocales.get(originalEventChannel.getGuild().getIdLong()).get("TrackScheduler.regularFailure"))).queue();
         } catch (InsufficientPermissionException ignored) {
             // This should not be logged.
         }
@@ -140,11 +142,12 @@ public class TrackScheduler extends AudioEventAdapter {
         long guildID = originalEventChannel.getGuild().getIdLong();
         queue.clear();
         guildFailCount.put(guildID, 0);
+        HashMap<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
         MessageEmbed failureEmbed = createQuickEmbed(
-                "❌ **Critical Error**",
-                "Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.",
-                "If this issue persists with specific audio sources, please file a /bug report"
+                "❌ " + lang.get("TrackScheduler.criticalFailure.title"),
+                lang.get("TrackScheduler.criticalFailure.description"),
+                lang.get("TrackScheduler.criticalFailure.footer")
         );
 
         try {
@@ -161,6 +164,8 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private void playNextTrack(AudioPlayer player, GuildMessageChannelUnion originalEventChannel) {
         long guildID = originalEventChannel.getGuild().getIdLong();
+        HashMap<String, String> lang = guildLocales.get(guildID);
+
         trackLoops.put(guildID, 0);
         nextTrack();
         AudioTrack nextTrack = player.getPlayingTrack();
@@ -170,18 +175,18 @@ public class TrackScheduler extends AudioEventAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Now playing: " + (nextTrack.getInfo().title.isEmpty() ?
+        eb.setTitle(String.format(lang.get("TrackScheduler.nextTrack.nowPlaying"), (nextTrack.getInfo().title.isEmpty() ?
             nextTrack.getInfo().uri :
-            nextTrack.getInfo().title), nextTrack.getInfo().uri
+            nextTrack.getInfo().title)), nextTrack.getInfo().uri
         );
 
-        eb.setDescription("**Channel**\n" + (nextTrack.getInfo().author.isEmpty() ?
-            "Unknown" :
-            nextTrack.getInfo().author)
+        eb.setDescription("**" + String.format(lang.get("Main.channel"), "**\n" + (nextTrack.getInfo().author.isEmpty() ?
+            lang.get("Main.unknown") :
+            nextTrack.getInfo().author))
         );
 
-        eb.addField("**Duration**\n",
-            nextTrack.getInfo().length > 432000000 ? "Unknown" :
+        eb.addField("**" + String.format(lang.get("Main.duration"), "**\n"),
+            nextTrack.getInfo().length > 432000000 ? lang.get("Main.unknown") :
             toSimpleTimestamp(nextTrack.getInfo().length),
             true
         );

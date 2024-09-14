@@ -98,7 +98,7 @@ CommandLyrics.lyricsForTrack=Lyrics for: {1}
 CommandLyrics.tooLong=Lyrics were too long, uploading them as a file.
 
 CommandNowPlaying.livestreamDuration=Live stream duration {1}
-CommandNowPlaying.channel=Channel: {1}
+CommandNowPlaying.channel=Channel:
 CommandNowPlaying.next=Up next:
 CommandNowPlaying.paused=Track paused:
 CommandNowPlaying.true=True

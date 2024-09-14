@@ -98,7 +98,7 @@ CommandLyrics.lyricsForTrack=Lyrics voor: {1}
 CommandLyrics.tooLong=Er is een bestand gemaakt omdat de lyrics te lang waren. 
 
 CommandNowPlaying.livestreamDuration=Live stream tijdsduur {1}
-CommandNowPlaying.channel=Kanaal: {1}
+CommandNowPlaying.channel=Kanaal:
 CommandNowPlaying.next=Volgende nummer:
 CommandNowPlaying.paused=Nummer is gepauzeerd:
 CommandNowPlaying.true=Ja

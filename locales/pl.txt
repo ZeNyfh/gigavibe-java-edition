@@ -98,7 +98,7 @@ CommandLyrics.lyricsForTrack=Tekst dla: {1}
 CommandLyrics.tooLong=Tekst był za długi, przesyłam jako plik.
 
 CommandNowPlaying.livestreamDuration=Czas trwania transmisji na żywo {1}
-CommandNowPlaying.channel=Kanał: {1}
+CommandNowPlaying.channel=Kanał:
 CommandNowPlaying.next=Następne:
 CommandNowPlaying.paused=Utwór wstrzymany:
 CommandNowPlaying.true=Tak
