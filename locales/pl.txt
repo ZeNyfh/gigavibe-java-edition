@@ -206,7 +206,7 @@ PlayerManager.loadFailed=Utwór nie został załadowany: {1}
 TrackScheduler.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
 TrackScheduler.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
 TrackScheduler.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.
-TrackScheduler.autoplay.queued=Autoodtwarzanie dodało do kolejki: {1}
+TrackScheduler.autoplay.queued=Autoodtwarzanie dodało do kolejki:
 
 TrackScheduler.regularFailure=Utwór nie został załadowany z nieznanego powodu. Pomijam...
 

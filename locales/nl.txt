@@ -206,7 +206,7 @@ PlayerManager.loadFailed=Het nummer kon niet geladen worden: {1}
 TrackScheduler.autoplay.notFound=Autoplay kon {1} niet vinden
 TrackScheduler.autoplay.noSimilar=Autoplay kon geen soortgelijke nummers vinden.
 TrackScheduler.autoplay.unknownError=Er is een onbekende fout opgetreden met de autoplay.  
-TrackScheduler.autoplay.queued=Autoplay word in de wachtrij gezet: {1}
+TrackScheduler.autoplay.queued=Autoplay word in de wachtrij gezet:
 
 TrackScheduler.regularFailure=Dit nummer word overgeslagen omdat het niet afgespeeld kon worden door een fout... 
 

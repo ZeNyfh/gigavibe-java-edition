@@ -206,7 +206,7 @@ PlayerManager.loadFailed=The track failed to load: {1}
 TrackScheduler.autoplay.notFound=Autoplay failed to find {1}
 TrackScheduler.autoplay.noSimilar=Autoplay could not find similar tracks.
 TrackScheduler.autoplay.unknownError=An unknown error occurred when trying to autoplay.
-TrackScheduler.autoplay.queued=Autoplay queued: {1}
+TrackScheduler.autoplay.queued=Autoplay queued:
 
 TrackScheduler.regularFailure=The track failed to load due to an unknown reason. Skipping...
 
