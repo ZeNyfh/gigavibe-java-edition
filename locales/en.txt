@@ -75,7 +75,7 @@ CommandInfo.gatewayPing=Gateway Ping: {1}
 CommandInfo.version=Version: {1}
 CommandInfo.ping=Ping {1} ms // ms here being short for milliseconds
 
-CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}
+CommandInsert.notEnoughArgs=Not enough arguments provided{1}Usage: {2}Integer{3}URL/SearchTerm{4}
 CommandInsert.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4}
 CommandInsert.decodingError=Something went wrong when decoding the track.
 CommandInsert.addedToPos=Added the track to position: {1}

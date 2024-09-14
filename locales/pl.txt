@@ -75,7 +75,7 @@ CommandInfo.gatewayPing=Ping bramy: {1}
 CommandInfo.version=Wersja: {1}
 CommandInfo.ping=Ping {1}
 
-CommandInsert.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}
+CommandInsert.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
 CommandInsert.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
 CommandInsert.decodingError=Wystąpił błąd podczas dekodowania utworu.
 CommandInsert.addedToPos=Dodano utwór na pozycję: {1}

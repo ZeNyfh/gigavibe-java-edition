@@ -75,7 +75,7 @@ CommandInfo.gatewayPing=Gateway Ping: {1}
 CommandInfo.version=Versie: {1}
 CommandInfo.ping=Ping {1} ms // ms here being short for milliseconds
 
-CommandInsert.notEnoughArgs=Niet genoeg argumenten gegeven.{1}Gebruik: {2}
+CommandInsert.notEnoughArgs=Niet genoeg argumenten gegeven.{1}Gebruik: {2}URL/Zoekterm{4}
 CommandInsert.invalidArgs=Ongeldige argumenten. Gebruik alleen cijfers{1}Gebruik: {2}URL/Zoekterm{4} 
 CommandInsert.decodingError=Er ging iets mis met het nummer decoderen.
 CommandInsert.addedToPos=Het nummer is toegevoegd op positie: {1} 
