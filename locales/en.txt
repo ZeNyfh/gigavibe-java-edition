@@ -22,7 +22,7 @@ CommandBlockChannel.channelList=Blocked channels for {1} // 1 is the server name
 CommandBlockChannel.noChannels=None
 
 CommandBug.noReport=Please provide something to report.
-CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the bug command to reply to messages.{3} // all numbers here are newlines
+CommandBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the {3} command to reply to messages.{4} // all numbers here are newlines except 3 which is a command name.
 
 CommandClearQueue.cleared=Cleared the queue
 

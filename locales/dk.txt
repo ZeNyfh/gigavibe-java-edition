@@ -21,7 +21,7 @@ CommandBlockChannel.channelList=Blokeret kanaler for {1}
 CommandBlockChannel.noChannels=Ingen
 
 CommandBug.noReport=Giv venligst noget at rapportere.
-CommandBug.successMessage=Tak for at sende en bug rapport!{1}Developeren skulle gerne komme i kontakt med dig gennem bottens DMs.{2}Venligst brug bug kommandoen til at svare på beskeder.{2}
+CommandBug.successMessage=Tak for at sende en bug rapport!{1}Developeren skulle gerne komme i kontakt med dig gennem bottens DMs.{2}Venligst brug {3} kommandoen til at svare på beskeder.{4}
 
 CommandClearQueue.cleared=Ryddede køen
 

@@ -21,7 +21,7 @@ CommandBlockChannel.channelList=Geblokkeerde kanalen voor {1}
 CommandBlockChannel.noChannels=Geen kanalen gevonden.
 
 CommandBug.noReport=Geef hier aan wat u te melden heeft.
-CommandBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DMs.{2}Gebruik de bug command om te reageren op de berichten.{3}
+CommandBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DMs.{2}Gebruik de {3} command om te reageren op de berichten.{4}
 
 CommandClearQueue.cleared=De wachtrij is leeggemaakt
 
