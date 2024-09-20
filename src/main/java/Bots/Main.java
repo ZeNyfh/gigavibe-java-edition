@@ -378,7 +378,10 @@ public class Main extends ListenerAdapter {
 
         for (String c : chars) {
             if (str.contains(c)) {
-                str = str.replaceAll(c, String.format("\\%s", c));
+                // double \ for escaping the regex to ensure normal interpretation
+                // quadruple \ for the replacement because java sucks
+                // also intellij hates the idea of `"\\" + c` and insists its an error, so we use String.format to shut it up
+                str = str.replaceAll(String.format("\\%s", c), "\\\\" + c);
             }
         }
         return str;

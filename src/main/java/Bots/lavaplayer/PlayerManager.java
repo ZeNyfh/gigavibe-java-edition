@@ -98,7 +98,7 @@ public class PlayerManager {
             String trackName = trackNameArray[trackNameArray.length - 1];
             embed.setTitle(trackName, audioTrack.getInfo().uri);
         } else {
-            embed.setTitle(audioTrack.getInfo().title, audioTrack.getInfo().uri);
+            embed.setTitle(sanitise(audioTrack.getInfo().title), audioTrack.getInfo().uri);
         }
         String length;
         if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
