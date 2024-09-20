@@ -288,14 +288,6 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static MessageEmbed createQuickEmbed(String title, String description) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(title);
-        eb.setColor(botColour);
-        eb.setDescription(description);
-        return eb.build();
-    }
-
     public static MessageEmbed createQuickEmbed(String title, String description, String footer) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title);
@@ -303,6 +295,10 @@ public class Main extends ListenerAdapter {
         eb.setDescription(description);
         eb.setFooter(footer);
         return eb.build();
+    }
+
+    public static MessageEmbed createQuickEmbed(String title, String description) {
+        return createQuickEmbed(title, description, null);
     }
 
     public static MessageEmbed createQuickError(String description) {
