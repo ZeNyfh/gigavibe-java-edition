@@ -159,6 +159,9 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
+                for (AudioTrack audioTrack : tracks) {
+                    audioTrack.setUserData(new TrackUserData(eventOrChannel));
+                }
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
                     if (autoplaying)
@@ -193,9 +196,6 @@ public class PlayerManager {
                         if (sendEmbed) {
                             replyWithEmbed(eventOrChannel, embed.build());
                         }
-                    }
-                    for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new TrackUserData(eventOrChannel));
                     }
                 }
                 loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
