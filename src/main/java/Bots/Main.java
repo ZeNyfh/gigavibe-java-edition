@@ -182,7 +182,6 @@ public class Main extends ListenerAdapter {
         List<Class<?>> classes = new ArrayList<>();
         String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         JarFile jarFile = null;
-        boolean jarFileCheck = false;
         try {
             jarFile = new JarFile(tempJarPath.substring(5));
         } catch (FileNotFoundException ignored) {
@@ -203,9 +202,8 @@ public class Main extends ListenerAdapter {
                 } catch (Exception ignored1) {
                 }
             }
-            jarFileCheck = true;
         }
-        if (!jarFileCheck) {
+        if (jarFile != null) {
             Enumeration<JarEntry> resources = jarFile.entries();
             while (resources.hasMoreElements()) {
                 JarEntry url = resources.nextElement();
