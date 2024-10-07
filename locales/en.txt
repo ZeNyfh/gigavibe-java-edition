@@ -136,7 +136,7 @@ CommandQueue.didYouMean=Did you mean to use {1}? // a different command name: "c
 CommandQueue.integerError=The page must be a positive integer.
 
 CommandRadio.list=Radio list:
-CommandRadio.alternativeList=Or use {1} <String> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well.
+CommandRadio.alternativeList=Or use {1} <String>{2} // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well. {2} is just markdown.
 CommandRadio.useForPlay=Use {1} <Radio Name>{2} to play a radio station. // 1 is a command, {2} is markdown.
 CommandRadio.noArgsList=No arguments given, here's some radio stations to choose from:
 CommandRadio.noSearchTerm=No search term given.

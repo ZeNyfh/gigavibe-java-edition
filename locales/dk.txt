@@ -136,7 +136,7 @@ CommandQueue.didYouMean=Mente du at bruge {1}?
 CommandQueue.integerError=Siden skal være et positivt heltal.
 
 CommandRadio.list=Radioliste:
-CommandRadio.alternativeList=Eller brug {1} radio søgning <Ord> // keep the <>
+CommandRadio.alternativeList=Eller brug {1} radio søgning <Ord>{2} // keep the <>
 CommandRadio.useForPlay=Brug {1} radio <Radio Navn>{2} at afspille en radiostation.
 CommandRadio.noArgsList=Ingen argumenter givet, her er nogle radiostationer at vælge imellem:
 CommandRadio.noSearchTerm=Intet søgeterm angivet.

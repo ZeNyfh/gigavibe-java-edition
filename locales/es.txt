@@ -136,7 +136,7 @@ CommandQueue.didYouMean=¿Querías usar {1}? // a different command name: "clear
 CommandQueue.integerError=El número de página debe ser un entero positivo.
 
 CommandRadio.list=Lista de la radio:
-CommandRadio.alternativeList=O usa {1} <Cadena de caracteres> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well.
+CommandRadio.alternativeList=O usa {1} <Cadena de caracteres>{2} // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well.
 CommandRadio.useForPlay=Usa {1} <Nombre de la radio>{2} para usar la radio. // 1 is a command, {2} is markdown.
 CommandRadio.noArgsList=Ningún argumento dado, aquí hay algunas estaciones de radio entre las que elegir:
 CommandRadio.noSearchTerm=Ningún término de busqueda dado.

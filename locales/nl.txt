@@ -135,7 +135,7 @@ CommandQueue.didYouMean=Wou je {1} gebruiken?
 CommandQueue.integerError=De pagina moet een cijfer boven 0 zijn. 
 
 CommandRadio.list=Radio's:
-CommandRadio.alternativeList=Of gebruik {1} zoek een radio <Tekst>  // keep the <>
+CommandRadio.alternativeList=Of gebruik {1} zoek een radio <Tekst>{2}  // keep the <>
 CommandRadio.useForPlay=Gebruik {1} radio <naam van radio>{2} om een radio af te spelen.
 CommandRadio.noArgsList=Geen argument gegeven, hier zijn radio's om van te kiezen:
 CommandRadio.noSearchTerm=Geen zoekterm gegeven.
