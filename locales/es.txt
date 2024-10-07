@@ -1,0 +1,226 @@
+// Locale made by Nois. Feel free to change your name if you are translating.
+// Any line starting with "//" will be ignored.
+// Any newlines will also be ignored.
+// Trailing spaces will be removed.
+// Use this english one as a template.
+// Comments can be added to the messages via a preceding //.
+// Translate everything between <>, [], and ()
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
+// please preserve the capitalisation and any punctuation if applicable.
+
+CommandAutoplay.noAPI=No se ha concedido ninguna clave API al bot por parte de LastFM, este comando no funcionará sin ella.
+CommandAutoplay.notAutoplaying=Reproducción automática desactivada.
+CommandAutoplay.isAutoplaying=Reproducción automática activada.
+
+CommandBlockChannel.invalidUsage=Uso válido: {1} <canal>{2} o {3} // 1 here is the command and its arguments, 2 is markdown (dont move from after channel), and 3 is also a command.
+CommandBlockChannel.alreadyBlocked=Este canal ya está bloqueado.
+CommandBlockChannel.notBlocked=Este canal no está bloqueado.
+CommandBlockChannel.added={1} ha sido añadido a la lista.// 1 is a channel name
+CommandBlockChannel.removed={1} ha sido borrado de la lista. // 1 is a channel name
+CommandBlockChannel.notFound=El canal no ha sido encontrado en el servidor.
+CommandBlockChannel.channelList=Canales bloqueados para {1} // 1 is the server name
+CommandBlockChannel.noChannels=Vacío
+
+CommandBug.noReport=Por favor, añada algo al informe.
+CommandBug.successMessage=¡Gracias por su informe!{1}El desarrollador se pondrá en contacto con usted mediante los mensajes privados del bot.{2}Por favor, use el comando de bug para responder a los mensajes.{3} // all numbers here are newlines
+
+CommandClearQueue.cleared=La cola ha sido vaciada
+
+CommandDisconnect.disconnected=Desconectado del chat de voz y vaciada la cola.
+
+CommandDJ.roleList=Roles:
+CommandDJ.userList=Users:
+CommandDJ.roleListEmpty=Vacío.
+CommandDJ.guildDJs=DJs para {1} // server name
+CommandDJ.notGiven=Ningún miembro ni rol ha sido especificado.
+CommandDJ.member=miembro
+CommandDJ.member.plural=miembros
+CommandDJ.role=rol
+CommandDJ.role.plural=roles
+CommandDJ.and=y
+CommandDJ.added={1} ha sido añadido a la lista de DJs. // user/role name
+CommandDJ.removed={1} ha sido eliminado de la lista de DJs.// user/role name
+CommandDJ.invalidArgs=Argumentos Inválidos.
+
+CommandForceSkip.failedToFind=La reproducción automática no encontró {1} // song title
+CommandForceSkip.couldNotFind=La reproducción automática no pudo encontrar ninguna pista similar.
+CommandForceSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente la lista.
+CommandForceSkip.autoplayQueued=Reproducción automática en cola:
+CommandForceSkip.skippedQueue=La cola ha sido omitida
+CommandForceSkip.skippedToPos={1} pistas han sido omitidas hasta {2} // 1 is the amount of tracks it skipped, 2 is a track name
+CommandForceSkip.skippedToTrack=La pista actual ha sido omitida y reemplazada por {1} // track name
+CommandForceSkip.skipped=La pista actual ha sido omitida
+
+CommandGithub.message={1}Usar SOLO en caso de querer enviar un informe de bugs o sobre alguna característica.{2}Al hacer una propuesta, asegúrese de especificar cuál es el bug y cómo recrearlo.{3}https://github.com/ZeNyfh/gigavibe-java-edition // all numbers here are basically just newlines, you can think of the parts between as new sentences.
+
+CommandHelp.category.general=General
+CommandHelp.category.music=Música
+CommandHelp.category.DJ=DJ
+CommandHelp.category.admin=Administrador
+CommandHelp.category.dev=Desarrollador
+CommandHelp.alias=Apodo
+commandHelp.alias.plural=Apodos
+CommandHelp.originalFooter=Pulsa los botones para obtener más información de un grupo.
+CommandHelp.footer=Syntax: {1} es un argumento necesario, {2} es un argumento opcional. {3} es un comando alternativo. // these are commands, they are not language specific.
+CommandHelp.embedTitle=Comandos
+
+CommandInfo.info=Información
+CommandInfo.ramUsage=Uso de la RAM: {1} // 1024MB
+CommandInfo.upTime=Tiempo de actividad: {1} // "1 day, 17 hours, 37 minutes, 19 seconds" pero no te preocupes, ¡se sitúa solo!
+CommandInfo.discordServers=Servidores: {1} // just the amount of servers
+CommandInfo.discordMembers=Usuarios: {1} // the amount of total users
+CommandInfo.registeredCommands=Comandos registrados: {1} // how many commands are registered
+CommandInfo.voiceChannels=Canales de voz: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
+CommandInfo.playingCount=Reproducciones en tiempo real: {1} // how many voice channels the bot is actually playing music in
+CommandInfo.gatewayPing=Ping de entrada: {1}ms // 204ms
+CommandInfo.version=Versión: {1} // 24.09.13 (a date but it's a version number)
+CommandInfo.ping=Ping: {1}ms // ms here being short for milliseconds
+
+CommandInsert.notEnoughArgs=Argumentos insuficientes{1}Uso: {2}Número entero{3}URL/TérminoDeBúsqueda{4}// 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
+CommandInsert.invalidArgs=Argumentos inválidos, sólo números enteros{1}Uso: {2}Número entero{3}URL/TérminoDeBúsqueda{4} 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
+CommandInsert.decodingError=Algo fue mal durante la decodificación de la pista.
+CommandInsert.addedToPos=Pista añadida a la posición: {1} // a position in the queue, a number.
+CommandInsert.queueError=Hubo un error al añadir la pista a la cola: {1} // an error message from the code.
+
+CommandInvite.haveFun=¡Pásalo bien!
+
+CommandJoin.noAccess=El bot no puede acceder a tu canal
+CommandJoin.joined=El bot se unió a tu chat de voz.
+
+CommandLoop.notLooping=Reproducción en bucle desactivada.
+CommandLoop.looping=Reproducción en bucle activada.
+
+CommandLoopQueue.notLooping=Reproducción en bucle de la lista desactivada.
+CommandLoopQueue.looping=Reproducción en bucle de la lista activada.
+
+CommandLyrics.notFound=No hubo resultados o el título de la canción es desconocido.
+CommandLyrics.source=Letra procedente de lrclib.net
+CommandLyrics.lyricsForTrack=Letra de: {1} // a song name
+CommandLyrics.tooLong=La letra es demasiado larga, se subirá como un archivo.
+
+CommandNowPlaying.livestreamDuration=Duración de la emisión en directo {1} // a number
+CommandNowPlaying.channel=Canal:
+CommandNowPlaying.next=Siguiente:
+CommandNowPlaying.paused=Pista pausada:
+CommandNowPlaying.true=Verdadero
+CommandNowPlaying.false=Falso
+CommandNowPlaying.trackLooping=Pista en bucle:
+CommandNowPlaying.queueLooping=Cola en bucle:
+CommandNowPlaying.autoplaying=Reproducción automática:
+
+CommandPause.resumed=La pista está reproduciéndose.
+CommandPause.paused=Pista pausada.
+
+CommandPing.ping=ping: {1}ms // ms here being short for milliseconds // as ping number
+CommandPing.gatewayPing=ping de entrada: {1}ms // ms here being short for milliseconds // also a ping number
+
+CommandPitch.defaulted=Establecido el tono a 1.
+CommandPitch.range=El tono debe estar comprendido entre 0.25 y 5
+CommandPitch.changed=El tono de la pista ha sido establecido a x{1} // x here is like 5x or 2x, aka a multiplier
+
+CommandPlay.queuedFromAtt={1} pistas han sido puestas en cola desde los archivos adjuntos. // an amount, so like "queued 6 tracks from..."
+CommandPlay.queuedFromAtt.error=Algo fue mal al cargar las pistas adjuntas.
+CommandPlay.wrongFormat=The track failed to load: Formato de archivo desconocido.
+CommandPlay.noArgs=Ningún argumento dado.
+CommandPlay.decodeError=Algo fue mal al decodificar la pista.
+CommandPlay.queuedManySongs=¡{1} canciones añadidas a la cola! // how many songs it queued
+CommandPlay.fileError=Algo fue mal al cargar las pistas desde el archivo.
+
+CommandPrivacyPolicy.privacyPolicy=Política de privacidad
+
+CommandQueue.nowPlaying=Reproduciendo ahora:
+CommandQueue.queueInfoFooter={1} canciones añadidas {2} Página {3} Longitud: {4} // 1 is amount, 2 is markdown, 3 is page number, 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
+CommandQueue.empty=Cola vacía.
+CommandQueue.unknownTitle=Título desconocido.
+CommandQueue.didYouMean=¿Querías usar {1}? // a different command name: "clear queue"
+CommandQueue.integerError=El número de página debe ser un entero positivo.
+
+CommandRadio.list=Lista de la radio:
+CommandRadio.alternativeList=O usa {1} <Cadena de caracteres> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well.
+CommandRadio.useForPlay=Usa {1} <Nombre de la radio>{2} para usar la radio. // 1 is a command, {2} is markdown.
+CommandRadio.noArgsList=Ningún argumento dado, aquí hay algunas estaciones de radio entre las que elegir:
+CommandRadio.noSearchTerm=Ningún término de busqueda dado.
+CommandRadio.notFound=No se pudo encontrar ninguna estación de radio con el nombre dado.
+CommandRadio.queued=Radio añadida a la cola:
+CommandRadio.invalid=Estación de radio inválida.
+
+CommandRemove.noSongs=No hay canciones que quitar de la lista.
+CommandRemove.invalidArgs=Argumentos inválidos, solo números enteros.
+CommandRemove.tooLarge=El número suministrado es más grande que el tamaño de la cola.
+CommandRemove.removed={1} ha sido omitido con éxito. // a track name.
+
+CommandSeek.invalidArg=Argumento inválido, usa el formato {1}[HORAS]:[MINUTOS]:<SEGUNDOS>{2}" // 1 and 2 are markdown. keep the [] and <>, translate everything inside.
+CommandSeek.timeTooLow=El tiempo provisto es menor o igual que 0.
+CommandSeek.cannotSeek=No puedes mover de posición esta pista.
+CommandSeek.noArg=Ningún argumento dado.
+
+CommandShuffle.emptyQueue=La cola está vacía.
+CommandShuffle.shuffled=La cola ha sido puesta en aleatorio.
+
+CommandSkip.alreadyVoted=Ya has votado para omitir.
+CommandSkip.autoplay.failedToFind=Reproducción automática no encontrada
+CommandSkip.failedToFind=La reproducción automática no pudo encontrar {1} // a track title.
+CommandSkip.couldNotFind=La reproducción automática no pudo encontrar pistas similares.
+CommandSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
+CommandSkip.autoplayQueued=La reproducción automática añadió a la cola:
+CommandSkip.skippedTo=La pista anterior ha sido omitida a {1}// a track title.
+CommandSkip.skippedTo.unknown=Pista omitida a {1}Título desconocido{2} // both are markdown and should be around unknown title.
+CommandSkip.nowPlaying=Reproduciendo ahora: {1} // track title
+CommandSkip.voted=Has votado para omitir la pista {1} de {2} para omitir. // how many people have voted to skip out of how many. (3 of 5 people for example)
+
+CommandSpeed.defaulted=Velocidad restablecida a 1.
+CommandSpeed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5
+CommandSpeed.success=Establecido la velocidad de reproducción a x{1}. // x here is a multiplier, for example 3x
+
+CommandTOS.TermsOfService=Términos de uso
+
+CommandVibrato.defaulted=Restablecido los parámetros a sus valores por defecto.
+CommandVibrato.incorrectArgs=El uso correcto es: {1}vibrato <Frecuencia> <Profundidad>{2} // 1 and 2 are markdown, keep the <>, translate the inside of them.
+CommandVibrato.rangeError.frequency=La frecuencia debe estar comprendida entre 0.1 y 14.
+CommandVibrato.rangeError.depth=La profundidad debe estar comprendida entre 0.05 y 1.
+CommandVibrato.success=La frecuencia del vibrato ha sido establecida en {1}Hz.{2}La profundidad del vibrato ha sido establecida en {3} // 1 here is a number, like 5Hz (hertz), 2 is markdown, and 3 is also a number.
+
+CommandVolume.defaulted=Volumen restablecido al valor por defecto de {1}. // this is 100, but also has markdown.
+CommandVolume.incorrectArg=El volumen debe ser un número entero.
+CommandVolume.tooHigh=El volumen no puede superar a 500.
+CommandVolume.tooLow=El volumen no puede ser menor que 0.
+CommandVolume.success=El volumen ha sido cambiado a {1}. // what the volume was changed to, a number between 1 and 500
+CommandVolume.invalidValue=Valor inválido.
+
+BaseCommand.notAllowed=No permitido.
+
+CommandStateChecker.notInVC=No estás en ningún chat de voz. // VC is voice channel
+CommandStateChecker.botNotInVC=El bot no está en ningún chat de voz.
+CommandStateChecker.botNotInYourVC=El bot no está en tu chat de voz.
+CommandStateChecker.botBusy=El bot ya está siendo usado en otro chat de voz.
+CommandStateChecker.cannotJoin=El bot no puede unirse al chat de voz.
+CommandStateChecker.noDJ=No tienes los permisos de DJ.
+CommandStateChecker.commandBlocked=Este comando está bloqueado en este canal.
+CommandStateChecker.isNotPlaying=El bot no está reproduciendo nada en estos momentos.
+CommandStateChecker.devOnly=Este comando es exclusivo para desarrolladores.
+
+PlayerManager.noSpotify=El bot no puede reproducir pistas de Spotify en estos momentos.
+PlayerManager.playlistQueued=Tamaño: {1} pistas.{2}Longitud: {3} // 1 is the amount of tracks, 2 is some markdown, 3 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
+PlayerManager.APIError=Un error ocurrió con respecto a la API de búsqueda de YouTube.
+PlayerManager.loadFailed=La pista falló en cargar: {1}
+
+TrackScheduler.autoplay.notFound=La reproducción automática no pudo encontrar {1} // a track name
+TrackScheduler.autoplay.noSimilar=La reproducción automática no pudo encontrar pistas similares.
+TrackScheduler.autoplay.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.
+TrackScheduler.autoplay.queued=La reproducción automática añadió a la cola:
+
+TrackScheduler.regularFailure=La pista falló en cargar debido a una razón desconocida. Omitiendo...
+
+TrackScheduler.criticalFailure.title=Error Crítico (XD)
+TrackScheduler.criticalFailure.description=Las pistas han fallado en cargar 3 veces, probablemente debido a un problema con la red más allá de nuestro control. Vaciando la cola para evitar la repetición de pistas.
+TrackScheduler.criticalFailure.footer=Si este problema continúa con fuentes de audio específicas, por favor, mande un informe usando el comando /bug
+
+TrackScheduler.nextTrack.nowPlaying=Ahora reproduciendo: {1} // a track name
+
+Main.success=Éxito // any messages with Success "✅ **Success**"
+Main.noPermission=No gozas de los permisos necesarios para usar este comando.
+Main.error=Error
+Main.unknown=Desconocido
+Main.channel=Canal {1} // a channel name
+Main.duration=Duración {1} // the duration of a track, will translate itself
+Main.update=El bot ha sido actualizado, ¡tu cola y parámetros han sido restablecidos!{1}Si deseas conocer los cambios, siéntete libre de unirte al servidor ubicado en el 'sobre mí' del bot. // a newline.
