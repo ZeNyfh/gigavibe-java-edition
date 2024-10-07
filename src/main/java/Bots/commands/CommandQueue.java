@@ -46,8 +46,9 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
             eb.appendDescription(j + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
-        eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
-        eb.setFooter(Queue.size() + " songs queued | Page " + newPageNumber + "/" + maxPage + " | Length: " + toTimestamp(queueTimeLength));
+        // TODO: invent a better implementation instead of using the raw guildLocales map in cases like these.
+        eb.setTitle("__**" + guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.nowPlaying") + "**__\n" + track.getInfo().title, track.getInfo().uri);
+        eb.setFooter(String.format(guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.queueInfoFooter"), Queue.size(), "|", newPageNumber + "/" + maxPage + " |", toTimestamp(queueTimeLength)));
         eb.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
@@ -70,14 +71,14 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("The queue is empty."));
+            event.replyEmbeds(createQuickError(event.getLocale("CommandQueue.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
         AudioTrack track = audioPlayer.getPlayingTrack();
         String title = track.getInfo().title;
-        if (track.getInfo().title == null) title = "Unknown title";
-        embed.setTitle("__**Now playing:**__\n" + title, track.getInfo().uri);
+        if (track.getInfo().title == null) title = event.getLocale("CommandQueue.unknownTitle");
+        embed.setTitle("__**" + event.getLocale("CommandQueue.nowPlaying") + "**__\n" + title, track.getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {
@@ -90,11 +91,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError("Did you mean to use **clearqueue**?"));
+                event.replyEmbeds(createQuickError(String.format(event.getLocale("CommandQueue.didYouMean"), "**clearqueue**")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError("The page must be a positive integer."));
+                event.replyEmbeds(createQuickError(event.getLocale("CommandQueue.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea
@@ -104,7 +105,7 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
-        embed.setFooter(queueLength + " songs queued | Page " + pageNumber + "/" + ((queueLength + 4) / 5) + " | Length: " + toTimestamp(queueTimeLength));
+        embed.setFooter(String.format(event.getLocale("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength)));
         embed.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
