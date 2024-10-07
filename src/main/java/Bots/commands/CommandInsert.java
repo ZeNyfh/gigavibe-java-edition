@@ -29,11 +29,11 @@ public class CommandInsert extends BaseCommand {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
-            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.notEnoughArgs"), "\n", "`<", "> <", ">`")));
+            event.replyEmbeds(createQuickError(String.format(event.getLocale("CommandInsert.notEnoughArgs"), "\n", "`<", "> <", ">`")));
             return;
         }
         if (!args[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.invalidArgs"), "\n", "`<", "> <", ">`")));
+            event.replyEmbeds(createQuickError(String.format(event.getLocale("CommandInsert.invalidArgs"), "\n", "`<", "> <", ">`")));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -66,7 +66,7 @@ public class CommandInsert extends BaseCommand {
                     PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
                     sendEmbedBool = false;
                 } catch (FriendlyException ignored) {
-                    event.replyEmbeds(createQuickError(event.getLang("CommandInsert.decodingError")));
+                    event.replyEmbeds(createQuickError(event.getLocale("CommandInsert.decodingError")));
                 }
             }
         } else {
@@ -83,9 +83,9 @@ public class CommandInsert extends BaseCommand {
                             musicManager.scheduler.queue(TemporaryQueue.get(i));
                         }
                         if (loadResult.songWasPlayed) {
-                            event.replyEmbeds(createQuickEmbed(" ", String.format(event.getLang("CommandInsert.addedToPos"), "**" + args[1] + "**")));
+                            event.replyEmbeds(createQuickEmbed(" ", String.format(event.getLocale("CommandInsert.addedToPos"), "**" + args[1] + "**")));
                         } else {
-                            event.replyEmbeds(createQuickError(String.format(event.getLang("CommandInsert.queueError"), "`" + loadResult.name() + "`")));
+                            event.replyEmbeds(createQuickError(String.format(event.getLocale("CommandInsert.queueError"), "`" + loadResult.name() + "`")));
                         }
                     });
                 }

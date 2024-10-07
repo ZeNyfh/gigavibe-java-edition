@@ -25,7 +25,7 @@ public class CommandVibrato extends BaseCommand {
         if (event.getArgs().length == 1) {
             vibrato.setFrequency(2);
             vibrato.setDepth(0.5f);
-            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**", "Set the parameters to their default values."));
+            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", "Set the parameters to their default values."));
             return;
         }
 
@@ -49,7 +49,7 @@ public class CommandVibrato extends BaseCommand {
 
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLang("Main.success") + "**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", "Set the vibrato frequency to " + value + "Hz.\nSet the vibrato depth to " + power));
     }
 
     @Override

@@ -94,7 +94,7 @@ public class CommandEvent {
         }
     }
 
-    public String getLang(String key) {
+    public String getLocale(String key) {
         return lang.get(key);
     }
 

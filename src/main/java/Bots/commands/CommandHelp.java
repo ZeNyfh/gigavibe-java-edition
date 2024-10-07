@@ -104,16 +104,16 @@ public class CommandHelp extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
-        embed.setFooter(String.format(event.getLang("CommandHelp.footer"), "\"<>\"", "\"[]\"", "\"()\""));
+        embed.setFooter(String.format(event.getLocale("CommandHelp.footer"), "\"<>\"", "\"[]\"", "\"()\""));
         if (userCategory != null) {
             BuildEmbedFromCategory(embed, userCategory, event.getGuild().getIdLong());
         } else {
-            embed.setTitle("\uD83D\uDCD4 **" + event.getLang("CommandHelp.embedTitle") + "**");
+            embed.setTitle("\uD83D\uDCD4 **" + event.getLocale("CommandHelp.embedTitle") + "**");
             for (Category category : Category.values()) {
                 if (category != Category.Dev)
                     embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
             }
-            embed.setFooter(event.getLang("CommandHelp.originalFooter"));
+            embed.setFooter(event.getLocale("CommandHelp.originalFooter"));
         }
         event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }

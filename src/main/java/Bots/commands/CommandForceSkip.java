@@ -34,15 +34,15 @@ public class CommandForceSkip extends BaseCommand {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
             boolean canPlay = true;
             if (searchTerm.equals("notfound")) {
-                messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n" + String.format(event.getLang("CommandForceSkip.failedToFind"), audioPlayer.getPlayingTrack().getInfo().title)).append("\n");
+                messageBuilder.append("❌ **" + event.getLocale("Main.error") + ":**\n" + String.format(event.getLocale("CommandForceSkip.failedToFind"), audioPlayer.getPlayingTrack().getInfo().title)).append("\n");
                 canPlay = false;
             }
             if (searchTerm.equals("none")) {
-                messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n" + event.getLang("CommandForceSkip.couldNotFind") + "\n");
+                messageBuilder.append("❌ **" + event.getLocale("Main.error") + ":**\n" + event.getLocale("CommandForceSkip.couldNotFind") + "\n");
                 canPlay = false;
             }
             if (searchTerm.isEmpty()) {
-                messageBuilder.append("❌ **" + event.getLang("Main.error") + ":**\n" + event.getLang("CommandForceSkip.noSearchTerm") + "\n");
+                messageBuilder.append("❌ **" + event.getLocale("Main.error") + ":**\n" + event.getLocale("CommandForceSkip.noSearchTerm") + "\n");
                 canPlay = false;
             }
             if (canPlay) {
@@ -53,14 +53,14 @@ public class CommandForceSkip extends BaseCommand {
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                messageBuilder.append("♾️ ").append(event.getLang("CommandForceSkip.autoplayQueued")).append(" ").append(artistName).append(" - ").append(title).append("\n");
+                messageBuilder.append("♾️ ").append(event.getLocale("CommandForceSkip.autoplayQueued")).append(" ").append(artistName).append(" - ").append(title).append("\n");
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.getLang("CommandForceSkip.skippedQueue")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.getLocale("CommandForceSkip.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
@@ -74,7 +74,7 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + String.format(event.getLang("CommandForceSkip.skippedToPos"), event.getArgs()[1], "__**[" + sanitise(title) + "](", trackInfo.uri + ")**__")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + String.format(event.getLocale("CommandForceSkip.skippedToPos"), event.getArgs()[1], "__**[" + sanitise(title) + "](", trackInfo.uri + ")**__")));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
@@ -88,10 +88,10 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + String.format(event.getLang("CommandForceSkip.skippedToTrack"), "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + String.format(event.getLocale("CommandForceSkip.skippedToTrack"), "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
             } else {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.getLang("CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.getLocale("CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));
             }
         }
         skipCountGuilds.remove(event.getGuild().getIdLong());
