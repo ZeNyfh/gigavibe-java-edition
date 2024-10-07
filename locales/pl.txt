@@ -135,7 +135,7 @@ CommandQueue.didYouMean=Czy chodziło o {1}?
 CommandQueue.integerError=Strona musi być liczbą całkowitą dodatnią.
 
 CommandRadio.list=Lista stacji radiowych:
-CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>
+CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>{2}
 CommandRadio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
 CommandRadio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
 CommandRadio.noSearchTerm=Nie podano terminu wyszukiwania.
