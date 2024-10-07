@@ -10,7 +10,7 @@ public class CommandPing extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         long time = currentTimeMillis();
-        event.reply(response -> response.editMessageFormat(event.getLocale("CommandPing.ping") + "\n" + event.getLocale("CommandPing.gatewayPing"), currentTimeMillis() - time, event.getJDA().getGatewayPing()), ".");
+        event.reply(response -> response.editMessageFormat(event.getLocaleString("CommandPing.ping") + "\n" + event.getLocaleString("CommandPing.gatewayPing"), currentTimeMillis() - time, event.getJDA().getGatewayPing()), ".");
     }
 
     @Override

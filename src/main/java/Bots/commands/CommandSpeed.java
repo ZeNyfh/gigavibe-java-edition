@@ -24,7 +24,7 @@ public class CommandSpeed extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setSpeed(1);
-            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", "Set the speed back to 1."));
+            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", "Set the speed back to 1."));
             return;
         }
 
@@ -36,7 +36,7 @@ public class CommandSpeed extends BaseCommand {
         }
 
         timescale.setSpeed(value);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", "Set the playback speed of the track to " + value + "x."));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", "Set the playback speed of the track to " + value + "x."));
     }
 
     @Override

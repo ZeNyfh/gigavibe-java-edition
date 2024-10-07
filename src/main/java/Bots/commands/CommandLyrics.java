@@ -30,16 +30,16 @@ public class CommandLyrics extends BaseCommand {
 
         String lyrics = LRCLIBManager.getLyrics(audioPlayer.getPlayingTrack()).trim();
         if (lyrics.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandLyrics.notFound")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandLyrics.notFound")));
             return;
         }
-        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(event.getLocale("CommandLyrics.source"));
+        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(event.getLocaleString("CommandLyrics.source"));
         String title = audioPlayer.getPlayingTrack().getInfo().title;
         if (audioPlayer.getPlayingTrack().getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
             title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri)[0];
         }
 
-        title = String.format(event.getLocale("CommandLyrics.lyricsForTrack"), title);
+        title = String.format(event.getLocaleString("CommandLyrics.lyricsForTrack"), title);
         if (title.length() > 256) {
             title = title.substring(0, 253) + "...";
         }
@@ -48,7 +48,7 @@ public class CommandLyrics extends BaseCommand {
             builder.setTitle(title);
             event.replyEmbeds(builder.build());
         } else {
-            builder.setDescription(event.getLocale("CommandLyrics.tooLong"));
+            builder.setDescription(event.getLocaleString("CommandLyrics.tooLong"));
             event.replyEmbeds(builder.build());
             event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title + ".txt")).queue();
         }

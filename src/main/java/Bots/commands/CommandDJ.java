@@ -33,7 +33,7 @@ public class CommandDJ extends BaseCommand {
         if (event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
-            builder.append("**" + event.getLocale("CommandDJ.roleList") + ":**\n"); // list DJ roles in embed
+            builder.append("**" + event.getLocaleString("CommandDJ.roleList") + ":**\n"); // list DJ roles in embed
             if (DJRoles.isEmpty()) {
                 builder.append("None.");
             } else {
@@ -50,9 +50,9 @@ public class CommandDJ extends BaseCommand {
                     }
                 }
             }
-            builder.append("\n\n**" + event.getLocale("CommandDJ.userList") + "**\n"); // list DJ users in embed
+            builder.append("\n\n**" + event.getLocaleString("CommandDJ.userList") + "**\n"); // list DJ users in embed
             if (DJUsers.isEmpty()) {
-                builder.append(event.getLocale("CommandDJ.roleListEmpty"));
+                builder.append(event.getLocaleString("CommandDJ.roleListEmpty"));
             } else {
                 int i = 0;
                 for (Object user : DJUsers) {
@@ -64,12 +64,12 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             eb.setColor(botColour);
-            eb.setTitle(String.format(event.getLocale("CommandDJ.guildDJs"), event.getGuild().getName()));
+            eb.setTitle(String.format(event.getLocaleString("CommandDJ.guildDJs"), event.getGuild().getName()));
             eb.appendDescription(builder);
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar functionality so we merge them initially
             if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.replyEmbeds(createQuickError(event.getLocale("Main.noPermission")));
+                event.replyEmbeds(createQuickError(event.getLocaleString("Main.noPermission")));
                 return;
             }
             List<Long> FoundMembers = new ArrayList<>();
@@ -87,7 +87,7 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             if (FoundMembers.size() + FoundRoles.size() == 0) {
-                event.replyEmbeds(createQuickError(event.getLocale("CommandDJ.notGiven")));
+                event.replyEmbeds(createQuickError(event.getLocaleString("CommandDJ.notGiven")));
                 return;
             }
 
@@ -101,12 +101,12 @@ public class CommandDJ extends BaseCommand {
                     modifyDJ(GuildObjectType.role.ordinal(), role, isAdding, config);
                 }
             }
-            String memberText = FoundMembers.size() == 1 ? event.getLocale("CommandDJ.member") : event.getLocale("CommandDJ.member.plural");
-            String roleText = FoundRoles.size() == 1 ? event.getLocale("CommandDJ.role") : event.getLocale("CommandDJ.role.plural");
+            String memberText = FoundMembers.size() == 1 ? event.getLocaleString("CommandDJ.member") : event.getLocaleString("CommandDJ.member.plural");
+            String roleText = FoundRoles.size() == 1 ? event.getLocaleString("CommandDJ.role") : event.getLocaleString("CommandDJ.role.plural");
             String msg;
             if (!FoundMembers.isEmpty()) {
                 if (!FoundRoles.isEmpty()) {
-                    msg = String.format("%d %s " + event.getLocale("CommandDJ.and") + " %d %s", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
+                    msg = String.format("%d %s " + event.getLocaleString("CommandDJ.and") + " %d %s", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
                 } else {
                     msg = String.format("%d %s", FoundMembers.size(), memberText);
                 }
@@ -114,12 +114,12 @@ public class CommandDJ extends BaseCommand {
                 msg = String.format("%d %s", FoundRoles.size(), roleText);
             }
             if (isAdding) {
-                event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", String.format(event.getLocale("CommandDJ.added"), msg)));
+                event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandDJ.added"), msg)));
             } else {
-                event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", String.format(event.getLocale("CommandDJ.removed"), msg)));
+                event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandDJ.removed"), msg)));
             }
         } else {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandDJ.invalidArgs")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandDJ.invalidArgs")));
         }
     }
 

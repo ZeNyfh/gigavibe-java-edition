@@ -22,7 +22,7 @@ public class CommandClearQueue extends BaseCommand {
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", event.getLocale("CommandClearQueue.cleared")));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", event.getLocaleString("CommandClearQueue.cleared")));
     }
 
     @Override

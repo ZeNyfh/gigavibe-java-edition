@@ -21,14 +21,14 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandAutoplay.noAPI")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandAutoplay.noAPI")));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", event.getLocale("CommandAutoplay.notAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", event.getLocaleString("CommandAutoplay.notAutoplaying")));
             AutoplayGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", event.getLocale("CommandAutoplay.isAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", event.getLocaleString("CommandAutoplay.isAutoplaying")));
             AutoplayGuilds.add(event.getGuild().getIdLong());
             AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
             if (track != null) {

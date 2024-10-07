@@ -71,14 +71,14 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandQueue.empty")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandQueue.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
         AudioTrack track = audioPlayer.getPlayingTrack();
         String title = track.getInfo().title;
-        if (track.getInfo().title == null) title = event.getLocale("CommandQueue.unknownTitle");
-        embed.setTitle("__**" + event.getLocale("CommandQueue.nowPlaying") + "**__\n" + title, track.getInfo().uri);
+        if (track.getInfo().title == null) title = event.getLocaleString("CommandQueue.unknownTitle");
+        embed.setTitle("__**" + event.getLocaleString("CommandQueue.nowPlaying") + "**__\n" + title, track.getInfo().uri);
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {
@@ -91,11 +91,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError(String.format(event.getLocale("CommandQueue.didYouMean"), "**clearqueue**")));
+                event.replyEmbeds(createQuickError(String.format(event.getLocaleString("CommandQueue.didYouMean"), "**clearqueue**")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError(event.getLocale("CommandQueue.integerError")));
+                event.replyEmbeds(createQuickError(event.getLocaleString("CommandQueue.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea
@@ -105,7 +105,7 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
-        embed.setFooter(String.format(event.getLocale("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength)));
+        embed.setFooter(String.format(event.getLocaleString("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength)));
         embed.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));

@@ -22,10 +22,10 @@ public class CommandJoin extends BaseCommand {
         try {
             event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
         } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandJoin.noAccess")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandJoin.noAccess")));
             return;
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅ " + event.getLocale("CommandJoin.joined")));
+        event.replyEmbeds(createQuickEmbed(" ", "✅ " + event.getLocaleString("CommandJoin.joined")));
 
     }
 

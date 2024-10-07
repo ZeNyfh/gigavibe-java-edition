@@ -34,7 +34,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", "Shuffled the queue!"));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", "Shuffled the queue!"));
     }
 
     @Override

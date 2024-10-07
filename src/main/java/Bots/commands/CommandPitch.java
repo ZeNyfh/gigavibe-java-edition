@@ -24,19 +24,19 @@ public class CommandPitch extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setPitch(1);
-            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", event.getLocale("CommandPitch.defaulted")));
+            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", event.getLocaleString("CommandPitch.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5.0 && value >= 0.25)) {
-            event.replyEmbeds(createQuickError(event.getLocale("CommandPitch.range")));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandPitch.range")));
             return;
         }
 
         timescale.setPitch(value);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocale("Main.success") + "**", String.format(event.getLocale("CommandPitch.changed"), value)));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandPitch.changed"), value)));
     }
 
     @Override
