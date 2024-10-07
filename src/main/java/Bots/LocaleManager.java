@@ -17,7 +17,6 @@ import static Bots.Main.sanitise;
 
 public class LocaleManager {
     public static HashMap<String, HashMap<String, String>> languages = new HashMap<>();
-
     public static void init(JDA bot) {
         languages.put("english", readLocale("locales/en.txt"));
         languages.put("polski", readLocale("locales/pl.txt"));
@@ -47,6 +46,20 @@ public class LocaleManager {
                 localeMap.put(lineSplit[0], serializeString(lineSplit[1]));
             } else {
                 System.err.println("Problematic locale: " + line);
+            }
+        }
+
+        // missing key handler
+        if (!localeFile.equals("locales/en.txt")) {
+            boolean isMissing = false;
+            for (String k : languages.get("english").keySet()) {
+                if (!localeMap.containsKey(k)) {
+                    if (!isMissing) {
+                        System.err.println(localeFile + " seems to be missing some keys.");
+                        isMissing = true;
+                    }
+                    System.err.println("MISSING KEY: " + k);
+                }
             }
         }
         return localeMap;
