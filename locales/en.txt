@@ -185,7 +185,7 @@ CommandVibrato.rangeError.frequency=The frequency must be between 0.1 and 14
 CommandVibrato.rangeError.depth=The depth must be between 0.05 and 1
 CommandVibrato.success=Set the vibrato frequency to {1}Hz.{2}Set the vibrato depth to {3} // 1 here is a number, like 5Hz (hertz), 2 is markdown, and 3 is also a number.
 
-CommandVolume.defaulted=Set volume to the default of {1}. // this is 100, but also has markdown.
+CommandVolume.defaulted=Set volume to the default of 100. // this is 100, but also has markdown.
 CommandVolume.incorrectArg=The volume must be an integer.
 CommandVolume.tooHigh=The volume can not be higher than 500.
 CommandVolume.tooLow=The volume can not be lower than 0.

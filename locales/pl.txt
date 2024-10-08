@@ -184,7 +184,7 @@ CommandVibrato.rangeError.frequency=Częstotliwość musi wynosić od 0.1 do 14
 CommandVibrato.rangeError.depth=Głębokość musi wynosić od 0.05 do 1
 CommandVibrato.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
 
-CommandVolume.defaulted=Ustawiono głośność na domyślną wartość {1}.
+CommandVolume.defaulted=Ustawiono głośność na domyślną wartość do 100.
 CommandVolume.incorrectArg=Głośność musi być liczbą całkowitą.
 CommandVolume.tooHigh=Głośność nie może być większa niż 500.
 CommandVolume.tooLow=Głośność nie może być mniejsza niż 0.

@@ -184,7 +184,7 @@ CommandVibrato.rangeError.frequency=De frequentie moet tussen 0.1 en 14 zijn.
 CommandVibrato.rangeError.depth=De diepte moet tussen 0.05 en 1 zijn.
 CommandVibrato.success=De vibrato frequentie is nu {1}Hz.{2}De vibrato diepte is nu {3}
 
-CommandVolume.defaulted=Het volume is veranderd naar de standaard {1}.
+CommandVolume.defaulted=Het volume is veranderd naar de standaard 100.
 CommandVolume.incorrectArg=Het volume moet een cijfer zijn. 
 CommandVolume.tooHigh=Het volume kan niet hoger zijn dan 500. 
 CommandVolume.tooLow=Het volume kan niet lager zijn dan 0. 

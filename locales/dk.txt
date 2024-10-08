@@ -185,7 +185,7 @@ CommandVibrato.rangeError.frequency=Frekvensen skal være mellem 0,1 og 14
 CommandVibrato.rangeError.depth=Dybden skal være mellem 0,05 og 1
 CommandVibrato.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
 
-CommandVolume.defaulted=Satte lydstyrken til standarden på {1}.
+CommandVolume.defaulted=Satte lydstyrken til standarden på 100.
 CommandVolume.incorrectArg=Volumen skal være et heltal.
 CommandVolume.tooHigh=Lydstyrken kan ikke være højere end 500.
 CommandVolume.tooLow=Lydstyrken kan ikke være lavere end 0.
