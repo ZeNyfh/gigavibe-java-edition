@@ -151,6 +151,7 @@ CommandRemove.removed=Sprang sangen {1} i kø over med succes.
 
 CommandSeek.invalidArg=Argumentet er ugyldigt, brug formatet {1}[TIMER]:[MINUTTER]:<SEKUNDER>{2}" // keep the [] and <>
 CommandSeek.timeTooLow=Den angivne tid er mindre end eller lig med 0.
+CommandSeek.setPos=Sæt musikens position til: {1}.
 CommandSeek.cannotSeek=Du kan ikke springe rundt i denne sang.
 CommandSeek.noArg=Intet argument givet.
 

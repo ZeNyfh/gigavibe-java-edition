@@ -151,6 +151,7 @@ CommandRemove.removed={1} ha sido omitido con éxito. // a track name.
 
 CommandSeek.invalidArg=Argumento inválido, usa el formato {1}[HORAS]:[MINUTOS]:<SEGUNDOS>{2}" // 1 and 2 are markdown. keep the [] and <>, translate everything inside.
 CommandSeek.timeTooLow=El tiempo provisto es menor o igual que 0.
+// MISSING CommandSeek.setPos=Set the position of the track to: {1}. // 1 here being timestamp like 12:34 (can include hours)
 CommandSeek.cannotSeek=No puedes mover de posición esta pista.
 CommandSeek.noArg=Ningún argumento dado.
 

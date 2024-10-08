@@ -150,6 +150,7 @@ CommandRemove.removed=Het nummer {1} van de wachtrij is successvol overgeslagen.
 
 CommandSeek.invalidArg=Dit argument is ongeldig. Gebruik het {1}[UREN]:[MINUTEN]:<SECONDES>{2}" formaat. // keep the [] and <>
 CommandSeek.timeTooLow=De tijd gegeven is lager of hetzelfde als 0. 
+// MISSING CommandSeek.setPos=Set the position of the track to: {1}. // 1 here being timestamp like 12:34 (can include hours)
 CommandSeek.cannotSeek=Je kan seek niet gebruiken voor dit nummer.
 CommandSeek.noArg=Geen argument gegeven.
 

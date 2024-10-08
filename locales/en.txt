@@ -151,6 +151,7 @@ CommandRemove.removed=Skipped queued track {1} successfully. // a track name.
 
 CommandSeek.invalidArg=Argument is invalid, use the format {1}[HOURS]:[MINUTES]:<SECONDS>{2}" // 1 and 2 are markdown. keep the [] and <>, translate everything inside.
 CommandSeek.timeTooLow=The time provided is lower than or equal to 0.
+CommandSeek.setPos=Set the position of the track to: {1}. // 1 here being timestamp like 12:34 (can include hours)
 CommandSeek.cannotSeek=You cannot seek with this track.
 CommandSeek.noArg=No argument given.
 

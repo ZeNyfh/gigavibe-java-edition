@@ -150,6 +150,7 @@ CommandRemove.removed=Usunięto z kolejki utwór {1} pomyślnie.
 
 CommandSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}"
 CommandSeek.timeTooLow=Podany czas jest mniejszy lub równy 0.
+CommandSeek.setPos=Ustawiono pozycję utworu do: {1}. // 1 here being timestamp like 12:34 (can include hours)
 CommandSeek.cannotSeek=Nie można przewinąć tego utworu.
 CommandSeek.noArg=Nie podano argumentu.
 
