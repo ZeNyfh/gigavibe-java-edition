@@ -167,7 +167,8 @@ CommandSkip.skippedTheTrack=Het nummer is over.
 CommandSkip.skippedTo=Het nummer is over geslagen naar {1}
 CommandSkip.skippedTo.unknown=Het nummer is overgeslagen naar {1}Onbekende titel{2}
 CommandSkip.nowPlaying=Nu: {1}
-CommandSkip.voted=Er is gestemd om {1} over te slaan en {2} af te spelen.
+CommandSkip.voted.title=Gestemd om het nummer over te slaan.
+CommandSkip.voted.description={1} van de {2} nodig om over te slaan.
 
 CommandSpeed.defaulted=De snelheid is terug naar 1.
 CommandSpeed.rangeError=De snelheid moet tussen 0.2 en 5 zijn.
