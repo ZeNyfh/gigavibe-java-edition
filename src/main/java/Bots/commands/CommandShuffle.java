@@ -25,7 +25,7 @@ public class CommandShuffle extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("There is nothing in the queue."));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandShuffle.emptyQueue")));
             return;
         }
 
@@ -34,7 +34,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", "Shuffled the queue!"));
+        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", event.getLocaleString("CommandShuffle.shuffled")));
     }
 
     @Override

@@ -26,16 +26,16 @@ public class CommandRemove extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("There are no songs in the queue to remove."));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.noSongs")));
             return;
         }
         if (event.getArgs().length == 1 || !event.getArgs()[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError("Invalid arguments, integers only."));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.invalidArgs")));
             return;
         }
         int position = Integer.parseInt(event.getArgs()[1]);
         if (queue.size() < position - 1) {
-            event.replyEmbeds(createQuickError("The provided number was larger than the size of the queue."));
+            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.tooLarge")));
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -43,7 +43,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Skipped queued track **" + position + "** successfully."));
+        event.replyEmbeds(createQuickEmbed(" ", "✅" + String.format(event.getLocaleString("CommandRemove.removed"), "**" + position + "**")));
     }
 
     @Override
