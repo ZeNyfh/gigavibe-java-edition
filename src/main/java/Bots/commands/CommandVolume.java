@@ -24,28 +24,28 @@ public class CommandVolume extends BaseCommand {
         String[] args = event.getArgs();
         if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);
-            event.replyEmbeds(createQuickEmbed(" ", "✅ Set volume to the default of **100**."));
+            event.replyEmbeds(createQuickEmbed(" ", "✅ " + event.getLocaleString("CommandVolume.defaulted")));
         } else {
             if (args[1].matches("[^\\d.]")) {
-                event.replyEmbeds(createQuickError("The volume must be an integer."));
+                event.replyEmbeds(createQuickError(event.getLocaleString("CommandVolume.incorrectArg")));
                 return;
             }
             if (args[1].matches("^\\d+$")) {
                 //If entire thing is a number
                 int volume = Integer.parseInt(args[1]);
                 if (volume > 500) {
-                    event.replyEmbeds(createQuickError("The volume can not be higher than 500."));
+                    event.replyEmbeds(createQuickError(event.getLocaleString("CommandVolume.tooHigh")));
                     return;
                 }
                 if (volume < 0) {
-                    event.replyEmbeds(createQuickError("The volume can not be lower than 0."));
+                    event.replyEmbeds(createQuickError(event.getLocaleString("CommandVolume.tooLow")));
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
-                event.replyEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**."));
+                event.replyEmbeds(createQuickEmbed(" ", "✅ " + String.format(event.getLocaleString("CommandVolume.success"), "**" + volume + "**.")));
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
-                event.replyEmbeds(createQuickError("Invalid value."));
+                event.replyEmbeds(createQuickError(event.getLocaleString("CommandVolume.invalidValue")));
             }
         }
     }
