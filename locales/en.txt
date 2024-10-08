@@ -170,6 +170,8 @@ CommandSkip.skippedTo.unknown=Skipped the track to {1}Unknown Title{2} // both a
 CommandSkip.nowPlaying=Now playing: {1} // track title
 CommandSkip.voted.title=Voted to skip the track.
 CommandSkip.voted.description={1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
+CommandSkip.channel=Channel
+CommandSkip.duration=Duration
 
 CommandSpeed.defaulted=Set the speed back to 1.
 CommandSpeed.rangeError=The speed must be between 0.2 and 5

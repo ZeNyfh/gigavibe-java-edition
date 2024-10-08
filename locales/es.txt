@@ -170,6 +170,8 @@ CommandSkip.skippedTo.unknown=Pista omitida a {1}Título desconocido{2} // both 
 CommandSkip.nowPlaying=Reproduciendo ahora: {1} // track title
 CommandSkip.voted.title=Has votado para omitir la pista.
 CommandSkip.voted.description={1} de {2} para omitir. // how many people have voted to skip out of how many. (3 of 5 people for example)
+CommandSkip.channel=Canal
+CommandSkip.duration=Duración
 
 CommandSpeed.defaulted=Velocidad restablecida a 1.
 CommandSpeed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5

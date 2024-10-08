@@ -169,6 +169,8 @@ CommandSkip.skippedTo.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
 CommandSkip.nowPlaying=Teraz odtwarzane: {1}
 CommandSkip.voted.title=Oddano głos na pominięcie utworu.
 CommandSkip.voted.description={1} z {2} potrzebnych do pominięcia.
+CommandSkip.channel=Kanał
+CommandSkip.duration=Czas trwania
 
 CommandSpeed.defaulted=Przywrócono prędkość do 1.
 CommandSpeed.rangeError=Prędkość musi wynosić od 0.2 do 5

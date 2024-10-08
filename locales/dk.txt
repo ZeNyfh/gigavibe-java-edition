@@ -170,6 +170,8 @@ CommandSkip.skippedTo.unknown=Sprang sporet over til {1}Ukendt titel{2}
 CommandSkip.nowPlaying=Spiller nu: {1}
 CommandSkip.voted.title=Stemte for at springe over nuværende sang.
 CommandSkip.voted.description={1} ud af {2} stemmer.
+CommandSkip.channel=Kanal
+CommandSkip.duration=Varighed
 
 CommandSpeed.defaulted=Satte hastigheden tilbage til 1.
 CommandSpeed.rangeError=Hastigheden skal være mellem 0,2 og 5
