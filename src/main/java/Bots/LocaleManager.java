@@ -59,6 +59,7 @@ public class LocaleManager {
                         isMissing = true;
                     }
                     System.err.println("MISSING KEY: " + k);
+                    localeMap.put(k, languages.get("english").get(k)); // if the language is missing anything, fallback to english.
                 }
             }
         }
