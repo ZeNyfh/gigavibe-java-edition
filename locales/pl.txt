@@ -163,6 +163,7 @@ CommandSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
 CommandSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
 CommandSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
 CommandSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
+CommandSkip.skippedTheTrack=Przewinięto utwór.
 CommandSkip.skippedTo=Przewinięto utwór do {1}
 CommandSkip.skippedTo.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
 CommandSkip.nowPlaying=Teraz odtwarzane: {1}

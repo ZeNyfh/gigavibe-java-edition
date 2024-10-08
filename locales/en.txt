@@ -159,11 +159,12 @@ CommandShuffle.emptyQueue=There is nothing in the queue.
 CommandShuffle.shuffled=Shuffled the queue!
 
 CommandSkip.alreadyVoted=You have already voted to skip.
-CommandSkip.autoplay.failedToFind=Autoplay failed to find
+CommandSkip.autoplay.failedToFind=Autoplay failed to find // there is a track title after this.
 CommandSkip.failedToFind=Autoplay failed to find {1} // a track title.
 CommandSkip.couldNotFind=Autoplay could not find similar tracks.
 CommandSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
-CommandSkip.autoplayQueued=Autoplay queued:
+CommandSkip.autoplayQueued=Autoplay queued: // there is also a track after this (artist - title)
+CommandSkip.skippedTheTrack=Skipped the track.
 CommandSkip.skippedTo=Skipped the track to {1} // a track title.
 CommandSkip.skippedTo.unknown=Skipped the track to {1}Unknown Title{2} // both are markdown and should be around unknown title.
 CommandSkip.nowPlaying=Now playing: {1} // track title

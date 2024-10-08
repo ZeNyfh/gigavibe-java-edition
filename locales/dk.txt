@@ -164,6 +164,7 @@ CommandSkip.failedToFind=Autoplay kunne ikke finde {1}
 CommandSkip.couldNotFind=Autoplay kunne ikke finde lignende musik.
 CommandSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
 CommandSkip.autoplayQueued=Autoplay i kø:
+CommandSkip.skippedTheTrack=Sprang sangen over.
 CommandSkip.skippedTo=Sprang over til sang {1}
 CommandSkip.skippedTo.unknown=Sprang sporet over til {1}Ukendt titel{2}
 CommandSkip.nowPlaying=Spiller nu: {1}

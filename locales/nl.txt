@@ -163,6 +163,7 @@ CommandSkip.failedToFind=Autoplay kon {1} niet vinden
 CommandSkip.couldNotFind=Autoplay kon geen soortgelijke nummers vinden.
 CommandSkip.noSearchTerm=Een onbekende fout is opgetreden met autoplay.
 CommandSkip.autoplayQueued=Autoplay heeft dit op de lijst:
+CommandSkip.skippedTheTrack=Het nummer is over.
 CommandSkip.skippedTo=Het nummer is over geslagen naar {1}
 CommandSkip.skippedTo.unknown=Het nummer is overgeslagen naar {1}Onbekende titel{2}
 CommandSkip.nowPlaying=Nu: {1}

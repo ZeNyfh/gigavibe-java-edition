@@ -164,6 +164,7 @@ CommandSkip.failedToFind=La reproducción automática no pudo encontrar {1} // a
 CommandSkip.couldNotFind=La reproducción automática no pudo encontrar pistas similares.
 CommandSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
 CommandSkip.autoplayQueued=La reproducción automática añadió a la cola:
+CommandSkip.skippedTheTrack=Pista omitida.
 CommandSkip.skippedTo=La pista anterior ha sido omitida a {1}// a track title.
 CommandSkip.skippedTo.unknown=Pista omitida a {1}Título desconocido{2} // both are markdown and should be around unknown title.
 CommandSkip.nowPlaying=Reproduciendo ahora: {1} // track title
