@@ -86,6 +86,10 @@ CommandInvite.haveFun=Miłej zabawy!
 CommandJoin.noAccess=Bot nie ma dostępu do Twojego kanału.
 CommandJoin.joined=Bot dołączył do Twojego kanału głosowego.
 
+CommandLocale.list=Lista języków:
+CommandLocale.languageChanged=Język był zmieniony na: {1} // 1 here being a language name.
+CommandLocale.unrecognised=Nierozpoznany język. Oto lista języków do wyboru:
+
 CommandLoop.notLooping=Nie powtarza już bieżącego utworu.
 CommandLoop.looping=Powtarza bieżący utwór.
 

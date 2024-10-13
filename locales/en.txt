@@ -87,6 +87,10 @@ CommandInvite.haveFun=Have fun!
 CommandJoin.noAccess=The bot can't access your channel
 CommandJoin.joined=Joined your vc.
 
+CommandLocale.list=List of languages:
+CommandLocale.languageChanged=The language has been changed to: {1} // 1 here being a language name.
+CommandLocale.unrecognised=Unrecognised language, here is a list of languages to choose from:
+
 CommandLoop.notLooping=No longer looping the current track.
 CommandLoop.looping=Looping the current track.
 

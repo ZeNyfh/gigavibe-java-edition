@@ -87,6 +87,10 @@ CommandInvite.haveFun=God fornøjelse!
 CommandJoin.noAccess=Botten kan ikke få adgang til din kanal
 CommandJoin.joined=Botten tilsluttede sig til din kanal.
 
+CommandLocale.list=Liste over sprog:
+CommandLocale.languageChanged=Språket er ændret til: {1} // 1 her er et sprognavn.
+CommandLocale.unrecognised=Ugenkendt sprog, her er en liste over sprog at vælge imellem:
+
 CommandLoop.notLooping=Gentager ikke længere den nuværende musik.
 CommandLoop.looping=Gentager nuværende musik.
 
