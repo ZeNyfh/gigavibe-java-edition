@@ -168,6 +168,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
+                            track.setUserData(new TrackUserData(eventOrChannel));
                             replyWithEmbed(eventOrChannel, createTrackEmbed(track).build(), autoplaying);
                         }
                     } else {
