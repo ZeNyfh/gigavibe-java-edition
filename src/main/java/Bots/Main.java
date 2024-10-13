@@ -324,10 +324,10 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static String toTimestamp(long seconds) {
+    public static String toTimestamp(long seconds, long guildID) {
         seconds /= 1000;
         if (seconds <= 0) {
-            return String.format(getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal()), "0");
+            return String.format(getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal(), guildID), "0");
         } else {
             long days = seconds / 86400;
             seconds %= 86400;
@@ -336,12 +336,26 @@ public class Main extends ListenerAdapter {
             long minutes = seconds / 60;
             seconds %= 60;
             ArrayList<String> totalSet = new ArrayList<>();
-            boolean plural = true;
-            if (days != 0) totalSet.add(String.format(days == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.day.ordinal()) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.day.ordinal()), days));
-            if (hours != 0) totalSet.add(String.format(hours == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.hour.ordinal()) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.hour.ordinal()), hours));
-            if (minutes != 0) totalSet.add(String.format(hours == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.minute.ordinal()) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.minute.ordinal()), minutes));
-            if (seconds != 0) totalSet.add(String.format(hours == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.second.ordinal()) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal()), seconds));
-            return String.join(", ", totalSet);
+
+            if (days != 0) {
+                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.day.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.day.ordinal(), guildID);
+                totalSet.add(String.format(dayLabel, days));
+            }
+
+            if (hours != 0) {
+                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.hour.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.hour.ordinal(), guildID);
+                totalSet.add(String.format(hourLabel, hours));
+            }
+
+            if (minutes != 0) {
+                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.minute.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.minute.ordinal(), guildID);
+                totalSet.add(String.format(minuteLabel, minutes));
+            }
+
+            if (seconds != 0) {
+                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.second.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal(), guildID);
+                totalSet.add(String.format(secondLabel, seconds));
+            }return String.join(", ", totalSet);
         }
     }
 

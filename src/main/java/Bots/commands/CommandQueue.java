@@ -48,7 +48,7 @@ public class CommandQueue extends BaseCommand {
         }
         // TODO: invent a better implementation instead of using the raw guildLocales map in cases like these.
         eb.setTitle("__**" + guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.nowPlaying") + "**__\n" + track.getInfo().title, track.getInfo().uri);
-        eb.setFooter(String.format(guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.queueInfoFooter"), Queue.size(), "|", newPageNumber + "/" + maxPage + " |", toTimestamp(queueTimeLength)));
+        eb.setFooter(String.format(guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.queueInfoFooter"), Queue.size(), "|", newPageNumber + "/" + maxPage + " |", toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         eb.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
@@ -105,7 +105,7 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
-        embed.setFooter(String.format(event.getLocaleString("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength)));
+        embed.setFooter(String.format(event.getLocaleString("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         embed.setColor(botColour);
         if (PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));

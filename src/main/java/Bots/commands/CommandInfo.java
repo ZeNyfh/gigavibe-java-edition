@@ -36,7 +36,7 @@ public class CommandInfo extends BaseCommand {
         eb.setColor(botColour);
         eb.appendDescription("\uD83D\uDD27  **" + String.format(event.getLocaleString("CommandInfo.ramUsage"), "** " + String.format("%,d", memoryUsed / 1024 / 1024)) + "MB\n\n");
         long finalUptime = currentTimeMillis() - Main.startupTime;
-        String finalTime = toTimestamp(finalUptime);
+        String finalTime = toTimestamp(finalUptime, event.getGuild().getIdLong());
         eb.appendDescription("⏰ **" + String.format(event.getLocaleString("CommandInfo.upTime"), "**" + finalTime) + "\n\n");
         eb.appendDescription("\uD83D\uDCE1 **" + String.format(event.getLocaleString("CommandInfo.discordServers"), "**" + String.format("%,d", event.getJDA().getGuilds().size())) + "\n\n");
         eb.appendDescription("\uD83D\uDC64 **" + String.format(event.getLocaleString("CommandInfo.discordMembers"), "**" + String.format("%,d", memberCount)) + "\n\n");

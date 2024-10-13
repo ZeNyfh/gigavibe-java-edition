@@ -104,7 +104,7 @@ public class PlayerManager {
         if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
             length = "Unknown";
         } else {
-            length = toTimestamp((audioTrack.getInfo().length));
+            length = toTimestamp(audioTrack.getInfo().length, ((TrackUserData) audioTrack.getUserData()).guildId);
         }
         embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
         return embed;
@@ -179,7 +179,7 @@ public class PlayerManager {
                             musicManager.scheduler.queue(audioTrack);
                         }
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
-                        embed.appendDescription(String.format(locale.get("PlayerManager.playlistQueued"), "**" + tracks.size() + "**","\n", "**" + toTimestamp(lengthSeconds) + "**\n\n"));
+                        embed.appendDescription(String.format(locale.get("PlayerManager.playlistQueued"), "**" + tracks.size() + "**","\n", "**" + toTimestamp(lengthSeconds, commandGuild.getIdLong()) + "**\n\n"));
                         for (int i = 0; i < tracks.size() && i < 5; i++) {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");

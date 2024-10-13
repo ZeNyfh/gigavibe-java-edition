@@ -23,18 +23,10 @@ public class LocaleMiddleman {
         second, minute, hour, day
     }
 
-    public static String getLocalisedTimeUnits(boolean plural, int unit) {
-        Long guildID = threadedGuildID.get();
-
+    public static String getLocalisedTimeUnits(boolean plural, int unit, long guildID) {
         String[] unitKeys = {"second", "minute", "hour", "day"};
         String key = "Main." + unitKeys[unit] + (plural ? ".plural" : "");
-        String defaultText = "%1$s " + unitKeys[unit] + "s";
-
-        if (guildID != null && guildLocales.containsKey(guildID)) {
-            return guildLocales.get(guildID).get(key);
-        }
-
-        return defaultText;
+        return guildLocales.get(guildID).get(key);
     }
 
     public static void clear() {
