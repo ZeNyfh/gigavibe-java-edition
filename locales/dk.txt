@@ -234,6 +234,8 @@ Main.second.plural={1} sekunder // 2 seconds
 
 Main.success=Succes // any messages with Success "✅ **Success**"
 Main.noPermission=Du har ikke tilladelse til at bruge denne kommando.
+Main.ratelimit=Du kan ikke bruge denne kommando i {1} sekunder.
+Main.botNoPermission=Jeg har ikke tilladelse til at læse eller sende beskeder til denne kanal.
 Main.error=Fejl
 Main.unknown=Ukendt
 Main.channel=Kanal {1}

@@ -234,6 +234,8 @@ Main.second.plural={1} sekund(y) // 2 seconds
 
 Main.success=Sukces
 Main.noPermission=Nie masz uprawnień do użycia tej komendy.
+Main.ratelimit=Nie możesz użyć tej komendy przez kolejne {1} sekund/y.
+Main.botNoPermission=Nie mam uprawnień do czytania ani wysyłania wiadomości w tym kanale.
 Main.error=Błąd
 Main.unknown=Nieznany
 Main.channel=Kanał {1}

@@ -232,7 +232,9 @@ Main.second={1} seconde // 1 second
 Main.second.plural={1} secondes // 2 seconds
 
 Main.success=Success // any messages with Success "✅ **Success**"
-Main.noPermission=Je hebt geen machtigingen om deze command te gebruiken. 
+Main.noPermission=Je hebt geen machtigingen om deze command te gebruiken.
+Main.ratelimit=Je kunt dit commando niet gebruiken voor nog eens {1} seconden.
+Main.botNoPermission=Ik heb geen toestemming om berichten te lezen of te versturen naar dit kanaal.
 Main.error=Error
 Main.unknown=Onbekend
 Main.channel=Kanaal {1}

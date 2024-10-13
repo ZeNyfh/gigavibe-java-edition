@@ -235,6 +235,8 @@ Main.second.plural={1} segundos // 2 seconds
 
 Main.success=Éxito // any messages with Success "✅ **Success**"
 Main.noPermission=No gozas de los permisos necesarios para usar este comando.
+Main.ratelimit=No puedes usar este comando durante los próximos {1} segundos.
+Main.botNoPermission=No tengo permiso para leer o enviar mensajes a este canal.
 Main.error=Error
 Main.unknown=Desconocido
 Main.channel=Canal {1} // a channel name
