@@ -3,6 +3,13 @@
 Discord bot written in java using JDA and lavaplayer for audio functionality. Has various site support, custom (user defined)
 dj users or roles and some other cool features for you to play with once you [invite](http://zenvibe.ddns.net/) or self-host the bot.
 
+## Language support:
+* English 100% - ZeNyfh
+* Polish 100% - ZeNyfh
+* Dutch 100% - etherealelysia
+* Danish 100% - SharkRainstorm
+* Spanish 100% - Nois
+
 ## Requirements
 
 * [JDK 16](https://adoptium.net/temurin/releases/?version=16&package=jdk)
