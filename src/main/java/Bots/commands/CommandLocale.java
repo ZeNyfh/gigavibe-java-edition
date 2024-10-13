@@ -11,15 +11,15 @@ public class CommandLocale extends BaseCommand {
     @Override
     public void execute(CommandEvent event) throws Exception {
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed("List: ", "- English\n- Polski\n- Nederlands\n- Dansk"));
+            event.replyEmbeds(createQuickEmbed(event.getLocaleString("CommandLocale.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
         } else {
             String lang = event.getArgs()[1].toLowerCase();
             if (languages.containsKey(lang)) {
                 event.getConfig().put("Locale", lang);
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
-                event.replyEmbeds(createQuickEmbed("Success", "Language changed to " + lang));
+                event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandLocale.languageChanged"), lang)));
             } else {
-                event.replyEmbeds(createQuickError("Unrecognised language"));
+                event.replyEmbeds(createQuickError(event.getLocaleString("CommandLocale.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
             }
         }
     }
@@ -37,5 +37,10 @@ public class CommandLocale extends BaseCommand {
     @Override
     public String getDescription() {
         return "Changes the language of Zenvibe for the server";
+    }
+
+    @Override
+    public long getRatelimit() {
+        return 30000;
     }
 }
