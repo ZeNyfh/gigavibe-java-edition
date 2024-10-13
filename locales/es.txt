@@ -208,6 +208,7 @@ PlayerManager.noSpotify=El bot no puede reproducir pistas de Spotify en estos mo
 PlayerManager.playlistQueued=Tamaño: {1} pistas.{2}Longitud: {3} // 1 is the amount of tracks, 2 is some markdown, 3 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
 PlayerManager.APIError=Un error ocurrió con respecto a la API de búsqueda de YouTube.
 PlayerManager.loadFailed=La pista falló en cargar: {1}
+PlayerManager.noMatches=No se encontraron coincidencias para esta pista.
 
 TrackScheduler.autoplay.notFound=La reproducción automática no pudo encontrar {1} // a track name
 TrackScheduler.autoplay.noSimilar=La reproducción automática no pudo encontrar pistas similares.

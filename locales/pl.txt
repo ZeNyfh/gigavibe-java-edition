@@ -207,6 +207,7 @@ PlayerManager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
 PlayerManager.playlistQueued=Ilość: {1} utworów.{2}Długość: {3}
 PlayerManager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
 PlayerManager.loadFailed=Utwór nie został załadowany: {1}
+PlayerManager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
 
 TrackScheduler.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
 TrackScheduler.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.

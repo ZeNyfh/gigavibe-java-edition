@@ -207,6 +207,7 @@ PlayerManager.noSpotify=De bot kan geen nummers van Spotify afspelen op het mome
 PlayerManager.playlistQueued=Hoeveelheid: {1} nummers.{2}Lengte: {3}
 PlayerManager.APIError=Er is een probleem opgetreden met de YouTube zoek API. 
 PlayerManager.loadFailed=Het nummer kon niet geladen worden: {1} 
+PlayerManager.noMatches=Er zijn geen overeenkomsten gevonden voor het nummer.
 
 TrackScheduler.autoplay.notFound=Autoplay kon {1} niet vinden
 TrackScheduler.autoplay.noSimilar=Autoplay kon geen soortgelijke nummers vinden.

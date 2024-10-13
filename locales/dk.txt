@@ -208,6 +208,7 @@ PlayerManager.noSpotify=Botten er ikke i stand til at afspille Spotify musik lig
 PlayerManager.playlistQueued=Størrelse: {1} Musik.{2}Længde: {3}
 PlayerManager.APIError=Der er opstået en fejl med YouTubes søge-API.
 PlayerManager.loadFailed=Nummeret kunne ikke indlæses: {1}
+PlayerManager.noMatches=Der blev ikke fundet noget til denne sang.
 
 TrackScheduler.autoplay.notFound=Autoplay kunne ikke finde {1}
 TrackScheduler.autoplay.noSimilar=Autoplay kunne ikke finde lignende sange.

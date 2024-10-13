@@ -194,9 +194,9 @@ CommandVolume.invalidValue=Invalid value.
 
 BaseCommand.notAllowed=Not Allowed
 
-CommandStateChecker.notInVC=You aren't in a VC. // VC is voice channel
-CommandStateChecker.botNotInVC=The bot isn't in a VC.
-CommandStateChecker.botNotInYourVC=The bot isn't in your VC.
+CommandStateChecker.notInVC=You are not in a VC. // VC is voice channel
+CommandStateChecker.botNotInVC=The bot is not in a VC.
+CommandStateChecker.botNotInYourVC=The bot is not in your VC.
 CommandStateChecker.botBusy=The bot is already busy in another VC.
 CommandStateChecker.cannotJoin=The bot is unable to join the VC.
 CommandStateChecker.noDJ=You do not have a DJ permissions.
@@ -208,6 +208,7 @@ PlayerManager.noSpotify=The bot is unable to play spotify tracks right now
 PlayerManager.playlistQueued=Size: {1} tracks.{2}Length: {3} // 1 is the amount of tracks, 2 is some markdown, 3 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
 PlayerManager.APIError=An error with the YouTube search API has occurred.
 PlayerManager.loadFailed=The track failed to load: {1}
+PlayerManager.noMatches=No matches found for the track.
 
 TrackScheduler.autoplay.notFound=Autoplay failed to find {1} // a track name
 TrackScheduler.autoplay.noSimilar=Autoplay could not find similar tracks.
