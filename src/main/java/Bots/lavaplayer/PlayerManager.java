@@ -135,10 +135,12 @@ public class PlayerManager {
         } else {
             commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
+        HashMap<String, String> locale = guildLocales.get(commandGuild.getIdLong());
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
-                if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError("The bot is unable to play spotify tracks right now"));
+                if (sendEmbed) {
+                    replyWithEmbed(eventOrChannel, createQuickError(locale.get("PlayerManager.noSpotify")));
+                }
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
                 return loadResultFuture;
             }
@@ -177,8 +179,7 @@ public class PlayerManager {
                             musicManager.scheduler.queue(audioTrack);
                         }
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
-                        embed.appendDescription("Size: **" + tracks.size() + "** tracks.\nLength: **" + toTimestamp(lengthSeconds) + "**\n\n");
-
+                        embed.appendDescription(String.format(locale.get("PlayerManager.playlistQueued"), "**" + tracks.size() + "**","\n", "**" + toTimestamp(lengthSeconds) + "**\n\n"));
                         for (int i = 0; i < tracks.size() && i < 5; i++) {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
@@ -204,7 +205,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError("No matches found for the track."));
+                    replyWithEmbed(eventOrChannel, createQuickError(locale.get("PlayerManager.noMatches")));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
@@ -216,11 +217,11 @@ public class PlayerManager {
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
                 if (e.getMessage().toLowerCase().contains("search response: 400")) {
-                    loadFailedBuilder.append("An error with the youtube search API has occurred. ");
+                    loadFailedBuilder.append(locale.get("PlayerManager.APIError")).append(" ");
                 }
                 loadFailedBuilder.append(e.getMessage());
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError("The track failed to load: " + loadFailedBuilder));
+                    replyWithEmbed(eventOrChannel, createQuickError(String.format(locale.get("PlayerManager.loadFailed"), loadFailedBuilder)));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
