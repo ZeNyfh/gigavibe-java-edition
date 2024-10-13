@@ -223,14 +223,14 @@ TrackScheduler.criticalFailure.footer=Hvis dette problem fortsætter med specifi
 
 TrackScheduler.nextTrack.nowPlaying=Spiller nu: {1}
 
-Main.day=dag // 1 day
-Main.day.plural=dage // 2 days
-Main.hour=time // 1 hour
-Main.hour.plural=timer // 2 hours
-Main.minute=minut // 1 minute
-Main.minute.plural=minutter // 2 minutes
-Main.second=sekund // 1 second
-Main.second.plural=sekunder // 2 seconds
+Main.day={1} dag // 1 day
+Main.day.plural={1} dage // 2 days
+Main.hour={1} time // 1 hour
+Main.hour.plural={1} timer // 2 hours
+Main.minute={1} minut // 1 minute
+Main.minute.plural={1} minutter // 2 minutes
+Main.second={1} sekund // 1 second
+Main.second.plural={1} sekunder // 2 seconds
 
 Main.success=Succes // any messages with Success "✅ **Success**"
 Main.noPermission=Du har ikke tilladelse til at bruge denne kommando.

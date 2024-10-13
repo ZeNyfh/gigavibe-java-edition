@@ -224,17 +224,20 @@ TrackScheduler.criticalFailure.footer=If this issue persists with specific audio
 TrackScheduler.nextTrack.nowPlaying=Now playing: {1} // a track name
 
 // if you experience issues with slavic languages specifically, feel free to use something like minut(y) if it can be two forms for plural.
-Main.day=day // 1 day
-Main.day.plural=days // 2 days
-Main.hour=hour // 1 hour
-Main.hour.plural=hours // 2 hours
-Main.minute=minute // 1 minute
-Main.minute.plural=minutes // 2 minutes
-Main.second=second // 1 second
-Main.second.plural=seconds // 2 seconds
+// if a language needs something akin to "days 2", then you can move the variable before/after the word!
+Main.day={1} day // 1 day
+Main.day.plural={1} days // 2 days
+Main.hour={1} hour // 1 hour
+Main.hour.plural={1} hours // 2 hours
+Main.minute={1} minute // 1 minute
+Main.minute.plural={1} minutes // 2 minutes
+Main.second={1} second // 1 second
+Main.second.plural={1} seconds // 2 seconds
 
 Main.success=Success // any messages with Success "✅ **Success**"
 Main.noPermission=You do not have the permission to use this command.
+Main.ratelimit=You cannot use this command for another {1} seconds.
+Main.botNoPermission=I don't have permission to read or send messages to this channel.
 Main.error=Error
 Main.unknown=Unknown
 Main.channel=Channel {1} // a channel name
