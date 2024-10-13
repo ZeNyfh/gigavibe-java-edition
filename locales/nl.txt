@@ -7,7 +7,7 @@
 // if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
 // please preserve the capitalisation and any punctuation if applicable.
 
-CommandAutoplay.noAPI=De bot is nog niet geassocieerd met een API sleutel voor LastFM, zonder de API sleutel kan de bot niet werken.
+CommandAutoplay.noAPI=De bot is nog niet geassocieerd met een API-sleutel voor LastFM, zonder de API-sleutel kan de bot niet werken.
 CommandAutoplay.notAutoplaying=Autoplay is nu uitgeschakeld.
 CommandAutoplay.isAutoplaying=Autoplay is nu aan.
 
@@ -21,7 +21,7 @@ CommandBlockChannel.channelList=Geblokkeerde kanalen voor {1}
 CommandBlockChannel.noChannels=Geen kanalen gevonden.
 
 CommandBug.noReport=Geef hier aan wat u te melden heeft.
-CommandBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DMs.{2}Gebruik de {3} command om te reageren op de berichten.{4}
+CommandBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DM's.{2}Gebruik de {3} command om te reageren op de berichten.{4}
 
 CommandClearQueue.cleared=De wachtrij is leeggemaakt
 
@@ -37,8 +37,8 @@ CommandDJ.member.plural=leden
 CommandDJ.role=rol
 CommandDJ.role.plural=rollen
 CommandDJ.and=en
-CommandDJ.added={1} is toegevoegd aan de lijst van DJs.
-CommandDJ.removed={1} is verwijderd van de lijst van DJs.
+CommandDJ.added={1} is toegevoegd aan de lijst van DJ's.
+CommandDJ.removed={1} is verwijderd van de lijst van DJ's.
 CommandDJ.invalidArgs=Ongeldige argumenten.
 
 CommandForceSkip.failedToFind=Autoplay kon {1} niet vinden
@@ -86,11 +86,15 @@ CommandInvite.haveFun=Veel plezier!
 CommandJoin.noAccess=De bot kan je kanaal niet bereiken 
 CommandJoin.joined=Vc ingegaan.
 
-CommandLoop.notLooping=Het huidige nummer word niet meer gelooped.
-CommandLoop.looping=Het huidige nummer word nu gelooped.
+CommandLocale.list=Lijst van talen:
+CommandLocale.languageChanged=De taal is gewijzigd naar: {1} // 1 hier is een taalnaam.
+CommandLocale.unrecognised=Onbekende taal, hier is een lijst van talen om uit te kiezen:
 
-CommandLoopQueue.notLooping=De huidige wachtrij word niet meer gelooped. 
-CommandLoopQueue.looping=De huidige wachtrij word nu gelooped.
+CommandLoop.notLooping=Het huidige nummer wordt niet meer gelooped.
+CommandLoop.looping=Het huidige nummer wordt nu gelooped.
+
+CommandLoopQueue.notLooping=De huidige wachtrij wordt niet meer gelooped.
+CommandLoopQueue.looping=De huidige wachtrij wordt nu gelooped.
 
 CommandLyrics.notFound=Er zijn geen resultaten gevonden of the titel was onbekend. 
 CommandLyrics.source=Lyrics zijn afkomstig van lrclib.net
@@ -104,10 +108,10 @@ CommandNowPlaying.paused=Nummer is gepauzeerd:
 CommandNowPlaying.true=Ja
 CommandNowPlaying.false=Nee
 CommandNowPlaying.trackLooping=Nummer gelooped:
-CommandNowPlaying.queueLooping=Wachtrij word gelooped:
+CommandNowPlaying.queueLooping=Wachtrij wordt gelooped:
 CommandNowPlaying.autoplaying=Auto playing:
 
-CommandPause.resumed=Het nummer word nu afgespeeld.
+CommandPause.resumed=Het nummer wordt nu afgespeeld.
 CommandPause.paused=Het nummer is nu gepauzeerd. 
 
 CommandPing.ping=ping: {1}ms // ms here being short for milliseconds
@@ -119,7 +123,7 @@ CommandPitch.changed=De toonhoogte van het nummer is veranderd naar {1}x // x he
 
 CommandPlay.queuedFromAtt={1} aantal nummers zijn toegevoegd aan de wachtrij van de bijlages. 
 CommandPlay.queuedFromAtt.error=Er ging iets mis met het laden van de nummers van de bestanden.
-CommandPlay.wrongFormat=Het nummer kon niet afgespeeld worden: Onbekend bestands formaat.
+CommandPlay.wrongFormat=Het nummer kon niet afgespeeld worden: Onbekend bestandsformaat.
 CommandPlay.noArgs=Geen arguments gegeven.
 CommandPlay.decodeError=Er ging iets mis met het decoderen van het nummer.
 CommandPlay.queuedManySongs=Er zijn {1} nummers op de wachtrij gezet! 
@@ -170,11 +174,11 @@ CommandSkip.nowPlaying=Nu: {1}
 CommandSkip.voted.title=Gestemd om het nummer over te slaan.
 CommandSkip.voted.description={1} van de {2} nodig om over te slaan.
 CommandSkip.channel=Kanaal
-CommandSkip.duration=Tijdsuur
+CommandSkip.duration=Tijdsduur
 
 CommandSpeed.defaulted=De snelheid is terug naar 1.
 CommandSpeed.rangeError=De snelheid moet tussen 0.2 en 5 zijn.
-CommandSpeed.success=De afspeel snelheid van het nummer is veranderd naar {1}x. // x here is a multiplier, for example 3x
+CommandSpeed.success=De afspeelsnelheid van het nummer is veranderd naar {1}x. // x here is a multiplier, for example 3x
 
 CommandTOS.TermsOfService=Terms of Service
 
@@ -198,7 +202,7 @@ CommandStateChecker.botNotInVC=De bot is niet in een VC.
 CommandStateChecker.botNotInYourVC=De bot is niet in jouw VC. 
 CommandStateChecker.botBusy=De bot is al bezet in een andere VC. 
 CommandStateChecker.cannotJoin=De bot kan deze VC niet ingaan. 
-CommandStateChecker.noDJ=Je hebt geen DJ machtigingen.
+CommandStateChecker.noDJ=Je hebt geen DJ-machtigingen.
 CommandStateChecker.commandBlocked=Deze command is geblokkeerd in dit kanaal.
 CommandStateChecker.isNotPlaying=De bot is niets aan het afspelen op het moment. 
 CommandStateChecker.devOnly=Deze command is alleen voor de developer. 
@@ -212,12 +216,12 @@ PlayerManager.noMatches=Er zijn geen overeenkomsten gevonden voor het nummer.
 TrackScheduler.autoplay.notFound=Autoplay kon {1} niet vinden
 TrackScheduler.autoplay.noSimilar=Autoplay kon geen soortgelijke nummers vinden.
 TrackScheduler.autoplay.unknownError=Er is een onbekende fout opgetreden met de autoplay.  
-TrackScheduler.autoplay.queued=Autoplay word in de wachtrij gezet:
+TrackScheduler.autoplay.queued=Autoplay wordt in de wachtrij gezet:
 
-TrackScheduler.regularFailure=Dit nummer word overgeslagen omdat het niet afgespeeld kon worden door een fout... 
+TrackScheduler.regularFailure=Dit nummer wordt overgeslagen omdat het niet afgespeeld kon worden door een fout...
 
 TrackScheduler.criticalFailure.title=Kritieke fout
-TrackScheduler.criticalFailure.description=Nummers hebben 3 keer niet kunnen laden, waarschijnlijk door een upstream netwerk probleem buiten ons bereik. De wachtrij word geleegd om nummer spam te voorkomen.
+TrackScheduler.criticalFailure.description=Nummers hebben 3 keer niet kunnen laden, waarschijnlijk door een upstream netwerk probleem buiten ons bereik. De wachtrij wordt geleegd om nummer spam te voorkomen.
 TrackScheduler.criticalFailure.footer=Als dit een probleem blijft met specifieke geluidsbronnen, meld dit probleem met gebruik van /bug
 
 TrackScheduler.nextTrack.nowPlaying=Nu: {1}
@@ -238,5 +242,5 @@ Main.botNoPermission=Ik heb geen toestemming om berichten te lezen of te verstur
 Main.error=Error
 Main.unknown=Onbekend
 Main.channel=Kanaal {1}
-Main.duration=Tijdsuur {1}
-Main.update=De bot heeft een update gekregen, je wachtrij en parameters zijn hersteld!{1}Als je wilt weten wat er veranderd is, kan je altijd bij de support server aansluiten die te vinden is in de bot's about-me.
+Main.duration=Tijdsduur {1}
+Main.update=De bot heeft een update gekregen, je wachtrij en parameters zijn hersteld!{1}Als je wilt weten wat er veranderd is, kan je altijd bij de supportserver aansluiten die te vinden is in de bot's about-me.
