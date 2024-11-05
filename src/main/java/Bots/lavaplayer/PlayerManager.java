@@ -296,14 +296,17 @@ public class PlayerManager {
         public final Object eventOrChannel;
         public final Long channelId;
         public final Long guildId;
+        public final String username;
 
         public TrackUserData(Object eventOrChannel) {
             this.eventOrChannel = eventOrChannel;
             GuildMessageChannelUnion channel;
             if (eventOrChannel instanceof CommandEvent) {
                 channel = ((CommandEvent) eventOrChannel).getChannel();
+                username = ((CommandEvent) eventOrChannel).getUser().getEffectiveName();
             } else {
                 channel = (GuildMessageChannelUnion) eventOrChannel;
+                username = "";
             }
             this.channelId = channel.getIdLong();
             this.guildId = channel.getGuild().getIdLong();
