@@ -49,7 +49,7 @@ public class PlayerManager {
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new Music(), new Web(), new AndroidTestsuite(), new AndroidLite(), new AndroidMusic(), new MediaConnect(), new Ios(), new TvHtml5Embedded()));
+        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new AndroidVr(), new Web(), new Ios(), new WebEmbedded(), new AndroidTestsuite()));
 
         String spotifyClientID = Dotenv.load().get("SPOTIFYCLIENTID");
         String spotifyClientSecret = Dotenv.load().get("SPOTIFYCLIENTSECRET");
