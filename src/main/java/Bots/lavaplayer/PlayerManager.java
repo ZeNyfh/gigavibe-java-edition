@@ -53,7 +53,9 @@ public class PlayerManager {
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new AndroidVr(), new Web(), new Ios(), new WebEmbedded(), new AndroidTestsuite()));
+        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new AndroidVr(), new Web(), new Ios(), new WebEmbedded(), new AndroidTestsuite());
+        ytSource.setPlaylistPageCount(50);
+        this.audioPlayerManager.registerSourceManager(ytSource);
 
         String spotifyClientID = Dotenv.load().get("SPOTIFYCLIENTID");
         String spotifyClientSecret = Dotenv.load().get("SPOTIFYCLIENTSECRET");
