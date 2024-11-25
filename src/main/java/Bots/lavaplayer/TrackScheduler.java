@@ -186,7 +186,7 @@ public class TrackScheduler extends AudioEventAdapter {
             true
         );
 
-        String name = "";
+        String name;
         name = ((PlayerManager.TrackUserData) nextTrack.getUserData()).username;
         if (!name.isEmpty()) {
             eb.setFooter("played by: " + name);
