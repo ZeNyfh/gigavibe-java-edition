@@ -88,7 +88,7 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track to __**[" + sanitise(title) + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track to __**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim()));
             } else {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track\n\n" + messageBuilder).trim()));
