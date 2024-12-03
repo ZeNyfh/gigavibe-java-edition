@@ -53,11 +53,9 @@ public class PlayerManager {
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new AndroidVr(), new Web(), new Ios(), new WebEmbedded(), new AndroidTestsuite());
+        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new Android(), new AndroidVr(), new Web(), new Ios(), new WebEmbedded());
         ytSource.setPlaylistPageCount(50);
 
-        // DONT TOUCH, this code DOES work and should be used in the future, however OAUTH seems to be completely broken right now.
-        /*
         Dotenv dotenv = Dotenv.load();
         String ytToken = dotenv.get("YTREFRESHTOKEN");
         if (ytToken == null) {
@@ -66,7 +64,6 @@ public class PlayerManager {
         } else {
             ytSource.useOauth2(ytToken, true);
         }
-        */
 
         this.audioPlayerManager.registerSourceManager(ytSource);
 
