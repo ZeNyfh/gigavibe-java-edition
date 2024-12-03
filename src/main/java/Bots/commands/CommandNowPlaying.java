@@ -77,7 +77,7 @@ public class CommandNowPlaying extends BaseCommand {
                     title = streamTitle;
                 }
             }
-            embed.addField("▶️ Up next:", "[" + sanitise(title) + "](" + trackQueue0.getInfo().uri + ")", true);
+            embed.addField("▶️ Up next:", "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
