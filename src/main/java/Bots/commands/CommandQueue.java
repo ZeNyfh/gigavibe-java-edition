@@ -24,7 +24,6 @@ public class CommandQueue extends BaseCommand {
 
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
-        final AudioTrack track = manager.audioPlayer.getPlayingTrack();
         final BlockingQueue<AudioTrack> Queue = manager.scheduler.queue;
         int newPageNumber = 1;
         if (Objects.equals(event.getButton().getId(), "forward")) {
@@ -46,11 +45,16 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
             eb.appendDescription(j + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
         }
-        eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
+        final AudioTrack track = manager.audioPlayer.getPlayingTrack();
+        if (track == null) {
+            System.out.println("WARNING: No active song despite populated queue");
+        } else {
+            eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
+            if (PlayerManager.getInstance().getThumbURL(track) != null)
+                eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
+        }
         eb.setFooter(Queue.size() + " songs queued | Page " + newPageNumber + "/" + maxPage + " | Length: " + toTimestamp(queueTimeLength));
         eb.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null)
-            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
 
@@ -75,9 +79,13 @@ public class CommandQueue extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         AudioTrack track = audioPlayer.getPlayingTrack();
-        String title = track.getInfo().title;
-        if (track.getInfo().title == null) title = "Unknown title";
-        embed.setTitle("__**Now playing:**__\n" + title, track.getInfo().uri);
+        if (track == null) {
+            System.out.println("WARNING: No active song despite populated queue");
+        } else {
+            String title = track.getInfo().title;
+            if (title == null) title = "Unknown title";
+            embed.setTitle("__**Now playing:**__\n" + title, track.getInfo().uri);
+        }
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {
@@ -106,7 +114,7 @@ public class CommandQueue extends BaseCommand {
         }
         embed.setFooter(queueLength + " songs queued | Page " + pageNumber + "/" + ((queueLength + 4) / 5) + " | Length: " + toTimestamp(queueTimeLength));
         embed.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null)
+        if (track != null && PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.replyEmbeds(message -> message.setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")), embed.build());
     }
