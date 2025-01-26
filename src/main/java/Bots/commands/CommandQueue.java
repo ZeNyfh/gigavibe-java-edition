@@ -24,7 +24,6 @@ public class CommandQueue extends BaseCommand {
 
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
-        final AudioTrack track = manager.audioPlayer.getPlayingTrack();
         final BlockingQueue<AudioTrack> Queue = manager.scheduler.queue;
         int newPageNumber = 1;
         if (Objects.equals(event.getButton().getId(), "forward")) {
@@ -44,14 +43,20 @@ public class CommandQueue extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         for (int j = 5 * newPageNumber - 5; j < 5 * newPageNumber && j < Queue.size(); j++) {
             AudioTrackInfo trackInfo = Objects.requireNonNull(getTrackFromQueue(event.getGuild(), j)).getInfo();
-            eb.appendDescription(j + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
+            eb.appendDescription(j + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
+        }
+        final AudioTrack track = manager.audioPlayer.getPlayingTrack();
+        if (track == null) {
+            System.out.println("WARNING: No active song despite populated queue");
+        } else {
+            eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
+            if (PlayerManager.getInstance().getThumbURL(track) != null)
+                eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         }
         // TODO: invent a better implementation instead of using the raw guildLocales map in cases like these.
         eb.setTitle("__**" + guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.nowPlaying") + "**__\n" + track.getInfo().title, track.getInfo().uri);
         eb.setFooter(String.format(guildLocales.get(event.getGuild().getIdLong()).get("CommandQueue.queueInfoFooter"), Queue.size(), "|", newPageNumber + "/" + maxPage + " |", toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         eb.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null)
-            eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
 
@@ -76,9 +81,15 @@ public class CommandQueue extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         AudioTrack track = audioPlayer.getPlayingTrack();
-        String title = track.getInfo().title;
-        if (track.getInfo().title == null) title = event.getLocaleString("CommandQueue.unknownTitle");
-        embed.setTitle("__**" + event.getLocaleString("CommandQueue.nowPlaying") + "**__\n" + title, track.getInfo().uri);
+
+        if (track == null) {
+            System.out.println("WARNING: No active song despite populated queue");
+        } else {
+            String title = track.getInfo().title;
+            if (track.getInfo().title == null) title = event.getLocaleString("CommandQueue.unknownTitle");
+            embed.setTitle("__**" + event.getLocaleString("CommandQueue.nowPlaying") + "**__\n" + title, track.getInfo().uri);
+        }
+        
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {
@@ -103,11 +114,11 @@ public class CommandQueue extends BaseCommand {
         queuePages.put(event.getGuild().getIdLong(), pageNumber);
         for (int i = 5 * pageNumber - 5; i < 5 * pageNumber && i < queueLength; i++) {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
-            embed.appendDescription(i + 1 + ". [" + sanitise(trackInfo.title) + "](" + trackInfo.uri + ")\n");
+            embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
         }
         embed.setFooter(String.format(event.getLocaleString("CommandQueue.queueInfoFooter"), queueLength, "|", pageNumber + "/" + ((queueLength + 4) / 5) + " |", toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         embed.setColor(botColour);
-        if (PlayerManager.getInstance().getThumbURL(track) != null)
+        if (track != null && PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         event.replyEmbeds(message -> message.setActionRow(Button.secondary("backward", "◀"), Button.secondary("forward", "▶")), embed.build());
     }

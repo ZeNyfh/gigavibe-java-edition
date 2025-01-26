@@ -117,7 +117,6 @@ public class Main extends ListenerAdapter {
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
         bot.getPresence().setActivity(Activity.playing("Use \"" + readableBotPrefix + " help\" | The bot is in " + bot.getGuilds().size() + " Servers!"));
-
         for (Guild guild : bot.getGuilds()) {
             trackLoops.put(guild.getIdLong(), 0);
             autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
@@ -157,7 +156,7 @@ public class Main extends ListenerAdapter {
             System.out.println(env.getName() + " doesn't exist, creating now.");
             ignoreFiles = env.createNewFile();
             FileWriter writer = new FileWriter(".env");
-            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# This is the hex value for the bot colour\nCOLOUR=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the last.fm API key for some functions of zenvibe\nLASTFMTOKEN=");
+            writer.write("# This is the bot token, it needs to be set.\nTOKEN=\n# This is the hex value for the bot colour\nCOLOUR=\n# These 2 are required for spotify support with the bot.\nSPOTIFYCLIENTID=\nSPOTIFYCLIENTSECRET=\n# This is the last.fm API key for some functions of zenvibe\nLASTFMTOKEN=\n# YouTube refresh token, optional.\nYTREFRESHTOKEN=");
             writer.close();
         }
         if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -187,7 +186,6 @@ public class Main extends ListenerAdapter {
         List<Class<?>> classes = new ArrayList<>();
         String tempJarPath = String.valueOf(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         JarFile jarFile = null;
-        boolean jarFileCheck = false;
         try {
             jarFile = new JarFile(tempJarPath.substring(5));
         } catch (FileNotFoundException ignored) {
@@ -208,9 +206,8 @@ public class Main extends ListenerAdapter {
                 } catch (Exception ignored1) {
                 }
             }
-            jarFileCheck = true;
         }
-        if (!jarFileCheck) {
+        if (jarFile != null) {
             Enumeration<JarEntry> resources = jarFile.entries();
             while (resources.hasMoreElements()) {
                 JarEntry url = resources.nextElement();
@@ -293,14 +290,6 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static MessageEmbed createQuickEmbed(String title, String description) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(title);
-        eb.setColor(botColour);
-        eb.setDescription(description);
-        return eb.build();
-    }
-
     public static MessageEmbed createQuickEmbed(String title, String description, String footer) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(title);
@@ -308,6 +297,10 @@ public class Main extends ListenerAdapter {
         eb.setDescription(description);
         eb.setFooter(footer);
         return eb.build();
+    }
+
+    public static MessageEmbed createQuickEmbed(String title, String description) {
+        return createQuickEmbed(title, description, null);
     }
 
     public static MessageEmbed createQuickError(String description) {
@@ -497,7 +490,7 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         trackLoops.put(event.getGuild().getIdLong(), 0);
-        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
+        event.getJDA().getPresence().setActivity(Activity.playing(String.format("music for %,d servers! | " + readableBotPrefix + " help", event.getJDA().getGuilds().size())));
         try {
             GuildDataManager.CreateGuildConfig(event.getGuild().getIdLong());
         } catch (IOException e) {

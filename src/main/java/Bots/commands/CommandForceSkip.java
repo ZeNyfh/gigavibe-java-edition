@@ -81,14 +81,15 @@ public class CommandForceSkip extends BaseCommand {
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
-                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch"));
+                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch") || trackInfo.uri.contains("bandcamp"));
                 if (trackInfo.isStream && !isHTTP) {
                     String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + String.format(event.getLocaleString("CommandForceSkip.skippedToTrack"), "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + String.format(event.getLocaleString("CommandForceSkip.skippedToTrack"), "__**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
+
             } else {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.getLocaleString("CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));

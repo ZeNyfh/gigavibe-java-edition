@@ -9,6 +9,10 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.getyarn.GetyarnAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -19,6 +23,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -49,7 +54,20 @@ public class PlayerManager {
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, new Music(), new Web(), new AndroidTestsuite(), new AndroidLite(), new AndroidMusic(), new MediaConnect(), new Ios(), new TvHtml5Embedded()));
+
+        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new TvHtml5Embedded(), new Tv(), new Web(), new Ios(), new WebEmbedded());
+        ytSource.setPlaylistPageCount(50);
+
+        Dotenv dotenv = Dotenv.load();
+        String ytToken = dotenv.get("YTREFRESHTOKEN");
+        if (ytToken == null) {
+            System.err.println("YTREFRESHTOKEN is not set in .env, YouTube may not work properly.");
+            ytSource.useOauth2(ytSource.getOauth2RefreshToken(), false);
+        } else {
+            ytSource.useOauth2(ytToken, true);
+        }
+
+        this.audioPlayerManager.registerSourceManager(ytSource);
 
         String spotifyClientID = Dotenv.load().get("SPOTIFYCLIENTID");
         String spotifyClientSecret = Dotenv.load().get("SPOTIFYCLIENTSECRET");
@@ -62,6 +80,9 @@ public class PlayerManager {
             hasSpotify = false;
         }
 
+        this.audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
+        this.audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager(true));
+
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
@@ -73,7 +94,7 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    public GuildMusicManager getMusicManager(Guild guild) {
+    public synchronized GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
             guildMusicManager.audioPlayer.setFilterFactory((track, format, output) -> {
@@ -98,7 +119,7 @@ public class PlayerManager {
             String trackName = trackNameArray[trackNameArray.length - 1];
             embed.setTitle(trackName, audioTrack.getInfo().uri);
         } else {
-            embed.setTitle(audioTrack.getInfo().title, audioTrack.getInfo().uri);
+            embed.setTitle(sanitise(audioTrack.getInfo().title), audioTrack.getInfo().uri);
         }
         String length;
         if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
@@ -161,6 +182,9 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
+                for (AudioTrack audioTrack : tracks) {
+                    audioTrack.setUserData(new TrackUserData(eventOrChannel));
+                }
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
                     if (autoplaying)
@@ -195,9 +219,6 @@ public class PlayerManager {
                         if (sendEmbed) {
                             replyWithEmbed(eventOrChannel, embed.build());
                         }
-                    }
-                    for (AudioTrack audioTrack : tracks) {
-                        audioTrack.setUserData(new TrackUserData(eventOrChannel));
                     }
                 }
                 loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
@@ -298,14 +319,17 @@ public class PlayerManager {
         public final Object eventOrChannel;
         public final Long channelId;
         public final Long guildId;
+        public final String username;
 
         public TrackUserData(Object eventOrChannel) {
             this.eventOrChannel = eventOrChannel;
             GuildMessageChannelUnion channel;
             if (eventOrChannel instanceof CommandEvent) {
                 channel = ((CommandEvent) eventOrChannel).getChannel();
+                username = ((CommandEvent) eventOrChannel).getUser().getEffectiveName();
             } else {
                 channel = (GuildMessageChannelUnion) eventOrChannel;
+                username = "";
             }
             this.channelId = channel.getIdLong();
             this.guildId = channel.getGuild().getIdLong();

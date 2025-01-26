@@ -191,6 +191,12 @@ public class TrackScheduler extends AudioEventAdapter {
             true
         );
 
+        String name;
+        name = ((PlayerManager.TrackUserData) nextTrack.getUserData()).username;
+        if (!name.isEmpty()) {
+            eb.setFooter("played by: " + name);
+        }
+
         if (PlayerManager.getInstance().getThumbURL(nextTrack) != null) {
             eb.setThumbnail(PlayerManager.getInstance().getThumbURL(nextTrack));
         }

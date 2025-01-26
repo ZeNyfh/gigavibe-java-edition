@@ -15,7 +15,7 @@ import static Bots.lavaplayer.LastFMManager.encode;
 public class CommandAutoplay extends BaseCommand {
     @Override
     public Check[] getChecks() {
-        return new Check[]{Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
+        return new Check[]{Check.IS_DEV, Check.IS_DJ, Check.IS_IN_SAME_VC, Check.IS_PLAYING};
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CommandAutoplay extends BaseCommand {
 
     @Override
     public Category getCategory() {
-        return Category.DJ;
+        return Category.Dev;
     }
 
     @Override
