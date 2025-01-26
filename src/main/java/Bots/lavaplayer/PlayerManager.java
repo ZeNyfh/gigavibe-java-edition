@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -53,7 +54,8 @@ public class PlayerManager {
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new Android(), new AndroidVr(), new Web(), new Ios(), new WebEmbedded());
+
+        YoutubeAudioSourceManager ytSource = new YoutubeAudioSourceManager(true, new TvHtml5Embedded(), new Tv(), new Web(), new Ios(), new WebEmbedded());
         ytSource.setPlaylistPageCount(50);
 
         Dotenv dotenv = Dotenv.load();
