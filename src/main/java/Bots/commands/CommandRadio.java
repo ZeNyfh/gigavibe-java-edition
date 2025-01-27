@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Bots.CommandEvent.localise;
 import static Bots.CommandStateChecker.PerformChecks;
 import static Bots.Main.*;
 
@@ -84,12 +85,12 @@ public class CommandRadio extends BaseCommand {
         if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
-            eb.appendDescription("\uD83D\uDCFB **" + event.getLocaleString("CommandRadio.list") + "**\n\n");
+            eb.appendDescription("\uD83D\uDCFB **" + localise("CommandRadio.list") + "**\n\n");
             getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
-            eb.appendDescription(String.format("\n*" + event.getLocaleString("CommandRadio.alternativeList"), "`" + readableBotPrefix, "`*"));
-            eb.setFooter(String.format(event.getLocaleString("CommandRadio.useForPlay"), "\"" + readableBotPrefix + " radio", "\""));
+            eb.appendDescription(String.format("\n*" + localise("CommandRadio.alternativeList"), "`" + readableBotPrefix, "`*"));
+            eb.setFooter(String.format(localise("CommandRadio.useForPlay"), "\"" + readableBotPrefix + " radio", "\""));
             if (event.getArgs().length == 1) {
-                event.replyEmbeds(createQuickError(event.getLocaleString("CommandRadio.noArgsList")), eb.build());
+                event.replyEmbeds(createQuickError(localise("CommandRadio.noArgsList")), eb.build());
             } else {
                 event.replyEmbeds(eb.build());
             }
@@ -99,7 +100,7 @@ public class CommandRadio extends BaseCommand {
         // We have to do this later manually since a 1-arg version (see above) shouldn't invoke VC joining
         CheckResult checkResult = PerformChecks(event, Check.TRY_JOIN_VC);
         if (!checkResult.Succeeded()) {
-            event.replyEmbeds(createQuickEmbed("❌ **" + event.getLocaleString("BaseCommand.notAllowed") + "**", checkResult.GetMessage()));
+            event.replyEmbeds(createQuickEmbed("❌ **" + localise("BaseCommand.notAllowed") + "**", checkResult.GetMessage()));
             return;
         }
 
@@ -108,7 +109,7 @@ public class CommandRadio extends BaseCommand {
         StringBuilder radioSearchTerm = new StringBuilder();
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             if (event.getArgs().length == 2) {
-                event.replyEmbeds(createQuickError(event.getLocaleString("CommandRadio.noSearchTerm")));
+                event.replyEmbeds(createQuickError(localise("CommandRadio.noSearchTerm")));
                 return;
             }
             List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
@@ -127,21 +128,21 @@ public class CommandRadio extends BaseCommand {
         }
         if (radioURL != null) {
             if (radioURL.equals("None")) {
-                event.replyEmbeds(createQuickError(event.getLocaleString("CommandRadio.notFound")));
+                event.replyEmbeds(createQuickError(localise("CommandRadio.notFound")));
             } else {
                 PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
-                event.replyEmbeds(createQuickEmbed(event.getLocaleString("CommandRadio.queued"), "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
+                event.replyEmbeds(createQuickEmbed(localise("CommandRadio.queued"), "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
             }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(wantedRadio)) {
                     PlayerManager.getInstance().loadAndPlay(event, tempMap.getValue(), false);
-                    event.replyEmbeds(createQuickEmbed(event.getLocaleString("CommandRadio.queued"), "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
+                    event.replyEmbeds(createQuickEmbed(localise("CommandRadio.queued"), "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRadio.invalid")));
+            event.replyEmbeds(createQuickError(localise("CommandRadio.invalid")));
         }
     }
 

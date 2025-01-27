@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandSeek extends BaseCommand {
@@ -28,7 +29,7 @@ public class CommandSeek extends BaseCommand {
                 String[] times = args[1].split(":", 3);
                 for (String time : times) {
                     if (!time.matches("^\\d+$")) {
-                        event.replyEmbeds(createQuickError(String.format(event.getLocaleString("CommandSeek.invalidArg"), "`", "`")));
+                        event.replyEmbeds(createQuickError(String.format(localise("CommandSeek.invalidArg"), "`", "`")));
                         return;
                     }
                 }
@@ -42,16 +43,16 @@ public class CommandSeek extends BaseCommand {
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    event.replyEmbeds(createQuickError(event.getLocaleString("CommandSeek.timeTooLow")));
+                    event.replyEmbeds(createQuickError(localise("CommandSeek.timeTooLow")));
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
-                event.replyEmbeds(createQuickEmbed(" ", String.format("✅ " + event.getLocaleString("CommandSeek.setPos"), "**" + toSimpleTimestamp(position) + "**")));
+                event.replyEmbeds(createQuickEmbed(" ", String.format("✅ " + localise("CommandSeek.setPos"), "**" + toSimpleTimestamp(position) + "**")));
             } else {
-                event.replyEmbeds(createQuickError(event.getLocaleString("CommandSeek.cannotSeek")));
+                event.replyEmbeds(createQuickError(localise("CommandSeek.cannotSeek")));
             }
         } else {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandSeek.noArg")));
+            event.replyEmbeds(createQuickError(localise("CommandSeek.noArg")));
         }
     }
 

@@ -2,6 +2,7 @@ package Bots;
 
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import static Bots.CommandEvent.localise;
 import static Bots.CommandStateChecker.*;
 
 // Custom base command class used by all commands
@@ -21,7 +22,7 @@ public abstract class BaseCommand {
     public final void executeWithChecks(CommandEvent event) throws Exception { //For main - do not override
         CheckResult checkResult = PerformChecks(event, this.getChecks());
         if (!checkResult.Succeeded()) {
-            event.replyEmbeds(Main.createQuickEmbed("❌ **" + event.getLocaleString("BaseCommand.notAllowed") + "**", checkResult.GetMessage()));
+            event.replyEmbeds(Main.createQuickEmbed("❌ **" + localise("BaseCommand.notAllowed") + "**", checkResult.GetMessage()));
         } else {
             this.execute(event);
         }

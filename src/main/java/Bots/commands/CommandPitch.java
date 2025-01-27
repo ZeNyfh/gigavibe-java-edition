@@ -9,6 +9,7 @@ import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandPitch extends BaseCommand {
@@ -24,19 +25,19 @@ public class CommandPitch extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setPitch(1);
-            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", event.getLocaleString("CommandPitch.defaulted")));
+            event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", localise("CommandPitch.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5.0 && value >= 0.25)) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandPitch.range")));
+            event.replyEmbeds(createQuickError(localise("CommandPitch.range")));
             return;
         }
 
         timescale.setPitch(value);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandPitch.changed"), value)));
+        event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandPitch.changed"), value)));
     }
 
     @Override

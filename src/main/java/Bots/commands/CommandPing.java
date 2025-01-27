@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 
+import static Bots.CommandEvent.localise;
 import static java.lang.System.currentTimeMillis;
 
 public class CommandPing extends BaseCommand {
@@ -10,7 +11,7 @@ public class CommandPing extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         long time = currentTimeMillis();
-        event.reply(response -> response.editMessageFormat(event.getLocaleString("CommandPing.ping") + "\n" + event.getLocaleString("CommandPing.gatewayPing"), currentTimeMillis() - time, event.getJDA().getGatewayPing()), ".");
+        event.reply(response -> response.editMessageFormat(localise("CommandPing.ping") + "\n" + localise("CommandPing.gatewayPing"), currentTimeMillis() - time, event.getJDA().getGatewayPing()), ".");
     }
 
     @Override

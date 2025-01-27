@@ -6,6 +6,7 @@ import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.skipCountGuilds;
 
@@ -22,7 +23,7 @@ public class CommandDisconnect extends BaseCommand {
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
         skipCountGuilds.remove(event.getGuild().getIdLong());
-        event.replyEmbeds(createQuickEmbed(" ", "✅ " + event.getLocaleString("CommandDisconnect.disconnected")));
+        event.replyEmbeds(createQuickEmbed(" ", "✅ " + localise("CommandDisconnect.disconnected")));
     }
 
     @Override

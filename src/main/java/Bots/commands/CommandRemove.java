@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
 
@@ -26,16 +27,16 @@ public class CommandRemove extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.noSongs")));
+            event.replyEmbeds(createQuickError(localise("CommandRemove.noSongs")));
             return;
         }
         if (event.getArgs().length == 1 || !event.getArgs()[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.invalidArgs")));
+            event.replyEmbeds(createQuickError(localise("CommandRemove.invalidArgs")));
             return;
         }
         int position = Integer.parseInt(event.getArgs()[1]);
         if (queue.size() < position - 1) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandRemove.tooLarge")));
+            event.replyEmbeds(createQuickError(localise("CommandRemove.tooLarge")));
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -43,7 +44,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅" + String.format(event.getLocaleString("CommandRemove.removed"), "**" + position + "**")));
+        event.replyEmbeds(createQuickEmbed(" ", "✅" + String.format(localise("CommandRemove.removed"), "**" + position + "**")));
     }
 
     @Override

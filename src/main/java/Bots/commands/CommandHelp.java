@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandHelp extends BaseCommand {
@@ -104,16 +105,16 @@ public class CommandHelp extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
-        embed.setFooter(String.format(event.getLocaleString("CommandHelp.footer"), "\"<>\"", "\"[]\"", "\"()\""));
+        embed.setFooter(String.format(localise("CommandHelp.footer"), "\"<>\"", "\"[]\"", "\"()\""));
         if (userCategory != null) {
             BuildEmbedFromCategory(embed, userCategory, event.getGuild().getIdLong());
         } else {
-            embed.setTitle("\uD83D\uDCD4 **" + event.getLocaleString("CommandHelp.embedTitle") + "**");
+            embed.setTitle("\uD83D\uDCD4 **" + localise("CommandHelp.embedTitle") + "**");
             for (Category category : Category.values()) {
                 if (category != Category.Dev)
                     embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
             }
-            embed.setFooter(event.getLocaleString("CommandHelp.originalFooter"));
+            embed.setFooter(localise("CommandHelp.originalFooter"));
         }
         event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }

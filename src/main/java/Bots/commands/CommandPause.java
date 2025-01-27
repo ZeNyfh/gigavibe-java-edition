@@ -7,6 +7,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandPause extends BaseCommand {
@@ -22,10 +23,10 @@ public class CommandPause extends BaseCommand {
 
         if (audioPlayer.isPaused()) {
             audioPlayer.setPaused(false);
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", event.getLocaleString("CommandPause.resumed")));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", localise("CommandPause.resumed")));
         } else {
             audioPlayer.setPaused(true);
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", event.getLocaleString("CommandPause.paused")));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", localise("CommandPause.paused")));
         }
     }
 

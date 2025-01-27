@@ -9,6 +9,7 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandVibrato extends BaseCommand {
@@ -25,12 +26,12 @@ public class CommandVibrato extends BaseCommand {
         if (event.getArgs().length == 1) {
             vibrato.setFrequency(2);
             vibrato.setDepth(0.5f);
-            event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", event.getLocaleString("CommandVibrato.defaulted")));
+            event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", localise("CommandVibrato.defaulted")));
             return;
         }
 
         if (event.getArgs().length != 3) {
-            event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", String.format(event.getLocaleString("CommandVibrato.incorrectArgs"), "`", "`")));
+            event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", String.format(localise("CommandVibrato.incorrectArgs"), "`", "`")));
             return;
         }
 
@@ -38,18 +39,18 @@ public class CommandVibrato extends BaseCommand {
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
 
         if (!(value <= 14 && value >= 0.1)) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandVibrato.rangeError.frequency")));
+            event.replyEmbeds(createQuickError(localise("CommandVibrato.rangeError.frequency")));
             return;
         }
 
         if (!(power <= 1 && power >= 0.05)) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandVibrato.rangeError.depth")));
+            event.replyEmbeds(createQuickError(localise("CommandVibrato.rangeError.depth")));
             return;
         }
 
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        event.replyEmbeds(createQuickEmbed("✅ **" + event.getLocaleString("Main.success") + "**", String.format(event.getLocaleString("CommandVibrato.success"), value, "\n", power)));
+        event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandVibrato.success"), value, "\n", power)));
     }
 
     @Override

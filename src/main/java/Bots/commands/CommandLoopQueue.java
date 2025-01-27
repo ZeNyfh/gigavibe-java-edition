@@ -4,6 +4,7 @@ import Bots.BaseCommand;
 import Bots.CommandEvent;
 import Bots.CommandStateChecker.Check;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.LoopQueueGuilds;
 import static Bots.Main.createQuickEmbed;
 
@@ -16,10 +17,10 @@ public class CommandLoopQueue extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", event.getLocaleString("CommandLoopQueue.notLooping")));
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", localise("CommandLoopQueue.notLooping")));
             LoopQueueGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", event.getLocaleString("CommandLoopQueue.looping")));
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", localise("CommandLoopQueue.looping")));
             LoopQueueGuilds.add(event.getGuild().getIdLong());
         }
     }

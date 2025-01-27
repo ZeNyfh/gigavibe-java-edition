@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
@@ -36,7 +37,7 @@ public class CommandSkip extends BaseCommand {
 
         List<Member> votes = skipCountGuilds.get(event.getGuild().getIdLong());
         if (votes.contains(event.getMember())) {
-            event.replyEmbeds(createQuickError(event.getLocaleString("CommandSkip.alreadyVoted")));
+            event.replyEmbeds(createQuickError(localise("CommandSkip.alreadyVoted")));
             return;
         } else {
             votes.add(event.getMember());
@@ -60,15 +61,15 @@ public class CommandSkip extends BaseCommand {
                 String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
                 boolean canPlay = true;
                 if (searchTerm.equals("notfound")) {
-                    messageBuilder.append("❌ **" + event.getLocaleString("Main.error") + ":**\n"+ event.getLocaleString("CommandSkip.autoplay.failedToFind") + " ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
+                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n"+ localise("CommandSkip.autoplay.failedToFind") + " ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
                     canPlay = false;
                 }
                 if (searchTerm.equals("none")) {
-                    messageBuilder.append("❌ **" + event.getLocaleString("Main.error") + ":**\n" + event.getLocaleString("CommandSkip.couldNotFind") + "\n");
+                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandSkip.couldNotFind") + "\n");
                     canPlay = false;
                 }
                 if (searchTerm.isEmpty()) {
-                    messageBuilder.append("❌ **" + event.getLocaleString("Main.error") + ":**\n" + event.getLocaleString("CommandSkip.noSearchTerm") + "\n");
+                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandSkip.noSearchTerm") + "\n");
                     canPlay = false;
                 }
                 if (canPlay) {
@@ -79,30 +80,30 @@ public class CommandSkip extends BaseCommand {
                             : encode(track.getInfo().author.toLowerCase(), false, true);
                     String title = encode(track.getInfo().title, true, false);
                     PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                    messageBuilder.append("♾️ " + event.getLocaleString("CommandSkip.autoplayQueued") + " ").append(artistName).append(" - ").append(title).append("\n");
+                    messageBuilder.append("♾️ " + localise("CommandSkip.autoplayQueued") + " ").append(artistName).append(" - ").append(title).append("\n");
                 }
             }
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.getLocaleString("CommandSkip.skippedTheTrack")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("CommandSkip.skippedTheTrack")));
             } else { // if there is something playing after the skip command
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(botColour);
                 if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
-                    eb.setTitle(String.format("⏩ "+event.getLocaleString("CommandSkip.skippedTo"), "__**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                    eb.setTitle(String.format("⏩ "+localise("CommandSkip.skippedTo"), "__**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
                 } else {
-                    eb.setTitle("⏩ " + String.format(event.getLocaleString("CommandSkip.skippedTo.unknown"), "__**", "**__"));
-                    eb.appendDescription(String.format(event.getLocaleString("CommandSkip.nowPlaying"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n"));
+                    eb.setTitle("⏩ " + String.format(localise("CommandSkip.skippedTo.unknown"), "__**", "**__"));
+                    eb.appendDescription(String.format(localise("CommandSkip.nowPlaying"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n"));
                 }
                 if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
-                    eb.appendDescription("**" + event.getLocaleString("CommandSkip.channel") + "**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
+                    eb.appendDescription("**" + localise("CommandSkip.channel") + "**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
                 }
-                eb.appendDescription("**" + event.getLocaleString("CommandSkip.duration") + "**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+                eb.appendDescription("**" + localise("CommandSkip.duration") + "**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
                 eb.appendDescription(messageBuilder);
                 event.replyEmbeds(eb.build());
             }
         } else {
-            event.replyEmbeds(createQuickEmbed(event.getLocaleString("CommandSkip.voted.title"), String.format(event.getLocaleString("CommandSkip.voted.description"), votedMemberCount, effectiveMemberCount/2)));
+            event.replyEmbeds(createQuickEmbed(localise("CommandSkip.voted.title"), String.format(localise("CommandSkip.voted.description"), votedMemberCount, effectiveMemberCount/2)));
         }
     }
 

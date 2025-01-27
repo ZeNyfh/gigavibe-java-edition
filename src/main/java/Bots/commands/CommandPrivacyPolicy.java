@@ -3,13 +3,14 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandPrivacyPolicy extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(event.getLocaleString("CommandPrivacyPolicy.privacyPolicy"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));
+        event.replyEmbeds(createQuickEmbed(localise("CommandPrivacyPolicy.privacyPolicy"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md"));
     }
 
     @Override

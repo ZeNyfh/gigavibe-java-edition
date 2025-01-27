@@ -3,12 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandGithub extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(" ", String.format(event.getLocaleString("CommandGithub.message"), "❕ ", "\n\n❕ ", "\n\n")));
+        event.replyEmbeds(createQuickEmbed(" ", String.format(localise("CommandGithub.message"), "❕ ", "\n\n❕ ", "\n\n")));
     }
 
     @Override

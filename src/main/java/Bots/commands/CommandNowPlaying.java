@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Objects;
 
+import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandNowPlaying extends BaseCommand {
@@ -38,7 +39,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             String totalTimeText;
             if (totalTime > 432000000) { // 5 days
-                totalTimeText = event.getLocaleString("Main.unknown"); //Assume malformed
+                totalTimeText = localise("Main.unknown"); //Assume malformed
             } else {
                 totalTimeText = toSimpleTimestamp((long) totalTime);
             }
@@ -53,7 +54,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setDescription("```" + event.getLocaleString("CommandNowPlaying.livestreamDuration") + ": " + toSimpleTimestamp(trackPos) + "```");
+            embed.setDescription("```" + localise("CommandNowPlaying.livestreamDuration") + ": " + toSimpleTimestamp(trackPos) + "```");
         }
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
@@ -62,9 +63,9 @@ public class CommandNowPlaying extends BaseCommand {
                 embed.setTitle(streamTitle, track.getInfo().uri);
             }
         } catch (Exception ignored) {
-            embed.setTitle(event.getLocaleString("Main.unknown"));
+            embed.setTitle(localise("Main.unknown"));
         }
-        embed.addField("\uD83D\uDC64 " + event.getLocaleString("CommandNowPlaying.channel"), track.getInfo().author, true);
+        embed.addField("\uD83D\uDC64 " + localise("CommandNowPlaying.channel"), track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
             if (PlayerManager.getInstance().getThumbURL(track) != null) {
@@ -77,31 +78,31 @@ public class CommandNowPlaying extends BaseCommand {
                     title = streamTitle;
                 }
             }
-            embed.addField("▶️ " + event.getLocaleString("CommandNowPlaying.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
+            embed.addField("▶️ " + localise("CommandNowPlaying.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
         if (audioPlayer.isPaused()) {
-            embed.addField("⏸️ " + event.getLocaleString("CommandNowPlaying.paused"), "✅ **" + event.getLocaleString("CommandNowPlaying.true") + "**", true);
+            embed.addField("⏸️ " + localise("CommandNowPlaying.paused"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("⏸️ " + event.getLocaleString("CommandNowPlaying.paused"), "❌ **" + event.getLocaleString("CommandNowPlaying.false") + "**", true);
+            embed.addField("⏸️ " + localise("CommandNowPlaying.paused"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
         }
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD02 " + event.getLocaleString("CommandNowPlaying.trackLooping"), "✅ **" + event.getLocaleString("CommandNowPlaying.true") + "**", true);
+            embed.addField("\uD83D\uDD02 " + localise("CommandNowPlaying.trackLooping"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
-            embed.addField("\uD83D\uDD02 " + event.getLocaleString("CommandNowPlaying.trackLooping"), "❌ **" + event.getLocaleString("CommandNowPlaying.false") + "**", true);
+            embed.addField("\uD83D\uDD02 " + localise("CommandNowPlaying.trackLooping"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
         }
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD01 " + event.getLocaleString("CommandNowPlaying.queueLooping"), "✅ **" + event.getLocaleString("CommandNowPlaying.true") + "**", true);
+            embed.addField("\uD83D\uDD01 " + localise("CommandNowPlaying.queueLooping"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("\uD83D\uDD01 " + event.getLocaleString("CommandNowPlaying.queueLooping"), "❌ **" + event.getLocaleString("CommandNowPlaying.false") + "**", true);
+            embed.addField("\uD83D\uDD01 " + localise("CommandNowPlaying.queueLooping"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("♾️ " + event.getLocaleString("CommandNowPlaying.autoplaying"), "✅ **" + event.getLocaleString("CommandNowPlaying.true") + "**", true);
+            embed.addField("♾️ " + localise("CommandNowPlaying.autoplaying"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
         } else {
-            embed.addField("♾️ " + event.getLocaleString("CommandNowPlaying.autoplaying"), "❌ **" + event.getLocaleString("CommandNowPlaying.false") + "**", true);
+            embed.addField("♾️ " + localise("CommandNowPlaying.autoplaying"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
