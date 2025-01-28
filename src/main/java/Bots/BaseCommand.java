@@ -20,8 +20,8 @@ public abstract class BaseCommand {
 
     public final void executeWithChecks(CommandEvent event) throws Exception { //For main - do not override
         CheckResult checkResult = PerformChecks(event, this.getChecks());
-        if (!checkResult.Succeeded()) {
-            event.replyEmbeds(Main.createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));
+        if (!checkResult.succeeded()) {
+            event.replyEmbeds(Main.createQuickEmbed("❌ **Not Allowed**", checkResult.getMessage()));
         } else {
             this.execute(event);
         }

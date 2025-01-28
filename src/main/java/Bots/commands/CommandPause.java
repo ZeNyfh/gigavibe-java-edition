@@ -27,8 +27,8 @@ public class CommandPause extends BaseCommand {
             event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", "Resumed playing from the queue."));
         } else {
             CommandStateChecker.CheckResult checkResult = PerformChecks(event, Check.IS_DJ, Check.IS_PLAYING);
-            if (!checkResult.Succeeded()) {
-                event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.GetMessage()));
+            if (!checkResult.succeeded()) {
+                event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.getMessage()));
                 return;
             }
             if (audioPlayer.isPaused()) {
