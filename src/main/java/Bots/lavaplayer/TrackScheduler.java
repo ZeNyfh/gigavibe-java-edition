@@ -138,14 +138,11 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private void handleCriticalFailure(GuildMessageChannelUnion originalEventChannel) {
         long guildID = originalEventChannel.getGuild().getIdLong();
-        queue.clear();
         guildFailCount.put(guildID, 0);
 
-        // TODO: We should try keeping the queue instead, not doing startTrack, and have the user use "unpause" to get stuff playing again
-        //       (This also provides a simple way to get out of the queue softlock state should a bug for it ever appear again)
         MessageEmbed failureEmbed = createQuickEmbed(
                 "❌ **Critical Error**",
-                "Multiple tracks have now failed to load, likely due to an upstream network issue beyond our control. Clearing the queue to avoid chat spam.",
+                "Multiple tracks have now failed to load, likely due to an upstream network issue beyond our control. Pausing all tracks to avoid chat spam.",
                 "If this issue persists with specific audio sources, please file a /bug report"
         );
 
