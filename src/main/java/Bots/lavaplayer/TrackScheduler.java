@@ -45,14 +45,13 @@ public class TrackScheduler extends AudioEventAdapter {
         PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
         GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
         long guildID = trackUserData.guildId;
-        guildFailCount.remove(guildID);
 
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
-            int currentFailCount = guildFailCount.getOrDefault(guildID, 0); // gets the value, if there is none, sets it to 0
-            guildFailCount.put(guildID, currentFailCount + 1);
-            handleTrackFailure(originalEventChannel, track);
+            handleTrackFailure(originalEventChannel, player, track);
             return;
         }
+
+        guildFailCount.remove(guildID);
 
         if (endReason.mayStartNext) {
             if (LoopGuilds.contains(guildID)) { // track is looping
@@ -105,24 +104,23 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-
-
-    private void handleTrackFailure(GuildMessageChannelUnion originalEventChannel, AudioTrack track) {
+    private void handleTrackFailure(GuildMessageChannelUnion originalEventChannel, AudioPlayer player, AudioTrack track) {
         long guildID = originalEventChannel.getGuild().getIdLong();
 
         int failCount = guildFailCount.getOrDefault(guildID, 0) + 1;
         guildFailCount.put(guildID, failCount);
 
+        System.err.println("Failed to load track " + track.getInfo().uri + " | fail count: " + failCount);
         if (failCount == 1) { // if fails once, retry the track.
             retryTrack(track);
         } else if (failCount < 3) { // if it is less than 3 but not 1, handle a regular failure.
-            handleRegularFailure(originalEventChannel);
+            handleRegularFailure(originalEventChannel, player);
         } else { // if it is more than 3, worry (network issue usually).
             handleCriticalFailure(originalEventChannel);
         }
     }
 
-    private void handleRegularFailure(GuildMessageChannelUnion originalEventChannel) {
+    private void handleRegularFailure(GuildMessageChannelUnion originalEventChannel, AudioPlayer player) {
         long guildID = originalEventChannel.getGuild().getIdLong();
 
         try {
@@ -133,6 +131,8 @@ public class TrackScheduler extends AudioEventAdapter {
 
         if (queue.isEmpty()) {
             guildFailCount.put(guildID, 0);
+        } else {
+            playNextTrack(player, originalEventChannel);
         }
     }
 
@@ -141,9 +141,11 @@ public class TrackScheduler extends AudioEventAdapter {
         queue.clear();
         guildFailCount.put(guildID, 0);
 
+        // TODO: We should try keeping the queue instead, not doing startTrack, and have the user use "unpause" to get stuff playing again
+        //       (This also provides a simple way to get out of the queue softlock state should a bug for it ever appear again)
         MessageEmbed failureEmbed = createQuickEmbed(
                 "❌ **Critical Error**",
-                "Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.",
+                "Multiple tracks have now failed to load, likely due to an upstream network issue beyond our control. Clearing the queue to avoid chat spam.",
                 "If this issue persists with specific audio sources, please file a /bug report"
         );
 
@@ -155,7 +157,6 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     private void retryTrack(AudioTrack track) {
-        System.err.println("Failed to load track " + track.getInfo().uri + " ; retrying...");
         this.player.startTrack(track.makeClone(), false);
     }
 
