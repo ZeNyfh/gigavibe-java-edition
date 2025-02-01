@@ -33,22 +33,22 @@ public class CommandInfo extends BaseCommand {
 
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(event.getJDA().getSelfUser().getName() + " " + localise("CommandInfo.info"), null);
+        eb.setTitle(event.getJDA().getSelfUser().getName() + " " + localise("Info", "CmdInfo.info"), null);
         eb.setColor(botColour);
-        eb.appendDescription("\uD83D\uDD27  **" + String.format(localise("CommandInfo.ramUsage"), "** " + String.format("%,d", memoryUsed / 1024 / 1024)) + "MB\n\n");
+        eb.appendDescription(localise("\uD83D\uDD27  **Ram usage:** {ram in MB}MB", "CmdInfo.ramUsage", String.format("%,d", memoryUsed / 1024 / 1024)) + "MB\n\n");
         long finalUptime = currentTimeMillis() - Main.startupTime;
         String finalTime = toTimestamp(finalUptime, event.getGuild().getIdLong());
-        eb.appendDescription("⏰ **" + String.format(localise("CommandInfo.upTime"), "**" + finalTime) + "\n\n");
-        eb.appendDescription("\uD83D\uDCE1 **" + String.format(localise("CommandInfo.discordServers"), "**" + String.format("%,d", event.getJDA().getGuilds().size())) + "\n\n");
-        eb.appendDescription("\uD83D\uDC64 **" + String.format(localise("CommandInfo.discordMembers"), "**" + String.format("%,d", memberCount)) + "\n\n");
-        eb.appendDescription("\uD83D\uDCD1 **" + String.format(localise("CommandInfo.registeredCommands"), "**" + CommandCount) + "\n\n");
-        eb.appendDescription("\uD83C\uDFB5 **" + String.format(localise("CommandInfo.voiceChannels"), "** " + vcCount) + "\n\n");
-        eb.appendDescription("\uD83D\uDD0A **" + String.format(localise("CommandInfo.playingCount"), "** " + playingCount) + "\n\n");
-        eb.appendDescription("⏱️ **" + String.format(localise("CommandInfo.gatewayPing"), "**" + event.getJDA().getGatewayPing()) + "\n\n");
-        eb.setFooter(String.format(localise("CommandInfo.version"), botVersion));
+        eb.appendDescription(localise("⏰ **Uptime:** {time}\n\n", "CmdInfo.upTime", finalTime));
+        eb.appendDescription("\uD83D\uDCE1 " + localise("**Guilds:** {guildCount}\n\n", "CmdInfo.discordServers", String.format("%,d", event.getJDA().getGuilds().size())));
+        eb.appendDescription("\uD83D\uDC64 " + localise("**Users:** {userCount}\n\n", "Cmd.discordMembers", String.format("%,d", memberCount)));
+        eb.appendDescription("\uD83D\uDCD1 " + localise("**Registered Commands:** {commandCount}\n\n", "CmdInfo.registeredCommands", +CommandCount));
+        eb.appendDescription("\uD83C\uDFB5 " + localise("**VCs:** {VCCount}\n\n", "CmdInfo.voiceChannels", vcCount));
+        eb.appendDescription("\uD83D\uDD0A " + localise("**Playing Count:** {playingCount}\n\n", "CmdInfo.playingCount", playingCount));
+        eb.appendDescription("⏱️ " + localise("**Gateway Ping:** {gPingNum}ms\n\n", "CommandInfo.gatewayPing", event.getJDA().getGatewayPing()));
+        eb.setFooter(localise("Version: {1}", "CommandInfo.version", botVersion));
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
-            eb.appendDescription("⏱️  **" + String.format(localise("CommandInfo.ping"), "**" + (currentTimeMillis() - time)));
+            eb.appendDescription("⏱️  " + localise("**Ping:** {pingNum}ms", "CmdInfo.ping", currentTimeMillis() - time));
             response.editMessageEmbeds(eb.build());
         }, eb.build());
     }

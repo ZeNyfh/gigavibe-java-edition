@@ -12,15 +12,15 @@ public class CommandLocale extends BaseCommand {
     @Override
     public void execute(CommandEvent event) throws Exception {
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed(localise("CommandLocale.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+            event.replyEmbeds(createQuickEmbed(localise("List of languages:", "CmdLoc.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
         } else {
             String lang = event.getArgs()[1].toLowerCase();
             if (languages.containsKey(lang)) {
                 event.getConfig().put("Locale", lang);
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
-                event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandLocale.languageChanged"), lang)));
+                event.replyEmbeds(createQuickSuccess(localise("The language has been changed to: {langName}", "CommandLocale.languageChanged", lang)));
             } else {
-                event.replyEmbeds(createQuickError(localise("CommandLocale.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+                event.replyEmbeds(createQuickError(localise("Unrecognised language, here is a list of languages to choose from:", "CommandLocale.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
             }
         }
     }
@@ -42,6 +42,6 @@ public class CommandLocale extends BaseCommand {
 
     @Override
     public long getRatelimit() {
-        return 30000;
+        return 10000;
     }
 }
