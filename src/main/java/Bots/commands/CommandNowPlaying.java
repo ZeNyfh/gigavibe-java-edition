@@ -39,7 +39,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             String totalTimeText;
             if (totalTime > 432000000) { // 5 days
-                totalTimeText = localise("Main.unknown"); //Assume malformed
+                totalTimeText = localise("Unknown","Main.unknown"); //Assume malformed
             } else {
                 totalTimeText = toSimpleTimestamp((long) totalTime);
             }
@@ -54,7 +54,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setDescription("```" + localise("CommandNowPlaying.livestreamDuration") + ": " + toSimpleTimestamp(trackPos) + "```");
+            embed.setDescription(localise("```Live stream duration: {trackPos}```","CmdNP.livestreamDuration", toSimpleTimestamp(trackPos)));
         }
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
@@ -63,9 +63,9 @@ public class CommandNowPlaying extends BaseCommand {
                 embed.setTitle(streamTitle, track.getInfo().uri);
             }
         } catch (Exception ignored) {
-            embed.setTitle(localise("Main.unknown"));
+            embed.setTitle(localise("Unknown","Main.unknown"));
         }
-        embed.addField("\uD83D\uDC64 " + localise("CommandNowPlaying.channel"), track.getInfo().author, true);
+        embed.addField("\uD83D\uDC64 " + localise("Channel:","CmdNP.channel"), track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
             if (PlayerManager.getInstance().getThumbURL(track) != null) {
@@ -78,31 +78,31 @@ public class CommandNowPlaying extends BaseCommand {
                     title = streamTitle;
                 }
             }
-            embed.addField("▶️ " + localise("CommandNowPlaying.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
+            embed.addField("▶️ " + localise("Up next:","CmdNP.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
         if (audioPlayer.isPaused()) {
-            embed.addField("⏸️ " + localise("CommandNowPlaying.paused"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
+            embed.addField("⏸️ " + localise("Track paused:","CmdNP.paused"), localise("✅ **True**","CmdNP.true"), true);
         } else {
-            embed.addField("⏸️ " + localise("CommandNowPlaying.paused"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
+            embed.addField("⏸️ " + localise("Track paused:","CmdNP.paused"), localise("❌ **False**","CmdNP.false"), true);
         }
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD02 " + localise("CommandNowPlaying.trackLooping"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
+            embed.addField("\uD83D\uDD02 " + localise("Track Looping:","CmdNP.trackLooping"), localise("✅ **True**","CmdNP.true"), true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
-            embed.addField("\uD83D\uDD02 " + localise("CommandNowPlaying.trackLooping"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
+            embed.addField("\uD83D\uDD02 " + localise("CmdNP.trackLooping"), localise("❌ **False**","CmdNP.false"), true);
         }
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD01 " + localise("CommandNowPlaying.queueLooping"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
+            embed.addField("\uD83D\uDD01 " + localise("CmdNP.queueLooping"), localise("✅ **True**","CmdNP.true"), true);
         } else {
-            embed.addField("\uD83D\uDD01 " + localise("CommandNowPlaying.queueLooping"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
+            embed.addField("\uD83D\uDD01 " + localise("CmdNP.queueLooping"), localise("❌ **False**","CmdNP.false"), true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("♾️ " + localise("CommandNowPlaying.autoplaying"), "✅ **" + localise("CommandNowPlaying.true") + "**", true);
+            embed.addField("♾️ " + localise("CmdNP.autoplaying"), localise("✅ **True**","CmdNP.true"), true);
         } else {
-            embed.addField("♾️ " + localise("CommandNowPlaying.autoplaying"), "❌ **" + localise("CommandNowPlaying.false") + "**", true);
+            embed.addField("♾️ " + localise("CmdNP.autoplaying"), localise("❌ **False**","CmdNP.false"), true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);

@@ -26,12 +26,12 @@ public class CommandVibrato extends BaseCommand {
         if (event.getArgs().length == 1) {
             vibrato.setFrequency(2);
             vibrato.setDepth(0.5f);
-            event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", localise("CommandVibrato.defaulted")));
+            event.replyEmbeds(createQuickSuccess(localise("Set the parameters to their default values.", "CmdVib.defaulted")));
             return;
         }
 
         if (event.getArgs().length != 3) {
-            event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", String.format(localise("CommandVibrato.incorrectArgs"), "`", "`")));
+            event.replyEmbeds(createQuickEmbed("❌ **Invalid arguments.**", localise("The valid usage is: `{cmdName} <Frequency> <Depth>`","CmdVib.incorrectArgs", "vibrato")));
             return;
         }
 
@@ -39,18 +39,18 @@ public class CommandVibrato extends BaseCommand {
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
 
         if (!(value <= 14 && value >= 0.1)) {
-            event.replyEmbeds(createQuickError(localise("CommandVibrato.rangeError.frequency")));
+            event.replyEmbeds(createQuickError(localise("The frequency must be between 0.1 and 14","CmdVib.rangeError.frequency")));
             return;
         }
 
         if (!(power <= 1 && power >= 0.05)) {
-            event.replyEmbeds(createQuickError(localise("CommandVibrato.rangeError.depth")));
+            event.replyEmbeds(createQuickError(localise("The depth must be between 0.05 and 1","CmdVib.rangeError.depth")));
             return;
         }
 
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandVibrato.success"), value, "\n", power)));
+        event.replyEmbeds(createQuickSuccess(localise("Set the vibrato frequency to {vibValue}Hz.\nSet the vibrato depth to {depthPower}","CmdVib.success", value, power)));
     }
 
     @Override

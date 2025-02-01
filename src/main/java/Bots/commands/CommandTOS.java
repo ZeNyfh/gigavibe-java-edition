@@ -10,7 +10,7 @@ public class CommandTOS extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(localise("CommandTOS.TermsOfService"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
+        event.replyEmbeds(createQuickEmbed(localise("Terms of Service","CmdTOS.TermsOfService"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
     }
 
     @Override
