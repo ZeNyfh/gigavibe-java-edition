@@ -45,7 +45,7 @@ public class CommandStateChecker {
     private static CheckResult IsUserInAnyVc(CommandEvent event) {
         return new CheckResult(
                 Objects.requireNonNull(event.getMember().getVoiceState()).inAudioChannel(),
-                localise("CommandStateChecker.notInVC")
+                localise("You are not in a voice channel.","CmdSCheck.notInVC")
         );
     }
 
@@ -61,7 +61,7 @@ public class CommandStateChecker {
     private static CheckResult IsBotInAnyVc(CommandEvent event) {
         return new CheckResult(
                 Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel(),
-                localise("CommandStateChecker.botNotInVC")
+                localise("The bot is not in a voice channel.","CmdSCheck.botNotInVC")
         );
     }
 
@@ -72,10 +72,10 @@ public class CommandStateChecker {
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
 
         if (!memberState.inAudioChannel()) {
-            return new CheckResult(false, localise("CommandStateChecker.notInVC"));
+            return new CheckResult(false, localise("You are not in a voice channel.","CmdSCheck.notInVC"));
         }
         if (selfState.getChannel() == null || memberState.getChannel() != selfState.getChannel()) {
-            return new CheckResult(false, localise("CommandStateChecker.botNotInVC"));
+            return new CheckResult(false, localise("The bot is not in a voice channel.","CmdSCheck.botNotInVC"));
         }
         return success;
     }
@@ -87,21 +87,21 @@ public class CommandStateChecker {
         GuildVoiceState selfState = Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState());
 
         if (!memberState.inAudioChannel()) {
-            return new CheckResult(false, localise("CommandStateChecker.notInVC"));
+            return new CheckResult(false, localise("The bot is not in your voice channel.","CmdSCheck.notInVC"));
         }
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
             GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(selfState.getGuild());
             if (manager.audioPlayer.getPlayingTrack() == null && manager.scheduler.queue == null) {
                 return success;
             }
-            return new CheckResult(false, localise("CommandStateChecker.botBusy"));
+            return new CheckResult(false, localise("The bot is already busy in another voice channel.","CmdSCheck.botBusy"));
         }
         if (memberState.getChannel() != selfState.getChannel()) {
             try {
                 audioManager.openAudioConnection(memberState.getChannel());
                 return success;
             } catch (InsufficientPermissionException e) {
-                return new CheckResult(false, localise("CommandStateChecker.cannotJoin"));
+                return new CheckResult(false, localise("The bot is unable to join the voice channel.","CmdSCheck.cannotJoin"));
             }
         } else {
             return success;
@@ -146,7 +146,7 @@ public class CommandStateChecker {
                 }
             }
         }
-        return new CheckResult(check, localise("CommandStateChecker.noDJ"));
+        return new CheckResult(check, localise("You do not have a DJ permissions.","CmdSCheck.noDJ"));
     }
 
     private static CheckResult IsChannelBlocked(CommandEvent event) {
@@ -154,7 +154,7 @@ public class CommandStateChecker {
         JSONArray blockedChannels = (JSONArray) config.get("BlockedChannels");
         for (Object blockedChannel : blockedChannels) {
             if (event.getChannel().getId().equals(blockedChannel)) {
-                return new CheckResult(false, localise("CommandStateChecker.commandBlocked"));
+                return new CheckResult(false, localise("This command is blocked in this channel.","CmdSCheck.commandBlocked"));
             }
         }
         return success;
@@ -163,7 +163,7 @@ public class CommandStateChecker {
     private static CheckResult IsPlaying(CommandEvent event) {
         return new CheckResult(
                 PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null,
-                localise("CommandStateChecker.isNotPlaying")
+                localise("The bot is not currently playing anything.","CmdSCheck.isNotPlaying")
         );
     }
 
@@ -178,7 +178,7 @@ public class CommandStateChecker {
             if (l == event.getUser().getIdLong())
                 matchesAny = true;
 
-        return new CheckResult(matchesAny, localise("CommandStateChecker.devOnly"));
+        return new CheckResult(matchesAny, localise("This command is for developers only.","CmdSCheck.devOnly"));
     }
 
     public enum Check {
