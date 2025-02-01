@@ -43,7 +43,7 @@ CmdDJ.invalidArgs=Nieprawidłowe argumenty.
 
 CmdFS.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
 CmdFS.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
-CmdFS.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+CmdFS.nullSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
 CmdFS.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 CmdFS.skippedQueue=Pominięto całą kolejkę.
 CmdFS.skippedToPos=Pominięto {1} utworów do {2}

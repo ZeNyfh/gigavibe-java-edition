@@ -34,7 +34,7 @@ CmdDJ.invalidArgs=Argumentos inválidos.
 
 CmdFS.failedToFind=La reproducción automática no encontró {1}
 CmdFS.couldNotFind=No se encontraron pistas similares para la reproducción automática.
-CmdFS.noSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.
+CmdFS.nullSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.
 CmdFS.autoplayQueued=Pistas en cola para la reproducción automática:
 CmdFS.skippedQueue=La cola ha sido saltada.
 CmdFS.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.

@@ -43,7 +43,7 @@ CmdDJ.invalidArgs=Ongeldige argumenten.
 
 CmdFS.failedToFind=Autoplay kon {1} niet vinden
 CmdFS.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.
-CmdFS.noSearchTerm=Is er een onbekende fout opgetreden terwijl autoplay werd geprobeerd.
+CmdFS.nullSearchTerm=Is er een onbekende fout opgetreden terwijl autoplay werd geprobeerd.
 CmdFS.autoplayQueued=Autoplay heeft dit op de wachtrij gezet:
 CmdFS.skippedQueue=De hele wachtrij is overgeslagen.
 CmdFS.skippedToPos={1} nummers zijn overgeslagen naar {2}

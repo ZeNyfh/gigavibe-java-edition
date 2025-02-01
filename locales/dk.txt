@@ -43,7 +43,7 @@ CmdDJ.invalidArgs=Ugyldige argumenter.
 
 CmdFS.failedToFind=Autoplay kunne ikke finde {1}
 CmdFS.couldNotFind=Autoplay kunne ikke finde lignende musik.
-CmdFS.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
+CmdFS.nullSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
 CmdFS.autoplayQueued=Autoplay i kø:
 CmdFS.skippedQueue=Sprang over hele køen
 CmdFS.skippedToPos=Sprang {1} sange over til {2}
