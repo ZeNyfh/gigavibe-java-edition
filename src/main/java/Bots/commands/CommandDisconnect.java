@@ -7,8 +7,7 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
 import static Bots.CommandEvent.localise;
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.skipCountGuilds;
+import static Bots.Main.*;
 
 public class CommandDisconnect extends BaseCommand {
     @Override
@@ -23,12 +22,12 @@ public class CommandDisconnect extends BaseCommand {
         event.getGuild().getAudioManager().closeAudioConnection();
         musicManager.scheduler.nextTrack();
         skipCountGuilds.remove(event.getGuild().getIdLong());
-        event.replyEmbeds(createQuickEmbed(" ", "✅ " + localise("CommandDisconnect.disconnected")));
+        event.replyEmbeds(createQuickSuccess(localise("Disconnected from the voice channel and cleared the queue.", "CmdDc.disconnected")));
     }
 
     @Override
     public String[] getNames() {
-        return new String[]{"disconnect", "dc", "leave", "fu" + "ckoff", "fu" + "ck off", "shutup"};
+        return new String[]{"disconnect", "dc", "leave", "fu" + "ckoff", "fu" + "ck off", "shutup", "shut up"};
     }
 
     @Override
