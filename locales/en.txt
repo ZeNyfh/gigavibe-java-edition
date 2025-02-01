@@ -5,8 +5,9 @@
 // Use this english one as a template.
 // Comments can be added to the messages via a preceding //.
 // Translate everything between <>, [], and ()
-// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
-// please preserve the capitalisation and any punctuation if applicable.
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain variables from the code.
+// please preserve the capitalisation and any punctuation if applicable, (use angled brackets or your local punctuation marks if necessary!).
+// if you find any markdown, try to keep it consistent between english and the language you are translating to, I.E if something is bolded with **{1}** then try keep that.
 
 CommandAutoplay.noAPI=The bot has not been given an API key for LastFM, this command does not work without it.
 CommandAutoplay.notAutoplaying=No longer autoplaying.
