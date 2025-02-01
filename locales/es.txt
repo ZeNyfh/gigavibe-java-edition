@@ -43,11 +43,11 @@ CmdFS.skipped=La pista actual ha sido saltada.
 
 CmdGit.message={1}Usar SOLO para informes de errores o sugerencias.{2}Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.{3}https
 
-CmdHelp.category.general=General
-CmdHelp.category.music=Música
-CmdHelp.category.DJ=DJ
-CmdHelp.category.admin=Administrador
-CmdHelp.category.dev=Desarrollador
+CmdHelp.cat.general=General
+CmdHelp.cat.music=Música
+CmdHelp.cat.DJ=DJ
+CmdHelp.cat.admin=Administrador
+CmdHelp.cat.dev=Desarrollador
 CmdHelp.alias=Alias
 CmdHelp.alias.plural=Alias
 CmdHelp.originalFooter=Haz clic en los botones para obtener más información de un grupo.

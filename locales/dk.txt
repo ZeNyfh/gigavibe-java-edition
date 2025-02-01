@@ -52,12 +52,11 @@ CmdFS.skipped=Sprang over nuværende musik
 
 CmdGit.message={1}KUN brug til bug rapports og funktionsanmodninger.{2}Når du rapporterer et problem, skal du sørge for at angive hvad fejlen er, og hvordan den genskabes.{3}https://github.com/ZeNyfh/gigavibe-java-edition
 
-CmdHelp.category.general=Generel
-CmdHelp.category.music=Musik
-CmdHelp.category.DJ=DJ
-CmdHelp.category.admin=Admin
-CmdHelp.category.dev=Dev
-CmdHelp.category.unknown=Ukendt kategori for hjælpetitel: {1}
+CmdHelp.cat.general=Generel
+CmdHelp.cat.music=Musik
+CmdHelp.cat.DJ=DJ
+CmdHelp.cat.admin=Admin
+CmdHelp.cat.dev=Dev
 CmdHelp.alias=Alias
 CmdHelp.alias.plural=Aliaser
 CmdHelp.originalFooter=Klik på knapperne for at få flere oplysninger om en gruppe.

@@ -52,11 +52,11 @@ CmdFS.skipped=Pominięto bieżący utwór.
 
 CmdGit.message={1}Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{2}Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{3}https://github.com/ZeNyfh/gigavibe-java-edition
 
-CmdHelp.category.general=Ogólne
-CmdHelp.category.music=Muzyka
-CmdHelp.category.DJ=DJ
-CmdHelp.category.admin=Admin
-CmdHelp.category.dev=Dev
+CmdHelp.cat.general=Ogólne
+CmdHelp.cat.music=Muzyka
+CmdHelp.cat.DJ=DJ
+CmdHelp.cat.admin=Admin
+CmdHelp.cat.dev=Dev
 CmdHelp.alias=Alias
 CmdHelp.alias.plural=Aliasy
 CmdHelp.originalFooter=Kliknij guziki, aby uzyskać więcej informacji o grupie.

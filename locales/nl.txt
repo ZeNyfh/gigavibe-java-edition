@@ -52,11 +52,11 @@ CmdFS.skipped=Het huidige nummer is overgeslagen.
 
 CmdGit.message={1}gebruik dit ALLEEN voor bug reports en functie suggesties.{2}Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt recreeëren.{3}https://github.com/ZeNyfh/gigavibe-java-edition
 
-CmdHelp.category.general=Generaal
-CmdHelp.category.music=Muziek
-CmdHelp.category.DJ=DJ
-CmdHelp.category.admin=Admin
-CmdHelp.category.dev=Dev
+CmdHelp.cat.general=Generaal
+CmdHelp.cat.music=Muziek
+CmdHelp.cat.DJ=DJ
+CmdHelp.cat.admin=Admin
+CmdHelp.cat.dev=Dev
 CmdHelp.alias=Bijnaam
 CmdHelp.alias.plural=Bijnamen
 CmdHelp.originalFooter=Klik op de knoppen voor meer informatie over een groep.
