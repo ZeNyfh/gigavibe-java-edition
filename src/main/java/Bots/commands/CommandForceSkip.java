@@ -34,16 +34,17 @@ public class CommandForceSkip extends BaseCommand {
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
             boolean canPlay = true;
+            String errorMessage = "❌ **" + localise("Error", "Main.error") + ":**\n";
             if (searchTerm.equals("notfound")) {
-                messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + String.format(localise("CommandForceSkip.failedToFind"), audioPlayer.getPlayingTrack().getInfo().title)).append("\n");
+                messageBuilder.append(errorMessage).append(localise("Autoplay failed to find {songTitle}\n", "CmdFS.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
                 canPlay = false;
             }
             if (searchTerm.equals("none")) {
-                messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandForceSkip.couldNotFind") + "\n");
+                messageBuilder.append(errorMessage).append(localise("Autoplay could not find similar tracks\n.", "CmdFS.couldNotFind"));
                 canPlay = false;
             }
             if (searchTerm.isEmpty()) {
-                messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandForceSkip.noSearchTerm") + "\n");
+                messageBuilder.append(errorMessage).append(localise("An unknown error occurred when trying to autoplay.\n", "CmdFS.nullSearchTerm"));
                 canPlay = false;
             }
             if (canPlay) {
@@ -54,14 +55,14 @@ public class CommandForceSkip extends BaseCommand {
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                messageBuilder.append("♾️ ").append(localise("CommandForceSkip.autoplayQueued")).append(" ").append(artistName).append(" - ").append(title).append("\n");
+                messageBuilder.append("♾️ ").append(localise("Autoplay queued: {artistName} - {songTitle}{nl}","CommandForceSkip.autoplayQueued", artistName, title));
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("CommandForceSkip.skippedQueue")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("Skipped the entire queue","CommandForceSkip.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
@@ -75,25 +76,26 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + String.format(localise("CommandForceSkip.skippedToPos"), event.getArgs()[1], "__**[" + sanitise(title) + "](", trackInfo.uri + ")**__")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("Skipped {n} tracks to {track}","CommandForceSkip.skippedToPos",
+                        event.getArgs()[1], "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__")));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
-                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch") || trackInfo.uri.contains("bandcamp"));
+                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch") || trackInfo.uri.contains("bandcamp") || trackInfo.uri.contains("spotify"));
                 if (trackInfo.isStream && !isHTTP) {
                     String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + String.format(localise("CommandForceSkip.skippedToTrack"), "__**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("Skipped the current track to {track}","CommandForceSkip.skippedToTrack", "__**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
 
             } else {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("Skipped the current track","CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));
             }
         }
         skipCountGuilds.remove(event.getGuild().getIdLong());
