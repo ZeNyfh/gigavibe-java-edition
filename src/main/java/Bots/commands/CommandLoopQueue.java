@@ -17,10 +17,10 @@ public class CommandLoopQueue extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", localise("CommandLoopQueue.notLooping")));
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", localise("No longer looping the current queue.","CmdLQ.notLooping")));
             LoopQueueGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", localise("CommandLoopQueue.looping")));
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", localise("No longer looping the current queue.","CmdLQ.looping")));
             LoopQueueGuilds.add(event.getGuild().getIdLong());
         }
     }

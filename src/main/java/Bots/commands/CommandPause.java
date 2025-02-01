@@ -23,10 +23,10 @@ public class CommandPause extends BaseCommand {
 
         if (audioPlayer.isPaused()) {
             audioPlayer.setPaused(false);
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", localise("CommandPause.resumed")));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", localise("Playback has now resumed.","CommandPause.resumed")));
         } else {
             audioPlayer.setPaused(true);
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", localise("CommandPause.paused")));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", localise("Playback is now paused.","CommandPause.paused")));
         }
     }
 
@@ -37,7 +37,7 @@ public class CommandPause extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"pause", "resume", "res", "continue", "unpause", "stop"};
+        return new String[]{"pause", "resume", "continue", "unpause", "stop", "start"};
     }
 
     @Override
