@@ -92,17 +92,17 @@ public class CommandNowPlaying extends BaseCommand {
             embed.addField("\uD83D\uDD02 " + localise("Track Looping:","CmdNP.trackLooping"), localise("✅ **True**","CmdNP.true"), true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
-            embed.addField("\uD83D\uDD02 " + localise("CmdNP.trackLooping"), localise("❌ **False**","CmdNP.false"), true);
+            embed.addField("\uD83D\uDD02 " + localise("Track Looping:","CmdNP.trackLooping"), localise("❌ **False**","CmdNP.false"), true);
         }
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("\uD83D\uDD01 " + localise("CmdNP.queueLooping"), localise("✅ **True**","CmdNP.true"), true);
+            embed.addField("\uD83D\uDD01 " + localise("Queue looping:","CmdNP.queueLooping"), localise("✅ **True**","CmdNP.true"), true);
         } else {
-            embed.addField("\uD83D\uDD01 " + localise("CmdNP.queueLooping"), localise("❌ **False**","CmdNP.false"), true);
+            embed.addField("\uD83D\uDD01 " + localise("Queue looping:","CmdNP.queueLooping"), localise("❌ **False**","CmdNP.false"), true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField("♾️ " + localise("CmdNP.autoplaying"), localise("✅ **True**","CmdNP.true"), true);
+            embed.addField("♾️ " + localise("Auto playing:","CmdNP.autoplaying"), localise("✅ **True**","CmdNP.true"), true);
         } else {
-            embed.addField("♾️ " + localise("CmdNP.autoplaying"), localise("❌ **False**","CmdNP.false"), true);
+            embed.addField("♾️ " + localise("Auto playing:","CmdNP.autoplaying"), localise("❌ **False**","CmdNP.false"), true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);
