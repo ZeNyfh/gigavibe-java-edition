@@ -72,6 +72,9 @@ public class LocaleManager {
     public static String ManagerLocalise(String original, String key, Map<String, String> lang, Object... args) {
         String localisedString = lang.get(key);
         original = original.replaceAll("\n", "{nl}"); // convert standard \n to locale friendly {nl}
+        if (key.startsWith("main.")) {
+            original = localisedString; // safety precaution to not edit keys that are used everywhere.
+        }
         // TODO: here add thing that will change the args in "String original" to positional
 
         /* TODO: here call something that will update the en.txt locale contents with whatever is in original.
