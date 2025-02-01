@@ -169,10 +169,10 @@ CmdSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
 CmdSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 CmdSkip.skippedTheTrack=Przewinięto utwór.
 CmdSkip.skippedTo=Przewinięto utwór do {1}
-CmdSkip.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
+CmdSkip.skippedTo.unknown=Przewinięto utwór do Nieznany tytuł.
 CmdSkip.nowPlaying=Teraz odtwarzane: {1}
-CmdSkip.title=Oddano głos na pominięcie utworu.
-CmdSkip.description={1} z {2} potrzebnych do pominięcia.
+CmdSkip.voted.title=Oddano głos na pominięcie utworu.
+CmdSkip.voted.description={1} z {2} potrzebnych do pominięcia.
 CmdSkip.channel=Kanał
 CmdSkip.duration=Czas trwania
 

@@ -160,10 +160,10 @@ CmdSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir autom�
 CmdSkip.autoplayQueued=La reproducción automática añadió a la cola:
 CmdSkip.skippedTheTrack=La pista ha sido omitida.
 CmdSkip.skippedTo=La pista anterior ha sido omitida a {1}.
-CmdSkip.unknown=Pista omitida a {1}Título desconocido{2}.
+CmdSkip.skippedTo.unknown=Pista omitida a Título desconocido.
 CmdSkip.nowPlaying=Reproduciendo ahora: {1}.
-CmdSkip.title=Has votado para omitir la pista.
-CmdSkip.description={1} de {2} para omitir.
+CmdSkip.voted.title=Has votado para omitir la pista.
+CmdSkip.voted.description={1} de {2} para omitir.
 CmdSkip.channel=Canal
 CmdSkip.duration=Duración
 

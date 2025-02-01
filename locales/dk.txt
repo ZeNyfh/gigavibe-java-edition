@@ -169,10 +169,10 @@ CmdSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
 CmdSkip.autoplayQueued=Autoplay i kø:
 CmdSkip.skippedTheTrack=Sprang sangen over.
 CmdSkip.skippedTo=Sprang over til sang {1}
-CmdSkip.unknown=Sprang sporet over til {1}Ukendt titel{2}
+CmdSkip.skippedTo.unknown=Sprang sporet over til Ukendt titel
 CmdSkip.nowPlaying=Spiller nu: {1}
-CmdSkip.title=Stemte for at springe over nuværende sang.
-CmdSkip.description={1} ud af {2} stemmer.
+CmdSkip.voted.title=Stemte for at springe over nuværende sang.
+CmdSkip.voted.description={1} ud af {2} stemmer.
 CmdSkip.channel=Kanal
 CmdSkip.duration=Varighed
 

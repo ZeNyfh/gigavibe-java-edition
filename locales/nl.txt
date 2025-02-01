@@ -169,10 +169,10 @@ CmdSkip.noSearchTerm=Een onbekende fout is opgetreden met autoplay.
 CmdSkip.autoplayQueued=Autoplay heeft dit op de lijst:
 CmdSkip.skippedTheTrack=Het nummer is over.
 CmdSkip.skippedTo=Het nummer is over geslagen naar {1}
-CmdSkip.unknown=Het nummer is overgeslagen naar {1}Onbekende titel{2}
+CmdSkip.skippedTo.unknown=Het nummer is overgeslagen naar Onbekende titel.
 CmdSkip.nowPlaying=Nu: {1}
-CmdSkip.title=Gestemd om het nummer over te slaan.
-CmdSkip.description={1} van de {2} nodig om over te slaan.
+CmdSkip.voted.title=Gestemd om het nummer over te slaan.
+CmdSkip.voted.description={1} van de {2} nodig om over te slaan.
 CmdSkip.channel=Kanaal
 CmdSkip.duration=Tijdsduur
 
