@@ -132,100 +132,100 @@ CommandPlay.fileError=Noget gik galt under indlæsning af musik fra filen.
 
 CommandPrivacyPolicy.privacyPolicy=Privatlivspolitik
 
-CommandQueue.nowPlaying=Spiller nu:
-CommandQueue.queueInfoFooter={1} sange i kø {2} Side {3} Længde: {4}
-CommandQueue.empty=Køen er tom.
-CommandQueue.unknownTitle=Ukendt titel
-CommandQueue.didYouMean=Mente du at bruge {1}?
-CommandQueue.integerError=Siden skal være et positivt heltal.
+CmdQ.nowPlaying=Spiller nu:
+CmdQ.queueInfoFooter={1} sange i kø {2} Side {3} Længde: {4}
+CmdQ.empty=Køen er tom.
+CmdQ.unknownTitle=Ukendt titel
+CmdQ.didYouMean=Mente du at bruge {1}?
+CmdQ.integerError=Siden skal være et positivt heltal.
 
-CommandRadio.list=Radioliste:
-CommandRadio.alternativeList=Eller brug {1} radio søgning <Ord>{2} // keep the <>
-CommandRadio.useForPlay=Brug {1} radio <Radio Navn>{2} at afspille en radiostation.
-CommandRadio.noArgsList=Ingen argumenter givet, her er nogle radiostationer at vælge imellem:
-CommandRadio.noSearchTerm=Intet søgeterm angivet.
-CommandRadio.notFound=Kunne ikke finde en radiostation med det givne navn
-CommandRadio.queued=Radiostation i kø:
-CommandRadio.invalid=Ikke en gyldig radiostation.
+CmdRadio.list=Radioliste:
+CmdRadio.alternativeList=Eller brug {1} radio søgning <Ord>{2} // keep the <>
+CmdRadio.useForPlay=Brug {1} radio <Radio Navn>{2} at afspille en radiostation.
+CmdRadio.noArgsList=Ingen argumenter givet, her er nogle radiostationer at vælge imellem:
+CmdRadio.noSearchTerm=Intet søgeterm angivet.
+CmdRadio.notFound=Kunne ikke finde en radiostation med det givne navn
+CmdRadio.queued=Radiostation i kø:
+CmdRadio.invalid=Ikke en gyldig radiostation.
 
-CommandRemove.noSongs=Der er ingen sange i køen til at fjerne.
-CommandRemove.invalidArgs=Ugyldige argumenter, kun heltal.
-CommandRemove.tooLarge=Det angivne antal var større end køens længde.
-CommandRemove.removed=Sprang sangen {1} i kø over med succes.
+CmdRem.noSongs=Der er ingen sange i køen til at fjerne.
+CmdRem.invalidArgs=Ugyldige argumenter, kun heltal.
+CmdRem.tooLarge=Det angivne antal var større end køens længde.
+CmdRem.removed=Sprang sangen {1} i kø over med succes.
 
-CommandSeek.invalidArg=Argumentet er ugyldigt, brug formatet {1}[TIMER]:[MINUTTER]:<SEKUNDER>{2}" // keep the [] and <>
-CommandSeek.timeTooLow=Den angivne tid er mindre end eller lig med 0.
-CommandSeek.setPos=Sæt musikens position til: {1}.
-CommandSeek.cannotSeek=Du kan ikke springe rundt i denne sang.
-CommandSeek.noArg=Intet argument givet.
+CmdSeek.invalidArg=Argumentet er ugyldigt, brug formatet {1}[TIMER]:[MINUTTER]:<SEKUNDER>{2}" // keep the [] and <>
+CmdSeek.timeTooLow=Den angivne tid er mindre end eller lig med 0.
+CmdSeek.setPos=Sæt musikens position til: {1}.
+CmdSeek.cannotSeek=Du kan ikke springe rundt i denne sang.
+CmdSeek.noArg=Intet argument givet.
 
-CommandShuffle.emptyQueue=Der er intet i køen.
-CommandShuffle.shuffled=Blandede køen!
+CmdShuffle.emptyQueue=Der er intet i køen.
+CmdShuffle.shuffled=Blandede køen!
 
-CommandSkip.alreadyVoted=Du har allerede stemt for at springe over.
-CommandSkip.autoplay.failedToFind=Autoplay kunne ikke finde
-CommandSkip.failedToFind=Autoplay kunne ikke finde {1}
-CommandSkip.couldNotFind=Autoplay kunne ikke finde lignende musik.
-CommandSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
-CommandSkip.autoplayQueued=Autoplay i kø:
-CommandSkip.skippedTheTrack=Sprang sangen over.
-CommandSkip.skippedTo=Sprang over til sang {1}
-CommandSkip.skippedTo.unknown=Sprang sporet over til {1}Ukendt titel{2}
-CommandSkip.nowPlaying=Spiller nu: {1}
-CommandSkip.voted.title=Stemte for at springe over nuværende sang.
-CommandSkip.voted.description={1} ud af {2} stemmer.
-CommandSkip.channel=Kanal
-CommandSkip.duration=Varighed
+CmdSkip.alreadyVoted=Du har allerede stemt for at springe over.
+CmdSkip.failedToFind=Autoplay kunne ikke finde
+CmdSkip.failedToFind=Autoplay kunne ikke finde {1}
+CmdSkip.couldNotFind=Autoplay kunne ikke finde lignende musik.
+CmdSkip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
+CmdSkip.autoplayQueued=Autoplay i kø:
+CmdSkip.skippedTheTrack=Sprang sangen over.
+CmdSkip.skippedTo=Sprang over til sang {1}
+CmdSkip.unknown=Sprang sporet over til {1}Ukendt titel{2}
+CmdSkip.nowPlaying=Spiller nu: {1}
+CmdSkip.title=Stemte for at springe over nuværende sang.
+CmdSkip.description={1} ud af {2} stemmer.
+CmdSkip.channel=Kanal
+CmdSkip.duration=Varighed
 
-CommandSpeed.defaulted=Satte hastigheden tilbage til 1.
-CommandSpeed.rangeError=Hastigheden skal være mellem 0,2 og 5
-CommandSpeed.success=Indstil afspilningshastigheden for musikken til {1}x. // x here is a multiplier, for example 3x
+CmdSpeed.defaulted=Satte hastigheden tilbage til 1.
+CmdSpeed.rangeError=Hastigheden skal være mellem 0,2 og 5
+CmdSpeed.success=Indstil afspilningshastigheden for musikken til {1}x. // x here is a multiplier, for example 3x
 
-CommandTOS.TermsOfService=Servicevilkår
+CmdTOS.TermsOfService=Servicevilkår
 
-CommandVibrato.defaulted=Satte parametrene til deres standardværdier.
-CommandVibrato.incorrectArgs=The valid usage is: {1} <Frekvens> <Dybde>{2} // keep the <>
-CommandVibrato.rangeError.frequency=Frekvensen skal være mellem 0,1 og 14
-CommandVibrato.rangeError.depth=Dybden skal være mellem 0,05 og 1
-CommandVibrato.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
+CmdVib.defaulted=Satte parametrene til deres standardværdier.
+CmdVib.incorrectArgs=The valid usage is: {1} <Frekvens> <Dybde>{2} // keep the <>
+CmdVib.frequency=Frekvensen skal være mellem 0,1 og 14
+CmdVib.depth=Dybden skal være mellem 0,05 og 1
+CmdVib.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
 
-CommandVolume.defaulted=Satte lydstyrken til standarden på 100.
-CommandVolume.incorrectArg=Volumen skal være et heltal.
-CommandVolume.tooHigh=Lydstyrken kan ikke være højere end 500.
-CommandVolume.tooLow=Lydstyrken kan ikke være lavere end 0.
-CommandVolume.success=Ændrede lydstyrken til {1}.
-CommandVolume.invalidValue=Ugyldig værdi.
+CmdVol.defaulted=Satte lydstyrken til standarden på 100.
+CmdVol.incorrectArg=Volumen skal være et heltal.
+CmdVol.tooHigh=Lydstyrken kan ikke være højere end 500.
+CmdVol.tooLow=Lydstyrken kan ikke være lavere end 0.
+CmdVol.success=Ændrede lydstyrken til {1}.
+CmdVol.invalidValue=Ugyldig værdi.
 
-BaseCommand.notAllowed=Ikke tilladt
+BaseCmd.notAllowed=Ikke tilladt
 
-CommandStateChecker.notInVC=Du er ikke i en VC. // VC is voice channel
-CommandStateChecker.botNotInVC=Botten er ikke i en VC.
-CommandStateChecker.botNotInYourVC=Botten er ikke i din VC.
-CommandStateChecker.botBusy=Botten er allerede optaget i en anden VC.
-CommandStateChecker.cannotJoin=Botten ​​kan ikke tilslutte sig denne VC.
-CommandStateChecker.noDJ=Du har ikke DJ tilladelser.
-CommandStateChecker.commandBlocked=Denne kommando er blokeret i denne kanal.
-CommandStateChecker.isNotPlaying=Botten ​​spiller ikke noget lige nu.
-CommandStateChecker.devOnly=Denne kommando er kun for developers.
+CmdSCheck.notInVC=Du er ikke i en VC. // VC is voice channel
+CmdSCheck.botNotInVC=Botten er ikke i en VC.
+CmdSCheck.botNotInYourVC=Botten er ikke i din VC.
+CmdSCheck.botBusy=Botten er allerede optaget i en anden VC.
+CmdSCheck.cannotJoin=Botten ​​kan ikke tilslutte sig denne VC.
+CmdSCheck.noDJ=Du har ikke DJ tilladelser.
+CmdSCheck.commandBlocked=Denne kommando er blokeret i denne kanal.
+CmdSCheck.isNotPlaying=Botten ​​spiller ikke noget lige nu.
+CmdSCheck.devOnly=Denne kommando er kun for developers.
 
-PlayerManager.noSpotify=Botten er ikke i stand til at afspille Spotify musik lige nu
-PlayerManager.playlistQueued=Størrelse: {1} Musik.{2}Længde: {3}
-PlayerManager.APIError=Der er opstået en fejl med YouTubes søge-API.
-PlayerManager.loadFailed=Nummeret kunne ikke indlæses: {1}
-PlayerManager.noMatches=Der blev ikke fundet noget til denne sang.
+PManager.noSpotify=Botten er ikke i stand til at afspille Spotify musik lige nu
+PManager.playlistQueued=Størrelse: {1} Musik.{2}Længde: {3}
+PManager.APIError=Der er opstået en fejl med YouTubes søge-API.
+PManager.loadFailed=Nummeret kunne ikke indlæses: {1}
+PManager.noMatches=Der blev ikke fundet noget til denne sang.
 
-TrackScheduler.autoplay.notFound=Autoplay kunne ikke finde {1}
-TrackScheduler.autoplay.noSimilar=Autoplay kunne ikke finde lignende sange.
-TrackScheduler.autoplay.unknownError=Der opstod en ukendt fejl i forsøg på at autoplay.
-TrackScheduler.autoplay.queued=Autoplay i kø: {1}
+TSched.notFound=Autoplay kunne ikke finde {1}
+TSched.noSimilar=Autoplay kunne ikke finde lignende sange.
+TSched.unknownError=Der opstod en ukendt fejl i forsøg på at autoplay.
+TSched.queued=Autoplay i kø: {1}
 
-TrackScheduler.regularFailure=Musikken kunne ikke indlæses på grund af en ukendt årsag. Springer over...
+TSched.regularFailure=Musikken kunne ikke indlæses på grund af en ukendt årsag. Springer over...
 
-TrackScheduler.criticalFailure.title=Kritisk Fejl
-TrackScheduler.criticalFailure.description=Musikken kunne ikke blevet indlæst 3 gange, sandsynligvis på grund af et upstream-netværksproblem udenfor vores kontrol. Rydning af køen for at undgå spam.
-TrackScheduler.criticalFailure.footer=Hvis dette problem fortsætter med specifikke kilder, bedes du indsende en fejlrapport vha /bug
+TSched.title=Kritisk Fejl
+TSched.description=Musikken kunne ikke blevet indlæst 3 gange, sandsynligvis på grund af et upstream-netværksproblem udenfor vores kontrol. Rydning af køen for at undgå spam.
+TSched.footer=Hvis dette problem fortsætter med specifikke kilder, bedes du indsende en fejlrapport vha /bug
 
-TrackScheduler.nextTrack.nowPlaying=Spiller nu: {1}
+TSched.nowPlaying=Spiller nu: {1}
 
 Main.day={1} dag // 1 day
 Main.day.plural={1} dage // 2 days

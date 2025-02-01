@@ -131,100 +131,100 @@ CommandPlay.fileError=Er ging iets fout met het nummer laden van het bestand.
 
 CommandPrivacyPolicy.privacyPolicy=Privacy Policy
 
-CommandQueue.nowPlaying=Nu:
-CommandQueue.queueInfoFooter={1} nummers op de wachtrij {2} Pagina {3} Lengte: {4}
-CommandQueue.empty=De wachtrij is leeg.
-CommandQueue.unknownTitle=Onbekende titel
-CommandQueue.didYouMean=Wou je {1} gebruiken?
-CommandQueue.integerError=De pagina moet een cijfer boven 0 zijn. 
+CmdQ.nowPlaying=Nu:
+CmdQ.queueInfoFooter={1} nummers op de wachtrij {2} Pagina {3} Lengte: {4}
+CmdQ.empty=De wachtrij is leeg.
+CmdQ.unknownTitle=Onbekende titel
+CmdQ.didYouMean=Wou je {1} gebruiken?
+CmdQ.integerError=De pagina moet een cijfer boven 0 zijn.
 
-CommandRadio.list=Radio's:
-CommandRadio.alternativeList=Of gebruik {1} zoek een radio <Tekst>{2}  // keep the <>
-CommandRadio.useForPlay=Gebruik {1} radio <naam van radio>{2} om een radio af te spelen.
-CommandRadio.noArgsList=Geen argument gegeven, hier zijn radio's om van te kiezen:
-CommandRadio.noSearchTerm=Geen zoekterm gegeven.
-CommandRadio.notFound=Kon geen radio vinden met deze naam.
-CommandRadio.queued=Deze radio is op de wachtrij gezet:
-CommandRadio.invalid=Dit is geen geldige radio. 
+CmdRadio.list=Radio's:
+CmdRadio.alternativeList=Of gebruik {1} zoek een radio <Tekst>{2}  // keep the <>
+CmdRadio.useForPlay=Gebruik {1} radio <naam van radio>{2} om een radio af te spelen.
+CmdRadio.noArgsList=Geen argument gegeven, hier zijn radio's om van te kiezen:
+CmdRadio.noSearchTerm=Geen zoekterm gegeven.
+CmdRadio.notFound=Kon geen radio vinden met deze naam.
+CmdRadio.queued=Deze radio is op de wachtrij gezet:
+CmdRadio.invalid=Dit is geen geldige radio.
 
-CommandRemove.noSongs=Er zijn geen nummers in de wachtrij die verwijderd kunnen worden.
-CommandRemove.invalidArgs=Ongeldige argumenten, gebruik alleen cijfers.
-CommandRemove.tooLarge=Het nummer gegeven was groter dan de grootte van de wachtrij.
-CommandRemove.removed=Het nummer {1} van de wachtrij is successvol overgeslagen. 
+CmdRem.noSongs=Er zijn geen nummers in de wachtrij die verwijderd kunnen worden.
+CmdRem.invalidArgs=Ongeldige argumenten, gebruik alleen cijfers.
+CmdRem.tooLarge=Het nummer gegeven was groter dan de grootte van de wachtrij.
+CmdRem.removed=Het nummer {1} van de wachtrij is successvol overgeslagen.
 
-CommandSeek.invalidArg=Dit argument is ongeldig. Gebruik het {1}[UREN]:[MINUTEN]:<SECONDES>{2}" formaat. // keep the [] and <>
-CommandSeek.timeTooLow=De tijd gegeven is lager of hetzelfde als 0. 
-CommandSeek.setPos=Stel de positie van het nummer in op: {1}. // 1 here being timestamp like 12:34 (can include hours)
-CommandSeek.cannotSeek=Je kan seek niet gebruiken voor dit nummer.
-CommandSeek.noArg=Geen argument gegeven.
+CmdSeek.invalidArg=Dit argument is ongeldig. Gebruik het {1}[UREN]:[MINUTEN]:<SECONDES>{2}" formaat. // keep the [] and <>
+CmdSeek.timeTooLow=De tijd gegeven is lager of hetzelfde als 0.
+CmdSeek.setPos=Stel de positie van het nummer in op: {1}. // 1 here being timestamp like 12:34 (can include hours)
+CmdSeek.cannotSeek=Je kan seek niet gebruiken voor dit nummer.
+CmdSeek.noArg=Geen argument gegeven.
 
-CommandShuffle.emptyQueue=De wachtrij is leeg.
-CommandShuffle.shuffled=De wachtrij is geshuffled!
+CmdShuffle.emptyQueue=De wachtrij is leeg.
+CmdShuffle.shuffled=De wachtrij is geshuffled!
 
-CommandSkip.alreadyVoted=Je hebt al gestemt om het nummer over te slaan.
-CommandSkip.autoplay.failedToFind=Autoplay kon dit niet vinden
-CommandSkip.failedToFind=Autoplay kon {1} niet vinden
-CommandSkip.couldNotFind=Autoplay kon geen soortgelijke nummers vinden.
-CommandSkip.noSearchTerm=Een onbekende fout is opgetreden met autoplay.
-CommandSkip.autoplayQueued=Autoplay heeft dit op de lijst:
-CommandSkip.skippedTheTrack=Het nummer is over.
-CommandSkip.skippedTo=Het nummer is over geslagen naar {1}
-CommandSkip.skippedTo.unknown=Het nummer is overgeslagen naar {1}Onbekende titel{2}
-CommandSkip.nowPlaying=Nu: {1}
-CommandSkip.voted.title=Gestemd om het nummer over te slaan.
-CommandSkip.voted.description={1} van de {2} nodig om over te slaan.
-CommandSkip.channel=Kanaal
-CommandSkip.duration=Tijdsduur
+CmdSkip.alreadyVoted=Je hebt al gestemt om het nummer over te slaan.
+CmdSkip.failedToFind=Autoplay kon dit niet vinden
+CmdSkip.failedToFind=Autoplay kon {1} niet vinden
+CmdSkip.couldNotFind=Autoplay kon geen soortgelijke nummers vinden.
+CmdSkip.noSearchTerm=Een onbekende fout is opgetreden met autoplay.
+CmdSkip.autoplayQueued=Autoplay heeft dit op de lijst:
+CmdSkip.skippedTheTrack=Het nummer is over.
+CmdSkip.skippedTo=Het nummer is over geslagen naar {1}
+CmdSkip.unknown=Het nummer is overgeslagen naar {1}Onbekende titel{2}
+CmdSkip.nowPlaying=Nu: {1}
+CmdSkip.title=Gestemd om het nummer over te slaan.
+CmdSkip.description={1} van de {2} nodig om over te slaan.
+CmdSkip.channel=Kanaal
+CmdSkip.duration=Tijdsduur
 
-CommandSpeed.defaulted=De snelheid is terug naar 1.
-CommandSpeed.rangeError=De snelheid moet tussen 0.2 en 5 zijn.
-CommandSpeed.success=De afspeelsnelheid van het nummer is veranderd naar {1}x. // x here is a multiplier, for example 3x
+CmdSpeed.defaulted=De snelheid is terug naar 1.
+CmdSpeed.rangeError=De snelheid moet tussen 0.2 en 5 zijn.
+CmdSpeed.success=De afspeelsnelheid van het nummer is veranderd naar {1}x. // x here is a multiplier, for example 3x
 
-CommandTOS.TermsOfService=Terms of Service
+CmdTOS.TermsOfService=Terms of Service
 
-CommandVibrato.defaulted=Verander de parameters naar hun standaard.
-CommandVibrato.incorrectArgs=De correctie manier van gebruik is: {1} <Frequentie> <Diepte>{2} // keep the <>
-CommandVibrato.rangeError.frequency=De frequentie moet tussen 0.1 en 14 zijn.
-CommandVibrato.rangeError.depth=De diepte moet tussen 0.05 en 1 zijn.
-CommandVibrato.success=De vibrato frequentie is nu {1}Hz.{2}De vibrato diepte is nu {3}
+CmdVib.defaulted=Verander de parameters naar hun standaard.
+CmdVib.incorrectArgs=De correctie manier van gebruik is: {1} <Frequentie> <Diepte>{2} // keep the <>
+CmdVib.frequency=De frequentie moet tussen 0.1 en 14 zijn.
+CmdVib.depth=De diepte moet tussen 0.05 en 1 zijn.
+CmdVib.success=De vibrato frequentie is nu {1}Hz.{2}De vibrato diepte is nu {3}
 
-CommandVolume.defaulted=Het volume is veranderd naar de standaard 100.
-CommandVolume.incorrectArg=Het volume moet een cijfer zijn. 
-CommandVolume.tooHigh=Het volume kan niet hoger zijn dan 500. 
-CommandVolume.tooLow=Het volume kan niet lager zijn dan 0. 
-CommandVolume.success=Volume is veranderd naar {1}.
-CommandVolume.invalidValue=Invalid value. 
+CmdVol.defaulted=Het volume is veranderd naar de standaard 100.
+CmdVol.incorrectArg=Het volume moet een cijfer zijn.
+CmdVol.tooHigh=Het volume kan niet hoger zijn dan 500.
+CmdVol.tooLow=Het volume kan niet lager zijn dan 0.
+CmdVol.success=Volume is veranderd naar {1}.
+CmdVol.invalidValue=Invalid value.
 
-BaseCommand.notAllowed=Niet toegestaan.
+BaseCmd.notAllowed=Niet toegestaan.
 
-CommandStateChecker.notInVC=Je bent niet in een VC. // VC is voice channel
-CommandStateChecker.botNotInVC=De bot is niet in een VC. 
-CommandStateChecker.botNotInYourVC=De bot is niet in jouw VC. 
-CommandStateChecker.botBusy=De bot is al bezet in een andere VC. 
-CommandStateChecker.cannotJoin=De bot kan deze VC niet ingaan. 
-CommandStateChecker.noDJ=Je hebt geen DJ-machtigingen.
-CommandStateChecker.commandBlocked=Deze command is geblokkeerd in dit kanaal.
-CommandStateChecker.isNotPlaying=De bot is niets aan het afspelen op het moment. 
-CommandStateChecker.devOnly=Deze command is alleen voor de developer. 
+CmdSCheck.notInVC=Je bent niet in een VC. // VC is voice channel
+CmdSCheck.botNotInVC=De bot is niet in een VC.
+CmdSCheck.botNotInYourVC=De bot is niet in jouw VC.
+CmdSCheck.botBusy=De bot is al bezet in een andere VC.
+CmdSCheck.cannotJoin=De bot kan deze VC niet ingaan.
+CmdSCheck.noDJ=Je hebt geen DJ-machtigingen.
+CmdSCheck.commandBlocked=Deze command is geblokkeerd in dit kanaal.
+CmdSCheck.isNotPlaying=De bot is niets aan het afspelen op het moment.
+CmdSCheck.devOnly=Deze command is alleen voor de developer.
 
-PlayerManager.noSpotify=De bot kan geen nummers van Spotify afspelen op het moment
-PlayerManager.playlistQueued=Hoeveelheid: {1} nummers.{2}Lengte: {3}
-PlayerManager.APIError=Er is een probleem opgetreden met de YouTube zoek API. 
-PlayerManager.loadFailed=Het nummer kon niet geladen worden: {1} 
-PlayerManager.noMatches=Er zijn geen overeenkomsten gevonden voor het nummer.
+PManager.noSpotify=De bot kan geen nummers van Spotify afspelen op het moment
+PManager.playlistQueued=Hoeveelheid: {1} nummers.{2}Lengte: {3}
+PManager.APIError=Er is een probleem opgetreden met de YouTube zoek API.
+PManager.loadFailed=Het nummer kon niet geladen worden: {1}
+PManager.noMatches=Er zijn geen overeenkomsten gevonden voor het nummer.
 
-TrackScheduler.autoplay.notFound=Autoplay kon {1} niet vinden
-TrackScheduler.autoplay.noSimilar=Autoplay kon geen soortgelijke nummers vinden.
-TrackScheduler.autoplay.unknownError=Er is een onbekende fout opgetreden met de autoplay.  
-TrackScheduler.autoplay.queued=Autoplay wordt in de wachtrij gezet:
+TSched.notFound=Autoplay kon {1} niet vinden
+TSched.noSimilar=Autoplay kon geen soortgelijke nummers vinden.
+TSched.unknownError=Er is een onbekende fout opgetreden met de autoplay.
+TSched.queued=Autoplay wordt in de wachtrij gezet:
 
-TrackScheduler.regularFailure=Dit nummer wordt overgeslagen omdat het niet afgespeeld kon worden door een fout...
+TSched.regularFailure=Dit nummer wordt overgeslagen omdat het niet afgespeeld kon worden door een fout...
 
-TrackScheduler.criticalFailure.title=Kritieke fout
-TrackScheduler.criticalFailure.description=Nummers hebben 3 keer niet kunnen laden, waarschijnlijk door een upstream netwerk probleem buiten ons bereik. De wachtrij wordt geleegd om nummer spam te voorkomen.
-TrackScheduler.criticalFailure.footer=Als dit een probleem blijft met specifieke geluidsbronnen, meld dit probleem met gebruik van /bug
+TSched.title=Kritieke fout
+TSched.description=Nummers hebben 3 keer niet kunnen laden, waarschijnlijk door een upstream netwerk probleem buiten ons bereik. De wachtrij wordt geleegd om nummer spam te voorkomen.
+TSched.footer=Als dit een probleem blijft met specifieke geluidsbronnen, meld dit probleem met gebruik van /bug
 
-TrackScheduler.nextTrack.nowPlaying=Nu: {1}
+TSched.nowPlaying=Nu: {1}
 
 Main.day={1} dag // 1 day
 Main.day.plural={1} dagen // 2 days

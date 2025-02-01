@@ -122,100 +122,100 @@ CommandPlay.fileError=Ocurrió un error al cargar las pistas desde el archivo.
 
 CommandPrivacyPolicy.privacyPolicy=Política de privacidad
 
-CommandQueue.nowPlaying=Reproduciendo ahora:
-CommandQueue.queueInfoFooter={1} canciones añadidas.{2} Página {3} Duración: {4}
-CommandQueue.empty=La cola está vacía.
-CommandQueue.unknownTitle=Título desconocido.
-CommandQueue.didYouMean=¿Querías usar {1}?
-CommandQueue.integerError=El número de página debe ser un entero positivo.
+CmdQ.nowPlaying=Reproduciendo ahora:
+CmdQ.queueInfoFooter={1} canciones añadidas.{2} Página {3} Duración: {4}
+CmdQ.empty=La cola está vacía.
+CmdQ.unknownTitle=Título desconocido.
+CmdQ.didYouMean=¿Querías usar {1}?
+CmdQ.integerError=El número de página debe ser un entero positivo.
 
-CommandRadio.list=Lista de radios:
-CommandRadio.alternativeList=O usa {1} <Cadena de caracteres>{2}
-CommandRadio.useForPlay=Usa {1} <Nombre de la radio>{2} para usar la radio.
-CommandRadio.noArgsList=No se proporcionaron argumentos, aquí tienes algunas estaciones de radio disponibles:
-CommandRadio.noSearchTerm=No se proporcionó ningún término de búsqueda.
-CommandRadio.notFound=No se encontró ninguna estación de radio con ese nombre.
-CommandRadio.queued=Radio añadida a la cola:
-CommandRadio.invalid=Estación de radio inválida.
+CmdRadio.list=Lista de radios:
+CmdRadio.alternativeList=O usa {1} <Cadena de caracteres>{2}
+CmdRadio.useForPlay=Usa {1} <Nombre de la radio>{2} para usar la radio.
+CmdRadio.noArgsList=No se proporcionaron argumentos, aquí tienes algunas estaciones de radio disponibles:
+CmdRadio.noSearchTerm=No se proporcionó ningún término de búsqueda.
+CmdRadio.notFound=No se encontró ninguna estación de radio con ese nombre.
+CmdRadio.queued=Radio añadida a la cola:
+CmdRadio.invalid=Estación de radio inválida.
 
-CommandRemove.noSongs=No hay canciones que quitar de la lista.
-CommandRemove.invalidArgs=Argumentos inválidos, solo números enteros.
-CommandRemove.tooLarge=El número proporcionado es mayor que el tamaño de la cola.
-CommandRemove.removed={1} ha sido eliminado con éxito.
+CmdRem.noSongs=No hay canciones que quitar de la lista.
+CmdRem.invalidArgs=Argumentos inválidos, solo números enteros.
+CmdRem.tooLarge=El número proporcionado es mayor que el tamaño de la cola.
+CmdRem.removed={1} ha sido eliminado con éxito.
 
-CommandSeek.invalidArg=Argumento inválido, usa el formato {1}[HORAS]:[MINUTOS]:<SEGUNDOS>{2}
-CommandSeek.timeTooLow=El tiempo proporcionado es menor o igual a 0.
-CommandSeek.setPos=Se ha establecido la posición de la pista en: {1}.
-CommandSeek.cannotSeek=No se puede cambiar la posición de esta pista.
-CommandSeek.noArg=No se proporcionaron argumentos.
+CmdSeek.invalidArg=Argumento inválido, usa el formato {1}[HORAS]:[MINUTOS]:<SEGUNDOS>{2}
+CmdSeek.timeTooLow=El tiempo proporcionado es menor o igual a 0.
+CmdSeek.setPos=Se ha establecido la posición de la pista en: {1}.
+CmdSeek.cannotSeek=No se puede cambiar la posición de esta pista.
+CmdSeek.noArg=No se proporcionaron argumentos.
 
-CommandShuffle.emptyQueue=La cola está vacía.
-CommandShuffle.shuffled=La cola ha sido barajada.
+CmdShuffle.emptyQueue=La cola está vacía.
+CmdShuffle.shuffled=La cola ha sido barajada.
 
-CommandSkip.alreadyVoted=Ya has votado para omitir.
-CommandSkip.autoplay.failedToFind=No se pudo encontrar la reproducción automática.
-CommandSkip.failedToFind=La reproducción automática no pudo encontrar {1}.
-CommandSkip.couldNotFind=La reproducción automática no pudo encontrar pistas similares.
-CommandSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
-CommandSkip.autoplayQueued=La reproducción automática añadió a la cola:
-CommandSkip.skippedTheTrack=La pista ha sido omitida.
-CommandSkip.skippedTo=La pista anterior ha sido omitida a {1}.
-CommandSkip.skippedTo.unknown=Pista omitida a {1}Título desconocido{2}.
-CommandSkip.nowPlaying=Reproduciendo ahora: {1}.
-CommandSkip.voted.title=Has votado para omitir la pista.
-CommandSkip.voted.description={1} de {2} para omitir.
-CommandSkip.channel=Canal
-CommandSkip.duration=Duración
+CmdSkip.alreadyVoted=Ya has votado para omitir.
+CmdSkip.failedToFind=No se pudo encontrar la reproducción automática.
+CmdSkip.failedToFind=La reproducción automática no pudo encontrar {1}.
+CmdSkip.couldNotFind=La reproducción automática no pudo encontrar pistas similares.
+CmdSkip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
+CmdSkip.autoplayQueued=La reproducción automática añadió a la cola:
+CmdSkip.skippedTheTrack=La pista ha sido omitida.
+CmdSkip.skippedTo=La pista anterior ha sido omitida a {1}.
+CmdSkip.unknown=Pista omitida a {1}Título desconocido{2}.
+CmdSkip.nowPlaying=Reproduciendo ahora: {1}.
+CmdSkip.title=Has votado para omitir la pista.
+CmdSkip.description={1} de {2} para omitir.
+CmdSkip.channel=Canal
+CmdSkip.duration=Duración
 
-CommandSpeed.defaulted=La velocidad se ha restablecido a 1.
-CommandSpeed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5.
-CommandSpeed.success=Velocidad de reproducción establecida en {1}x.
+CmdSpeed.defaulted=La velocidad se ha restablecido a 1.
+CmdSpeed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5.
+CmdSpeed.success=Velocidad de reproducción establecida en {1}x.
 
-CommandTOS.TermsOfService=Términos de Servicio
+CmdTOS.TermsOfService=Términos de Servicio
 
-CommandVibrato.defaulted=Parámetros restablecidos a sus valores predeterminados.
-CommandVibrato.incorrectArgs=El uso correcto es: {1} <Frecuencia> <Profundidad>{2}.
-CommandVibrato.rangeError.frequency=La frecuencia debe estar entre 0.1 y 14.
-CommandVibrato.rangeError.depth=La profundidad debe estar entre 0.05 y 1.
-CommandVibrato.success=Frecuencia de vibrato establecida en {1}Hz.{2}Profundidad de vibrato establecida en {3}.
+CmdVib.defaulted=Parámetros restablecidos a sus valores predeterminados.
+CmdVib.incorrectArgs=El uso correcto es: {1} <Frecuencia> <Profundidad>{2}.
+CmdVib.frequency=La frecuencia debe estar entre 0.1 y 14.
+CmdVib.depth=La profundidad debe estar entre 0.05 y 1.
+CmdVib.success=Frecuencia de vibrato establecida en {1}Hz.{2}Profundidad de vibrato establecida en {3}.
 
-CommandVolume.defaulted=El volumen se ha restablecido al valor predeterminado de 100.
-CommandVolume.incorrectArg=El volumen debe ser un número entero.
-CommandVolume.tooHigh=El volumen no puede superar 500.
-CommandVolume.tooLow=El volumen no puede ser menor que 0.
-CommandVolume.success=El volumen ha sido cambiado a {1}.
-CommandVolume.invalidValue=Valor inválido.
+CmdVol.defaulted=El volumen se ha restablecido al valor predeterminado de 100.
+CmdVol.incorrectArg=El volumen debe ser un número entero.
+CmdVol.tooHigh=El volumen no puede superar 500.
+CmdVol.tooLow=El volumen no puede ser menor que 0.
+CmdVol.success=El volumen ha sido cambiado a {1}.
+CmdVol.invalidValue=Valor inválido.
 
-BaseCommand.notAllowed=No permitido.
+BaseCmd.notAllowed=No permitido.
 
-CommandStateChecker.notInVC=No estás en un canal de voz.
-CommandStateChecker.botNotInVC=El bot no está en un canal de voz.
-CommandStateChecker.botNotInYourVC=El bot no está en tu canal de voz.
-CommandStateChecker.botBusy=El bot ya está ocupado en otro canal de voz.
-CommandStateChecker.cannotJoin=El bot no puede unirse al canal de voz.
-CommandStateChecker.noDJ=No tienes permisos de DJ.
-CommandStateChecker.commandBlocked=Este comando está bloqueado en este canal.
-CommandStateChecker.isNotPlaying=El bot no está reproduciendo nada actualmente.
-CommandStateChecker.devOnly=Este comando es exclusivo para desarrolladores.
+CmdSCheck.notInVC=No estás en un canal de voz.
+CmdSCheck.botNotInVC=El bot no está en un canal de voz.
+CmdSCheck.botNotInYourVC=El bot no está en tu canal de voz.
+CmdSCheck.botBusy=El bot ya está ocupado en otro canal de voz.
+CmdSCheck.cannotJoin=El bot no puede unirse al canal de voz.
+CmdSCheck.noDJ=No tienes permisos de DJ.
+CmdSCheck.commandBlocked=Este comando está bloqueado en este canal.
+CmdSCheck.isNotPlaying=El bot no está reproduciendo nada actualmente.
+CmdSCheck.devOnly=Este comando es exclusivo para desarrolladores.
 
-PlayerManager.noSpotify=El bot no puede reproducir pistas de Spotify en estos momentos.
-PlayerManager.playlistQueued=Tamaño: {1} pistas.{2}Duración: {3}.
-PlayerManager.APIError=Ocurrió un error con la API de búsqueda de YouTube.
-PlayerManager.loadFailed=La pista no se pudo cargar: {1}.
-PlayerManager.noMatches=No se encontraron coincidencias para esta pista.
+PManager.noSpotify=El bot no puede reproducir pistas de Spotify en estos momentos.
+PManager.playlistQueued=Tamaño: {1} pistas.{2}Duración: {3}.
+PManager.APIError=Ocurrió un error con la API de búsqueda de YouTube.
+PManager.loadFailed=La pista no se pudo cargar: {1}.
+PManager.noMatches=No se encontraron coincidencias para esta pista.
 
-TrackScheduler.autoplay.notFound=La reproducción automática no pudo encontrar {1}.
-TrackScheduler.autoplay.noSimilar=La reproducción automática no pudo encontrar pistas similares.
-TrackScheduler.autoplay.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.
-TrackScheduler.autoplay.queued=La reproducción automática añadió a la cola:
+TSched.notFound=La reproducción automática no pudo encontrar {1}.
+TSched.noSimilar=La reproducción automática no pudo encontrar pistas similares.
+TSched.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.
+TSched.queued=La reproducción automática añadió a la cola:
 
-TrackScheduler.regularFailure=La pista falló al cargar debido a una razón desconocida. Omitiendo...
+TSched.regularFailure=La pista falló al cargar debido a una razón desconocida. Omitiendo...
 
-TrackScheduler.criticalFailure.title=Error Crítico
-TrackScheduler.criticalFailure.description=Las pistas han fallado al cargar 3 veces, probablemente debido a un problema de red fuera de nuestro control. Vaciando la cola para evitar la repetición de pistas.
-TrackScheduler.criticalFailure.footer=Si este problema persiste con fuentes de audio específicas, por favor, envíe un informe de error usando /bug.
+TSched.title=Error Crítico
+TSched.description=Las pistas han fallado al cargar 3 veces, probablemente debido a un problema de red fuera de nuestro control. Vaciando la cola para evitar la repetición de pistas.
+TSched.footer=Si este problema persiste con fuentes de audio específicas, por favor, envíe un informe de error usando /bug.
 
-TrackScheduler.nextTrack.nowPlaying=Ahora reproduciendo: {1}.
+TSched.nowPlaying=Ahora reproduciendo: {1}.
 
 Main.day={1} día
 Main.day.plural={1} días

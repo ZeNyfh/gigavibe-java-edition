@@ -131,100 +131,100 @@ CommandPlay.fileError=Wystąpił błąd podczas ładowania utworów z pliku.
 
 CommandPrivacyPolicy.privacyPolicy=Polityka Prywatności
 
-CommandQueue.nowPlaying=Teraz odtwarzane:
-CommandQueue.queueInfoFooter={1} utworów w kolejce {2} Strona {3} Długość: {4}
-CommandQueue.empty=Kolejka jest pusta.
-CommandQueue.unknownTitle=Nieznany tytuł
-CommandQueue.didYouMean=Czy chodziło o {1}?
-CommandQueue.integerError=Strona musi być liczbą całkowitą dodatnią.
+CmdQ.nowPlaying=Teraz odtwarzane:
+CmdQ.queueInfoFooter={1} utworów w kolejce {2} Strona {3} Długość: {4}
+CmdQ.empty=Kolejka jest pusta.
+CmdQ.unknownTitle=Nieznany tytuł
+CmdQ.didYouMean=Czy chodziło o {1}?
+CmdQ.integerError=Strona musi być liczbą całkowitą dodatnią.
 
-CommandRadio.list=Lista stacji radiowych:
-CommandRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>{2}
-CommandRadio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
-CommandRadio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
-CommandRadio.noSearchTerm=Nie podano terminu wyszukiwania.
-CommandRadio.notFound=Nie znaleziono stacji radiowej o podanej nazwie.
-CommandRadio.queued=Dodano do kolejki stację radiową:
-CommandRadio.invalid=Nieprawidłowa stacja radiowa.
+CmdRadio.list=Lista stacji radiowych:
+CmdRadio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>{2}
+CmdRadio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
+CmdRadio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
+CmdRadio.noSearchTerm=Nie podano terminu wyszukiwania.
+CmdRadio.notFound=Nie znaleziono stacji radiowej o podanej nazwie.
+CmdRadio.queued=Dodano do kolejki stację radiową:
+CmdRadio.invalid=Nieprawidłowa stacja radiowa.
 
-CommandRemove.noSongs=Brak utworów w kolejce do usunięcia.
-CommandRemove.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.
-CommandRemove.tooLarge=Podana liczba jest większa niż rozmiar kolejki.
-CommandRemove.removed=Usunięto z kolejki utwór {1} pomyślnie.
+CmdRem.noSongs=Brak utworów w kolejce do usunięcia.
+CmdRem.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.
+CmdRem.tooLarge=Podana liczba jest większa niż rozmiar kolejki.
+CmdRem.removed=Usunięto z kolejki utwór {1} pomyślnie.
 
-CommandSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}"
-CommandSeek.timeTooLow=Podany czas jest mniejszy lub równy 0.
-CommandSeek.setPos=Ustawiono pozycję utworu do: {1}. // 1 here being timestamp like 12:34 (can include hours)
-CommandSeek.cannotSeek=Nie można przewinąć tego utworu.
-CommandSeek.noArg=Nie podano argumentu.
+CmdSeek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}"
+CmdSeek.timeTooLow=Podany czas jest mniejszy lub równy 0.
+CmdSeek.setPos=Ustawiono pozycję utworu do: {1}. // 1 here being timestamp like 12:34 (can include hours)
+CmdSeek.cannotSeek=Nie można przewinąć tego utworu.
+CmdSeek.noArg=Nie podano argumentu.
 
-CommandShuffle.emptyQueue=Kolejka jest pusta.
-CommandShuffle.shuffled=Kolejka została przetasowana!
+CmdShuffle.emptyQueue=Kolejka jest pusta.
+CmdShuffle.shuffled=Kolejka została przetasowana!
 
-CommandSkip.alreadyVoted=Już oddałeś głos na pominięcie.
-CommandSkip.autoplay.failedToFind=Autoodtwarzanie nie mogło znaleźć niczego
-CommandSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
-CommandSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
-CommandSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
-CommandSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
-CommandSkip.skippedTheTrack=Przewinięto utwór.
-CommandSkip.skippedTo=Przewinięto utwór do {1}
-CommandSkip.skippedTo.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
-CommandSkip.nowPlaying=Teraz odtwarzane: {1}
-CommandSkip.voted.title=Oddano głos na pominięcie utworu.
-CommandSkip.voted.description={1} z {2} potrzebnych do pominięcia.
-CommandSkip.channel=Kanał
-CommandSkip.duration=Czas trwania
+CmdSkip.alreadyVoted=Już oddałeś głos na pominięcie.
+CmdSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć niczego
+CmdSkip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
+CmdSkip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+CmdSkip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+CmdSkip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
+CmdSkip.skippedTheTrack=Przewinięto utwór.
+CmdSkip.skippedTo=Przewinięto utwór do {1}
+CmdSkip.unknown=Przewinięto utwór do {1}Nieznany tytuł{2}
+CmdSkip.nowPlaying=Teraz odtwarzane: {1}
+CmdSkip.title=Oddano głos na pominięcie utworu.
+CmdSkip.description={1} z {2} potrzebnych do pominięcia.
+CmdSkip.channel=Kanał
+CmdSkip.duration=Czas trwania
 
-CommandSpeed.defaulted=Przywrócono prędkość do 1.
-CommandSpeed.rangeError=Prędkość musi wynosić od 0.2 do 5
-CommandSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x.
+CmdSpeed.defaulted=Przywrócono prędkość do 1.
+CmdSpeed.rangeError=Prędkość musi wynosić od 0.2 do 5
+CmdSpeed.success=Ustawiono prędkość odtwarzania utworu na {1}x.
 
-CommandTOS.TermsOfService=Regulamin
+CmdTOS.TermsOfService=Regulamin
 
-CommandVibrato.defaulted=Przywrócono domyślne wartości parametrów.
-CommandVibrato.incorrectArgs=Poprawne użycie to: {1} <Częstotliwość> <Głębokość>{2}
-CommandVibrato.rangeError.frequency=Częstotliwość musi wynosić od 0.1 do 14
-CommandVibrato.rangeError.depth=Głębokość musi wynosić od 0.05 do 1
-CommandVibrato.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
+CmdVib.defaulted=Przywrócono domyślne wartości parametrów.
+CmdVib.incorrectArgs=Poprawne użycie to: {1} <Częstotliwość> <Głębokość>{2}
+CmdVib.frequency=Częstotliwość musi wynosić od 0.1 do 14
+CmdVib.depth=Głębokość musi wynosić od 0.05 do 1
+CmdVib.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
 
-CommandVolume.defaulted=Ustawiono głośność na domyślną wartość do 100.
-CommandVolume.incorrectArg=Głośność musi być liczbą całkowitą.
-CommandVolume.tooHigh=Głośność nie może być większa niż 500.
-CommandVolume.tooLow=Głośność nie może być mniejsza niż 0.
-CommandVolume.success=Zmieniono głośność na {1}.
-CommandVolume.invalidValue=Nieprawidłowa wartość.
+CmdVol.defaulted=Ustawiono głośność na domyślną wartość do 100.
+CmdVol.incorrectArg=Głośność musi być liczbą całkowitą.
+CmdVol.tooHigh=Głośność nie może być większa niż 500.
+CmdVol.tooLow=Głośność nie może być mniejsza niż 0.
+CmdVol.success=Zmieniono głośność na {1}.
+CmdVol.invalidValue=Nieprawidłowa wartość.
 
-BaseCommand.notAllowed=Brak dostępu
+BaseCmd.notAllowed=Brak dostępu
 
-CommandStateChecker.notInVC=Nie jesteś w kanale głosowym.
-CommandStateChecker.botNotInVC=Bot nie jest w kanale głosowym.
-CommandStateChecker.botNotInYourVC=Bot nie jest w Twoim kanale głosowym.
-CommandStateChecker.botBusy=Bot jest zajęty w innym kanale głosowym.
-CommandStateChecker.cannotJoin=Bot nie może dołączyć do kanału głosowego.
-CommandStateChecker.noDJ=Nie masz uprawnień DJ-a.
-CommandStateChecker.commandBlocked=Ta komenda jest zablokowana w tym kanale.
-CommandStateChecker.isNotPlaying=Bot obecnie nic nie odtwarza.
-CommandStateChecker.devOnly=Ta komenda jest tylko dla programistów.
+CmdSCheck.notInVC=Nie jesteś w kanale głosowym.
+CmdSCheck.botNotInVC=Bot nie jest w kanale głosowym.
+CmdSCheck.botNotInYourVC=Bot nie jest w Twoim kanale głosowym.
+CmdSCheck.botBusy=Bot jest zajęty w innym kanale głosowym.
+CmdSCheck.cannotJoin=Bot nie może dołączyć do kanału głosowego.
+CmdSCheck.noDJ=Nie masz uprawnień DJ-a.
+CmdSCheck.commandBlocked=Ta komenda jest zablokowana w tym kanale.
+CmdSCheck.isNotPlaying=Bot obecnie nic nie odtwarza.
+CmdSCheck.devOnly=Ta komenda jest tylko dla programistów.
 
-PlayerManager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
-PlayerManager.playlistQueued=Ilość: {1} utworów.{2}Długość: {3}
-PlayerManager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
-PlayerManager.loadFailed=Utwór nie został załadowany: {1}
-PlayerManager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
+PManager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
+PManager.playlistQueued=Ilość: {1} utworów.{2}Długość: {3}
+PManager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
+PManager.loadFailed=Utwór nie został załadowany: {1}
+PManager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
 
-TrackScheduler.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
-TrackScheduler.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
-TrackScheduler.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.
-TrackScheduler.autoplay.queued=Autoodtwarzanie dodało do kolejki:
+TSched.notFound=Autoodtwarzanie nie mogło znaleźć {1}
+TSched.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+TSched.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+TSched.queued=Autoodtwarzanie dodało do kolejki:
 
-TrackScheduler.regularFailure=Utwór nie został załadowany z nieznanego powodu. Pomijam...
+TSched.regularFailure=Utwór nie został załadowany z nieznanego powodu. Pomijam...
 
-TrackScheduler.criticalFailure.title=Błąd krytyczny
-TrackScheduler.criticalFailure.description=Odtworzenie utworów nie powiodło się 3 razy, przypuszczalnie z powodu problemu sieciowego poza naszą kontrolą. Czyszczenie kolejki, aby uniknąć spamu.
-TrackScheduler.criticalFailure.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
+TSched.title=Błąd krytyczny
+TSched.description=Odtworzenie utworów nie powiodło się 3 razy, przypuszczalnie z powodu problemu sieciowego poza naszą kontrolą. Czyszczenie kolejki, aby uniknąć spamu.
+TSched.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
 
-TrackScheduler.nextTrack.nowPlaying=Teraz odtwarzane: {1}
+TSched.nowPlaying=Teraz odtwarzane: {1}
 
 
 Main.day={1} dzień // 1 day
