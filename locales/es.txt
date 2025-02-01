@@ -1,126 +1,126 @@
-CommandAutoplay.noAPI=No se ha proporcionado una clave API a LastFM, este comando no funcionará sin ella.
-CommandAutoplay.notAutoplaying=La reproducción automática está desactivada.
-CommandAutoplay.isAutoplaying=La reproducción automática está activada.
+CmdAp.noAPI=No se ha proporcionado una clave API a LastFM, este comando no funcionará sin ella.
+CmdAp.notAutoplaying=La reproducción automática está desactivada.
+CmdAp.isAutoplaying=La reproducción automática está activada.
 
-CommandBlockChannel.invalidUsage=Uso válido: {1} <canal>{2} o {3}
-CommandBlockChannel.alreadyBlocked=Este canal ya está bloqueado.
-CommandBlockChannel.notBlocked=Este canal no está bloqueado.
-CommandBlockChannel.added=El canal {1} ha sido añadido a la lista de bloqueados.
-CommandBlockChannel.removed=El canal {1} ha sido eliminado de la lista de bloqueados.
-CommandBlockChannel.notFound=No se encontró el canal en el servidor.
-CommandBlockChannel.channelList=Canales bloqueados en {1}:
-CommandBlockChannel.noChannels=No hay canales bloqueados.
+CmdBC.invalidUsage=Uso válido: {1} <canal>{2} o {3}
+CmdBC.alreadyBlocked=Este canal ya está bloqueado.
+CmdBC.notBlocked=Este canal no está bloqueado.
+CmdBC.added=El canal {1} ha sido añadido a la lista de bloqueados.
+CmdBC.removed=El canal {1} ha sido eliminado de la lista de bloqueados.
+CmdBC.notFound=No se encontró el canal en el servidor.
+CmdBC.channelList=Canales bloqueados en {1}:
+CmdBC.noChannels=No hay canales bloqueados.
 
-CommandBug.noReport=Por favor, incluya información en el informe.
-CommandBug.successMessage=¡Gracias por tu informe!{1}El desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.{2}Usa el comando de bug para responder a los mensajes.{3}
+CmdBug.noReport=Por favor, incluya información en el informe.
+CmdBug.successMessage=¡Gracias por tu informe!{1}El desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.{2}Usa el comando de bug para responder a los mensajes.{3}
 
-CommandClearQueue.cleared=La cola ha sido vaciada.
+CmdCQ.cleared=La cola ha sido vaciada.
 
-CommandDisconnect.disconnected=Desconectado del chat de voz y la cola ha sido vaciada.
+CmdDc.disconnected=Desconectado del chat de voz y la cola ha sido vaciada.
 
-CommandDJ.roleList=Roles:
-CommandDJ.userList=Usuarios:
-CommandDJ.roleListEmpty=Vacío.
-CommandDJ.guildDJs=DJs en {1}
-CommandDJ.notGiven=No se ha especificado ningún miembro o rol.
-CommandDJ.member=miembro
-CommandDJ.member.plural=miembros
-CommandDJ.role=rol
-CommandDJ.role.plural=roles
-CommandDJ.and=y
-CommandDJ.added={1} ha sido añadido a la lista de DJs.
-CommandDJ.removed={1} ha sido eliminado de la lista de DJs.
-CommandDJ.invalidArgs=Argumentos inválidos.
+CmdDJ.roleList=Roles:
+CmdDJ.userList=Usuarios:
+CmdDJ.roleListEmpty=Vacío.
+CmdDJ.guildDJs=DJs en {1}
+CmdDJ.notGiven=No se ha especificado ningún miembro o rol.
+CmdDJ.member=miembro
+CmdDJ.member.plural=miembros
+CmdDJ.role=rol
+CmdDJ.role.plural=roles
+CmdDJ.and=y
+CmdDJ.added={1} ha sido añadido a la lista de DJs.
+CmdDJ.removed={1} ha sido eliminado de la lista de DJs.
+CmdDJ.invalidArgs=Argumentos inválidos.
 
-CommandForceSkip.failedToFind=La reproducción automática no encontró {1}
-CommandForceSkip.couldNotFind=No se encontraron pistas similares para la reproducción automática.
-CommandForceSkip.noSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.
-CommandForceSkip.autoplayQueued=Pistas en cola para la reproducción automática:
-CommandForceSkip.skippedQueue=La cola ha sido saltada.
-CommandForceSkip.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.
-CommandForceSkip.skippedToTrack=La pista actual ha sido saltada y reemplazada por {1}.
-CommandForceSkip.skipped=La pista actual ha sido saltada.
+CmdFS.failedToFind=La reproducción automática no encontró {1}
+CmdFS.couldNotFind=No se encontraron pistas similares para la reproducción automática.
+CmdFS.noSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.
+CmdFS.autoplayQueued=Pistas en cola para la reproducción automática:
+CmdFS.skippedQueue=La cola ha sido saltada.
+CmdFS.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.
+CmdFS.skippedToTrack=La pista actual ha sido saltada y reemplazada por {1}.
+CmdFS.skipped=La pista actual ha sido saltada.
 
-CommandGithub.message={1}Usar SOLO para informes de errores o sugerencias.{2}Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.{3}https
+CmdGit.message={1}Usar SOLO para informes de errores o sugerencias.{2}Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.{3}https
 
-CommandHelp.category.general=General
-CommandHelp.category.music=Música
-CommandHelp.category.DJ=DJ
-CommandHelp.category.admin=Administrador
-CommandHelp.category.dev=Desarrollador
-CommandHelp.alias=Alias
-CommandHelp.alias.plural=Alias
-CommandHelp.originalFooter=Haz clic en los botones para obtener más información de un grupo.
-CommandHelp.footer=Sintaxis: {1} es un argumento requerido, {2} es un argumento opcional. {3} es un comando alternativo.
-CommandHelp.embedTitle=Comandos
+CmdHelp.category.general=General
+CmdHelp.category.music=Música
+CmdHelp.category.DJ=DJ
+CmdHelp.category.admin=Administrador
+CmdHelp.category.dev=Desarrollador
+CmdHelp.alias=Alias
+CmdHelp.alias.plural=Alias
+CmdHelp.originalFooter=Haz clic en los botones para obtener más información de un grupo.
+CmdHelp.footer=Sintaxis: {1} es un argumento requerido, {2} es un argumento opcional. {3} es un comando alternativo.
+CmdHelp.embedTitle=Comandos
 
-CommandInfo.info=Información
-CommandInfo.ramUsage=Uso de RAM: {1}
-CommandInfo.upTime=Tiempo de actividad: {1}
-CommandInfo.discordServers=Servidores: {1}
-CommandInfo.discordMembers=Usuarios: {1}
-CommandInfo.registeredCommands=Comandos registrados: {1}
-CommandInfo.voiceChannels=Canales de voz: {1}
-CommandInfo.playingCount=Reproducciones actuales: {1}
-CommandInfo.gatewayPing=Ping de entrada: {1}ms
-CommandInfo.version=Versión: {1}
-CommandInfo.ping=Ping: {1}ms
+CmdInfo.info=Información
+CmdInfo.ramUsage=Uso de RAM: {1}
+CmdInfo.upTime=Tiempo de actividad: {1}
+CmdInfo.discordServers=Servidores: {1}
+CmdInfo.discordMembers=Usuarios: {1}
+CmdInfo.registeredCommands=Comandos registrados: {1}
+CmdInfo.voiceChannels=Canales de voz: {1}
+CmdInfo.playingCount=Reproducciones actuales: {1}
+CmdInfo.gatewayPing=Ping de entrada: {1}ms
+CmdInfo.version=Versión: {1}
+CmdInfo.ping=Ping: {1}ms
 
-CommandInsert.notEnoughArgs=Argumentos insuficientes.{1}Uso: {2}Número entero{3}URL o término de búsqueda{4}
-CommandInsert.invalidArgs=Argumentos inválidos, sólo se permiten números enteros.{1}Uso: {2}Número entero{3}URL o término de búsqueda{4}
-CommandInsert.decodingError=Ocurrió un error al decodificar la pista.
-CommandInsert.addedToPos=Pista añadida en la posición {1}.
-CommandInsert.queueError=Ocurrió un error al añadir la pista a la cola: {1}.
+CmdIns.notEnoughArgs=Argumentos insuficientes.{1}Uso: {2}Número entero{3}URL o término de búsqueda{4}
+CmdIns.invalidArgs=Argumentos inválidos, sólo se permiten números enteros.{1}Uso: {2}Número entero{3}URL o término de búsqueda{4}
+CmdIns.decodingError=Ocurrió un error al decodificar la pista.
+CmdIns.addedToPos=Pista añadida en la posición {1}.
+CmdIns.queueError=Ocurrió un error al añadir la pista a la cola: {1}.
 
-CommandInvite.haveFun=¡Que te diviertas!
+CmdInv.haveFun=¡Que te diviertas!
 
-CommandJoin.noAccess=El bot no tiene acceso a tu canal.
-CommandJoin.joined=El bot se ha unido a tu chat de voz.
+CmdJoin.noAccess=El bot no tiene acceso a tu canal.
+CmdJoin.joined=El bot se ha unido a tu chat de voz.
 
-CommandLocale.list=Lista de idiomas:
-CommandLocale.languageChanged=El idioma ha sido cambiado a: {1}
-CommandLocale.unrecognised=Idioma no reconocido, aquí tienes una lista de idiomas disponibles:
+CmdLoc.list=Lista de idiomas:
+CmdLoc.languageChanged=El idioma ha sido cambiado a: {1}
+CmdLoc.unrecognised=Idioma no reconocido, aquí tienes una lista de idiomas disponibles:
 
-CommandLoop.notLooping=Reproducción en bucle desactivada.
-CommandLoop.looping=Reproducción en bucle activada.
+CmdLoop.notLooping=Reproducción en bucle desactivada.
+CmdLoop.looping=Reproducción en bucle activada.
 
-CommandLoopQueue.notLooping=Reproducción en bucle de la cola desactivada.
-CommandLoopQueue.looping=Reproducción en bucle de la cola activada.
+CmdLQ.notLooping=Reproducción en bucle de la cola desactivada.
+CmdLQ.looping=Reproducción en bucle de la cola activada.
 
-CommandLyrics.notFound=No se encontraron resultados o el título de la canción es desconocido.
-CommandLyrics.source=Letra obtenida de lrclib.net
-CommandLyrics.lyricsForTrack=Letra de: {1}
-CommandLyrics.tooLong=La letra es demasiado larga, se subirá como archivo.
+CmdLyr.notFound=No se encontraron resultados o el título de la canción es desconocido.
+CmdLyr.source=Letra obtenida de lrclib.net
+CmdLyr.lyricsForTrack=Letra de: {1}
+CmdLyr.tooLong=La letra es demasiado larga, se subirá como archivo.
 
-CommandNowPlaying.livestreamDuration=Duración de la transmisión en vivo: {1}
-CommandNowPlaying.channel=Canal:
-CommandNowPlaying.next=Siguiente:
-CommandNowPlaying.paused=Pista pausada:
-CommandNowPlaying.true=Verdadero
-CommandNowPlaying.false=Falso
-CommandNowPlaying.trackLooping=Pista en bucle:
-CommandNowPlaying.queueLooping=Cola en bucle:
-CommandNowPlaying.autoplaying=Reproducción automática:
+CmdNP.livestreamDuration=Duración de la transmisión en vivo: {1}
+CmdNP.channel=Canal:
+CmdNP.next=Siguiente:
+CmdNP.paused=Pista pausada:
+CmdNP.true=Verdadero
+CmdNP.false=Falso
+CmdNP.trackLooping=Pista en bucle:
+CmdNP.queueLooping=Cola en bucle:
+CmdNP.autoplaying=Reproducción automática:
 
-CommandPause.resumed=La pista se está reproduciendo.
-CommandPause.paused=Pista pausada.
+CmdPause.resumed=La pista se está reproduciendo.
+CmdPause.paused=Pista pausada.
 
-CommandPing.ping=Ping: {1}ms
-CommandPing.gatewayPing=Ping de entrada: {1}ms
+CmdPing.ping=Ping: {1}ms
+CmdPing.gatewayPing=Ping de entrada: {1}ms
 
-CommandPitch.defaulted=El tono ha sido restablecido a 1.
-CommandPitch.range=El tono debe estar entre 0.25 y 5.
-CommandPitch.changed=El tono de la pista ha sido establecido a x{1}.
+CmdPitch.defaulted=El tono ha sido restablecido a 1.
+CmdPitch.range=El tono debe estar entre 0.25 y 5.
+CmdPitch.changed=El tono de la pista ha sido establecido a x{1}.
 
-CommandPlay.queuedFromAtt=Se han puesto en cola {1} pistas desde los archivos adjuntos.
-CommandPlay.queuedFromAtt.error=Hubo un error al cargar las pistas adjuntas.
-CommandPlay.wrongFormat=La pista no se pudo cargar: Formato de archivo desconocido.
-CommandPlay.noArgs=No se proporcionaron argumentos.
-CommandPlay.decodeError=Ocurrió un error al decodificar la pista.
-CommandPlay.queuedManySongs=¡{1} canciones añadidas a la cola!
-CommandPlay.fileError=Ocurrió un error al cargar las pistas desde el archivo.
+CmdPlay.queuedFromAtt=Se han puesto en cola {1} pistas desde los archivos adjuntos.
+CmdPlay.queuedFromAtt.error=Hubo un error al cargar las pistas adjuntas.
+CmdPlay.wrongFormat=La pista no se pudo cargar: Formato de archivo desconocido.
+CmdPlay.noArgs=No se proporcionaron argumentos.
+CmdPlay.decodeError=Ocurrió un error al decodificar la pista.
+CmdPlay.queuedManySongs=¡{1} canciones añadidas a la cola!
+CmdPlay.fileError=Ocurrió un error al cargar las pistas desde el archivo.
 
-CommandPrivacyPolicy.privacyPolicy=Política de privacidad
+CmdPP.privacyPolicy=Política de privacidad
 
 CmdQ.nowPlaying=Reproduciendo ahora:
 CmdQ.queueInfoFooter={1} canciones añadidas.{2} Página {3} Duración: {4}

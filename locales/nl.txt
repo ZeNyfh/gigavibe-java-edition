@@ -7,129 +7,129 @@
 // if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
 // please preserve the capitalisation and any punctuation if applicable.
 
-CommandAutoplay.noAPI=De bot is nog niet geassocieerd met een API-sleutel voor LastFM, zonder de API-sleutel kan de bot niet werken.
-CommandAutoplay.notAutoplaying=Autoplay is nu uitgeschakeld.
-CommandAutoplay.isAutoplaying=Autoplay is nu aan.
+CmdAp.noAPI=De bot is nog niet geassocieerd met een API-sleutel voor LastFM, zonder de API-sleutel kan de bot niet werken.
+CmdAp.notAutoplaying=Autoplay is nu uitgeschakeld.
+CmdAp.isAutoplaying=Autoplay is nu aan.
 
-CommandBlockChannel.invalidUsage=Het geldige gebruik hiervan is: {1} <kanaal>{2} of {3}
-CommandBlockChannel.alreadyBlocked=Dit kanaal is al geblokkeerd.
-CommandBlockChannel.notBlocked=Dit kanaal is niet geblokkeerd.
-CommandBlockChannel.added={1} is toegevoegd aan de lijst.
-CommandBlockChannel.removed={1} is verwijderd van de lijst.
-CommandBlockChannel.notFound=Dit kanaal kon niet gevonden worden in deze discord server.
-CommandBlockChannel.channelList=Geblokkeerde kanalen voor {1}
-CommandBlockChannel.noChannels=Geen kanalen gevonden.
+CmdBC.invalidUsage=Het geldige gebruik hiervan is: {1} <kanaal>{2} of {3}
+CmdBC.alreadyBlocked=Dit kanaal is al geblokkeerd.
+CmdBC.notBlocked=Dit kanaal is niet geblokkeerd.
+CmdBC.added={1} is toegevoegd aan de lijst.
+CmdBC.removed={1} is verwijderd van de lijst.
+CmdBC.notFound=Dit kanaal kon niet gevonden worden in deze discord server.
+CmdBC.channelList=Geblokkeerde kanalen voor {1}
+CmdBC.noChannels=Geen kanalen gevonden.
 
-CommandBug.noReport=Geef hier aan wat u te melden heeft.
-CommandBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DM's.{2}Gebruik de {3} command om te reageren op de berichten.{4}
+CmdBug.noReport=Geef hier aan wat u te melden heeft.
+CmdBug.successMessage=Bedankt voor uw inzet!{1}De developer zal bereikbaar zijn via de bot's DM's.{2}Gebruik de {3} command om te reageren op de berichten.{4}
 
-CommandClearQueue.cleared=De wachtrij is leeggemaakt
+CmdCQ.cleared=De wachtrij is leeggemaakt
 
-CommandDisconnect.disconnected=Het spraak kanaal is verlaten en de wachtrij is leeg gemaakt.
+CmdDc.disconnected=Het spraak kanaal is verlaten en de wachtrij is leeg gemaakt.
 
-CommandDJ.roleList=Rollen:
-CommandDJ.userList=Gebruikers: 
-CommandDJ.roleListEmpty=Leeg.
-CommandDJ.guildDJs=DJs voor {1}
-CommandDJ.notGiven=Geen leden of rollen waren aangegeven.
-CommandDJ.member=lid 
-CommandDJ.member.plural=leden
-CommandDJ.role=rol
-CommandDJ.role.plural=rollen
-CommandDJ.and=en
-CommandDJ.added={1} is toegevoegd aan de lijst van DJ's.
-CommandDJ.removed={1} is verwijderd van de lijst van DJ's.
-CommandDJ.invalidArgs=Ongeldige argumenten.
+CmdDJ.roleList=Rollen:
+CmdDJ.userList=Gebruikers:
+CmdDJ.roleListEmpty=Leeg.
+CmdDJ.guildDJs=DJs voor {1}
+CmdDJ.notGiven=Geen leden of rollen waren aangegeven.
+CmdDJ.member=lid
+CmdDJ.member.plural=leden
+CmdDJ.role=rol
+CmdDJ.role.plural=rollen
+CmdDJ.and=en
+CmdDJ.added={1} is toegevoegd aan de lijst van DJ's.
+CmdDJ.removed={1} is verwijderd van de lijst van DJ's.
+CmdDJ.invalidArgs=Ongeldige argumenten.
 
-CommandForceSkip.failedToFind=Autoplay kon {1} niet vinden
-CommandForceSkip.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.
-CommandForceSkip.noSearchTerm=Is er een onbekende fout opgetreden terwijl autoplay werd geprobeerd.
-CommandForceSkip.autoplayQueued=Autoplay heeft dit op de wachtrij gezet:
-CommandForceSkip.skippedQueue=De hele wachtrij is overgeslagen.
-CommandForceSkip.skippedToPos={1} nummers zijn overgeslagen naar {2} 
-CommandForceSkip.skippedToTrack=Het huidige nummer is overslagen naar {1}
-CommandForceSkip.skipped=Het huidige nummer is overgeslagen.
+CmdFS.failedToFind=Autoplay kon {1} niet vinden
+CmdFS.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.
+CmdFS.noSearchTerm=Is er een onbekende fout opgetreden terwijl autoplay werd geprobeerd.
+CmdFS.autoplayQueued=Autoplay heeft dit op de wachtrij gezet:
+CmdFS.skippedQueue=De hele wachtrij is overgeslagen.
+CmdFS.skippedToPos={1} nummers zijn overgeslagen naar {2}
+CmdFS.skippedToTrack=Het huidige nummer is overslagen naar {1}
+CmdFS.skipped=Het huidige nummer is overgeslagen.
 
-CommandGithub.message={1}gebruik dit ALLEEN voor bug reports en functie suggesties.{2}Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt recreeëren.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+CmdGit.message={1}gebruik dit ALLEEN voor bug reports en functie suggesties.{2}Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt recreeëren.{3}https://github.com/ZeNyfh/gigavibe-java-edition
 
-CommandHelp.category.general=Generaal 
-CommandHelp.category.music=Muziek
-CommandHelp.category.DJ=DJ
-CommandHelp.category.admin=Admin
-CommandHelp.category.dev=Dev 
-CommandHelp.alias=Bijnaam
-CommandHelp.alias.plural=Bijnamen
-CommandHelp.originalFooter=Klik op de knoppen voor meer informatie over een groep.
-CommandHelp.footer=Syntax: {1} is een benodigd argument, {2} is een optioneel argument. {3} is een alternatieve benaming voor de command.  
-CommandHelp.embedTitle=Commands
+CmdHelp.category.general=Generaal
+CmdHelp.category.music=Muziek
+CmdHelp.category.DJ=DJ
+CmdHelp.category.admin=Admin
+CmdHelp.category.dev=Dev
+CmdHelp.alias=Bijnaam
+CmdHelp.alias.plural=Bijnamen
+CmdHelp.originalFooter=Klik op de knoppen voor meer informatie over een groep.
+CmdHelp.footer=Syntax: {1} is een benodigd argument, {2} is een optioneel argument. {3} is een alternatieve benaming voor de command.
+CmdHelp.embedTitle=Commands
 
-CommandInfo.info=Informatie
-CommandInfo.ramUsage=Ram gebruik: {1}
-CommandInfo.upTime=Uptime: {1}
-CommandInfo.discordServers=Gilden: {1}
-CommandInfo.discordMembers=Gebruikers: {1}
-CommandInfo.registeredCommands=Geregistreerde commands: {1}
-CommandInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
-CommandInfo.playingCount=Aantal momentele spelers: {1} 
-CommandInfo.gatewayPing=Gateway Ping: {1}ms
-CommandInfo.version=Versie: {1}
-CommandInfo.ping=Ping {1}ms // ms here being short for milliseconds
+CmdInfo.info=Informatie
+CmdInfo.ramUsage=Ram gebruik: {1}
+CmdInfo.upTime=Uptime: {1}
+CmdInfo.discordServers=Gilden: {1}
+CmdInfo.discordMembers=Gebruikers: {1}
+CmdInfo.registeredCommands=Geregistreerde commands: {1}
+CmdInfo.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
+CmdInfo.playingCount=Aantal momentele spelers: {1}
+CmdInfo.gatewayPing=Gateway Ping: {1}ms
+CmdInfo.version=Versie: {1}
+CmdInfo.ping=Ping {1}ms // ms here being short for milliseconds
 
-CommandInsert.notEnoughArgs=Niet genoeg argumenten gegeven.{1}Gebruik: {2}URL/Zoekterm{4}
-CommandInsert.invalidArgs=Ongeldige argumenten. Gebruik alleen cijfers{1}Gebruik: {2}URL/Zoekterm{4} 
-CommandInsert.decodingError=Er ging iets mis met het nummer decoderen.
-CommandInsert.addedToPos=Het nummer is toegevoegd op positie: {1} 
-CommandInsert.queueError=Is ging iets mis met het toevoegen van een nummer aan de wachtrij: {1} 
+CmdIns.notEnoughArgs=Niet genoeg argumenten gegeven.{1}Gebruik: {2}URL/Zoekterm{4}
+CmdIns.invalidArgs=Ongeldige argumenten. Gebruik alleen cijfers{1}Gebruik: {2}URL/Zoekterm{4}
+CmdIns.decodingError=Er ging iets mis met het nummer decoderen.
+CmdIns.addedToPos=Het nummer is toegevoegd op positie: {1}
+CmdIns.queueError=Is ging iets mis met het toevoegen van een nummer aan de wachtrij: {1}
 
-CommandInvite.haveFun=Veel plezier!
+CmdInv.haveFun=Veel plezier!
 
-CommandJoin.noAccess=De bot kan je kanaal niet bereiken 
-CommandJoin.joined=Vc ingegaan.
+CmdJoin.noAccess=De bot kan je kanaal niet bereiken
+CmdJoin.joined=Vc ingegaan.
 
-CommandLocale.list=Lijst van talen:
-CommandLocale.languageChanged=De taal is gewijzigd naar: {1} // 1 hier is een taalnaam.
-CommandLocale.unrecognised=Onbekende taal, hier is een lijst van talen om uit te kiezen:
+CmdLoc.list=Lijst van talen:
+CmdLoc.languageChanged=De taal is gewijzigd naar: {1} // 1 hier is een taalnaam.
+CmdLoc.unrecognised=Onbekende taal, hier is een lijst van talen om uit te kiezen:
 
-CommandLoop.notLooping=Het huidige nummer wordt niet meer gelooped.
-CommandLoop.looping=Het huidige nummer wordt nu gelooped.
+CmdLoop.notLooping=Het huidige nummer wordt niet meer gelooped.
+CmdLoop.looping=Het huidige nummer wordt nu gelooped.
 
-CommandLoopQueue.notLooping=De huidige wachtrij wordt niet meer gelooped.
-CommandLoopQueue.looping=De huidige wachtrij wordt nu gelooped.
+CmdLQ.notLooping=De huidige wachtrij wordt niet meer gelooped.
+CmdLQ.looping=De huidige wachtrij wordt nu gelooped.
 
-CommandLyrics.notFound=Er zijn geen resultaten gevonden of the titel was onbekend. 
-CommandLyrics.source=Lyrics zijn afkomstig van lrclib.net
-CommandLyrics.lyricsForTrack=Lyrics voor: {1} 
-CommandLyrics.tooLong=Er is een bestand gemaakt omdat de lyrics te lang waren. 
+CmdLyr.notFound=Er zijn geen resultaten gevonden of the titel was onbekend.
+CmdLyr.source=Lyrics zijn afkomstig van lrclib.net
+CmdLyr.lyricsForTrack=Lyrics voor: {1}
+CmdLyr.tooLong=Er is een bestand gemaakt omdat de lyrics te lang waren.
 
-CommandNowPlaying.livestreamDuration=Live stream tijdsduur {1}
-CommandNowPlaying.channel=Kanaal:
-CommandNowPlaying.next=Volgende nummer:
-CommandNowPlaying.paused=Nummer is gepauzeerd:
-CommandNowPlaying.true=Ja
-CommandNowPlaying.false=Nee
-CommandNowPlaying.trackLooping=Nummer gelooped:
-CommandNowPlaying.queueLooping=Wachtrij wordt gelooped:
-CommandNowPlaying.autoplaying=Auto playing:
+CmdNP.livestreamDuration=Live stream tijdsduur {1}
+CmdNP.channel=Kanaal:
+CmdNP.next=Volgende nummer:
+CmdNP.paused=Nummer is gepauzeerd:
+CmdNP.true=Ja
+CmdNP.false=Nee
+CmdNP.trackLooping=Nummer gelooped:
+CmdNP.queueLooping=Wachtrij wordt gelooped:
+CmdNP.autoplaying=Auto playing:
 
-CommandPause.resumed=Het nummer wordt nu afgespeeld.
-CommandPause.paused=Het nummer is nu gepauzeerd. 
+CmdPause.resumed=Het nummer wordt nu afgespeeld.
+CmdPause.paused=Het nummer is nu gepauzeerd.
 
-CommandPing.ping=ping: {1}ms // ms here being short for milliseconds
-CommandPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
+CmdPing.ping=ping: {1}ms // ms here being short for milliseconds
+CmdPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
 
-CommandPitch.defaulted=De toonhoogte is nu terug op 1. 
-CommandPitch.range=De toonhoogte moet tussen 0.25 en 5 zijn. 
-CommandPitch.changed=De toonhoogte van het nummer is veranderd naar {1}x // x here is like 5x or 2x, aka a multiplier
+CmdPitch.defaulted=De toonhoogte is nu terug op 1.
+CmdPitch.range=De toonhoogte moet tussen 0.25 en 5 zijn.
+CmdPitch.changed=De toonhoogte van het nummer is veranderd naar {1}x // x here is like 5x or 2x, aka a multiplier
 
-CommandPlay.queuedFromAtt={1} aantal nummers zijn toegevoegd aan de wachtrij van de bijlages. 
-CommandPlay.queuedFromAtt.error=Er ging iets mis met het laden van de nummers van de bestanden.
-CommandPlay.wrongFormat=Het nummer kon niet afgespeeld worden: Onbekend bestandsformaat.
-CommandPlay.noArgs=Geen arguments gegeven.
-CommandPlay.decodeError=Er ging iets mis met het decoderen van het nummer.
-CommandPlay.queuedManySongs=Er zijn {1} nummers op de wachtrij gezet! 
-CommandPlay.fileError=Er ging iets fout met het nummer laden van het bestand.
+CmdPlay.queuedFromAtt={1} aantal nummers zijn toegevoegd aan de wachtrij van de bijlages.
+CmdPlay.queuedFromAtt.error=Er ging iets mis met het laden van de nummers van de bestanden.
+CmdPlay.wrongFormat=Het nummer kon niet afgespeeld worden: Onbekend bestandsformaat.
+CmdPlay.noArgs=Geen arguments gegeven.
+CmdPlay.decodeError=Er ging iets mis met het decoderen van het nummer.
+CmdPlay.queuedManySongs=Er zijn {1} nummers op de wachtrij gezet!
+CmdPlay.fileError=Er ging iets fout met het nummer laden van het bestand.
 
-CommandPrivacyPolicy.privacyPolicy=Privacy Policy
+CmdPP.privacyPolicy=Privacy Policy
 
 CmdQ.nowPlaying=Nu:
 CmdQ.queueInfoFooter={1} nummers op de wachtrij {2} Pagina {3} Lengte: {4}
