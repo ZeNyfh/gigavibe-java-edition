@@ -69,6 +69,18 @@ public class LocaleManager {
 
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
+    public static String ManagerLocalise(String original, String key, Object... args) {
+        String localisedString = lang.get(key);
+        // TODO: here add thing that will change the args to positional
+
+        /* TODO: here call something that will update the en.txt locale contents with whatever is in original.
+         *  this will add the functionality of adding new keys faster and also editing existing localisations for english quickly, as well as keeping the original strings in the code.
+         *  the english locale does NOT need to exist with this system in place, though it exists for parity and to assist translators.
+         */
+        if (args.length != 0) return String.format(key, args);
+        return localisedString;
+    }
+
     private static String serializeString(String localeInput) {
         localeInput = localeInput.split("//")[0];
         localeInput = localeInput.trim();

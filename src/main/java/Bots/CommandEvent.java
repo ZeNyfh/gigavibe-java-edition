@@ -97,13 +97,7 @@ public class CommandEvent {
     }
 
     public static String localise(String original, String key, Object... args) {
-        String localisedString = lang.get(key);
-        /* TODO: here call something that will update the en.txt locale contents with whatever is in original.
-         *  this will add the functionality of adding new keys faster and also editing existing localisations for english quickly, as well as keeping the original strings in the code.
-         *  the english locale does NOT need to exist with this system in place, though it exists for parity and to assist translators.
-         */
-        if (args.length != 0) return String.format(key, args);
-        return localisedString;
+        return LocaleManager.ManagerLocalise(original, key, args);
     }
 
     public boolean isSlash() {
