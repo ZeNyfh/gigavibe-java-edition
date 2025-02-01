@@ -97,7 +97,7 @@ public class CommandEvent {
     }
 
     public static String localise(String original, String key, Object... args) {
-        return LocaleManager.ManagerLocalise(original, key, args);
+        return LocaleManager.ManagerLocalise(original, key, lang, args);
     }
 
     public boolean isSlash() {
