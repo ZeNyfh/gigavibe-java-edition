@@ -10,6 +10,15 @@ public class LocaleMiddleman {
         threadedGuildID.set(guildID);
     }
 
+    public static String getLocalisedSuccess() {
+        Long guildID = threadedGuildID.get();
+        if (guildID != null) {
+            return guildLocales.get(guildID).get("Main.success");
+        }
+        // fallback to english word if something happens.
+        return "Success";
+    }
+
     public static String getLocalisedError() {
         Long guildID = threadedGuildID.get();
         if (guildID != null) {

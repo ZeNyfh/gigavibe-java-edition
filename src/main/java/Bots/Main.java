@@ -51,9 +51,9 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static Bots.GuildDataManager.*;
-import static Bots.LocaleMiddleman.getLocalisedError;
-import static Bots.LocaleMiddleman.getLocalisedTimeUnits;
+import static Bots.GuildDataManager.GetConfig;
+import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.LocaleMiddleman.*;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -301,6 +301,10 @@ public class Main extends ListenerAdapter {
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
         return createQuickEmbed(title, description, null);
+    }
+
+    public static MessageEmbed createQuickSuccess(String description) {
+        return createQuickEmbed("✅ **" + getLocalisedSuccess() + "**", description);
     }
 
     public static MessageEmbed createQuickError(String description) {
