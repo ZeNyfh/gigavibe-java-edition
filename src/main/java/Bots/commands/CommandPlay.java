@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import static Bots.CommandEvent.localise;
-import static Bots.Main.createQuickEmbed;
 import static Bots.Main.createQuickError;
+import static Bots.Main.createQuickSuccess;
 
 public class CommandPlay extends BaseCommand {
     final public Set<String> audioFiles = Set.of(
@@ -65,9 +65,9 @@ public class CommandPlay extends BaseCommand {
             for (String finalLine : finalURLs) {
                 PlayerManager.getInstance().loadAndPlay(event, finalLine.split("\\|", 2)[0].trim(), false);
             }
-            event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandPlay.queuedManySongs"), actualListSize)));
+            event.replyEmbeds(createQuickSuccess(localise("Queued {num} songs!", "CmdPlay.queuedManySongs", actualListSize)));
         } catch (Exception e) {
-            event.replyEmbeds(createQuickError( localise("CommandPlay.fileError") + "\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
+            event.replyEmbeds(createQuickError(localise("Something went wrong when loading the tracks from the file.", "Cmd.fileError") + "\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
         }
         return true;
     }
@@ -87,8 +87,7 @@ public class CommandPlay extends BaseCommand {
         List<Message.Attachment> attachments = event.getAttachments();
         List<Message.Attachment> playableAttachments = new ArrayList<>();
 
-        for (int i = 0; i < attachments.size(); i++) {
-            Message.Attachment attachment = attachments.get(i);
+        for (Message.Attachment attachment : attachments) {
             if (attachment.getFileExtension() != null && audioFiles.contains(attachment.getFileExtension().toLowerCase())) {
                 playableAttachments.add(attachment);
             }
@@ -109,20 +108,20 @@ public class CommandPlay extends BaseCommand {
                         for (Message.Attachment attachment : playableAttachments) {
                             PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
                         }
-                        event.replyEmbeds(createQuickEmbed("✅ **" + localise("Main.success") + "**", String.format(localise("CommandPlay.queuedFromAtt"), playableAttachments.size())));
+                        event.replyEmbeds(createQuickSuccess(localise("Queued {num} tracks from attachments.", "CmdPlay.queuedFromAtt", playableAttachments.size())));
                     }
                 } catch (Exception e) {
-                    event.replyEmbeds(createQuickError( localise("CommandPlay.queuedFromAtt.error") + "\n```\n" + e.getMessage() + "\n```"));
+                    event.replyEmbeds(createQuickError(localise("Something went wrong when loading the tracks from the attachments.", "CmdPlay.queuedFromAtt.error") + "\n```\n" + e.getMessage() + "\n```"));
                 }
             }
         } else { // no valid attachments to play, check for url/s in message content.
             if (args.length < 2) {
                 // error for no valid attachments found
                 if (!attachments.isEmpty()) {
-                    event.replyEmbeds(createQuickError(localise("CommandPlay.wrongFormat")));
+                    event.replyEmbeds(createQuickError(localise("The track failed to load: Unknown file format.", "CmdPlay.wrongFormat")));
                     return;
                 }
-                event.replyEmbeds(createQuickError(localise("CommandPlay.noArgs")));
+                event.replyEmbeds(createQuickError(localise("No arguments given.", "CmdPlay.noArgs")));
                 return;
             }
             if (playFromTXT(event, false)) return;
@@ -138,7 +137,7 @@ public class CommandPlay extends BaseCommand {
             try {
                 PlayerManager.getInstance().loadAndPlay(event, link, true);
             } catch (FriendlyException e) {
-                event.replyEmbeds(createQuickError( localise("CommandPlay.decodeError")+ "\n```\n" + e.getMessage() + "\n```"));
+                event.replyEmbeds(createQuickError(localise("Something went wrong when decoding the track.", "CmdPlay.decodeError") + "\n```\n" + e.getMessage() + "\n```"));
             }
         }
     }
