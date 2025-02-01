@@ -37,7 +37,7 @@ public class CommandSkip extends BaseCommand {
 
         List<Member> votes = skipCountGuilds.get(event.getGuild().getIdLong());
         if (votes.contains(event.getMember())) {
-            event.replyEmbeds(createQuickError(localise("CommandSkip.alreadyVoted")));
+            event.replyEmbeds(createQuickError(localise("You have already voted to skip.","CmdSkip.alreadyVoted")));
             return;
         } else {
             votes.add(event.getMember());
@@ -61,15 +61,24 @@ public class CommandSkip extends BaseCommand {
                 String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
                 boolean canPlay = true;
                 if (searchTerm.equals("notfound")) {
-                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n"+ localise("CommandSkip.autoplay.failedToFind") + " ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
+                    messageBuilder.append("❌ **")
+                            .append(localise("Error", "Main.error"))
+                            .append(":**\n")
+                            .append(localise("Autoplay failed to find {track}\n", "CmdSkip.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
                     canPlay = false;
                 }
                 if (searchTerm.equals("none")) {
-                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandSkip.couldNotFind") + "\n");
+                    messageBuilder.append("❌ **")
+                            .append(localise("Error", "Main.error"))
+                            .append(":**\n")
+                            .append(localise("Autoplay could not find similar tracks.\n", "CmdSkip.couldNotFind"));
                     canPlay = false;
                 }
                 if (searchTerm.isEmpty()) {
-                    messageBuilder.append("❌ **" + localise("Main.error") + ":**\n" + localise("CommandSkip.noSearchTerm") + "\n");
+                    messageBuilder.append("❌ **")
+                            .append(localise("Error", "Main.error"))
+                            .append(":**\n")
+                            .append(localise("An unknown error occurred when trying to autoplay.\n", "CmdSkip.noSearchTerm"));
                     canPlay = false;
                 }
                 if (canPlay) {
@@ -80,30 +89,32 @@ public class CommandSkip extends BaseCommand {
                             : encode(track.getInfo().author.toLowerCase(), false, true);
                     String title = encode(track.getInfo().title, true, false);
                     PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                    messageBuilder.append("♾️ " + localise("CommandSkip.autoplayQueued") + " ").append(artistName).append(" - ").append(title).append("\n");
+                    messageBuilder.append("♾️ ")
+                            .append(localise("Autoplay queued: {artistName} - {title}\n","CmdSkip.autoplayQueued", artistName, title));
                 }
             }
             musicManager.scheduler.nextTrack();
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("CommandSkip.skippedTheTrack")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("Skipped the track.","CmdSkip.skippedTheTrack")));
             } else { // if there is something playing after the skip command
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(botColour);
                 if (musicManager.audioPlayer.getPlayingTrack().getInfo().title != null) {
-                    eb.setTitle(String.format("⏩ "+localise("CommandSkip.skippedTo"), "__**" + musicManager.audioPlayer.getPlayingTrack().getInfo().title + "**__"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
+                    eb.setTitle("⏩ " + localise("Skipped the track to __**{trackTitle}**__","CmdSkip.skippedTo", musicManager.audioPlayer.getPlayingTrack().getInfo().title ), musicManager.audioPlayer.getPlayingTrack().getInfo().uri);
                 } else {
-                    eb.setTitle("⏩ " + String.format(localise("CommandSkip.skippedTo.unknown"), "__**", "**__"));
-                    eb.appendDescription(String.format(localise("CommandSkip.nowPlaying"), musicManager.audioPlayer.getPlayingTrack().getInfo().uri + "\n\n"));
+                    eb.setTitle("⏩ " + localise("Skipped the track to __**Unknown Title**__","CmdSkip.skippedTo.unknown"));
+                    eb.appendDescription(localise("Now playing: {url}\n\n","CmdSkip.nowPlaying", musicManager.audioPlayer.getPlayingTrack().getInfo().uri));
                 }
                 if (musicManager.audioPlayer.getPlayingTrack().getInfo().author != null) {
-                    eb.appendDescription("**" + localise("CommandSkip.channel") + "**\n" + musicManager.audioPlayer.getPlayingTrack().getInfo().author + "\n");
+                    eb.appendDescription("**" + localise("**Channel**\n{trackAuthor}\n","CmdSkip.channel", musicManager.audioPlayer.getPlayingTrack().getInfo().author));
                 }
-                eb.appendDescription("**" + localise("CommandSkip.duration") + "**\n" + toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length));
+                eb.appendDescription(localise("**Duration**\n{trackLength}","CmdSkip.duration", toSimpleTimestamp(musicManager.audioPlayer.getPlayingTrack().getInfo().length)));
                 eb.appendDescription(messageBuilder);
                 event.replyEmbeds(eb.build());
             }
         } else {
-            event.replyEmbeds(createQuickEmbed(localise("CommandSkip.voted.title"), String.format(localise("CommandSkip.voted.description"), votedMemberCount, effectiveMemberCount/2)));
+            event.replyEmbeds(createQuickEmbed(localise("Voted to skip the track.","CmdSkip.voted.title"),
+                    localise("Voted to skip the track.","CmdSkip.voted.description", votedMemberCount, effectiveMemberCount/2)));
         }
     }
 

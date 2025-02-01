@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Bots.CommandEvent.localise;
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 public class CommandRemove extends BaseCommand {
     @Override
@@ -27,16 +26,16 @@ public class CommandRemove extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(localise("CommandRemove.noSongs")));
+            event.replyEmbeds(createQuickError(localise("There are no songs in the queue to remove.","CmdRem.noSongs")));
             return;
         }
         if (event.getArgs().length == 1 || !event.getArgs()[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(localise("CommandRemove.invalidArgs")));
+            event.replyEmbeds(createQuickError(localise("Invalid arguments, integers only.", "CmdRem.invalidArgs")));
             return;
         }
         int position = Integer.parseInt(event.getArgs()[1]);
         if (queue.size() < position - 1) {
-            event.replyEmbeds(createQuickError(localise("CommandRemove.tooLarge")));
+            event.replyEmbeds(createQuickError(localise("The provided number was larger than the size of the queue.", "CmdRem.tooLarge")));
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -44,7 +43,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅" + String.format(localise("CommandRemove.removed"), "**" + position + "**")));
+        event.replyEmbeds(createQuickSuccess(localise("Skipped queued track **{position}** successfully.","CmdRem.removed",position)));
     }
 
     @Override
