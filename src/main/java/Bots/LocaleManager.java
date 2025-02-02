@@ -7,7 +7,10 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +19,8 @@ import static Bots.Main.guildLocales;
 
 public class LocaleManager {
     public static HashMap<String, HashMap<String, String>> languages = new HashMap<>();
+    static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
+
     public static void init(JDA bot) {
         languages.put("english", readLocale("locales/en.txt"));
         languages.put("polski", readLocale("locales/pl.txt"));
@@ -33,7 +38,7 @@ public class LocaleManager {
         File file = new File(localeFile);
         List<String> lines = new ArrayList<>();
         try {
-           lines = Files.readAllLines(Path.of(file.getAbsolutePath()));
+            lines = Files.readAllLines(Path.of(file.getAbsolutePath()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,8 +73,6 @@ public class LocaleManager {
         return localeMap;
     }
 
-    static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
-
     // for use in CommandEvent.localise or when the lang map has to be passed in manually.
     public static String managerLocalise(String key, Map<String, String> lang, Object... args) {
         String localisedString = lang.get(key);
@@ -80,7 +83,7 @@ public class LocaleManager {
 
     private static String serializeString(String localeInput) {
         String[] localeStrings = localeInput.split("//");
-        localeInput = localeInput.replace("//" + localeStrings[localeStrings.length-1], "").trim();
+        localeInput = localeInput.replace("//" + localeStrings[localeStrings.length - 1], "").trim();
         localeInput = localeInput.replaceAll("\\{nl}", "\n");
 
         Matcher matcher = serializePattern.matcher(localeInput);

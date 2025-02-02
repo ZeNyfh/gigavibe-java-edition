@@ -28,10 +28,6 @@ public class LocaleMiddleman {
         return "Error";
     }
 
-    public enum timeUnits {
-        second, minute, hour, day
-    }
-
     public static String getLocalisedTimeUnits(boolean plural, int unit, long guildID) {
         String[] unitKeys = {"second", "minute", "hour", "day"};
         String key = "main." + unitKeys[unit] + (plural ? ".plural" : "");
@@ -40,6 +36,10 @@ public class LocaleMiddleman {
 
     public static void clear() {
         threadedGuildID.remove();
+    }
+
+    public enum timeUnits {
+        second, minute, hour, day
     }
 }
 

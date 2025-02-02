@@ -34,6 +34,7 @@ import static Bots.Main.*;
  * @version 2.1.1
  */
 public class CommandEvent {
+    private static HashMap<String, String> lang = null;
     private final Object coreEvent;
     private final JDA JDA;
     private final Guild guild;
@@ -45,7 +46,6 @@ public class CommandEvent {
     private final String rawContent;
     private final List<Message.Attachment> attachments;
     private final JSONObject config;
-    private static HashMap<String, String> lang = null;
 
     public CommandEvent(MessageReceivedEvent event) {
         this.coreEvent = event;

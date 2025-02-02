@@ -2,7 +2,6 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandEvent;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import static Bots.CommandEvent.localise;

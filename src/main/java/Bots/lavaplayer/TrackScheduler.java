@@ -120,7 +120,6 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
 
-
     private void handleTrackFailure(GuildMessageChannelUnion originalEventChannel, AudioTrack track) {
         long guildID = originalEventChannel.getGuild().getIdLong();
 
@@ -194,14 +193,14 @@ public class TrackScheduler extends AudioEventAdapter {
         );
 
         eb.setDescription(managerLocalise("main.channel", lang, (nextTrack.getInfo().author.isEmpty() ?
-            lang.get("main.unknown") :
-            nextTrack.getInfo().author))
+                lang.get("main.unknown") :
+                nextTrack.getInfo().author))
         );
 
         eb.addField(managerLocalise("main.duration", lang),
-            nextTrack.getInfo().length > 432000000 ? lang.get("main.unknown") :
-            toSimpleTimestamp(nextTrack.getInfo().length),
-            true
+                nextTrack.getInfo().length > 432000000 ? lang.get("main.unknown") :
+                        toSimpleTimestamp(nextTrack.getInfo().length),
+                true
         );
 
         String name;
