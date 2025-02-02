@@ -54,7 +54,7 @@ cmd.fs.skippedToPos=Skipped {1} tracks to {2} // 1 is the amount of tracks it sk
 cmd.fs.skippedToTrack=Skipped the current track to {1} // track name
 cmd.fs.skipped=Skipped the current track.
 
-cmd.git.message=❕ Use this for bug reports and feature requests ONLY.{nl}When making an issue, make sure to specify what the bug is and how to recreate it.{nl}https://github.com/ZeNyfh/gigavibe-java-edition // you can think of the newlines as marks between new sentences. Don't remove the emoji :)
+cmd.git.message=❕ Use this for bug reports and feature requests ONLY.{nl}{nl}❕ When making an issue, make sure to specify what the bug is and how to recreate it.{nl}https://github.com/ZeNyfh/gigavibe-java-edition // you can think of the newlines as marks between new sentences. Don't remove the emoji :)
 
 cmd.help.cat.general=📖 **General**
 cmd.help.cat.music=🔊 **Music**
@@ -68,16 +68,16 @@ cmd.help.footer=Syntax: "<>" is a required argument, "[]" is an optional argumen
 cmd.help.embedTitle=📔 **Commands**
 
 cmd.info.info={1} Info // a discord server name
-cmd.info.ramUsage=**Ram usage:** {1}MB{nl}{nl} // 1024MB and two newlines.
-cmd.info.upTime=Uptime: {1} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
-cmd.info.discordServers=📡 Guilds: {1} // just the amount of servers
-cmd.info.discordMembers=👤 Users: {1} // the amount of total users
-cmd.info.registeredCommands=📑 Registered Commands: {1} // how many commands are registered
-cmd.info.voiceChannels=🎵 VCs: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
-cmd.info.playingCount=🔊 Playing Count: {1} // how many voice channels the bot is actually playing music in
-cmd.info.gatewayPing=⏱️ Gateway Ping: {1}ms // 204ms
+cmd.info.ramUsage=🔧 **Ram usage:** {1}MB{nl}{nl} // 1024MB and two newlines.
+cmd.info.upTime=⏰ **Uptime:** {1}{nl}{nl} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
+cmd.info.discordServers=📡 **Guilds:** {1}{nl}{nl} // just the amount of servers
+cmd.info.discordMembers=👤 **Users:** {1}{nl}{nl} // the amount of total users
+cmd.info.registeredCommands=📑 **Registered Commands:** {1}{nl}{nl} // how many commands are registered
+cmd.info.voiceChannels=🎵 **VCs:** {1}{nl}{nl} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
+cmd.info.playingCount=🔊 **Playing Count:** {1}{nl}{nl} // how many voice channels the bot is actually playing music in
+cmd.info.gatewayPing=⏱️ **Gateway Ping:** {1}ms{nl}{nl} // 204ms
 cmd.info.version=Version: {1} // 24.09.13 (a date but it's a version number)
-cmd.info.ping=Ping: {1}ms // ms here being short for milliseconds
+cmd.info.ping=**Ping:** {1}ms{nl}{nl} // ms here being short for milliseconds
 
 cmd.ins.notEnoughArgs=Not enough arguments provided{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here please.
 cmd.ins.invalidArgs=Invalid arguments, integers only{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here too please.
@@ -105,7 +105,7 @@ cmd.lyr.source=Lyrics sourced from lrclib.net // obviously dont translate the ur
 cmd.lyr.lyricsForTrack=Lyrics for: {1} // a song name
 cmd.lyr.tooLong=Lyrics were too long, uploading them as a file...
 
-cmd.np.livestreamDuration=Live stream duration {1} // a time. (HH:MM:SS).
+cmd.np.livestreamDuration=```Live stream duration {1}``` // a time. (HH:MM:SS).
 cmd.np.channel=👤 Channel:
 cmd.np.next=▶️ Up next:
 cmd.np.paused=⏸️ Track paused:
@@ -135,16 +135,16 @@ cmd.play.fileError=Something went wrong when loading the tracks from the file.
 
 cmd.pp.privacyPolicy=Privacy Policy
 
-cmd.q.nowPlaying=__**Now playing:**__{nl}
-cmd.q.queueInfoFooter={1} songs queued | Page {2}/{3} | Length: {3} // 1 is amount, 2 is a page number, 3 is the max page number (5/12 pages, change the slash if needed), 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
+cmd.q.nowPlaying=__**Now playing:**__{nl}{1} // song
+cmd.q.queueInfoFooter={1} songs queued | Page {2}/{3} | Length: {4} // 1 is amount, 2 is a page number, 3 is the max page number (5/12 pages, change the slash if needed), 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
 cmd.q.empty=The queue is empty.
 cmd.q.unknownTitle=Unknown title
 cmd.q.didYouMean=Did you mean to use **{1}**? // a different command name: "clear queue"
 cmd.q.integerError=The page must be a positive whole number.
 
 cmd.radio.list=📻 **Radio list:**{nl}{nl}
-cmd.radio.alternativeList=Or use {1} <String> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well
-cmd.radio.useForPlay=Use {1} <Radio Name>{2} to play a radio station. // 1 is a command, {2} is markdown.
+cmd.radio.alternativeList=*Or use `{1} {2} <String>`* // 1 is the bot prefix, 2 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well
+cmd.radio.useForPlay=Use "{1} {2} <Radio Name>" to play a radio station. // 1 is a command, {2} is markdown.
 cmd.radio.noArgsList=No arguments given, here's some radio stations to choose from:
 cmd.radio.noSearchTerm=No search term given.
 cmd.radio.notFound=Could not find a radio station with the given name.
@@ -158,7 +158,7 @@ cmd.rem.removed=Skipped queued track {1} successfully. // a track position, aka 
 
 cmd.seek.invalidArg=The argument is invalid, please use the format `[HOURS]:[MINUTES]:<SECONDS>` // keep the [] and <>, translate everything inside them too.
 cmd.seek.timeTooLow=The time provided less than or equal to 0.
-cmd.seek.setPos=Set the position of the track to: {1}. // 1 here being a simple timestamp like 12:34 (can include hours)
+cmd.seek.setPos=Set the position of the track to: **{1}**. // 1 here being a simple timestamp like 12:34 (can include hours)
 cmd.seek.cannotSeek=This track cannot be seeked through. // "seeking" is the act of skipping to a specific time/part in a song.
 cmd.seek.noArg=No argument was given.
 
@@ -176,7 +176,7 @@ cmd.skip.skippedTo.unknown=⏩ Skipped the track to __**Unknown Title**__ // tra
 cmd.skip.nowPlaying=Now playing: {1} // track URL
 cmd.skip.voted.title=Voted to skip the track.
 cmd.skip.voted.description={1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
-cmd.skip.channel=**Channel**{nl}{1} // a channel/artist name.
+cmd.skip.channel=**Channel**{nl}{1}{nl} // a channel/artist name.
 cmd.skip.duration=**Duration**{nl}{1} // a simple timestamp like 12:34 (can include hours)
 
 cmd.speed.defaulted=Set the playback speed back to 1.
@@ -241,7 +241,7 @@ main.minute.plural={1} minutes // 2 minutes
 main.second={1} second // 1 second
 main.second.plural={1} seconds // 2 seconds
 
-main.success=Success // any messages with Success "✅ **Success**"
+main.success=Success
 main.noPermission=You do not have the permission to use this command.
 main.ratelimit=You cannot use this command for another {1} seconds.
 main.botNoPermission=I don't have permission to read or send messages to this channel.
