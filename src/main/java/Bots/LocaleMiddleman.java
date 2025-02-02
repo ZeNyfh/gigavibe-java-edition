@@ -13,7 +13,7 @@ public class LocaleMiddleman {
     public static String getLocalisedSuccess() {
         Long guildID = threadedGuildID.get();
         if (guildID != null) {
-            return guildLocales.get(guildID).get("Main.success");
+            return guildLocales.get(guildID).get("main.success");
         }
         // fallback to english word if something happens.
         return "Success";
@@ -22,7 +22,7 @@ public class LocaleMiddleman {
     public static String getLocalisedError() {
         Long guildID = threadedGuildID.get();
         if (guildID != null) {
-            return guildLocales.get(guildID).get("Main.error");
+            return guildLocales.get(guildID).get("main.error");
         }
         // fallback to english word if something happens.
         return "Error";
@@ -34,7 +34,7 @@ public class LocaleMiddleman {
 
     public static String getLocalisedTimeUnits(boolean plural, int unit, long guildID) {
         String[] unitKeys = {"second", "minute", "hour", "day"};
-        String key = "Main." + unitKeys[unit] + (plural ? ".plural" : "");
+        String key = "main." + unitKeys[unit] + (plural ? ".plural" : "");
         return guildLocales.get(guildID).get(key);
     }
 
