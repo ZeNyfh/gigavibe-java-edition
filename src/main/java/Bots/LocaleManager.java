@@ -69,18 +69,9 @@ public class LocaleManager {
 
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
-    public static String ManagerLocalise(String original, String key, Map<String, String> lang, Object... args) {
+    public static String ManagerLocalise(String key, Map<String, String> lang, Object... args) {
         String localisedString = lang.get(key);
-        original = original.replaceAll("\n", "{nl}"); // convert standard \n to locale friendly {nl}
-        if (key.startsWith("main.")) {
-            original = localisedString; // safety precaution to not edit keys that are used everywhere.
-        }
-        // TODO: here add thing that will change the args in "String original" to positional
-
-        /* TODO: here call something that will update the en.txt locale contents with whatever is in original.
-         *  this will add the functionality of adding new keys faster and also editing existing localisations for english quickly, as well as keeping the original strings in the code.
-         *  the english locale does NOT need to exist with this system in place, though it exists for parity and to assist translators.
-         */
+        
         if (args.length != 0) return String.format(key, args);
         return localisedString;
     }

@@ -429,7 +429,7 @@ public class Main extends ListenerAdapter {
                 return;
             }
         }
-        // I use cmd here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
+        // I use cmd. here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
             if (filePrefix.isEmpty()) {
                 System.err.println("Tried to delete empty string, bad idea.");
