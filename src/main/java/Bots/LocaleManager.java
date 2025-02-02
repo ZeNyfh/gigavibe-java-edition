@@ -4,8 +4,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -13,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.Main.guildLocales;
-import static Bots.Main.sanitise;
 
 public class LocaleManager {
     public static HashMap<String, HashMap<String, String>> languages = new HashMap<>();
@@ -69,7 +66,8 @@ public class LocaleManager {
 
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
-    public static String ManagerLocalise(String key, Map<String, String> lang, Object... args) {
+    // for use in CommandEvent.localise or when the lang map has to be passed in manually.
+    public static String managerLocalise(String key, Map<String, String> lang, Object... args) {
         String localisedString = lang.get(key);
         
         if (args.length != 0) return String.format(key, args);
