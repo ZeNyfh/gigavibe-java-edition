@@ -221,12 +221,12 @@ public class GuildDataManager {
 
     public static void SaveQueues(JDA bot) { // queue restoration can only occur once because this here does NOT give the tracks their data.
         for (Guild guild : bot.getGuilds()) {
-            AudioPlayer player = PlayerManager.getInstance().getMusicManager(guild).audioPlayer;
+            GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
+            AudioPlayer player = musicManager.audioPlayer;
             AudioTrack playingTrack = player.getPlayingTrack();
             if (playingTrack == null) { // the track being null means there is no queue 99% of the time.
                 continue;
             }
-            GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
             String fileName = guild.getId() + ".txt";
             File guildQueueFile = new File(configFolder + "/queues/" + fileName);
             try {

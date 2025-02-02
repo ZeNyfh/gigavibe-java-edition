@@ -16,7 +16,7 @@ dj users or roles and some other cool features for you to play with once you [in
 
 ## Usage
 
-Make sure to define a token and change any parameters you wish to change (such as the prefix) within the .env file.
+Make sure to define a token and change any parameters you wish to change (such as the bot colour) within the .env file.
 If there is no .env file, try running the bot once. It will proceed to create any missing files.
 
 Run the bot using the latest included .jar file in releases or compile the jar yourself from source.

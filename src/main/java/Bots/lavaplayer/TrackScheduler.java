@@ -48,14 +48,13 @@ public class TrackScheduler extends AudioEventAdapter {
         GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
         long guildID = trackUserData.guildId;
         HashMap<String, String> lang = guildLocales.get(guildID);
-        guildFailCount.remove(guildID);
 
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
-            int currentFailCount = guildFailCount.getOrDefault(guildID, 0); // gets the value, if there is none, sets it to 0
-            guildFailCount.put(guildID, currentFailCount + 1);
-            handleTrackFailure(originalEventChannel, track);
+            handleTrackFailure(originalEventChannel, player, track);
             return;
         }
+
+        guildFailCount.remove(guildID);
 
         if (endReason.mayStartNext) {
             if (LoopGuilds.contains(guildID)) { // track is looping
@@ -120,22 +119,23 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
 
-    private void handleTrackFailure(GuildMessageChannelUnion originalEventChannel, AudioTrack track) {
+    private void handleTrackFailure(GuildMessageChannelUnion originalEventChannel, AudioPlayer player, AudioTrack track) {
         long guildID = originalEventChannel.getGuild().getIdLong();
 
         int failCount = guildFailCount.getOrDefault(guildID, 0) + 1;
         guildFailCount.put(guildID, failCount);
 
+        System.err.println("Failed to load track " + track.getInfo().uri + " | fail count: " + failCount);
         if (failCount == 1) { // if fails once, retry the track.
             retryTrack(track);
         } else if (failCount < 3) { // if it is less than 3 but not 1, handle a regular failure.
-            handleRegularFailure(originalEventChannel);
+            handleRegularFailure(originalEventChannel, player);
         } else { // if it is more than 3, worry (network issue usually).
             handleCriticalFailure(originalEventChannel);
         }
     }
 
-    private void handleRegularFailure(GuildMessageChannelUnion originalEventChannel) {
+    private void handleRegularFailure(GuildMessageChannelUnion originalEventChannel, AudioPlayer player) {
         long guildID = originalEventChannel.getGuild().getIdLong();
         Map<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
@@ -147,12 +147,13 @@ public class TrackScheduler extends AudioEventAdapter {
 
         if (queue.isEmpty()) {
             guildFailCount.put(guildID, 0);
+        } else {
+            playNextTrack(player, originalEventChannel);
         }
     }
 
     private void handleCriticalFailure(GuildMessageChannelUnion originalEventChannel) {
         long guildID = originalEventChannel.getGuild().getIdLong();
-        queue.clear();
         guildFailCount.put(guildID, 0);
         HashMap<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
@@ -170,7 +171,6 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     private void retryTrack(AudioTrack track) {
-        System.err.println("Failed to load track " + track.getInfo().uri + " ; retrying...");
         this.player.startTrack(track.makeClone(), false);
     }
 

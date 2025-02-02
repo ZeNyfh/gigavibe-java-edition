@@ -20,6 +20,29 @@ import static Bots.CommandEvent.localise;
 // A simple checker designed to check common cases in commands
 // Can either be called manually or handled automatically by overriding getChecks
 public class CommandStateChecker {
+    public enum Check {
+        IS_USER_IN_ANY_VC, IS_BOT_IN_ANY_VC, IS_IN_SAME_VC, TRY_JOIN_VC, IS_DJ, IS_CHANNEL_BLOCKED, IS_PLAYING, IS_DEV
+    }
+
+    public static final class CheckResult {
+        private final boolean succeeded;
+        private final String message;
+
+        public CheckResult(boolean s, String m) {
+            this.succeeded = s;
+            this.message = m;
+        }
+
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+        public boolean succeeded() {
+            return this.succeeded;
+        }
+
+        public String getMessage() {
+            return this.message;
+        }
+    }
+
     private static final CheckResult success = new CheckResult(true, "(You should never see this message)");
 
     public static CheckResult PerformChecks(CommandEvent event, Check... checks) {
@@ -36,7 +59,7 @@ public class CommandStateChecker {
                 case IS_DEV -> result = IsDev(event);
                 default -> System.err.println("Skipping unhandled check for Check " + check.name());
             }
-            if (!result.Succeeded())
+            if (!result.succeeded())
                 break;
         }
         return result;
@@ -179,28 +202,5 @@ public class CommandStateChecker {
                 matchesAny = true;
 
         return new CheckResult(matchesAny, localise("cmd.scheck.devOnly"));
-    }
-
-    public enum Check {
-        IS_USER_IN_ANY_VC, IS_BOT_IN_ANY_VC, IS_IN_SAME_VC, TRY_JOIN_VC, IS_DJ, IS_CHANNEL_BLOCKED, IS_PLAYING, IS_DEV
-    }
-
-    public static final class CheckResult {
-        private final boolean succeeded;
-        private final String message;
-
-        public CheckResult(boolean s, String m) {
-            this.succeeded = s;
-            this.message = m;
-        }
-
-        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-        public boolean Succeeded() {
-            return this.succeeded;
-        }
-
-        public String GetMessage() {
-            return this.message;
-        }
     }
 }
