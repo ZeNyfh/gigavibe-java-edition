@@ -7,244 +7,246 @@
 // Translate everything between <>, [], and ()
 // if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain variables from the code.
 // please preserve the capitalisation and any punctuation if applicable, (use angled brackets or your local punctuation marks if necessary!).
+
 // if you find any markdown, try to keep it consistent between english and the language you are translating to, I.E if something is bolded with **{1}** then try keep that.
+// new lines are written with {nl}, try to keep them where they are, relative to your translations and the variables, when translating.
 
-CmdAp.noAPI=The bot has not been given an API key for LastFM, this command does not work without it.
-CmdAp.notAutoplaying=No longer autoplaying.
-CmdAp.isAutoplaying=Now autoplaying.
+cmd.ap.noAPI=The bot has not been given an API key for LastFM, this command does not work without it.
+cmd.ap.notAutoplaying=No longer autoplaying.
+cmd.ap.isAutoplaying=Now autoplaying.
 
-CmdBC.invalidUsage=The valid usage is: {1} <channel>{2} or {3} // 1 here is the command and its arguments, 2 is markdown (dont move from after channel), and 3 is also a command.
-CmdBC.alreadyBlocked=This channel is already blocked.
-CmdBC.notBlocked=This channel is not blocked.
-CmdBC.added=Added {1} to the list. // 1 is a channel name
-CmdBC.removed=Removed {1} from the list. // 1 is a channel name
-CmdBC.notFound=This channel was not found in this discord server.
-CmdBC.channelList=Blocked channels for {1} // 1 is the server name
-CmdBC.noChannels=None
+cmd.bc.invalidUsage=The valid usage is: `{1} <channel>` or `{2}` // 1 here is the command and its arguments, 2 is also a command, `` is markdown, do not remove.
+cmd.bc.alreadyBlocked=This channel is already blocked.
+cmd.bc.added=Added <#{1}> to the list. // 1 is a channel name
+cmd.bc.notBlocked=This channel is not blocked.
+cmd.bc.removed=Removed <#{1}> from the list. // 1 is a channel name
+cmd.bc.notFound=This channel was not found in this discord server.
+cmd.bc.channelList=Blocked channels for {1}: // 1 is the server name, colon implies there's a list after.
+cmd.bc.noChannels=**None**
 
-CmdBug.noReport=Please provide something to report.
-CmdBug.successMessage=Thanks for sending in a bug report!{1}The developer should be in contact with you via the bot's dms.{2}Please use the {3} command to reply to messages.{4} // all numbers here are newlines except 3 which is a command name.
+cmd.bug.noReport=Please provide something to report.
+cmd.bug.successMessage=Thank you for sending in a bug report!{nl}The developer should be in contact with you via the bot's dms.{nl}Please use the **{1}** command to reply to messages.{nl} // {1} is a command name. {nl} are newlines, do not remove the bolding (var surrounded by **).
 
-CmdBug.cleared=Cleared the queue
+cmd.cq.cleared=Cleared the queue
 
-CmdDc.disconnected=Disconnected from the voice channel and cleared the queue.
+cmd.dc.disconnected=Disconnected from the voice channel and cleared the queue.
 
-CmdDJ.roleList=Roles:
-CmdDJ.userList=Users:
-CmdDJ.roleListEmpty=None.
-CmdDJ.guildDJs=DJs for {1} // server name
-CmdDJ.notGiven=No members or roles were specified.
-CmdDJ.member=member
-CmdDJ.plural=members
-CmdDJ.role=role
-CmdDJ.plural=roles
-CmdDJ.and=and
-CmdDJ.added=Added {1} to the DJ list. // user/role name
-CmdDJ.removed=Removed {1} from the DJ list. // user/role name
-CmdDJ.invalidArgs=Invalid Arguments.
+cmd.dj.roleList=**Roles**:{nl}
+cmd.dj.roleListEmpty=None.
+cmd.dj.userList={nl}{nl}**Users:**{nl}
+cmd.dj.guildDJs=DJs for {1} // server name
+cmd.dj.notGiven=No members or roles were specified.
+cmd.dj.member=member
+cmd.dj.member.plural=members
+cmd.dj.role=role
+cmd.dj.role.plural=roles
+cmd.dj.membersAndRoles={1} {2} and {3} {4} // count of members, mentions, number, role/s and member names
+cmd.dj.added=Added {1} to the DJ list. // user/role name
+cmd.dj.removed=Removed {1} from the DJ list. // user/role name
+cmd.dj.invalidArgs=Invalid Arguments.
 
-CmdFS.failedToFind=Autoplay failed to find {1} // song title
-CmdFS.couldNotFind=Autoplay could not find similar tracks.
-CmdFS.noSearchTerm=An unknown error occurred when trying to autoplay.
-CmdFS.autoplayQueued=Autoplay queued:
-CmdFS.skippedQueue=Skipped the entire queue
-CmdFS.skippedToPos=Skipped {1} tracks to {2} // 1 is the amount of tracks it skipped, 2 is a track name
-CmdFS.skippedToTrack=Skipped the current track to {1} // track name
-CmdFS.skipped=Skipped the current track
+cmd.fs.failedToFind=Autoplay failed to find {1}{nl} // song title
+cmd.fs.couldNotFind=Autoplay could not find similar tracks.{nl}
+cmd.fs.nullSearchTerm=An unknown error occurred when trying to autoplay.{nl}
+cmd.fs.autoplayQueued=Autoplay queued: {1} - {2} // artist, song title
+cmd.fs.skippedQueue=Skipped the entire queue
+cmd.fs.skippedToPos=Skipped {1} tracks to {2} // 1 is the amount of tracks it skipped, 2 is a track name
+cmd.fs.skippedToTrack=Skipped the current track to {1} // track name
+cmd.fs.skipped=Skipped the current track.
 
-CmdGit.message={1}Use this for bug reports and feature requests ONLY.{2}When making an issue, make sure to specify what the bug is and how to recreate it.{3}https://github.com/ZeNyfh/gigavibe-java-edition // all numbers here are basically just newlines, you can think of the parts between as new sentences.
+cmd.git.message=❕ Use this for bug reports and feature requests ONLY.{nl}When making an issue, make sure to specify what the bug is and how to recreate it.{nl}https://github.com/ZeNyfh/gigavibe-java-edition // you can think of the newlines as marks between new sentences. Don't remove the emoji :)
 
-CmdHelp.general=General
-CmdHelp.music=Music
-CmdHelp.DJ=DJ
-CmdHelp.admin=Admin
-CmdHelp.dev=Dev
-CmdHelp.alias=Alias
-CmdHelp.plural=Aliases
-CmdHelp.originalFooter=Click the buttons to get more information on a group.
-CmdHelp.footer=Syntax: {1} is a required argument, {2} is an optional argument. {3} is an alternate word for the command. // these are commands, they are not language specific.
-CmdHelp.embedTitle=Commands
+cmd.help.cat.general=📖 **General**
+cmd.help.cat.music=🔊 **Music**
+cmd.help.cat.DJ=🎧 **DJ**
+cmd.help.cat.admin=📑 **Admin**
+cmd.help.cat.dev=🔨 **Dev**
+cmd.help.alias={nl}`Alias:`
+cmd.help.alias.plural={nl}`Aliases:`
+cmd.help.originalFooter=Click the buttons to get more information on a group.
+cmd.help.footer=Syntax: "<>" is a required argument, "[]" is an optional argument. "()" is an alternate word for the command. // these are command argument characters, they are not language specific, do not change.
+cmd.help.embedTitle=📔 **Commands**
 
-CmdInfo.info=Info
-CmdInfo.ramUsage=Ram usage: {1} // 1024MB
-CmdInfo.upTime=Uptime: {1} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
-CmdInfo.discordServers=Guilds: {1} // just the amount of servers
-CmdInfo.discordMembers=Users: {1} // the amount of total users
-CmdInfo.registeredCommands=Registered Commands: {1} // how many commands are registered
-CmdInfo.voiceChannels=VCs: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
-CmdInfo.playingCount=Playing Count: {1} // how many voice channels the bot is actually playing music in
-CmdInfo.gatewayPing=Gateway Ping: {1}ms // 204ms
-CmdInfo.version=Version: {1} // 24.09.13 (a date but it's a version number)
-CmdInfo.ping=Ping {1}ms // ms here being short for milliseconds
+cmd.info.info={1} Info // a discord server name
+cmd.info.ramUsage=**Ram usage:** {1}MB{nl}{nl} // 1024MB and two newlines.
+cmd.info.upTime=Uptime: {1} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
+cmd.info.discordServers=📡 Guilds: {1} // just the amount of servers
+cmd.info.discordMembers=👤 Users: {1} // the amount of total users
+cmd.info.registeredCommands=📑 Registered Commands: {1} // how many commands are registered
+cmd.info.voiceChannels=🎵 VCs: {1} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
+cmd.info.playingCount=🔊 Playing Count: {1} // how many voice channels the bot is actually playing music in
+cmd.info.gatewayPing=⏱️ Gateway Ping: {1}ms // 204ms
+cmd.info.version=Version: {1} // 24.09.13 (a date but it's a version number)
+cmd.info.ping=Ping: {1}ms // ms here being short for milliseconds
 
-CmdIns.notEnoughArgs=Not enough arguments provided{1}Usage: {2}Integer{3}URL/SearchTerm{4}// 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
-CmdIns.invalidArgs=Invalid arguments, integers only{1}Usage: {2}Integer{3}URL/SearchTerm{4} 1 is a newline, 2 3 and 4 are special characters (specifically < and > to show what is required in a command)
-CmdIns.decodingError=Something went wrong when decoding the track.
-CmdIns.addedToPos=Added the track to position: {1} // a position in the queue, a number.
-CmdIns.queueError=There was an error while adding the track to the queue: {1} // an error message from the code.
+cmd.ins.notEnoughArgs=Not enough arguments provided{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here please.
+cmd.ins.invalidArgs=Invalid arguments, integers only{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here too please.
+cmd.ins.decodingError=Something went wrong when decoding the track.
+cmd.ins.addedToPos=Added the track to position: **{1}** // a position in the queue, a number.
+cmd.ins.queueError=There was an error while adding the track to the queue: {1} // an error message from the code.
 
-CmdInv.haveFun=Have fun!
+cmd.inv.haveFun=Have fun!
 
-CmdJoin.noAccess=The bot can't access your channel
-CmdJoin.joined=Joined your vc.
+cmd.join.noAccess=The bot cannot access your channel.
+cmd.join.joined=Joined your voice channel!
 
-CmdLoc.list=List of languages:
-CmdLoc.languageChanged=The language has been changed to: {1} // 1 here being a language name.
-CmdLoc.unrecognised=Unrecognised language, here is a list of languages to choose from:
+cmd.loc.list=List of languages:
+cmd.loc.languageChanged=The language has been changed to: {1} // 1 here being a language name.
+cmd.loc.unrecognised=Unrecognised language, here is a list of languages to choose from:
 
-CmdLoop.notLooping=No longer looping the current track.
-CmdLoop.looping=Looping the current track.
+cmd.loop.notLooping=No longer looping the current track.
+cmd.loop.looping=Looping the current track.
 
-CmdLQ.notLooping=No longer looping the current queue.
-CmdLQ.looping=Looping the current queue.
+cmd.lq.notLooping=No longer looping the current queue.
+cmd.lq.looping=Looping the current queue.
 
-CmdLyr.notFound=No results found or the song title was unknown.
-CmdLyr.source=Lyrics sourced from lrclib.net
-CmdLyr.lyricsForTrack=Lyrics for: {1} // a song name
-CmdLyr.tooLong=Lyrics were too long, uploading them as a file.
+cmd.lyr.notFound=No results found or the song title was unknown.
+cmd.lyr.source=Lyrics sourced from lrclib.net // obviously dont translate the url
+cmd.lyr.lyricsForTrack=Lyrics for: {1} // a song name
+cmd.lyr.tooLong=Lyrics were too long, uploading them as a file...
 
-CmdNP.livestreamDuration=Live stream duration {1} // a number
-CmdNP.channel=Channel:
-CmdNP.next=Up next:
-CmdNP.paused=Track paused:
-CmdNP.true=True
-CmdNP.false=False
-CmdNP.trackLooping=Track Looping:
-CmdNP.queueLooping=Queue looping:
-CmdNP.autoplaying=Auto playing:
+cmd.np.livestreamDuration=Live stream duration {1} // a time. (HH:MM:SS).
+cmd.np.channel=👤 Channel:
+cmd.np.next=▶️ Up next:
+cmd.np.paused=⏸️ Track paused:
+cmd.np.true=✅ **True** // can be translated as yes, feel free to change the emoji here if applicable (IE circle)
+cmd.np.false=❌ **False** // can be translated as no, feel free to change the emoji here if applicable (IE checkmark)
+cmd.np.trackLooping=🔂 Track Looping: // this is what the true and false are for.
+cmd.np.queueLooping=🔁 Queue looping: // this is what the true and false are for.
+cmd.np.autoplaying=♾️ Auto playing: // this is what the true and false are for.
 
-CmdPause.resumed=The track is now playing.
-CmdPause.paused=The track is now paused.
+cmd.pause.resumed=Playback has now resumed.
+cmd.pause.paused=Playback is now paused.
 
-CmdPing.ping=ping: {1}ms // ms here being short for milliseconds 1 as ping number
-CmdPing.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds 1 also a ping number
+cmd.ping.ping=ping: {1}ms // ms here being short for milliseconds 1 as ping number
+cmd.ping.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds 1 also a ping number
 
-CmdPitch.defaulted=Set the pitch back to 1.
-CmdPitch.range=The pitch must be between 0.25 and 5
-CmdPitch.changed=Set the pitch of the track to {1}x // x here is like 5x or 2x, aka a multiplier
+cmd.pitch.defaulted=Set the pitch back to 1.
+cmd.pitch.range=The pitch must be between 0.25 and 5
+cmd.pitch.changed=Set the pitch of the track to {1}x // x here is like 5x or 2x, aka a multiplier
 
-CmdPlay.queuedFromAtt=Queued {1} tracks from attachments. // an amount, so like "queued 6 tracks from..."
-CmdPlay.error=Something went wrong when loading the tracks from attachments.
-CmdPlay.wrongFormat=The track failed to load: Unknown file format.
-CmdPlay.noArgs=No arguments given.
-CmdPlay.decodeError=Something went wrong when decoding the track.
-CmdPlay.queuedManySongs=Queued {1} songs! // how many songs it queued
-CmdPlay.fileError=Something went wrong when loading the tracks from the file.
+cmd.play.queuedFromAtt=Queued {1} tracks from attachments. // an amount, so like "queued 6 tracks from..."
+cmd.play.queuedFromAtt.error=Something went wrong when loading the tracks from the attachments.
+cmd.play.wrongFormat=The track failed to load: Unknown file format.
+cmd.play.noArgs=No arguments given.
+cmd.play.decodeError=Something went wrong when decoding the track.
+cmd.play.queuedManySongs=Queued {1} songs! // how many songs it queued
+cmd.play.fileError=Something went wrong when loading the tracks from the file.
 
-CmdPP.privacyPolicy=Privacy Policy
+cmd.pp.privacyPolicy=Privacy Policy
 
-CmdQ.nowPlaying=Now playing:
-CmdQ.queueInfoFooter={1} songs queued {2} Page {3} Length: {4} // 1 is amount, 2 is markdown, 3 is page number, 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
-CmdQ.empty=The queue is empty.
-CmdQ.unknownTitle=Unknown title
-CmdQ.didYouMean=Did you mean to use {1}? // a different command name: "clear queue"
-CmdQ.integerError=The page must be a positive integer.
+cmd.q.nowPlaying=__**Now playing:**__{nl}
+cmd.q.queueInfoFooter={1} songs queued | Page {2}/{3} | Length: {3} // 1 is amount, 2 is a page number, 3 is the max page number (5/12 pages, change the slash if needed), 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
+cmd.q.empty=The queue is empty.
+cmd.q.unknownTitle=Unknown title
+cmd.q.didYouMean=Did you mean to use **{1}**? // a different command name: "clear queue"
+cmd.q.integerError=The page must be a positive whole number.
 
-CmdRadio.list=Radio list:
-CmdRadio.alternativeList=Or use {1} <String>{2} // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well. {2} is just markdown.
-CmdRadio.useForPlay=Use {1} <Radio Name>{2} to play a radio station. // 1 is a command, {2} is markdown.
-CmdRadio.noArgsList=No arguments given, here's some radio stations to choose from:
-CmdRadio.noSearchTerm=No search term given.
-CmdRadio.notFound=Couldn't find a radio station with the given name
-CmdRadio.queued=Queued Radio station:
-CmdRadio.invalid=Not a valid radio station.
+cmd.radio.list=📻 **Radio list:**{nl}{nl}
+cmd.radio.alternativeList=Or use {1} <String> // 1 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well
+cmd.radio.useForPlay=Use {1} <Radio Name>{2} to play a radio station. // 1 is a command, {2} is markdown.
+cmd.radio.noArgsList=No arguments given, here's some radio stations to choose from:
+cmd.radio.noSearchTerm=No search term given.
+cmd.radio.notFound=Could not find a radio station with the given name.
+cmd.radio.queued=Queued Radio station:
+cmd.radio.invalid=Not a valid radio station.
 
-CmdRem.noSongs=There are no songs in the queue to remove.
-CmdRem.invalidArgs=Invalid arguments, integers only.
-CmdRem.tooLarge=The provided number was larger than the size of the queue.
-CmdRem.removed=Skipped queued track {1} successfully. // a track name.
+cmd.rem.noSongs=There are no songs in the queue to remove.
+cmd.rem.invalidArgs=Invalid arguments, integers only.
+cmd.rem.tooLarge=The provided number was larger than the size of the queue.
+cmd.rem.removed=Skipped queued track {1} successfully. // a track position, aka "the track that was at position 5 in the queue".
 
-CmdSeek.invalidArg=Argument is invalid, use the format {1}[HOURS]:[MINUTES]:<SECONDS>{2}" // 1 and 2 are markdown. keep the [] and <>, translate everything inside.
-CmdSeek.timeTooLow=The time provided is lower than or equal to 0.
-CmdSeek.setPos=Set the position of the track to: {1}. // 1 here being timestamp like 12:34 (can include hours)
-CmdSeek.cannotSeek=You cannot seek with this track.
-CmdSeek.noArg=No argument given.
+cmd.seek.invalidArg=The argument is invalid, please use the format `[HOURS]:[MINUTES]:<SECONDS>` // keep the [] and <>, translate everything inside them too.
+cmd.seek.timeTooLow=The time provided less than or equal to 0.
+cmd.seek.setPos=Set the position of the track to: {1}. // 1 here being a simple timestamp like 12:34 (can include hours)
+cmd.seek.cannotSeek=This track cannot be seeked through. // "seeking" is the act of skipping to a specific time/part in a song.
+cmd.seek.noArg=No argument was given.
 
-CmdShuffle.emptyQueue=There is nothing in the queue.
-CmdShuffle.shuffled=Shuffled the queue!
+cmd.shuffle.emptyQueue=There is nothing in the queue.
+cmd.shuffle.shuffled=Shuffled the queue!
 
-CmdSkip.alreadyVoted=You have already voted to skip.
-CmdSkip.failedToFind=Autoplay failed to find // there is a track title after this.
-CmdSkip.failedToFind=Autoplay failed to find {1} // a track title.
-CmdSkip.couldNotFind=Autoplay could not find similar tracks.
-CmdSkip.noSearchTerm=An unknown error occurred when trying to autoplay.
-CmdSkip.autoplayQueued=Autoplay queued: // there is also a track after this (artist - title)
-CmdSkip.skippedTheTrack=Skipped the track.
-CmdSkip.skippedTo=Skipped the track to {1} // a track title.
-CmdSkip.unknown=Skipped the track to {1}Unknown Title{2} // both are markdown and should be around unknown title.
-CmdSkip.nowPlaying=Now playing: {1} // track title
-CmdSkip.title=Voted to skip the track.
-CmdSkip.description={1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
-CmdSkip.channel=Channel
-CmdSkip.duration=Duration
+cmd.skip.alreadyVoted=You have already voted to skip.
+cmd.skip.failedToFind=Autoplay failed to find {1} // a track title.
+cmd.skip.couldNotFind=Autoplay could not find similar tracks.{nl}
+cmd.skip.noSearchTerm=An unknown error occurred when trying to autoplay.
+cmd.skip.autoplayQueued=Autoplay queued: __**{1} - {2}**__  // "artistName - title" for example: "Rick Astley - Never gonna give you up"
+cmd.skip.skippedTheTrack=⏩ Skipped the track.
+cmd.skip.skippedTo=⏩ Skipped the track to __**{1}**__ // a song title.
+cmd.skip.skippedTo.unknown=⏩ Skipped the track to __**Unknown Title**__ // translate Unknown Title, try preserve the capitalisation
+cmd.skip.nowPlaying=Now playing: {1} // track URL
+cmd.skip.voted.title=Voted to skip the track.
+cmd.skip.voted.description={1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
+cmd.skip.channel=**Channel**{nl}{1} // a channel/artist name.
+cmd.skip.duration=**Duration**{nl}{1} // a simple timestamp like 12:34 (can include hours)
 
-CmdSpeed.defaulted=Set the speed back to 1.
-CmdSpeed.rangeError=The speed must be between 0.2 and 5
-CmdSpeed.success=Set the playback speed of the track to {1}x. // x here is a multiplier, for example 3x
+cmd.speed.defaulted=Set the playback speed back to 1.
+cmd.speed.rangeError=The speed must be between 0.2 and 5.
+cmd.speed.success=Set the playback speed of the track to {1}x. // {1}x here is a number and multiplier, for example 3x
 
-CmdTOS.TermsOfService=Terms of Service
+cmd.tos.TermsOfService=Terms of Service
 
-CmdVib.defaulted=Set the parameters to their default values.
-CmdVib.incorrectArgs=The valid usage is: {1} <Frequency> <Depth>{2} // 1 and 2 are markdown, keep the <>, translate the inside of them.
-CmdVib.frequency=The frequency must be between 0.1 and 14
-CmdVib.depth=The depth must be between 0.05 and 1
-CmdVib.success=Set the vibrato frequency to {1}Hz.{2}Set the vibrato depth to {3} // 1 here is a number, like 5Hz (hertz), 2 is markdown, and 3 is also a number.
+cmd.vib.defaulted=Set the parameters to their default values.
+cmd.vib.incorrectArgs=The valid usage is: `{1} <Frequency> <Depth>` // {1} is a command name, keep the <>, translate the inside of them.
+cmd.vib.range.frequency=The frequency must be between 0.1 and 14.
+cmd.vib.range.depth=The depth must be between 0.05 and 1
+cmd.vib.success=Set the vibrato frequency to {1}Hz.{nl}Set the vibrato depth to {2} // 1 here is a number, like 5Hz (hertz), and 2 is also a number.
+cmd.vib.invalidArgs=❌ **Invalid arguments.**
 
-CmdVol.defaulted=Set volume to the default of 100.
-CmdVol.incorrectArg=The volume must be an integer.
-CmdVol.tooHigh=The volume can not be higher than 500.
-CmdVol.tooLow=The volume can not be lower than 0.
-CmdVol.success=Changed the volume to {1}. // what the volume was changed to, a number between 1 and 500
-CmdVol.invalidValue=Invalid value.
+cmd.vol.defaulted=Set volume to the default of 100.
+cmd.vol.incorrectArg=The volume must be a whole number.
+cmd.vol.tooHigh=The volume can not be higher than 500.
+cmd.vol.tooLow=The volume can not be lower than 0.
+cmd.vol.success=Changed the volume to {1}. // what the volume was changed to, a number between 1 and 500
+cmd.vol.invalidValue=Invalid value.
 
-BaseCmd.notAllowed=Not Allowed
+basecmd.notAllowed=❌ **Not Allowed**
 
-CmdSCheck.notInVC=You are not in a VC. // VC is voice channel
-CmdSCheck.botNotInVC=The bot is not in a VC.
-CmdSCheck.botNotInYourVC=The bot is not in your VC.
-CmdSCheck.botBusy=The bot is already busy in another VC.
-CmdSCheck.cannotJoin=The bot is unable to join the VC.
-CmdSCheck.noDJ=You do not have a DJ permissions.
-CmdSCheck.commandBlocked=This command is blocked in this channel.
-CmdSCheck.isNotPlaying=The bot is not currently playing anything.
-CmdSCheck.devOnly=This command is for developers only.
+cmd.scheck.notInVC=You are not in a voice channel.
+cmd.scheck.botNotInVC=The bot is not in a voice channel.
+cmd.scheck.botNotInYourVC=The bot is not in your voice channel.
+cmd.scheck.botBusy=The bot is already busy in another voice channel.
+cmd.scheck.cannotJoin=The bot is unable to join the voice channel.
+cmd.scheck.noDJ=You do not have DJ permissions.
+cmd.scheck.commandBlocked=This command is blocked in this channel.
+cmd.scheck.isNotPlaying=The bot is not currently playing anything.
+cmd.scheck.devOnly=This command is for developers only.
 
-PManager.noSpotify=The bot is unable to play spotify tracks right now
-PManager.playlistQueued=Size: {1} tracks.{2}Length: {3} // 1 is the amount of tracks, 2 is some markdown, 3 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
-PManager.APIError=An error with the YouTube search API has occurred.
-PManager.loadFailed=The track failed to load: {1}
-PManager.noMatches=No matches found for the track.
+pmanager.noSpotify=The bot is unable to play spotify tracks right now.
+pmanager.playlistQueued=Size: **{1}** tracks.{nl}Length: **{2}**{nl}{nl} // 1 is the amount of tracks, 2 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
+pmanager.APIError=An error with the YouTube search API has occurred.
+pmanager.loadFailed=The track failed to load: {1}
+pmanager.noMatches=No matches found for the track.
 
-TSched.notFound=Autoplay failed to find {1} // a track name
-TSched.noSimilar=Autoplay could not find similar tracks.
-TSched.unknownError=An unknown error occurred when trying to autoplay.
-TSched.queued=Autoplay queued:
+tsched.autoplay.notFound=Autoplay failed to find {1} // a track name
+tsched.autoplay.noSimilar=Autoplay could not find similar tracks.{nl}
+tsched.autoplay.unknownError=An unknown error occurred when trying to autoplay.{nl}
+tsched.queued=♾️ Autoplay queued: // this is followed by an "artist name - song title"
 
-TSched.regularFailure=The track failed to load due to an unknown reason. Skipping...
+tsched.regfail=The track failed to load due to an unknown reason. Skipping...
 
-TSched.title=Critical Error
-TSched.description=Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.
-TSched.footer=If this issue persists with specific audio sources, please file a bug report using /bug
+tsched.critfail.title=❌ Critical Error
+tsched.critfail.description=Tracks have now failed to load 3 times, likely due to an upstream network issue beyond our control. Clearing the queue to avoid track spam.
+tsched.critfail.footer=If this issue persists with specific audio sources, please file a bug report using /bug
 
-TSched.nowPlaying=Now playing: {1} // a track name
+tsched.playnext.nowPlaying=Now playing: {1} // a track name
 
 // if you experience issues with slavic languages specifically, feel free to use something like minut(y) if it can be two forms for plural.
 // if a language needs something akin to "days 2", then you can move the variable before/after the word!
-Main.day={1} day // 1 day
-Main.day.plural={1} days // 2 days
-Main.hour={1} hour // 1 hour
-Main.hour.plural={1} hours // 2 hours
-Main.minute={1} minute // 1 minute
-Main.minute.plural={1} minutes // 2 minutes
-Main.second={1} second // 1 second
-Main.second.plural={1} seconds // 2 seconds
+main.day={1} day // 1 day
+main.day.plural={1} days // 2 days
+main.hour={1} hour // 1 hour
+main.hour.plural={1} hours // 2 hours
+main.minute={1} minute // 1 minute
+main.minute.plural={1} minutes // 2 minutes
+main.second={1} second // 1 second
+main.second.plural={1} seconds // 2 seconds
 
-Main.success=Success // any messages with Success "✅ **Success**"
-Main.noPermission=You do not have the permission to use this command.
-Main.ratelimit=You cannot use this command for another {1} seconds.
-Main.botNoPermission=I don't have permission to read or send messages to this channel.
-Main.error=Error
-Main.unknown=Unknown
-Main.channel=Channel {1} // a channel name
-Main.duration=Duration {1} // the duration of a track, will translate itself
-Main.update=An update to the bot occurred, your queue and parameters have been restored!{1}If you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.
+main.success=Success // any messages with Success "✅ **Success**"
+main.noPermission=You do not have the permission to use this command.
+main.ratelimit=You cannot use this command for another {1} seconds.
+main.botNoPermission=I don't have permission to read or send messages to this channel.
+main.error=Error
+main.unknown=Unknown
+main.channel=**Channel**{nl}
+main.duration=**Duration**{nl}
+main.update=An update to the bot occurred, your queue and parameters have been restored!{nl}If you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.
