@@ -69,15 +69,15 @@ public class LocaleManager {
     // for use in CommandEvent.localise or when the lang map has to be passed in manually.
     public static String managerLocalise(String key, Map<String, String> lang, Object... args) {
         String localisedString = lang.get(key);
-        
-        if (args.length != 0) return String.format(key, args);
+        localisedString = localisedString.replaceAll("\\\\n", "\n");
+        if (args.length != 0) return String.format(localisedString, args);
         return localisedString;
     }
 
     private static String serializeString(String localeInput) {
-        localeInput = localeInput.split("//")[0];
-        localeInput = localeInput.trim();
-        localeInput = localeInput.replaceAll("\\{nl}", "\n"); // convert locale friendly newline to standard newline
+        String[] localeStrings = localeInput.split("//");
+        localeInput = localeInput.replace("//" + localeStrings[localeStrings.length-1], "").trim();
+        localeInput = localeInput.replaceAll("\\{nl}", "\n");
 
         Matcher matcher = serializePattern.matcher(localeInput);
 
