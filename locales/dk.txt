@@ -11,236 +11,236 @@ cmd.ap.noAPI=Botten har ikke fået en API key til LastFM, denne kommando duer ik
 cmd.ap.notAutoplaying=Autoplayer ikke musik.
 cmd.ap.isAutoplaying=Autoplayer musik.
 
-cmd.bc.invalidUsage=Den gyldige brug er: {1} <kanal>{2} eller {3}
+cmd.bc.invalidUsage=Den gyldige brug er: `{1} <kanal>` eller `{2}`
 cmd.bc.alreadyBlocked=Denne kanal er allerede blokeret.
 cmd.bc.notBlocked=Denne kanal er ikke blokeret.
-cmd.bc.added=Tilføjet {1} til listen.
-cmd.bc.removed=Fjernede {1} fra listen.
+cmd.bc.added=Tilføjet <#{1}> til listen.
+cmd.bc.removed=Fjernede <#{1}> fra listen.
 cmd.bc.notFound=Denne kanal var ikke fundet på denne Discord server.
-cmd.bc.channelList=Blokeret kanaler for {1}
-cmd.bc.noChannels=Ingen
+cmd.bc.channelList=Blokeret kanaler for {1}:
+cmd.bc.noChannels=**Ingen**
 
-cmd.bug.noReport=Giv venligst noget at rapportere.
-cmd.bug.successMessage=Tak for at sende en bug rapport!{1}Developeren skulle gerne komme i kontakt med dig gennem bottens DMs.{2}Venligst brug {3} kommandoen til at svare på beskeder.{4}
+cmd.bug.noReport=Angiv venligst noget at rapportere.
+cmd.bug.successMessage=Tak for din fejlrapport!{nl}Udvikleren vil kontakte dig via botens DM'er.{nl}Brug kommandoen **{1}** til at svare på beskeder.{nl}
 
-cmd.cq.cleared=Ryddede køen
+cmd.cq.cleared=Ryddede køen.
 
 cmd.dc.disconnected=Forlod kanalen og ryddede køen.
 
-cmd.dj.roleList=Roller:
-cmd.dj.userList=Brugere:
+cmd.dj.roleList=**Roller**:{nl}
 cmd.dj.roleListEmpty=Ingen.
+cmd.dj.userList={nl}{nl}**Brugere:**{nl}
 cmd.dj.guildDJs=DJs for {1}
-cmd.dj.notGiven=Ingen brugere eller roller specificeret.
-cmd.dj.member=bruger
-cmd.dj.member.plural=brugere
+cmd.dj.notGiven=Ingen medlemmer eller roller blev angivet.
+cmd.dj.member=medlem
+cmd.dj.member.plural=medlemmer
 cmd.dj.role=rolle
 cmd.dj.role.plural=roller
-cmd.dj.membersAndRoles=og
-cmd.dj.added=Tilføjet {1} til DJ listen.
-cmd.dj.removed=Fjernede {1} fra DJ listen.
+cmd.dj.membersAndRoles={1} {2} og {3} {4}
+cmd.dj.added=Tilføjet {1} til DJ-listen.
+cmd.dj.removed=Fjernet {1} fra DJ-listen.
 cmd.dj.invalidArgs=Ugyldige argumenter.
 
-cmd.fs.failedToFind=Autoplay kunne ikke finde {1}
-cmd.fs.couldNotFind=Autoplay kunne ikke finde lignende musik.
-cmd.fs.nullSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
-cmd.fs.autoplayQueued=Autoplay i kø:
-cmd.fs.skippedQueue=Sprang over hele køen
-cmd.fs.skippedToPos=Sprang {1} sange over til {2}
-cmd.fs.skippedToTrack=Sprang det nuværende musik til {1}
-cmd.fs.skipped=Sprang over nuværende musik
+cmd.fs.failedToFind=Autoplay kunne ikke finde {1}{nl}
+cmd.fs.couldNotFind=Autoplay kunne ikke finde lignende numre.{nl}
+cmd.fs.nullSearchTerm=Der opstod en ukendt fejl under forsøg på autoplay.{nl}
+cmd.fs.autoplayQueued=Autoplay i kø: {1} - {2}
+cmd.fs.skippedQueue=Sprang over hele køen.
+cmd.fs.skippedToPos=Sprang {1} numre over til {2}.
+cmd.fs.skippedToTrack=Sprang det nuværende nummer over til {1}.
+cmd.fs.skipped=Sprang det nuværende nummer over.
 
-cmd.git.message={1}KUN brug til bug rapports og funktionsanmodninger.{2}Når du rapporterer et problem, skal du sørge for at angive hvad fejlen er, og hvordan den genskabes.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.{nl}{nl}❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.{nl}https://github.com/ZeNyfh/gigavibe-java-edition
 
-cmd.help.cat.general=Generel
-cmd.help.cat.music=Musik
-cmd.help.cat.DJ=DJ
-cmd.help.cat.admin=Admin
-cmd.help.cat.dev=Dev
-cmd.help.alias=Alias
-cmd.help.alias.plural=Aliaser
+cmd.help.cat.general=📖 **Generelt**
+cmd.help.cat.music=🔊 **Musik**
+cmd.help.cat.DJ=🎧 **DJ**
+cmd.help.cat.admin=📑 **Admin**
+cmd.help.cat.dev=🔨 **Udvikler**
+cmd.help.alias={nl}`Alias:`
+cmd.help.alias.plural={nl}`Aliaser:`
 cmd.help.originalFooter=Klik på knapperne for at få flere oplysninger om en gruppe.
-cmd.help.footer=Syntaks: {1} er et påkrævet argument, {2} er et valgfrit argument. {3} er et alternativt ord for kommandoen.
-cmd.help.embedTitle=Kommandoer
+cmd.help.footer=Syntaks: "<>" er et påkrævet argument, "[]" er et valgfrit argument. "()" er et alternativt ord for kommandoen.
+cmd.help.embedTitle=📔 **Kommandoer**
 
-cmd.info.info=Info
-cmd.info.ramUsage=Ram brug: {1}
-cmd.info.upTime=Uptime: {1}
-cmd.info.discordServers=Guilds: {1}
-cmd.info.discordMembers=Brugere: {1}
-cmd.info.registeredCommands=Registrerede kommandoer: {1}
-cmd.info.voiceChannels=VCs: {1} // VCs here being short for VoiceChannels
-cmd.info.playingCount=Nuværende servere der bruger denne bot: {1}
-cmd.info.gatewayPing=Gateway Ping: {1}ms
+cmd.info.info={1} Info
+cmd.info.ramUsage=🔧 **RAM-forbrug:** {1}MB{nl}{nl}
+cmd.info.upTime=⏰ **Oppetid:** {1}{nl}{nl}
+cmd.info.discordServers=📡 **Servere:** {1}{nl}{nl}
+cmd.info.discordMembers=👤 **Brugere:** {1}{nl}{nl}
+cmd.info.registeredCommands=📑 **Registrerede kommandoer:** {1}{nl}{nl}
+cmd.info.voiceChannels=🎵 **Stemmekanaler:** {1}{nl}{nl}
+cmd.info.playingCount=🔊 **Aktive afspilninger:** {1}{nl}{nl}
+cmd.info.gatewayPing=⏱️ **Gateway-ping:** {1}ms{nl}{nl}
 cmd.info.version=Version: {1}
-cmd.info.ping=Ping {1}ms // ms here being short for milliseconds
+cmd.info.ping=**Ping:** {1}ms{nl}{nl}
 
-cmd.ins.notEnoughArgs=Ikke nok argumenter angivet{1}Brug: {2}Heltal{3}URL/Søgeudtryk{4}
-cmd.ins.invalidArgs=Ugyldige argumenter, kun heltal{1}Brug: {2}Heltal{3}URL/Søgeudtryk{4}
-cmd.ins.decodingError=Noget gik galt da musikken blev afkodet.
-cmd.ins.addedToPos=Føjede musik til position: {1}
-cmd.ins.queueError=Der opstod en fejl under tilføjelse af musik til køen: {1}
+cmd.ins.notEnoughArgs=Ikke nok argumenter angivet.{nl}Brug: <Heltal> <URL/Søgeudtryk>
+cmd.ins.invalidArgs=Ugyldige argumenter, kun heltal.{nl}Brug: <Heltal> <URL/Søgeudtryk>
+cmd.ins.decodingError=Noget gik galt under afkodningen af nummeret.
+cmd.ins.addedToPos=Tilføjet nummeret på position: **{1}**
+cmd.ins.queueError=Der opstod en fejl under tilføjelse af nummeret til køen: {1}
 
 cmd.inv.haveFun=God fornøjelse!
 
-cmd.join.noAccess=Botten kan ikke få adgang til din kanal
-cmd.join.joined=Botten tilsluttede sig til din kanal.
+cmd.join.noAccess=Botten har ikke adgang til din kanal.
+cmd.join.joined=Botten sluttede sig til din stemmekanal.
 
 cmd.loc.list=Liste over sprog:
-cmd.loc.languageChanged=Språket er ændret til: {1} // 1 her er et sprognavn.
-cmd.loc.unrecognised=Ugenkendt sprog, her er en liste over sprog at vælge imellem:
+cmd.loc.languageChanged=Sproget blev ændret til: {1}
+cmd.loc.unrecognised=Ukendt sprog, her er en liste over tilgængelige sprog:
 
-cmd.loop.notLooping=Gentager ikke længere den nuværende musik.
-cmd.loop.looping=Gentager nuværende musik.
+cmd.loop.notLooping=Gentager ikke længere det nuværende nummer.
+cmd.loop.looping=Gentager nu det nuværende nummer.
 
 cmd.lq.notLooping=Gentager ikke længere den nuværende kø.
-cmd.lq.looping=Gentager den nuværende kø.
+cmd.lq.looping=Gentager nu den nuværende kø.
 
 cmd.lyr.notFound=Ingen resultater fundet, eller sangtitlen var ukendt.
-cmd.lyr.source=Lyrik hentet fra lrclib.net
-cmd.lyr.lyricsForTrack=Lyrik for: {1}
-cmd.lyr.tooLong=Lyrik var for lang, uploader dem som en fil.
+cmd.lyr.source=Tekst hentet fra lrclib.net
+cmd.lyr.lyricsForTrack=Tekst til: {1}
+cmd.lyr.tooLong=Teksten var for lang, den uploades som en fil.
 
-cmd.np.livestreamDuration=Livestream varighed {1}
-cmd.np.channel=Kanal: {1}
-cmd.np.next=Næste:
-cmd.np.paused=Sat på pause:
-cmd.np.true=Ja
-cmd.np.false=Nej
-cmd.np.trackLooping=Musik gentager:
-cmd.np.queueLooping=Kø gentager:
-cmd.np.autoplaying=Autoplaying:
+cmd.np.livestreamDuration=```Livestream varighed {1}```
+cmd.np.channel=👤 Kanal:
+cmd.np.next=▶️ Næste:
+cmd.np.paused=⏸️ Nummer på pause:
+cmd.np.true=✅ **Sandt**
+cmd.np.false=❌ **Falsk**
+cmd.np.trackLooping=🔂 Nummer gentages:
+cmd.np.queueLooping=🔁 Kø gentages:
+cmd.np.autoplaying=♾️ Autoplay:
 
-cmd.pause.resumed=Musikken afspiller nu.
-cmd.pause.paused=Musikken er sat på pause.
+cmd.pause.resumed=Afspilningen er genoptaget.
+cmd.pause.paused=Afspilningen er sat på pause.
 
-cmd.ping.ping=ping: {1}ms // ms here being short for milliseconds
-cmd.ping.gatewayPing=gateway ping: {1}ms // ms here being short for milliseconds
+cmd.ping.ping=ping: {1}ms
+cmd.ping.gatewayPing=gateway-ping: {1}ms
 
-cmd.pitch.defaulted=Satte tonehøjden tilbage til 1.
-cmd.pitch.range=Tonehøjden skal være mellem 0,25 og 5
-cmd.pitch.changed=Indstil musikkens tonehøjde til {1}x // x here is like 5x or 2x, aka a multiplier
+cmd.pitch.defaulted=Tonehøjden er sat tilbage til 1.
+cmd.pitch.range=Tonehøjden skal være mellem 0,25 og 5.
+cmd.pitch.changed=Tonehøjden for nummeret er sat til {1}x.
 
-cmd.play.queuedFromAtt=Sat {1} sange i kø fra vedhæftede filer.
-cmd.play.queuedFromAtt.error=Noget gik galt under indlæsning af musik fra vedhæftede filer.
-cmd.play.wrongFormat=Musikken kunne ikke indlæses: Ukendt filformat.
-cmd.play.noArgs=Ingen argumenter givet.
-cmd.play.decodeError=Noget gik galt, da musikken blev afkodet.
-cmd.play.queuedManySongs=Sange i kø: {1}!
-cmd.play.fileError=Noget gik galt under indlæsning af musik fra filen.
+cmd.play.queuedFromAtt=Tilføjet {1} numre fra vedhæftede filer til køen.
+cmd.play.queuedFromAtt.error=Noget gik galt under indlæsning af numre fra vedhæftede filer.
+cmd.play.wrongFormat=Nummeret kunne ikke indlæses: Ukendt filformat.
+cmd.play.noArgs=Ingen argumenter angivet.
+cmd.play.decodeError=Noget gik galt under afkodningen af nummeret.
+cmd.play.queuedManySongs=Tilføjet {1} numre til køen!
+cmd.play.fileError=Noget gik galt under indlæsning af numre fra filen.
 
 cmd.pp.privacyPolicy=Privatlivspolitik
 
-cmd.q.nowPlaying=Spiller nu:
-cmd.q.queueInfoFooter={1} sange i kø {2} Side {3} Længde: {4}
+cmd.q.nowPlaying=__**Spiller nu:**__{nl}{1}
+cmd.q.queueInfoFooter={1} numre i kø | Side {2}/{3} | Længde: {4}
 cmd.q.empty=Køen er tom.
 cmd.q.unknownTitle=Ukendt titel
-cmd.q.didYouMean=Mente du at bruge {1}?
+cmd.q.didYouMean=Mente du at bruge **{1}**?
 cmd.q.integerError=Siden skal være et positivt heltal.
 
-cmd.radio.list=Radioliste:
-cmd.radio.alternativeList=Eller brug {1} radio søgning <Ord>{2} // keep the <>
-cmd.radio.useForPlay=Brug {1} radio <Radio Navn>{2} at afspille en radiostation.
-cmd.radio.noArgsList=Ingen argumenter givet, her er nogle radiostationer at vælge imellem:
-cmd.radio.noSearchTerm=Intet søgeterm angivet.
-cmd.radio.notFound=Kunne ikke finde en radiostation med det givne navn
-cmd.radio.queued=Radiostation i kø:
-cmd.radio.invalid=Ikke en gyldig radiostation.
+cmd.radio.list=📻 **Radiokanaler:**{nl}{nl}
+cmd.radio.alternativeList=*Eller brug `{1} {2} <Tekst>`*
+cmd.radio.useForPlay=Brug "{1} {2} <Radiokanal>" for at afspille en radiokanal.
+cmd.radio.noArgsList=Ingen argumenter angivet, her er nogle radiokanaler at vælge imellem:
+cmd.radio.noSearchTerm=Intet søgeord angivet.
+cmd.radio.notFound=Kunne ikke finde en radiokanal med det givne navn.
+cmd.radio.queued=Radiokanal i kø:
+cmd.radio.invalid=Ugyldig radiokanal.
 
-cmd.rem.noSongs=Der er ingen sange i køen til at fjerne.
+cmd.rem.noSongs=Der er ingen numre i køen at fjerne.
 cmd.rem.invalidArgs=Ugyldige argumenter, kun heltal.
-cmd.rem.tooLarge=Det angivne antal var større end køens længde.
-cmd.rem.removed=Sprang sangen {1} i kø over med succes.
+cmd.rem.tooLarge=Det angivne tal var større end køens længde.
+cmd.rem.removed=Fjernede nummer {1} fra køen.
 
-cmd.seek.invalidArg=Argumentet er ugyldigt, brug formatet {1}[TIMER]:[MINUTTER]:<SEKUNDER>{2}" // keep the [] and <>
+cmd.seek.invalidArg=Argumentet er ugyldigt, brug formatet `[TIMER]:[MINUTTER]:<SEKUNDER>`
 cmd.seek.timeTooLow=Den angivne tid er mindre end eller lig med 0.
-cmd.seek.setPos=Sæt musikens position til: {1}.
-cmd.seek.cannotSeek=Du kan ikke springe rundt i denne sang.
-cmd.seek.noArg=Intet argument givet.
+cmd.seek.setPos=Indstillede nummerets position til: **{1}**.
+cmd.seek.cannotSeek=Du kan ikke spole i dette nummer.
+cmd.seek.noArg=Intet argument angivet.
 
 cmd.shuffle.emptyQueue=Der er intet i køen.
 cmd.shuffle.shuffled=Blandede køen!
 
 cmd.skip.alreadyVoted=Du har allerede stemt for at springe over.
-cmd.skip.failedToFind=Autoplay kunne ikke finde
 cmd.skip.failedToFind=Autoplay kunne ikke finde {1}
-cmd.skip.couldNotFind=Autoplay kunne ikke finde lignende musik.
-cmd.skip.noSearchTerm=Der opstod en ukendt fejl i forsøg på at autoplay.
-cmd.skip.autoplayQueued=Autoplay i kø:
-cmd.skip.skippedTheTrack=Sprang sangen over.
-cmd.skip.skippedTo=Sprang over til sang {1}
-cmd.skip.skippedTo.unknown=Sprang sporet over til Ukendt titel
+cmd.skip.couldNotFind=Autoplay kunne ikke finde lignende numre.{nl}
+cmd.skip.noSearchTerm=Der opstod en ukendt fejl under forsøg på autoplay.
+cmd.skip.autoplayQueued=Autoplay i kø: __**{1} - {2}**__
+cmd.skip.skippedTheTrack=⏩ Sprang nummeret over.
+cmd.skip.skippedTo=⏩ Sprang over til __**{1}**__
+cmd.skip.skippedTo.unknown=⏩ Sprang over til __**Ukendt titel**__
 cmd.skip.nowPlaying=Spiller nu: {1}
-cmd.skip.voted.title=Stemte for at springe over nuværende sang.
-cmd.skip.voted.description={1} ud af {2} stemmer.
-cmd.skip.channel=Kanal
-cmd.skip.duration=Varighed
+cmd.skip.voted.title=Stemte for at springe over nummeret.
+cmd.skip.voted.description={1} ud af {2} stemmer nødvendige for at springe over.
+cmd.skip.channel=**Kanal**{nl}{1}{nl}
+cmd.skip.duration=**Varighed**{nl}{1}
 
-cmd.speed.defaulted=Satte hastigheden tilbage til 1.
-cmd.speed.rangeError=Hastigheden skal være mellem 0,2 og 5
-cmd.speed.success=Indstil afspilningshastigheden for musikken til {1}x. // x here is a multiplier, for example 3x
+cmd.speed.defaulted=Afspilningshastigheden er sat tilbage til 1.
+cmd.speed.rangeError=Hastigheden skal være mellem 0,2 og 5.
+cmd.speed.success=Indstillede afspilningshastigheden til {1}x.
 
 cmd.tos.TermsOfService=Servicevilkår
 
-cmd.vib.defaulted=Satte parametrene til deres standardværdier.
-cmd.vib.incorrectArgs=The valid usage is: {1} <Frekvens> <Dybde>{2} // keep the <>
-cmd.vib.frequency=Frekvensen skal være mellem 0,1 og 14
-cmd.vib.depth=Dybden skal være mellem 0,05 og 1
-cmd.vib.success=Indstillet vibrato frekvensen til {1}Hz.{2}Indstillet vibrato dybden til {3}
+cmd.vib.defaulted=Parametrene er sat tilbage til standardværdier.
+cmd.vib.incorrectArgs=Den korrekte brug er: `{1} <Frekvens> <Dybde>`
+cmd.vib.range.frequency=Frekvensen skal være mellem 0,1 og 14.
+cmd.vib.range.depth=Dybden skal være mellem 0,05 og 1.
+cmd.vib.success=Indstillede vibratofrekvensen til {1}Hz.{nl}Indstillede vibratodybden til {2}.
+cmd.vib.invalidArgs=❌ **Ugyldige argumenter.**
 
-cmd.vol.defaulted=Satte lydstyrken til standarden på 100.
-cmd.vol.incorrectArg=Volumen skal være et heltal.
+cmd.vol.defaulted=Lydstyrken er sat tilbage til standardværdien på 100.
+cmd.vol.incorrectArg=Lydstyrken skal være et heltal.
 cmd.vol.tooHigh=Lydstyrken kan ikke være højere end 500.
 cmd.vol.tooLow=Lydstyrken kan ikke være lavere end 0.
 cmd.vol.success=Ændrede lydstyrken til {1}.
 cmd.vol.invalidValue=Ugyldig værdi.
 
-basecmd.notAllowed=Ikke tilladt
+basecmd.notAllowed=❌ **Ikke tilladt**
 
-cmd.scheck.notInVC=Du er ikke i en VC. // VC is voice channel
-cmd.scheck.botNotInVC=Botten er ikke i en VC.
-cmd.scheck.botNotInYourVC=Botten er ikke i din VC.
-cmd.scheck.botBusy=Botten er allerede optaget i en anden VC.
-cmd.scheck.cannotJoin=Botten ​​kan ikke tilslutte sig denne VC.
-cmd.scheck.noDJ=Du har ikke DJ tilladelser.
+cmd.scheck.notInVC=Du er ikke i en stemmekanal.
+cmd.scheck.botNotInVC=Botten er ikke i en stemmekanal.
+cmd.scheck.botNotInYourVC=Botten er ikke i din stemmekanal.
+cmd.scheck.botBusy=Botten er allerede optaget i en anden stemmekanal.
+cmd.scheck.cannotJoin=Botten kan ikke tilslutte sig denne stemmekanal.
+cmd.scheck.noDJ=Du har ikke DJ-tilladelser.
 cmd.scheck.commandBlocked=Denne kommando er blokeret i denne kanal.
-cmd.scheck.isNotPlaying=Botten ​​spiller ikke noget lige nu.
-cmd.scheck.devOnly=Denne kommando er kun for developers.
+cmd.scheck.isNotPlaying=Botten spiller ikke noget i øjeblikket.
+cmd.scheck.devOnly=Denne kommando er kun for udviklere.
 
-pmanager.noSpotify=Botten er ikke i stand til at afspille Spotify musik lige nu
-pmanager.playlistQueued=Størrelse: {1} Musik.{2}Længde: {3}
-pmanager.APIError=Der er opstået en fejl med YouTubes søge-API.
+pmanager.noSpotify=Botten kan ikke afspille Spotify-numre lige nu.
+pmanager.playlistQueued=Størrelse: **{1}** numre.{nl}Længde: **{2}**{nl}{nl}
+pmanager.APIError=Der opstod en fejl med YouTubes søge-API.
 pmanager.loadFailed=Nummeret kunne ikke indlæses: {1}
-pmanager.noMatches=Der blev ikke fundet noget til denne sang.
+pmanager.noMatches=Der blev ikke fundet nogen matches for dette nummer.
 
-tsched.notFound=Autoplay kunne ikke finde {1}
-tsched.noSimilar=Autoplay kunne ikke finde lignende sange.
-tsched.unknownError=Der opstod en ukendt fejl i forsøg på at autoplay.
-tsched.queued=Autoplay i kø: {1}
+tsched.autoplay.notFound=Autoplay kunne ikke finde {1}
+tsched.autoplay.noSimilar=Autoplay kunne ikke finde lignende numre.{nl}
+tsched.autoplay.unknownError=Der opstod en ukendt fejl under forsøg på autoplay.{nl}
+tsched.queued=♾️ Autoplay i kø:
 
-tsched.regularFailure=Musikken kunne ikke indlæses på grund af en ukendt årsag. Springer over...
+tsched.regfail=Nummeret kunne ikke indlæses af ukendte årsager. Springer over...
 
-tsched.title=Kritisk Fejl
-tsched.description=Musikken kunne ikke blevet indlæst 3 gange, sandsynligvis på grund af et upstream-netværksproblem udenfor vores kontrol. Rydning af køen for at undgå spam.
-tsched.footer=Hvis dette problem fortsætter med specifikke kilder, bedes du indsende en fejlrapport vha /bug
+tsched.critfail.title=❌ Kritisk fejl
+tsched.critfail.description=Nummeret kunne ikke indlæses 3 gange, sandsynligvis på grund af et netværksproblem uden for vores kontrol. Rydder køen for at undgå spam.
+tsched.critfail.footer=Hvis dette problem fortsætter med specifikke lydkilder, bedes du indsende en fejlrapport vha. /bug
 
-tsched.nowPlaying=Spiller nu: {1}
+tsched.playnext.nowPlaying=Spiller nu: {1}
 
-main.day={1} dag // 1 day
-main.day.plural={1} dage // 2 days
-main.hour={1} time // 1 hour
-main.hour.plural={1} timer // 2 hours
-main.minute={1} minut // 1 minute
-main.minute.plural={1} minutter // 2 minutes
-main.second={1} sekund // 1 second
-main.second.plural={1} sekunder // 2 seconds
+main.day={1} dag
+main.day.plural={1} dage
+main.hour={1} time
+main.hour.plural={1} timer
+main.minute={1} minut
+main.minute.plural={1} minutter
+main.second={1} sekund
+main.second.plural={1} sekunder
 
-main.success=Succes // any messages with Success "✅ **Success**"
+main.success=✅ **Succes**
 main.noPermission=Du har ikke tilladelse til at bruge denne kommando.
 main.ratelimit=Du kan ikke bruge denne kommando i {1} sekunder.
-main.botNoPermission=Jeg har ikke tilladelse til at læse eller sende beskeder til denne kanal.
+main.botNoPermission=Jeg har ikke tilladelse til at læse eller sende beskeder i denne kanal.
 main.error=Fejl
 main.unknown=Ukendt
-main.channel=Kanal {1}
-main.duration=Varighed {1}
-main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!{1}Hvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens About Me.
+main.channel=**Kanal**{nl}
+main.duration=**Varighed**{nl}
+main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!{nl}Hvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens "Om mig".
