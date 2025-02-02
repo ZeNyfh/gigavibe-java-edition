@@ -2,6 +2,7 @@ package Bots;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -10,6 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Bots.GuildDataManager.GetGuildConfig;
 import static Bots.Main.guildLocales;
 
 public class LocaleManager {
@@ -21,6 +23,8 @@ public class LocaleManager {
         languages.put("dansk", readLocale("locales/dk.txt"));
         languages.put("español", readLocale("locales/es.txt"));
         for (Guild g : bot.getGuilds()) {
+            JSONObject config = GetGuildConfig(g.getIdLong());
+            guildLocales.put(g.getIdLong(), languages.get(config.get("Locale")));
             guildLocales.putIfAbsent(g.getIdLong(), languages.get("english"));
         }
     }

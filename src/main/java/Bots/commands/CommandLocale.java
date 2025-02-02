@@ -2,6 +2,8 @@ package Bots.commands;
 
 import Bots.BaseCommand;
 import Bots.CommandEvent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import static Bots.CommandEvent.localise;
 import static Bots.LocaleManager.languages;
@@ -16,7 +18,8 @@ public class CommandLocale extends BaseCommand {
         } else {
             String lang = event.getArgs()[1].toLowerCase();
             if (languages.containsKey(lang)) {
-                event.getConfig().put("Locale", lang);
+                JSONObject config = event.getConfig();
+                config.put("Locale", lang);
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
                 event.replyEmbeds(createQuickSuccess(localise("cmd.loc.languageChanged", lang)));
             } else {
