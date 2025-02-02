@@ -53,6 +53,7 @@ import java.util.jar.JarFile;
 
 import static Bots.GuildDataManager.GetConfig;
 import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.LocaleMiddleman.*;
 import static java.lang.System.currentTimeMillis;
 
@@ -429,7 +430,7 @@ public class Main extends ListenerAdapter {
                 return;
             }
         }
-        // I use cmd. here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
+        // I use cmd here as the normal java method for this would throw an exception if a file is being accessed (such as the bot.jar file)
         try {
             if (filePrefix.isEmpty()) {
                 System.err.println("Tried to delete empty string, bad idea.");
@@ -572,8 +573,9 @@ public class Main extends ListenerAdapter {
     private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
+            Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError(String.format(guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong()).get("Main.ratelimit"), ratelimitTime))).setEphemeral(true).queue();
+                event.replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime))).setEphemeral(true).queue();
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -604,8 +606,9 @@ public class Main extends ListenerAdapter {
             }
             //ratelimit code. ratelimit is per-user per-guild
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
+            Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.getMessage().replyEmbeds(createQuickError(String.format(guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong()).get("Main.ratelimit"), ratelimitTime))).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+                event.getMessage().replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime))).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -640,9 +643,9 @@ public class Main extends ListenerAdapter {
             event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.")).queue(); // this cannot be localised because it isn't in a guild.
             return;
         }
-        HashMap<String, String> locale = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
+        HashMap<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) {
-            event.replyEmbeds(createQuickError(locale.get("Main.botNoPermission"))).setEphemeral(true).queue();
+            event.replyEmbeds(createQuickError(managerLocalise("main.botNoPermission", lang))).setEphemeral(true).queue();
             return;
         }
         for (BaseCommand Command : commands) {
@@ -717,6 +720,7 @@ public class Main extends ListenerAdapter {
                 try {
                     Guild guild = bot.getGuildById(guildID);
                     GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
+                    Map<String, String> lang = guildLocales.get(guild.getIdLong());
                     VoiceChannel vc = guild.getVoiceChannelById(vcID);
                     if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
                         continue;
@@ -749,7 +753,7 @@ public class Main extends ListenerAdapter {
                     player.setVolume(volume);
                     // TODO: audio filters to be added here.
 
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **" + guildLocales.get(channelUnion.getGuild().getIdLong()).get("Main.success") + "**", String.format(guildLocales.get(channelUnion.getGuild().getIdLong()).get("Main.update"), "\n"))).queue();
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickSuccess(managerLocalise("main.update", lang))).queue();
                     scanner.close();
                     ignoreFiles = file.delete();
                 } catch (Exception e) {

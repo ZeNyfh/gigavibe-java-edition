@@ -10,8 +10,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.getyarn.GetyarnAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -23,7 +21,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.unions.GuildMessageChannelUnion;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -39,6 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
 public class PlayerManager {
@@ -160,7 +158,7 @@ public class PlayerManager {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 if (sendEmbed) {
-                    replyWithEmbed(eventOrChannel, createQuickError(locale.get("PlayerManager.noSpotify")));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noSpotify", locale)));
                 }
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
                 return loadResultFuture;
@@ -181,6 +179,7 @@ public class PlayerManager {
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
+                Map<String, String> locale = guildLocales.get(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 for (AudioTrack audioTrack : tracks) {
                     audioTrack.setUserData(new TrackUserData(eventOrChannel));
@@ -204,7 +203,7 @@ public class PlayerManager {
                             musicManager.scheduler.queue(audioTrack);
                         }
                         embed.setTitle(audioPlaylist.getName().replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("\\\\", "\\\\\\\\"));
-                        embed.appendDescription(String.format(locale.get("PlayerManager.playlistQueued"), "**" + tracks.size() + "**","\n", "**" + toTimestamp(lengthSeconds, commandGuild.getIdLong()) + "**\n\n"));
+                        embed.appendDescription(managerLocalise("pmanager.playlistQueued", locale, tracks.size(), toTimestamp(lengthSeconds, commandGuild.getIdLong())));
                         for (int i = 0; i < tracks.size() && i < 5; i++) {
                             if (tracks.get(i).getInfo().title == null) {
                                 embed.appendDescription(i + 1 + ". [" + tracks.get(i).getInfo().identifier + "](" + tracks.get(i).getInfo().uri + ")\n");
@@ -227,7 +226,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError(locale.get("PlayerManager.noMatches")));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noMatches", locale)));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
@@ -239,11 +238,11 @@ public class PlayerManager {
 
                 final StringBuilder loadFailedBuilder = new StringBuilder();
                 if (e.getMessage().toLowerCase().contains("search response: 400")) {
-                    loadFailedBuilder.append(locale.get("PlayerManager.APIError")).append(" ");
+                    loadFailedBuilder.append(managerLocalise("pmanager.APIError", locale)).append(" ");
                 }
                 loadFailedBuilder.append(e.getMessage());
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError(String.format(locale.get("PlayerManager.loadFailed"), loadFailedBuilder)));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.loadFailed", locale, loadFailedBuilder)));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });
