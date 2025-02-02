@@ -65,9 +65,9 @@ public class CommandPlay extends BaseCommand {
             for (String finalLine : finalURLs) {
                 PlayerManager.getInstance().loadAndPlay(event, finalLine.split("\\|", 2)[0].trim(), false);
             }
-            event.replyEmbeds(createQuickSuccess(localise("Queued {num} songs!", "CmdPlay.queuedManySongs", actualListSize)));
+            event.replyEmbeds(createQuickSuccess(localise("cmd.play.queuedManySongs", actualListSize)));
         } catch (Exception e) {
-            event.replyEmbeds(createQuickError(localise("Something went wrong when loading the tracks from the file.", "Cmd.fileError") + "\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
+            event.replyEmbeds(createQuickError(localise("cmd.play.fileError") + "\n```\n" + e.getMessage() + "\n```")); // tell the user what happened.
         }
         return true;
     }
@@ -108,20 +108,20 @@ public class CommandPlay extends BaseCommand {
                         for (Message.Attachment attachment : playableAttachments) {
                             PlayerManager.getInstance().loadAndPlay(event, attachment.getUrl(), false);
                         }
-                        event.replyEmbeds(createQuickSuccess(localise("Queued {num} tracks from attachments.", "CmdPlay.queuedFromAtt", playableAttachments.size())));
+                        event.replyEmbeds(createQuickSuccess(localise("cmd.play.queuedFromAtt", playableAttachments.size())));
                     }
                 } catch (Exception e) {
-                    event.replyEmbeds(createQuickError(localise("Something went wrong when loading the tracks from the attachments.", "CmdPlay.queuedFromAtt.error") + "\n```\n" + e.getMessage() + "\n```"));
+                    event.replyEmbeds(createQuickError(localise("cmd.play.queuedFromAtt.error") + "\n```\n" + e.getMessage() + "\n```"));
                 }
             }
         } else { // no valid attachments to play, check for url/s in message content.
             if (args.length < 2) {
                 // error for no valid attachments found
                 if (!attachments.isEmpty()) {
-                    event.replyEmbeds(createQuickError(localise("The track failed to load: Unknown file format.", "CmdPlay.wrongFormat")));
+                    event.replyEmbeds(createQuickError(localise("cmd.play.wrongFormat")));
                     return;
                 }
-                event.replyEmbeds(createQuickError(localise("No arguments given.", "CmdPlay.noArgs")));
+                event.replyEmbeds(createQuickError(localise("cmd.play.noArgs")));
                 return;
             }
             if (playFromTXT(event, false)) return;
@@ -137,7 +137,7 @@ public class CommandPlay extends BaseCommand {
             try {
                 PlayerManager.getInstance().loadAndPlay(event, link, true);
             } catch (FriendlyException e) {
-                event.replyEmbeds(createQuickError(localise("Something went wrong when decoding the track.", "CmdPlay.decodeError") + "\n```\n" + e.getMessage() + "\n```"));
+                event.replyEmbeds(createQuickError(localise("cmd.play.decodeError") + "\n```\n" + e.getMessage() + "\n```"));
             }
         }
     }

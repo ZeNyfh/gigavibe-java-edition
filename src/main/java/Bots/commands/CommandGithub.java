@@ -9,8 +9,9 @@ import static Bots.Main.createQuickEmbed;
 public class CommandGithub extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(" ", localise("❕ Use this for bug reports and feature requests ONLY.\n\n❕ When making an issue, make sure to specify what the bug is and how to recreate it.\n\nhttps://github.com/ZeNyfh/gigavibe-java-edition","CommandGithub.message")));
+        event.replyEmbeds(createQuickEmbed(" ", localise("cmd.git.message")));
     }
+
     @Override
     public Category getCategory() {
         return Category.General;

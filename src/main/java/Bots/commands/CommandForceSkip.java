@@ -34,17 +34,17 @@ public class CommandForceSkip extends BaseCommand {
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
             boolean canPlay = true;
-            String errorMessage = "❌ **" + localise("Error", "Main.error") + ":**\n";
+            String errorMessage = "❌ **" + localise("main.error") + ":**\n";
             if (searchTerm.equals("notfound")) {
-                messageBuilder.append(errorMessage).append(localise("Autoplay failed to find {songTitle}\n", "CmdFS.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
+                messageBuilder.append(errorMessage).append(localise("cmd.fs.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
                 canPlay = false;
             }
             if (searchTerm.equals("none")) {
-                messageBuilder.append(errorMessage).append(localise("Autoplay could not find similar tracks\n.", "CmdFS.couldNotFind"));
+                messageBuilder.append(errorMessage).append(localise("cmd.fs.couldNotFind"));
                 canPlay = false;
             }
             if (searchTerm.isEmpty()) {
-                messageBuilder.append(errorMessage).append(localise("An unknown error occurred when trying to autoplay.\n", "CmdFS.nullSearchTerm"));
+                messageBuilder.append(errorMessage).append(localise("cmd.fs.nullSearchTerm"));
                 canPlay = false;
             }
             if (canPlay) {
@@ -55,14 +55,14 @@ public class CommandForceSkip extends BaseCommand {
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                messageBuilder.append("♾️ ").append(localise("Autoplay queued: {artistName} - {songTitle}{nl}","CommandForceSkip.autoplayQueued", artistName, title));
+                messageBuilder.append("♾️ ").append(localise("cmd.fs.autoplayQueued", artistName, title));
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("Skipped the entire queue","CommandForceSkip.skippedQueue")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("cmd.fs.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
@@ -76,8 +76,9 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("Skipped {n} tracks to {track}","CommandForceSkip.skippedToPos",
-                        event.getArgs()[1], "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__")));
+                String trackHyperLink = "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__";
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("cmd.fs.skippedToPos",
+                        event.getArgs()[1], trackHyperLink)));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
@@ -91,11 +92,12 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("Skipped the current track to {track}","CommandForceSkip.skippedToTrack", "__**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim())));
+                String trackHyperLink = "__**[" + title + "](" + trackInfo.uri + ")**__\n\n";
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("cmd.fs.skippedToTrack", trackHyperLink + messageBuilder).trim())));
 
             } else {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("Skipped the current track","CommandForceSkip.skipped") + "\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("cmd.fs.skipped") + "\n\n" + messageBuilder).trim()));
             }
         }
         skipCountGuilds.remove(event.getGuild().getIdLong());

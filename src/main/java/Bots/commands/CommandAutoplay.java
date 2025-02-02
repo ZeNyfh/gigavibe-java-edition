@@ -22,14 +22,14 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
-            event.replyEmbeds(createQuickError(localise("The bot has not been given an API key for LastFM, this command does not work without it.", "CmdAp.noAPI")));
+            event.replyEmbeds(createQuickError(localise("cmd.ap.noAPI")));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", localise("No longer autoplaying.","CmdAp.notAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", localise("cmd.ap.notAutoplaying")));
             AutoplayGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", localise("Now autoplaying.","CmdAp.isAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", localise("cmd.ap.isAutoplaying")));
             AutoplayGuilds.add(event.getGuild().getIdLong());
             AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
             if (track != null) {

@@ -24,13 +24,13 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.replyEmbeds(createQuickError(localise("You do not have the permission to use this command.","Main.noPermission")));
+            event.replyEmbeds(createQuickError(localise("main.noPermission")));
             return;
         }
         String[] args = event.getArgs();
         if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
             if (args.length < 3) {
-                event.replyEmbeds(createQuickError(localise("The valid usage is: `{blockchannel <remove/add>} <channel>` or `{blockchannel list}`", "CmdBC.invalidUsage")));
+                event.replyEmbeds(createQuickError(localise("cmd.bc.invalidUsage", "blockchannel <remove/add>", "blockchannel list")));
                 return;
             }
         }
@@ -47,29 +47,29 @@ public class CommandBlockChannel extends BaseCommand {
                 if (guildChannel.getId().equals(targetChannel)) {
                     if (args[1].equalsIgnoreCase("add")) {
                         if (blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError(localise("This channel is already blocked.", "CmdBC.alreadyBlocked")));
+                            event.replyEmbeds(createQuickError(localise("cmd.bc.alreadyBlocked")));
                             return;
                         }
                         blockedChannels.add(targetChannel);
-                        event.replyEmbeds(createQuickSuccess(localise("Added {channelName} to the list.", "CmdBC.added", "<#" + guildChannel.getIdLong() + ">")));
+                        event.replyEmbeds(createQuickSuccess(localise("cmd.bc.added", +guildChannel.getIdLong())));
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         if (!blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError(localise("This channel is not blocked.", "CmdBC.notBlocked")));
+                            event.replyEmbeds(createQuickError(localise("cmd.bc.notBlocked")));
                             return;
                         }
                         blockedChannels.remove(targetChannel);
-                        event.replyEmbeds(createQuickSuccess(localise("Removed {channelName} from the list.","CmdBC.removed", "<#" + guildChannel.getIdLong() + ">")));
+                        event.replyEmbeds(createQuickSuccess(localise("cmd.bc.removed", guildChannel.getIdLong())));
                     }
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError(localise("This channel was not found in this discord server.","CmdBC.notFound")));
+            event.replyEmbeds(createQuickError(localise("cmd.bc.notFound")));
         } else if (args[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
-            eb.setTitle(localise("Blocked channels for {guildName}:","CmdBC.channelList", event.getGuild().getName()));
+            eb.setTitle(localise("cmd.bc.channelList", event.getGuild().getName()));
             if (blockedChannels.isEmpty()) {
-                eb.appendDescription(localise("**None**", "CmdBC.noChannels"));
+                eb.appendDescription(localise("cmd.bc.noChannels"));
                 event.replyEmbeds(eb.build());
                 return;
             }
@@ -78,7 +78,7 @@ public class CommandBlockChannel extends BaseCommand {
             }
             event.replyEmbeds(eb.build());
         } else {
-            event.replyEmbeds(createQuickError(localise("The valid usage is: `{blockchannel <remove/add>} <channel>` or `{blockchannel list}`", "CmdBC.invalidUsage")));
+            event.replyEmbeds(createQuickError(localise("cmd.bc.invalidUsage")));
         }
     }
 

@@ -25,19 +25,19 @@ public class CommandSpeed extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setSpeed(1);
-            event.replyEmbeds(createQuickSuccess(localise("Set the playback speed back to 1.","CmdSpeed.defaulted")));
+            event.replyEmbeds(createQuickSuccess(localise("cmd.speed.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5 && value >= 0.2)) {
-            event.replyEmbeds(createQuickError(localise("The speed must be between 0.2 and 5.","CmdSpeed.rangeError")));
+            event.replyEmbeds(createQuickError(localise("cmd.speed.rangeError")));
             return;
         }
 
         timescale.setSpeed(value);
-        event.replyEmbeds(createQuickSuccess(localise("Set the playback speed of the track to {speedValue}x.","CommandSpeed.success", value)));
+        event.replyEmbeds(createQuickSuccess(localise("cmd.speed.success", value)));
     }
 
     @Override

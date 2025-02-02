@@ -25,19 +25,19 @@ public class CommandPitch extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setPitch(1);
-            event.replyEmbeds(createQuickSuccess(localise("Set the pitch back to 1.", "CmdPitch.defaulted")));
+            event.replyEmbeds(createQuickSuccess(localise("cmd.pitch.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5.0 && value >= 0.25)) {
-            event.replyEmbeds(createQuickError(localise("The pitch must be between 0.25 and 5", "CmdPitch.range")));
+            event.replyEmbeds(createQuickError(localise("cmd.pitch.range")));
             return;
         }
 
         timescale.setPitch(value);
-        event.replyEmbeds(createQuickSuccess(localise("Set the pitch of the track to {pitchNum}x", "CmdPitch.changed", value)));
+        event.replyEmbeds(createQuickSuccess(localise("cmd.pitch.changed", value)));
     }
 
     @Override

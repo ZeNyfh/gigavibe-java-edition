@@ -29,7 +29,7 @@ public class CommandSeek extends BaseCommand {
                 String[] times = args[1].split(":", 3);
                 for (String time : times) {
                     if (!time.matches("^\\d+$")) {
-                        event.replyEmbeds(createQuickError(String.format(localise("The argument is invalid, please use the format `[HOURS]:[MINUTES]:<SECONDS>`","CmdSeek.invalidArg"))));
+                        event.replyEmbeds(createQuickError(String.format(localise("cmd.seek.invalidArg"))));
                         return;
                     }
                 }
@@ -43,16 +43,16 @@ public class CommandSeek extends BaseCommand {
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    event.replyEmbeds(createQuickError(localise("The time provided less than or equal to 0.", "CmdSeek.timeTooLow")));
+                    event.replyEmbeds(createQuickError(localise("cmd.seek.timeTooLow")));
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
-                event.replyEmbeds(createQuickSuccess(localise("Set the position of the track to: **{timestampPos}**.","CmdSeek.setPos", toSimpleTimestamp(position))));
+                event.replyEmbeds(createQuickSuccess(localise("cmd.seek.setPos", toSimpleTimestamp(position))));
             } else {
-                event.replyEmbeds(createQuickError(localise("This track cannot be seeked through.","CmdSeek.cannotSeek")));
+                event.replyEmbeds(createQuickError(localise("cmd.seek.cannotSeek")));
             }
         } else {
-            event.replyEmbeds(createQuickError(localise("No argument was given.","CmdSeek.noArg")));
+            event.replyEmbeds(createQuickError(localise("cmd.seek.noArg")));
         }
     }
 

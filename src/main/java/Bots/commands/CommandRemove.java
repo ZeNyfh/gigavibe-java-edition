@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Bots.CommandEvent.localise;
-import static Bots.Main.*;
+import static Bots.Main.createQuickError;
+import static Bots.Main.createQuickSuccess;
 
 public class CommandRemove extends BaseCommand {
     @Override
@@ -26,16 +27,16 @@ public class CommandRemove extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(localise("There are no songs in the queue to remove.","CmdRem.noSongs")));
+            event.replyEmbeds(createQuickError(localise("cmd.rem.noSongs")));
             return;
         }
         if (event.getArgs().length == 1 || !event.getArgs()[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(localise("Invalid arguments, integers only.", "CmdRem.invalidArgs")));
+            event.replyEmbeds(createQuickError(localise("cmd.rem.invalidArgs")));
             return;
         }
         int position = Integer.parseInt(event.getArgs()[1]);
-        if (queue.size() < position - 1) {
-            event.replyEmbeds(createQuickError(localise("The provided number was larger than the size of the queue.", "CmdRem.tooLarge")));
+        if (queue.size() < position) {
+            event.replyEmbeds(createQuickError(localise("cmd.rem.tooLarge")));
             return;
         }
         musicManager.scheduler.queue.clear();
@@ -43,7 +44,7 @@ public class CommandRemove extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickSuccess(localise("Skipped queued track **{position}** successfully.","CmdRem.removed",position)));
+        event.replyEmbeds(createQuickSuccess(localise("cmd.rem.removed", position)));
     }
 
     @Override

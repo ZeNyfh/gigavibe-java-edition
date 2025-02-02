@@ -16,12 +16,12 @@ public class CommandBug extends BaseCommand {
     public void execute(CommandEvent event) {
         event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError(localise("Please provide something to report.","CmdBug.noReport")));
+            event.replyEmbeds(createQuickError(localise("cmd.bug.noReport")));
             return;
         }
         String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
         Objects.requireNonNull(event.getJDA().getUserById(211789389401948160L)).openPrivateChannel().queue(a -> a.sendMessage("User: `" + event.getUser().getName() + "`\nUserID: `" + event.getUser().getId() + "`\nGuild: `" + event.getGuild().getId() + "`\n\n" + messageContentCleaned).queue());
-        event.reply(String.format(localise("Thank you for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\nPlease use the **{bug}** command to reply to messages.\n","CmdBug.successMessage", "bug")));
+        event.reply(String.format(localise("cmd.bug.successMessage", "bug")));
     }
 
     @Override

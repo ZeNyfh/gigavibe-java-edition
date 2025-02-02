@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static Bots.CommandEvent.localise;
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
 public class CommandHelp extends BaseCommand {
@@ -37,11 +38,11 @@ public class CommandHelp extends BaseCommand {
     private void BuildEmbedFromCategory(EmbedBuilder embed, Category category, long guildID) {
         HashMap<String, String> lang = guildLocales.get(guildID);
         switch (category) { //Note: This generates an anonymous reference (CommandHelp$1). I do not know why nor how, nor does it matter, but I'm still confused. -9382
-            case General -> embed.setTitle("\uD83D\uDCD6 " + lang.get("CmdHelp.cat.general")); // General
-            case Music -> embed.setTitle("\uD83D\uDD0A " + lang.get("CmdHelp.cat.music")); // Music
-            case DJ -> embed.setTitle("\uD83C\uDFA7 " + lang.get("CmdHelp.cat.DJ")); // DJ
-            case Admin -> embed.setTitle("\uD83D\uDCD1 " + lang.get("CmdHelp.cat.admin")); // Admin
-            case Dev -> embed.setTitle("\uD83D\uDD28 " + lang.get("CmdHelp.cat.dev")); // Dev
+            case General -> embed.setTitle(managerLocalise("cmd.help.cat.general", lang)); // General
+            case Music -> embed.setTitle(managerLocalise("cmd.help.cat.music", lang)); // Music
+            case DJ -> embed.setTitle(managerLocalise("cmd.help.cat.DJ", lang)); // DJ
+            case Admin -> embed.setTitle(managerLocalise("cmd.help.cat.admin", lang)); // Admin
+            case Dev -> embed.setTitle(managerLocalise("cmd.help.cat.dev", lang)); // Dev
             default -> System.err.println("Unrecognised category for help title: " + category);
         }
         int i = 0;
@@ -50,10 +51,11 @@ public class CommandHelp extends BaseCommand {
                 i++;
                 StringBuilder aliases = new StringBuilder();
                 if (Command.getNames().length == 2) {
-                    aliases.append(lang.get("CommandHelp.alias")); // alias
+                    aliases.append(managerLocalise("cmd.help.alias", lang));
                 } else if (Command.getNames().length > 2) {
-                    aliases.append(lang.get("CommandHelp.alias.plural"));
+                    aliases.append(managerLocalise("cmd.help.alias.plural", lang));
                 }
+                aliases.append(" ");
                 int j = 0;
                 for (String name : Command.getNames()) {
                     j++;
@@ -75,7 +77,7 @@ public class CommandHelp extends BaseCommand {
         EmbedBuilder eb = new EmbedBuilder();
         HashMap<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         eb.setColor(botColour);
-        eb.setFooter(lang.get("CmdHelp.footer")); // Syntax: "<>" is a required argument, "[]" is an optional argument. "()" is an alternate word for the command.
+        eb.setFooter(lang.get("cmd.help.footer")); // Syntax: "<>" is a required argument, "[]" is an optional argument. "()" is an alternate word for the command.
         Category ButtonCategory = Category.valueOf(Objects.requireNonNull(event.getButton().getId()).split("help-")[1]);
         BuildEmbedFromCategory(eb, ButtonCategory, Objects.requireNonNull(event.getGuild()).getIdLong());
         event.getInteraction().editMessageEmbeds().setEmbeds(eb.build()).queue();
@@ -106,16 +108,16 @@ public class CommandHelp extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
-        embed.setFooter(localise("Syntax: \"<>\" is a required argument, \"[]\" is an optional argument. \"()\" is an alternate word for the command.","CmdHelp.footer"));
+        embed.setFooter(localise("cmd.help.footer"));
         if (userCategory != null) {
             BuildEmbedFromCategory(embed, userCategory, event.getGuild().getIdLong());
         } else {
-            embed.setTitle("\uD83D\uDCD4 " + localise("**Commands**","CmdHelp.embedTitle"));
+            embed.setTitle(localise("cmd.help.embedTitle"));
             for (Category category : Category.values()) {
                 if (category != Category.Dev)
                     embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
             }
-            embed.setFooter(localise("Click the buttons to get more information on a group.","CmdHelp.originalFooter"));
+            embed.setFooter(localise("cmd.help.originalFooter"));
         }
         event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }

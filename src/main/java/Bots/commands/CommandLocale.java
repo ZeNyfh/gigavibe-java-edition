@@ -12,15 +12,15 @@ public class CommandLocale extends BaseCommand {
     @Override
     public void execute(CommandEvent event) throws Exception {
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed(localise("List of languages:", "CmdLoc.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+            event.replyEmbeds(createQuickEmbed(localise("cmd.loc.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
         } else {
             String lang = event.getArgs()[1].toLowerCase();
             if (languages.containsKey(lang)) {
                 event.getConfig().put("Locale", lang);
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
-                event.replyEmbeds(createQuickSuccess(localise("The language has been changed to: {langName}", "CommandLocale.languageChanged", lang)));
+                event.replyEmbeds(createQuickSuccess(localise("cmd.loc.languageChanged", lang)));
             } else {
-                event.replyEmbeds(createQuickError(localise("Unrecognised language, here is a list of languages to choose from:", "CommandLocale.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+                event.replyEmbeds(createQuickError(localise("cmd.loc.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
             }
         }
     }

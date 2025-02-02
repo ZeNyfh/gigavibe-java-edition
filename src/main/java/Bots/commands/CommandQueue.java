@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
 import static Bots.CommandEvent.localise;
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
 public class CommandQueue extends BaseCommand {
@@ -26,6 +27,7 @@ public class CommandQueue extends BaseCommand {
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
         final BlockingQueue<AudioTrack> Queue = manager.scheduler.queue;
+        Map<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         int newPageNumber = 1;
         if (Objects.equals(event.getButton().getId(), "forward")) {
             newPageNumber = queuePages.getOrDefault(event.getGuild().getIdLong(), 1) + 1;
@@ -50,13 +52,13 @@ public class CommandQueue extends BaseCommand {
         if (track == null) {
             System.out.println("WARNING: No active song despite populated queue");
         } else {
-            eb.setTitle(guildLocales.get(event.getGuild().getIdLong()).get("CmdQ.nowPlaying") + track.getInfo().title, track.getInfo().uri);
+            eb.setTitle(managerLocalise("cmd.q.nowPlaying", lang, track.getInfo().title), track.getInfo().uri);
             if (PlayerManager.getInstance().getThumbURL(track) != null)
                 eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         }
         // TODO: invent a better implementation instead of using the raw guildLocales map in cases like these.
-        eb.setTitle(guildLocales.get(event.getGuild().getIdLong()).get("CmdQ.nowPlaying") + Objects.requireNonNull(track).getInfo().title, track.getInfo().uri);
-        eb.setFooter(String.format(guildLocales.get(event.getGuild().getIdLong()).get("CmdQ.queueInfoFooter"), Queue.size(), "|", newPageNumber + "/" + maxPage + " |", toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
+        eb.setTitle(managerLocalise("cmd.q.nowPlaying", lang, Objects.requireNonNull(track).getInfo().title), track.getInfo().uri);
+        eb.setFooter(managerLocalise("cmd.q.queueInfoFooter", lang, Queue.size(), newPageNumber, maxPage, toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         eb.setColor(botColour);
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
@@ -77,7 +79,7 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(localise("The queue is empty.", "CmdQ.empty")));
+            event.replyEmbeds(createQuickError(localise("cmd.q.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -87,8 +89,8 @@ public class CommandQueue extends BaseCommand {
             System.out.println("WARNING: No active song despite populated queue");
         } else {
             String title = track.getInfo().title;
-            if (track.getInfo().title == null) title = localise("Unknown title", "CmdQ.unknownTitle");
-            embed.setTitle(localise("__**Now playing:**__\n {song}", "CmdQ.nowPlaying", title), track.getInfo().uri);
+            if (track.getInfo().title == null) title = localise("cmd.q.unknownTitle");
+            embed.setTitle(localise("cmd.q.nowPlaying", title), track.getInfo().uri);
         }
 
         int queueLength = queue.size();
@@ -103,11 +105,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError(localise("Did you mean to use {command}?", "CmdQ.didYouMean", "**clearqueue**")));
+                event.replyEmbeds(createQuickError(localise("cmd.q.didYouMean", "clearqueue")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError(localise("The page must be a positive whole number.", "CmdQ.integerError")));
+                event.replyEmbeds(createQuickError(localise("cmd.q.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea
@@ -117,10 +119,9 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
         }
-        String pageOfQueue = pageNumber + "/" + ((queueLength + 4) / 5);
         String playbackLength = toTimestamp(queueTimeLength, event.getGuild().getIdLong());
 
-        embed.setFooter(localise("{queueLength} songs queued | Page {pageOfQueue} | Length: {playbackLength}", "CmdQ.queueInfoFooter", queueLength, pageOfQueue, playbackLength));
+        embed.setFooter(localise("cmd.q.queueInfoFooter", queueLength, pageNumber, (queueLength + 4) / 5, playbackLength));
         embed.setColor(botColour);
         if (track != null && PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));

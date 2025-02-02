@@ -23,10 +23,10 @@ public class CommandJoin extends BaseCommand {
         try {
             event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
         } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError(localise("The bot cannot access your channel.", "CmdJoin.noAccess")));
+            event.replyEmbeds(createQuickError(localise("cmd.join.noAccess")));
             return;
         }
-        event.replyEmbeds(createQuickSuccess(localise("Joined your voice channel!", "CmdJoin.joined")));
+        event.replyEmbeds(createQuickSuccess(localise("cmd.join.joined")));
     }
 
     @Override

@@ -30,11 +30,11 @@ public class CommandInsert extends BaseCommand {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
-            event.replyEmbeds(createQuickError(localise("Not enough arguments provided\nUsage: `<Integer> <URL/SearchTerm>`", "CmdIns.notEnoughArgs")));
+            event.replyEmbeds(createQuickError(localise("cmd.ins.notEnoughArgs")));
             return;
         }
         if (!args[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(localise("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`", "CmdIns.invalidArgs")));
+            event.replyEmbeds(createQuickError(localise("cmd.ins.invalidArgs")));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -67,7 +67,7 @@ public class CommandInsert extends BaseCommand {
                     PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
                     sendEmbedBool = false;
                 } catch (FriendlyException ignored) {
-                    event.replyEmbeds(createQuickError(localise("Something went wrong when decoding the track.", "CmdIns.decodingError")));
+                    event.replyEmbeds(createQuickError(localise("cmd.ins.decodingError")));
                 }
             }
         } else {
@@ -84,9 +84,9 @@ public class CommandInsert extends BaseCommand {
                             musicManager.scheduler.queue(TemporaryQueue.get(i));
                         }
                         if (loadResult.songWasPlayed) {
-                            event.replyEmbeds(createQuickEmbed(" ", localise("Added the track to position: **{numPos}**", "CmdIns.addedToPos", args[1])));
+                            event.replyEmbeds(createQuickEmbed(" ", localise("cmd.ins.addedToPos", args[1])));
                         } else {
-                            event.replyEmbeds(createQuickError(localise("There was an error while adding the track to the queue: `{loadResult}` ", "CmdIns.queueError", loadResult.name())));
+                            event.replyEmbeds(createQuickError(localise("cmd.ins.queueError", loadResult.name())));
                         }
                     });
                 }
