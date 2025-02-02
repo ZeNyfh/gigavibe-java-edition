@@ -183,8 +183,8 @@ cmd.tos.TermsOfService=Regulamin
 
 cmd.vib.defaulted=Przywrócono domyślne wartości parametrów.
 cmd.vib.incorrectArgs=Poprawne użycie to: `{1} <Częstotliwość> <Głębokość>`
-cmd.vib.frequency=Częstotliwość musi wynosić od 0.1 do 14.
-cmd.vib.depth=Głębokość musi wynosić od 0.05 do 1.
+cmd.vib.range.frequency=Częstotliwość musi wynosić od 0.1 do 14.
+cmd.vib.range.depth=Głębokość musi wynosić od 0.05 do 1.
 cmd.vib.success=Ustawiono częstotliwość wibrato na {1}Hz.{nl}Ustawiono głębokość wibrato na {2}.
 cmd.vib.invalidArgs=❌ **Nieprawidłowe argumenty.**
 
