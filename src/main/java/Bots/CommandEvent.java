@@ -96,6 +96,14 @@ public class CommandEvent {
         }
     }
 
+    /** Localise function by ZeNyfh.
+     * Takes a key value in the format (cmd.name.stringName) for example: "cmd.vol.tooHigh"
+     * it then takes all the arguments, it does String.format() in the backend.
+     * if for some reason "lang" is undefined, or you are localising somewhere where "event" is undefined, use LocaleManager.managerLocalise
+     * <p>
+     * managerLocalise is the same as localise, except that you pass in the key, the map<String, String> (locale map), and then the args.
+     * you can get this locale map like using: Main.guildLocales.get(guildIDLong);
+     */
     public static String localise(String key, Object... args) {
         return LocaleManager.managerLocalise(key, lang, args);
     }
