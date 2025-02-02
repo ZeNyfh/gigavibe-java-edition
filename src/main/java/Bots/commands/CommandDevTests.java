@@ -3,6 +3,7 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 import Bots.CommandStateChecker.Check;
+import Bots.LocaleManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -85,6 +86,9 @@ public class CommandDevTests extends BaseCommand {
             } else if (command.equalsIgnoreCase("guilds")) {
                 writeGuilds(event);
                 event.reply("File made guilds.csv.");
+            } else if (command.equalsIgnoreCase("reloadlocale")) {
+                LocaleManager.init(event.getJDA());
+                event.reply("reinitialised all locales.");
             } else {
                 event.reply("Unrecognised dev command " + command);
             }
