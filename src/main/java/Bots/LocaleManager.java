@@ -84,7 +84,7 @@ public class LocaleManager {
     private static String serializeString(String localeInput) {
         String[] localeStrings = localeInput.split("//");
         localeInput = localeInput.replace("//" + localeStrings[localeStrings.length - 1], "").trim();
-        localeInput = localeInput.replaceAll("\\{nl}", "\n");
+        localeInput = localeInput.replaceAll("\\\\n", "\n");
 
         Matcher matcher = serializePattern.matcher(localeInput);
 

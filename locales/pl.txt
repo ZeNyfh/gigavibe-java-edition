@@ -21,15 +21,15 @@ cmd.bc.channelList=Zablokowane kanały dla {1}:
 cmd.bc.noChannels=**Brak**
 
 cmd.bug.noReport=Podaj coś do zgłoszenia.
-cmd.bug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{nl}Programista skontaktuje się z Tobą przez DM bota.{nl}Proszę użyć komendy **{1}**, aby odpowiedzieć na wiadomości.{nl}
+cmd.bug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!\nProgramista skontaktuje się z Tobą przez DM bota.\nProszę użyć komendy **{1}**, aby odpowiedzieć na wiadomości.\n
 
 cmd.cq.cleared=Kolejka została wyczyszczona.
 
 cmd.dc.disconnected=Rozłączono z kanałem głosowym i wyczyszczono kolejkę.
 
-cmd.dj.roleList=**Role**:{nl}
+cmd.dj.roleList=**Role**:\n
 cmd.dj.roleListEmpty=Brak.
-cmd.dj.userList={nl}{nl}**Użytkownicy:**{nl}
+cmd.dj.userList=\n\n**Użytkownicy:**\n
 cmd.dj.guildDJs=DJe dla {1}
 cmd.dj.notGiven=Nie podano członków ani ról.
 cmd.dj.member=członek
@@ -41,42 +41,42 @@ cmd.dj.added=Dodano {1} do listy DJ-ów.
 cmd.dj.removed=Usunięto {1} z listy DJ-ów.
 cmd.dj.invalidArgs=Nieprawidłowe argumenty.
 
-cmd.fs.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}{nl}
-cmd.fs.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
-cmd.fs.nullSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.{nl}
+cmd.fs.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}\n
+cmd.fs.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.\n
+cmd.fs.nullSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.\n
 cmd.fs.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 cmd.fs.skippedQueue=Pominięto całą kolejkę.
 cmd.fs.skippedToPos=Pominięto {1} utworów do {2}.
 cmd.fs.skippedToTrack=Pominięto bieżący utwór do {1}.
 cmd.fs.skipped=Pominięto bieżący utwór.
 
-cmd.git.message=❕ Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{nl}{nl}❕ Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{nl}https://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Użyj tego tylko do zgłaszania błędów i sugestii funkcji.\n\n❕ Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
 
 cmd.help.cat.general=📖 **Ogólne**
 cmd.help.cat.music=🔊 **Muzyka**
 cmd.help.cat.DJ=🎧 **DJ**
 cmd.help.cat.admin=📑 **Admin**
 cmd.help.cat.dev=🔨 **Dev**
-cmd.help.alias={nl}`Alias:`
-cmd.help.alias.plural={nl}`Aliasy:`
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Aliasy:`
 cmd.help.originalFooter=Kliknij guziki, aby uzyskać więcej informacji o grupie.
 cmd.help.footer=Syntaksa: "<>" to argument wymagany, "[]" to argument opcjonalny. "()" to alternatywne słowo dla komendy.
 cmd.help.embedTitle=📔 **Komendy**
 
 cmd.info.info={1} Informacje
-cmd.info.ramUsage=🔧 **Zużycie RAM:** {1}MB{nl}{nl}
-cmd.info.upTime=⏰ **Czas działania:** {1}{nl}{nl}
-cmd.info.discordServers=📡 **Serwery:** {1}{nl}{nl}
-cmd.info.discordMembers=👤 **Użytkownicy:** {1}{nl}{nl}
-cmd.info.registeredCommands=📑 **Zarejestrowane komendy:** {1}{nl}{nl}
-cmd.info.voiceChannels=🎵 **Kanały głosowe:** {1}{nl}{nl}
-cmd.info.playingCount=🔊 **Liczba odtwarzanych:** {1}{nl}{nl}
-cmd.info.gatewayPing=⏱️ **Ping bramy:** {1}ms{nl}{nl}
+cmd.info.ramUsage=🔧 **Zużycie RAM:** {1}MB\n\n
+cmd.info.upTime=⏰ **Czas działania:** {1}\n\n
+cmd.info.discordServers=📡 **Serwery:** {1}\n\n
+cmd.info.discordMembers=👤 **Użytkownicy:** {1}\n\n
+cmd.info.registeredCommands=📑 **Zarejestrowane komendy:** {1}\n\n
+cmd.info.voiceChannels=🎵 **Kanały głosowe:** {1}\n\n
+cmd.info.playingCount=🔊 **Liczba odtwarzanych:** {1}\n\n
+cmd.info.gatewayPing=⏱️ **Ping bramy:** {1}ms\n\n
 cmd.info.version=Wersja: {1}
-cmd.info.ping=**Ping:** {1}ms{nl}{nl}
+cmd.info.ping=**Ping:** {1}ms\n\n
 
-cmd.ins.notEnoughArgs=Nie podano wystarczającej liczby argumentów.{nl}Użycie: <Liczba całkowita> <URL/Termin wyszukiwania>
-cmd.ins.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.{nl}Użycie: <Liczba całkowita> <URL/Termin wyszukiwania>
+cmd.ins.notEnoughArgs=Nie podano wystarczającej liczby argumentów.\nUżycie: <Liczba całkowita> <URL/Termin wyszukiwania>
+cmd.ins.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.\nUżycie: <Liczba całkowita> <URL/Termin wyszukiwania>
 cmd.ins.decodingError=Wystąpił błąd podczas dekodowania utworu.
 cmd.ins.addedToPos=Dodano utwór na pozycję: **{1}**
 cmd.ins.queueError=Wystąpił błąd podczas dodawania utworu do kolejki: {1}
@@ -131,14 +131,14 @@ cmd.play.fileError=Wystąpił błąd podczas ładowania utworów z pliku.
 
 cmd.pp.privacyPolicy=Polityka Prywatności
 
-cmd.q.nowPlaying=__**Teraz odtwarzane:**__{nl}{1}
+cmd.q.nowPlaying=__**Teraz odtwarzane:**__\n{1}
 cmd.q.queueInfoFooter={1} utworów w kolejce | Strona {2}/{3} | Długość: {4}
 cmd.q.empty=Kolejka jest pusta.
 cmd.q.unknownTitle=Nieznany tytuł
 cmd.q.didYouMean=Czy chodziło o **{1}**?
 cmd.q.integerError=Strona musi być liczbą całkowitą dodatnią.
 
-cmd.radio.list=📻 **Lista stacji radiowych:**{nl}{nl}
+cmd.radio.list=📻 **Lista stacji radiowych:**\n\n
 cmd.radio.alternativeList=*Lub użyj `{1} {2} <Słowo/a>`*
 cmd.radio.useForPlay=Użyj "{1} {2} <Nazwa Radia>", aby odtworzyć stację radiową.
 cmd.radio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
@@ -163,7 +163,7 @@ cmd.shuffle.shuffled=Kolejka została przetasowana!
 
 cmd.skip.alreadyVoted=Już oddałeś głos na pominięcie.
 cmd.skip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
-cmd.skip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
+cmd.skip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.\n
 cmd.skip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
 cmd.skip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 cmd.skip.skippedTheTrack=⏩ Przewinięto utwór.
@@ -172,8 +172,8 @@ cmd.skip.skippedTo.unknown=⏩ Przewinięto utwór do __**Nieznany tytuł**__
 cmd.skip.nowPlaying=Teraz odtwarzane: {1}
 cmd.skip.voted.title=Oddano głos na pominięcie utworu.
 cmd.skip.voted.description={1} z {2} potrzebnych do pominięcia.
-cmd.skip.channel=**Kanał**{nl}{1}{nl}
-cmd.skip.duration=**Czas trwania**{nl}{1}
+cmd.skip.channel=**Kanał**\n{1}\n
+cmd.skip.duration=**Czas trwania**\n{1}
 
 cmd.speed.defaulted=Przywrócono prędkość do 1.
 cmd.speed.rangeError=Prędkość musi wynosić od 0.2 do 5.
@@ -185,7 +185,7 @@ cmd.vib.defaulted=Przywrócono domyślne wartości parametrów.
 cmd.vib.incorrectArgs=Poprawne użycie to: `{1} <Częstotliwość> <Głębokość>`
 cmd.vib.range.frequency=Częstotliwość musi wynosić od 0.1 do 14.
 cmd.vib.range.depth=Głębokość musi wynosić od 0.05 do 1.
-cmd.vib.success=Ustawiono częstotliwość wibrato na {1}Hz.{nl}Ustawiono głębokość wibrato na {2}.
+cmd.vib.success=Ustawiono częstotliwość wibrato na {1}Hz.\nUstawiono głębokość wibrato na {2}.
 cmd.vib.invalidArgs=❌ **Nieprawidłowe argumenty.**
 
 cmd.vol.defaulted=Ustawiono głośność na domyślną wartość do 100.
@@ -208,14 +208,14 @@ cmd.scheck.isNotPlaying=Bot obecnie nic nie odtwarza.
 cmd.scheck.devOnly=Ta komenda jest tylko dla programistów.
 
 pmanager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
-pmanager.playlistQueued=Ilość: **{1}** utworów.{nl}Długość: **{2}**{nl}{nl}
+pmanager.playlistQueued=Ilość: **{1}** utworów.\nDługość: **{2}**\n\n
 pmanager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
 pmanager.loadFailed=Utwór nie został załadowany: {1}
 pmanager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
 
 tsched.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
-tsched.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
-tsched.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.{nl}
+tsched.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.\n
+tsched.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.\n
 tsched.queued=♾️ Autoodtwarzanie dodało do kolejki:
 
 tsched.regfail=Utwór nie został załadowany z nieznanego powodu. Pomijam...
@@ -241,6 +241,6 @@ main.ratelimit=Nie możesz użyć tej komendy przez kolejne {1} sekund/y.
 main.botNoPermission=Nie mam uprawnień do czytania ani wysyłania wiadomości w tym kanale.
 main.error=Błąd
 main.unknown=Nieznany
-main.channel=**Kanał**{nl}
-main.duration=**Czas trwania**{nl}
-main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!{nl}Jeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.
+main.channel=**Kanał**\n
+main.duration=**Czas trwania**\n
+main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!\nJeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.

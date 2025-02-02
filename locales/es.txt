@@ -12,15 +12,15 @@ cmd.bc.channelList=Canales bloqueados en {1}:
 cmd.bc.noChannels=**Ninguno**
 
 cmd.bug.noReport=Por favor, incluya información en el informe.
-cmd.bug.successMessage=¡Gracias por tu informe!{nl}El desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.{nl}Usa el comando **{1}** para responder a los mensajes.{nl}
+cmd.bug.successMessage=¡Gracias por tu informe!\nEl desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.\nUsa el comando **{1}** para responder a los mensajes.\n
 
 cmd.cq.cleared=La cola ha sido vaciada.
 
 cmd.dc.disconnected=Desconectado del chat de voz y la cola ha sido vaciada.
 
-cmd.dj.roleList=**Roles**:{nl}
+cmd.dj.roleList=**Roles**:\n
 cmd.dj.roleListEmpty=Ninguno.
-cmd.dj.userList={nl}{nl}**Usuarios:**{nl}
+cmd.dj.userList=\n\n**Usuarios:**\n
 cmd.dj.guildDJs=DJs en {1}
 cmd.dj.notGiven=No se ha especificado ningún miembro o rol.
 cmd.dj.member=miembro
@@ -32,42 +32,42 @@ cmd.dj.added=Añadido {1} a la lista de DJs.
 cmd.dj.removed=Eliminado {1} de la lista de DJs.
 cmd.dj.invalidArgs=Argumentos inválidos.
 
-cmd.fs.failedToFind=La reproducción automática no encontró {1}{nl}
-cmd.fs.couldNotFind=No se encontraron pistas similares para la reproducción automática.{nl}
-cmd.fs.nullSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.{nl}
+cmd.fs.failedToFind=La reproducción automática no encontró {1}\n
+cmd.fs.couldNotFind=No se encontraron pistas similares para la reproducción automática.\n
+cmd.fs.nullSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.\n
 cmd.fs.autoplayQueued=Autoplay en cola: {1} - {2}
 cmd.fs.skippedQueue=La cola ha sido saltada.
 cmd.fs.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.
 cmd.fs.skippedToTrack=La pista actual ha sido saltada y reemplazada por {1}.
 cmd.fs.skipped=La pista actual ha sido saltada.
 
-cmd.git.message=❕ Usar SOLO para informes de errores o sugerencias.{nl}{nl}❕ Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.{nl}https://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Usar SOLO para informes de errores o sugerencias.\n\n❕ Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
 
 cmd.help.cat.general=📖 **General**
 cmd.help.cat.music=🔊 **Música**
 cmd.help.cat.DJ=🎧 **DJ**
 cmd.help.cat.admin=📑 **Administrador**
 cmd.help.cat.dev=🔨 **Desarrollador**
-cmd.help.alias={nl}`Alias:`
-cmd.help.alias.plural={nl}`Alias:`
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Alias:`
 cmd.help.originalFooter=Haz clic en los botones para obtener más información de un grupo.
 cmd.help.footer=Sintaxis: "<>" es un argumento requerido, "[]" es un argumento opcional. "()" es un comando alternativo.
 cmd.help.embedTitle=📔 **Comandos**
 
 cmd.info.info={1} Información
-cmd.info.ramUsage=🔧 **Uso de RAM:** {1}MB{nl}{nl}
-cmd.info.upTime=⏰ **Tiempo de actividad:** {1}{nl}{nl}
-cmd.info.discordServers=📡 **Servidores:** {1}{nl}{nl}
-cmd.info.discordMembers=👤 **Usuarios:** {1}{nl}{nl}
-cmd.info.registeredCommands=📑 **Comandos registrados:** {1}{nl}{nl}
-cmd.info.voiceChannels=🎵 **Canales de voz:** {1}{nl}{nl}
-cmd.info.playingCount=🔊 **Reproducciones actuales:** {1}{nl}{nl}
-cmd.info.gatewayPing=⏱️ **Ping de entrada:** {1}ms{nl}{nl}
+cmd.info.ramUsage=🔧 **Uso de RAM:** {1}MB\n\n
+cmd.info.upTime=⏰ **Tiempo de actividad:** {1}\n\n
+cmd.info.discordServers=📡 **Servidores:** {1}\n\n
+cmd.info.discordMembers=👤 **Usuarios:** {1}\n\n
+cmd.info.registeredCommands=📑 **Comandos registrados:** {1}\n\n
+cmd.info.voiceChannels=🎵 **Canales de voz:** {1}\n\n
+cmd.info.playingCount=🔊 **Reproducciones actuales:** {1}\n\n
+cmd.info.gatewayPing=⏱️ **Ping de entrada:** {1}ms\n\n
 cmd.info.version=Versión: {1}
-cmd.info.ping=**Ping:** {1}ms{nl}{nl}
+cmd.info.ping=**Ping:** {1}ms\n\n
 
-cmd.ins.notEnoughArgs=Argumentos insuficientes.{nl}Uso: <Entero> <URL/Término de búsqueda>
-cmd.ins.invalidArgs=Argumentos inválidos, solo enteros.{nl}Uso: <Entero> <URL/Término de búsqueda>
+cmd.ins.notEnoughArgs=Argumentos insuficientes.\nUso: <Entero> <URL/Término de búsqueda>
+cmd.ins.invalidArgs=Argumentos inválidos, solo enteros.\nUso: <Entero> <URL/Término de búsqueda>
 cmd.ins.decodingError=Ocurrió un error al decodificar la pista.
 cmd.ins.addedToPos=Añadido el track en la posición: **{1}**
 cmd.ins.queueError=Ocurrió un error al añadir la pista a la cola: {1}
@@ -122,14 +122,14 @@ cmd.play.fileError=Ocurrió un error al cargar las pistas desde el archivo.
 
 cmd.pp.privacyPolicy=Política de privacidad
 
-cmd.q.nowPlaying=__**Reproduciendo ahora:**__{nl}{1}
+cmd.q.nowPlaying=__**Reproduciendo ahora:**__\n{1}
 cmd.q.queueInfoFooter={1} canciones en cola | Página {2}/{3} | Duración: {4}
 cmd.q.empty=La cola está vacía.
 cmd.q.unknownTitle=Título desconocido.
 cmd.q.didYouMean=¿Querías usar **{1}**?
 cmd.q.integerError=El número de página debe ser un entero positivo.
 
-cmd.radio.list=📻 **Lista de radios:**{nl}{nl}
+cmd.radio.list=📻 **Lista de radios:**\n\n
 cmd.radio.alternativeList=*O usa `{1} {2} <Cadena>`*
 cmd.radio.useForPlay=Usa "{1} {2} <Nombre de la radio>" para usar la radio.
 cmd.radio.noArgsList=No se proporcionaron argumentos, aquí tienes algunas estaciones de radio disponibles:
@@ -154,7 +154,7 @@ cmd.shuffle.shuffled=La cola ha sido barajada.
 
 cmd.skip.alreadyVoted=Ya has votado para omitir.
 cmd.skip.failedToFind=Autoplay no pudo encontrar {1}
-cmd.skip.couldNotFind=Autoplay no pudo encontrar pistas similares.{nl}
+cmd.skip.couldNotFind=Autoplay no pudo encontrar pistas similares.\n
 cmd.skip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
 cmd.skip.autoplayQueued=Autoplay en cola: __**{1} - {2}**__
 cmd.skip.skippedTheTrack=⏩ Pista omitida.
@@ -163,8 +163,8 @@ cmd.skip.skippedTo.unknown=⏩ Pista omitida a __**Título desconocido**__
 cmd.skip.nowPlaying=Reproduciendo ahora: {1}
 cmd.skip.voted.title=Votado para omitir la pista.
 cmd.skip.voted.description={1} de {2} necesarios para omitir.
-cmd.skip.channel=**Canal**{nl}{1}{nl}
-cmd.skip.duration=**Duración**{nl}{1}
+cmd.skip.channel=**Canal**\n{1}\n
+cmd.skip.duration=**Duración**\n{1}
 
 cmd.speed.defaulted=La velocidad se ha restablecido a 1.
 cmd.speed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5.
@@ -176,7 +176,7 @@ cmd.vib.defaulted=Parámetros restablecidos a sus valores predeterminados.
 cmd.vib.incorrectArgs=El uso correcto es: `{1} <Frecuencia> <Profundidad>`
 cmd.vib.range.frequency=La frecuencia debe estar entre 0.1 y 14.
 cmd.vib.range.depth=La profundidad debe estar entre 0.05 y 1.
-cmd.vib.success=Frecuencia de vibrato establecida en {1}Hz.{nl}Profundidad de vibrato establecida en {2}.
+cmd.vib.success=Frecuencia de vibrato establecida en {1}Hz.\nProfundidad de vibrato establecida en {2}.
 cmd.vib.invalidArgs=❌ **Argumentos inválidos.**
 
 cmd.vol.defaulted=El volumen se ha restablecido al valor predeterminado de 100.
@@ -199,14 +199,14 @@ cmd.scheck.isNotPlaying=El bot no está reproduciendo nada actualmente.
 cmd.scheck.devOnly=Este comando es exclusivo para desarrolladores.
 
 pmanager.noSpotify=El bot no puede reproducir pistas de Spotify en estos momentos.
-pmanager.playlistQueued=Tamaño: **{1}** pistas.{nl}Duración: **{2}**{nl}{nl}
+pmanager.playlistQueued=Tamaño: **{1}** pistas.\nDuración: **{2}**\n\n
 pmanager.APIError=Ocurrió un error con la API de búsqueda de YouTube.
 pmanager.loadFailed=La pista no se pudo cargar: {1}.
 pmanager.noMatches=No se encontraron coincidencias para esta pista.
 
 tsched.autoplay.notFound=Autoplay no pudo encontrar {1}
-tsched.autoplay.noSimilar=Autoplay no pudo encontrar pistas similares.{nl}
-tsched.autoplay.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.{nl}
+tsched.autoplay.noSimilar=Autoplay no pudo encontrar pistas similares.\n
+tsched.autoplay.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.\n
 tsched.queued=♾️ Autoplay en cola:
 
 tsched.regfail=La pista falló al cargar debido a una razón desconocida. Omitiendo...
@@ -232,6 +232,6 @@ main.ratelimit=No puedes usar este comando durante los próximos {1} segundos.
 main.botNoPermission=No tengo permiso para leer o enviar mensajes a este canal.
 main.error=Error
 main.unknown=Desconocido
-main.channel=**Canal**{nl}
-main.duration=**Duración**{nl}
-main.update=El bot ha sido actualizado, ¡tu cola y parámetros han sido restablecidos!{nl}Si deseas conocer los cambios, siéntete libre de unirte al servidor de soporte que se encuentra en la sección "sobre mí" del bot.
+main.channel=**Canal**\n
+main.duration=**Duración**\n
+main.update=El bot ha sido actualizado, ¡tu cola y parámetros han sido restablecidos!\nSi deseas conocer los cambios, siéntete libre de unirte al servidor de soporte que se encuentra en la sección "sobre mí" del bot.

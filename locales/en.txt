@@ -9,7 +9,8 @@
 // please preserve the capitalisation and any punctuation if applicable, (use angled brackets or your local punctuation marks if necessary!).
 
 // if you find any markdown, try to keep it consistent between english and the language you are translating to, I.E if something is bolded with **{1}** then try keep that.
-// new lines are written with {nl}, try to keep them where they are, relative to your translations and the variables when translating.
+// new lines are written with \n, try to keep them where they are, relative to your translations and the variables when translating.
+// If you do not know how to interpret something, refer to the code.
 
 cmd.ap.noAPI=The bot has not been given an API key for LastFM, this command does not work without it.
 cmd.ap.notAutoplaying=No longer autoplaying.
@@ -25,15 +26,15 @@ cmd.bc.channelList=Blocked channels for {1}: // 1 is the server name, colon impl
 cmd.bc.noChannels=**None**
 
 cmd.bug.noReport=Please provide something to report.
-cmd.bug.successMessage=Thank you for sending in a bug report!{nl}The developer should be in contact with you via the bot's dms.{nl}Please use the **{1}** command to reply to messages.{nl} // {1} is a command name. {nl} are newlines, do not remove the bolding (var surrounded by **).
+cmd.bug.successMessage=Thank you for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\nPlease use the **{1}** command to reply to messages.\n // {1} is a command name. \n are newlines, do not remove the bolding (var surrounded by **).
 
 cmd.cq.cleared=Cleared the queue
 
 cmd.dc.disconnected=Disconnected from the voice channel and cleared the queue.
 
-cmd.dj.roleList=**Roles**:{nl}
+cmd.dj.roleList=**Roles**:\n
 cmd.dj.roleListEmpty=None.
-cmd.dj.userList={nl}{nl}**Users:**{nl}
+cmd.dj.userList=\n\n**Users:**\n
 cmd.dj.guildDJs=DJs for {1} // server name
 cmd.dj.notGiven=No members or roles were specified.
 cmd.dj.member=member
@@ -45,42 +46,42 @@ cmd.dj.added=Added {1} to the DJ list. // user/role name
 cmd.dj.removed=Removed {1} from the DJ list. // user/role name
 cmd.dj.invalidArgs=Invalid Arguments.
 
-cmd.fs.failedToFind=Autoplay failed to find {1}{nl} // song title
-cmd.fs.couldNotFind=Autoplay could not find similar tracks.{nl}
-cmd.fs.nullSearchTerm=An unknown error occurred when trying to autoplay.{nl}
+cmd.fs.failedToFind=Autoplay failed to find {1}\n // song title
+cmd.fs.couldNotFind=Autoplay could not find similar tracks.\n
+cmd.fs.nullSearchTerm=An unknown error occurred when trying to autoplay.\n
 cmd.fs.autoplayQueued=Autoplay queued: {1} - {2} // artist, song title
 cmd.fs.skippedQueue=Skipped the entire queue
 cmd.fs.skippedToPos=Skipped {1} tracks to {2} // 1 is the amount of tracks it skipped, 2 is a track name
 cmd.fs.skippedToTrack=Skipped the current track to {1} // track name
 cmd.fs.skipped=Skipped the current track.
 
-cmd.git.message=❕ Use this for bug reports and feature requests ONLY.{nl}{nl}❕ When making an issue, make sure to specify what the bug is and how to recreate it.{nl}https://github.com/ZeNyfh/gigavibe-java-edition // you can think of the newlines as marks between new sentences. Don't remove the emoji :)
+cmd.git.message=❕ Use this for bug reports and feature requests ONLY.\n\n❕ When making an issue, make sure to specify what the bug is and how to recreate it.\nhttps://github.com/ZeNyfh/gigavibe-java-edition // you can think of the newlines as marks between new sentences. Don't remove the emoji :)
 
 cmd.help.cat.general=📖 **General**
 cmd.help.cat.music=🔊 **Music**
 cmd.help.cat.DJ=🎧 **DJ**
 cmd.help.cat.admin=📑 **Admin**
 cmd.help.cat.dev=🔨 **Dev**
-cmd.help.alias={nl}`Alias:`
-cmd.help.alias.plural={nl}`Aliases:`
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Aliases:`
 cmd.help.originalFooter=Click the buttons to get more information on a group.
 cmd.help.footer=Syntax: "<>" is a required argument, "[]" is an optional argument. "()" is an alternate word for the command. // these are command argument characters, they are not language specific, do not change.
 cmd.help.embedTitle=📔 **Commands**
 
 cmd.info.info={1} Info // a discord server name
-cmd.info.ramUsage=🔧 **Ram usage:** {1}MB{nl}{nl} // 1024MB and two newlines.
-cmd.info.upTime=⏰ **Uptime:** {1}{nl}{nl} // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
-cmd.info.discordServers=📡 **Guilds:** {1}{nl}{nl} // just the amount of servers
-cmd.info.discordMembers=👤 **Users:** {1}{nl}{nl} // the amount of total users
-cmd.info.registeredCommands=📑 **Registered Commands:** {1}{nl}{nl} // how many commands are registered
-cmd.info.voiceChannels=🎵 **VCs:** {1}{nl}{nl} // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
-cmd.info.playingCount=🔊 **Playing Count:** {1}{nl}{nl} // how many voice channels the bot is actually playing music in
-cmd.info.gatewayPing=⏱️ **Gateway Ping:** {1}ms{nl}{nl} // 204ms
+cmd.info.ramUsage=🔧 **Ram usage:** {1}MB\n\n // 1024MB and two newlines.
+cmd.info.upTime=⏰ **Uptime:** {1}\n\n // "1 day, 17 hours, 37 minutes, 19 seconds" but dont worry, it localises itself!
+cmd.info.discordServers=📡 **Guilds:** {1}\n\n // just the amount of servers
+cmd.info.discordMembers=👤 **Users:** {1}\n\n // the amount of total users
+cmd.info.registeredCommands=📑 **Registered Commands:** {1}\n\n // how many commands are registered
+cmd.info.voiceChannels=🎵 **VCs:** {1}\n\n // how many voice channels the bot is in (VCs short for voice channels, feel free to change)
+cmd.info.playingCount=🔊 **Playing Count:** {1}\n\n // how many voice channels the bot is actually playing music in
+cmd.info.gatewayPing=⏱️ **Gateway Ping:** {1}ms\n\n // 204ms
 cmd.info.version=Version: {1} // 24.09.13 (a date but it's a version number)
-cmd.info.ping=**Ping:** {1}ms{nl}{nl} // ms here being short for milliseconds
+cmd.info.ping=**Ping:** {1}ms\n\n // ms here being short for milliseconds
 
-cmd.ins.notEnoughArgs=Not enough arguments provided{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here please.
-cmd.ins.invalidArgs=Invalid arguments, integers only{nl}Usage: <Integer> <URL/SearchTerm> // translate things inside the <> here too please.
+cmd.ins.notEnoughArgs=Not enough arguments provided\nUsage: <Integer> <URL/SearchTerm> // translate things inside the <> here please.
+cmd.ins.invalidArgs=Invalid arguments, integers only\nUsage: <Integer> <URL/SearchTerm> // translate things inside the <> here too please.
 cmd.ins.decodingError=Something went wrong when decoding the track.
 cmd.ins.addedToPos=Added the track to position: **{1}** // a position in the queue, a number.
 cmd.ins.queueError=There was an error while adding the track to the queue: {1} // an error message from the code.
@@ -135,14 +136,14 @@ cmd.play.fileError=Something went wrong when loading the tracks from the file.
 
 cmd.pp.privacyPolicy=Privacy Policy
 
-cmd.q.nowPlaying=__**Now playing:**__{nl}{1} // song
+cmd.q.nowPlaying=__**Now playing:**__\n{1} // song
 cmd.q.queueInfoFooter={1} songs queued | Page {2}/{3} | Length: {4} // 1 is amount, 2 is a page number, 3 is the max page number (5/12 pages, change the slash if needed), 4 is a length in the format 3:45 ([hours]:[mins]:<seconds>)
 cmd.q.empty=The queue is empty.
 cmd.q.unknownTitle=Unknown title
 cmd.q.didYouMean=Did you mean to use **{1}**? // a different command name: "clear queue"
 cmd.q.integerError=The page must be a positive whole number.
 
-cmd.radio.list=📻 **Radio list:**{nl}{nl}
+cmd.radio.list=📻 **Radio list:**\n\n
 cmd.radio.alternativeList=*Or use `{1} {2} <String>`* // 1 is the bot prefix, 2 is a command, keep the <> btw and translate String to something like "word" if you cannot translate it well
 cmd.radio.useForPlay=Use "{1} {2} <Radio Name>" to play a radio station. // 1 is a command, {2} is markdown.
 cmd.radio.noArgsList=No arguments given, here's some radio stations to choose from:
@@ -167,7 +168,7 @@ cmd.shuffle.shuffled=Shuffled the queue!
 
 cmd.skip.alreadyVoted=You have already voted to skip.
 cmd.skip.failedToFind=Autoplay failed to find {1} // a track title.
-cmd.skip.couldNotFind=Autoplay could not find similar tracks.{nl}
+cmd.skip.couldNotFind=Autoplay could not find similar tracks.\n
 cmd.skip.noSearchTerm=An unknown error occurred when trying to autoplay.
 cmd.skip.autoplayQueued=Autoplay queued: __**{1} - {2}**__  // "artistName - title" for example: "Rick Astley - Never gonna give you up"
 cmd.skip.skippedTheTrack=⏩ Skipped the track.
@@ -176,8 +177,8 @@ cmd.skip.skippedTo.unknown=⏩ Skipped the track to __**Unknown Title**__ // tra
 cmd.skip.nowPlaying=Now playing: {1} // track URL
 cmd.skip.voted.title=Voted to skip the track.
 cmd.skip.voted.description={1} of {2} needed to skip. // how many people have voted to skip out of how many. (3 of 5 people for example)
-cmd.skip.channel=**Channel**{nl}{1}{nl} // a channel/artist name.
-cmd.skip.duration=**Duration**{nl}{1} // a simple timestamp like 12:34 (can include hours)
+cmd.skip.channel=**Channel**\n{1}\n // a channel/artist name.
+cmd.skip.duration=**Duration**\n{1} // a simple timestamp like 12:34 (can include hours)
 
 cmd.speed.defaulted=Set the playback speed back to 1.
 cmd.speed.rangeError=The speed must be between 0.2 and 5.
@@ -189,7 +190,7 @@ cmd.vib.defaulted=Set the parameters to their default values.
 cmd.vib.incorrectArgs=The valid usage is: `{1} <Frequency> <Depth>` // {1} is a command name, keep the <>, translate the inside of them.
 cmd.vib.range.frequency=The frequency must be between 0.1 and 14.
 cmd.vib.range.depth=The depth must be between 0.05 and 1
-cmd.vib.success=Set the vibrato frequency to {1}Hz.{nl}Set the vibrato depth to {2} // 1 here is a number, like 5Hz (hertz), and 2 is also a number.
+cmd.vib.success=Set the vibrato frequency to {1}Hz.\nSet the vibrato depth to {2} // 1 here is a number, like 5Hz (hertz), and 2 is also a number.
 cmd.vib.invalidArgs=❌ **Invalid arguments.**
 
 cmd.vol.defaulted=Set volume to the default of 100.
@@ -212,14 +213,14 @@ cmd.scheck.isNotPlaying=The bot is not currently playing anything.
 cmd.scheck.devOnly=This command is for developers only.
 
 pmanager.noSpotify=The bot is unable to play spotify tracks right now.
-pmanager.playlistQueued=Size: **{1}** tracks.{nl}Length: **{2}**{nl}{nl} // 1 is the amount of tracks, 2 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
+pmanager.playlistQueued=Size: **{1}** tracks.\nLength: **{2}**\n\n // 1 is the amount of tracks, 2 is like 2 hours, 1 minute, 3 seconds, it will translate itself.
 pmanager.APIError=An error with the YouTube search API has occurred.
 pmanager.loadFailed=The track failed to load: {1}
 pmanager.noMatches=No matches found for the track.
 
 tsched.autoplay.notFound=Autoplay failed to find {1} // a track name
-tsched.autoplay.noSimilar=Autoplay could not find similar tracks.{nl}
-tsched.autoplay.unknownError=An unknown error occurred when trying to autoplay.{nl}
+tsched.autoplay.noSimilar=Autoplay could not find similar tracks.\n
+tsched.autoplay.unknownError=An unknown error occurred when trying to autoplay.\n
 tsched.queued=♾️ Autoplay queued: // this is followed by an "artist name - song title"
 
 tsched.regfail=The track failed to load due to an unknown reason. Skipping...
@@ -247,6 +248,6 @@ main.ratelimit=You cannot use this command for another {1} seconds.
 main.botNoPermission=I don't have permission to read or send messages to this channel.
 main.error=Error
 main.unknown=Unknown
-main.channel=**Channel**{nl}
-main.duration=**Duration**{nl}
-main.update=An update to the bot occurred, your queue and parameters have been restored!{nl}If you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.
+main.channel=**Channel**\n
+main.duration=**Duration**\n
+main.update=An update to the bot occurred, your queue and parameters have been restored!\nIf you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.

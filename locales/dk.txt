@@ -21,15 +21,15 @@ cmd.bc.channelList=Blokeret kanaler for {1}:
 cmd.bc.noChannels=**Ingen**
 
 cmd.bug.noReport=Angiv venligst noget at rapportere.
-cmd.bug.successMessage=Tak for din fejlrapport!{nl}Udvikleren vil kontakte dig via botens DM'er.{nl}Brug kommandoen **{1}** til at svare på beskeder.{nl}
+cmd.bug.successMessage=Tak for din fejlrapport!\nUdvikleren vil kontakte dig via botens DM'er.\nBrug kommandoen **{1}** til at svare på beskeder.\n
 
 cmd.cq.cleared=Ryddede køen.
 
 cmd.dc.disconnected=Forlod kanalen og ryddede køen.
 
-cmd.dj.roleList=**Roller**:{nl}
+cmd.dj.roleList=**Roller**:\n
 cmd.dj.roleListEmpty=Ingen.
-cmd.dj.userList={nl}{nl}**Brugere:**{nl}
+cmd.dj.userList=\n\n**Brugere:**\n
 cmd.dj.guildDJs=DJs for {1}
 cmd.dj.notGiven=Ingen medlemmer eller roller blev angivet.
 cmd.dj.member=medlem
@@ -41,42 +41,42 @@ cmd.dj.added=Tilføjet {1} til DJ-listen.
 cmd.dj.removed=Fjernet {1} fra DJ-listen.
 cmd.dj.invalidArgs=Ugyldige argumenter.
 
-cmd.fs.failedToFind=Autoplay kunne ikke finde {1}{nl}
-cmd.fs.couldNotFind=Autoplay kunne ikke finde lignende numre.{nl}
-cmd.fs.nullSearchTerm=Der opstod en ukendt fejl under forsøg på autoplay.{nl}
+cmd.fs.failedToFind=Autoplay kunne ikke finde {1}\n
+cmd.fs.couldNotFind=Autoplay kunne ikke finde lignende numre.\n
+cmd.fs.nullSearchTerm=Der opstod en ukendt fejl under forsøg på autoplay.\n
 cmd.fs.autoplayQueued=Autoplay i kø: {1} - {2}
 cmd.fs.skippedQueue=Sprang over hele køen.
 cmd.fs.skippedToPos=Sprang {1} numre over til {2}.
 cmd.fs.skippedToTrack=Sprang det nuværende nummer over til {1}.
 cmd.fs.skipped=Sprang det nuværende nummer over.
 
-cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.{nl}{nl}❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.{nl}https://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.\n\n❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
 
 cmd.help.cat.general=📖 **Generelt**
 cmd.help.cat.music=🔊 **Musik**
 cmd.help.cat.DJ=🎧 **DJ**
 cmd.help.cat.admin=📑 **Admin**
 cmd.help.cat.dev=🔨 **Udvikler**
-cmd.help.alias={nl}`Alias:`
-cmd.help.alias.plural={nl}`Aliaser:`
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Aliaser:`
 cmd.help.originalFooter=Klik på knapperne for at få flere oplysninger om en gruppe.
 cmd.help.footer=Syntaks: "<>" er et påkrævet argument, "[]" er et valgfrit argument. "()" er et alternativt ord for kommandoen.
 cmd.help.embedTitle=📔 **Kommandoer**
 
 cmd.info.info={1} Info
-cmd.info.ramUsage=🔧 **RAM-forbrug:** {1}MB{nl}{nl}
-cmd.info.upTime=⏰ **Oppetid:** {1}{nl}{nl}
-cmd.info.discordServers=📡 **Servere:** {1}{nl}{nl}
-cmd.info.discordMembers=👤 **Brugere:** {1}{nl}{nl}
-cmd.info.registeredCommands=📑 **Registrerede kommandoer:** {1}{nl}{nl}
-cmd.info.voiceChannels=🎵 **Stemmekanaler:** {1}{nl}{nl}
-cmd.info.playingCount=🔊 **Aktive afspilninger:** {1}{nl}{nl}
-cmd.info.gatewayPing=⏱️ **Gateway-ping:** {1}ms{nl}{nl}
+cmd.info.ramUsage=🔧 **RAM-forbrug:** {1}MB\n\n
+cmd.info.upTime=⏰ **Oppetid:** {1}\n\n
+cmd.info.discordServers=📡 **Servere:** {1}\n\n
+cmd.info.discordMembers=👤 **Brugere:** {1}\n\n
+cmd.info.registeredCommands=📑 **Registrerede kommandoer:** {1}\n\n
+cmd.info.voiceChannels=🎵 **Stemmekanaler:** {1}\n\n
+cmd.info.playingCount=🔊 **Aktive afspilninger:** {1}\n\n
+cmd.info.gatewayPing=⏱️ **Gateway-ping:** {1}ms\n\n
 cmd.info.version=Version: {1}
-cmd.info.ping=**Ping:** {1}ms{nl}{nl}
+cmd.info.ping=**Ping:** {1}ms\n\n
 
-cmd.ins.notEnoughArgs=Ikke nok argumenter angivet.{nl}Brug: <Heltal> <URL/Søgeudtryk>
-cmd.ins.invalidArgs=Ugyldige argumenter, kun heltal.{nl}Brug: <Heltal> <URL/Søgeudtryk>
+cmd.ins.notEnoughArgs=Ikke nok argumenter angivet.\nBrug: <Heltal> <URL/Søgeudtryk>
+cmd.ins.invalidArgs=Ugyldige argumenter, kun heltal.\nBrug: <Heltal> <URL/Søgeudtryk>
 cmd.ins.decodingError=Noget gik galt under afkodningen af nummeret.
 cmd.ins.addedToPos=Tilføjet nummeret på position: **{1}**
 cmd.ins.queueError=Der opstod en fejl under tilføjelse af nummeret til køen: {1}
@@ -131,14 +131,14 @@ cmd.play.fileError=Noget gik galt under indlæsning af numre fra filen.
 
 cmd.pp.privacyPolicy=Privatlivspolitik
 
-cmd.q.nowPlaying=__**Spiller nu:**__{nl}{1}
+cmd.q.nowPlaying=__**Spiller nu:**__\n{1}
 cmd.q.queueInfoFooter={1} numre i kø | Side {2}/{3} | Længde: {4}
 cmd.q.empty=Køen er tom.
 cmd.q.unknownTitle=Ukendt titel
 cmd.q.didYouMean=Mente du at bruge **{1}**?
 cmd.q.integerError=Siden skal være et positivt heltal.
 
-cmd.radio.list=📻 **Radiokanaler:**{nl}{nl}
+cmd.radio.list=📻 **Radiokanaler:**\n\n
 cmd.radio.alternativeList=*Eller brug `{1} {2} <Tekst>`*
 cmd.radio.useForPlay=Brug "{1} {2} <Radiokanal>" for at afspille en radiokanal.
 cmd.radio.noArgsList=Ingen argumenter angivet, her er nogle radiokanaler at vælge imellem:
@@ -163,7 +163,7 @@ cmd.shuffle.shuffled=Blandede køen!
 
 cmd.skip.alreadyVoted=Du har allerede stemt for at springe over.
 cmd.skip.failedToFind=Autoplay kunne ikke finde {1}
-cmd.skip.couldNotFind=Autoplay kunne ikke finde lignende numre.{nl}
+cmd.skip.couldNotFind=Autoplay kunne ikke finde lignende numre.\n
 cmd.skip.noSearchTerm=Der opstod en ukendt fejl under forsøg på autoplay.
 cmd.skip.autoplayQueued=Autoplay i kø: __**{1} - {2}**__
 cmd.skip.skippedTheTrack=⏩ Sprang nummeret over.
@@ -172,8 +172,8 @@ cmd.skip.skippedTo.unknown=⏩ Sprang over til __**Ukendt titel**__
 cmd.skip.nowPlaying=Spiller nu: {1}
 cmd.skip.voted.title=Stemte for at springe over nummeret.
 cmd.skip.voted.description={1} ud af {2} stemmer nødvendige for at springe over.
-cmd.skip.channel=**Kanal**{nl}{1}{nl}
-cmd.skip.duration=**Varighed**{nl}{1}
+cmd.skip.channel=**Kanal**\n{1}\n
+cmd.skip.duration=**Varighed**\n{1}
 
 cmd.speed.defaulted=Afspilningshastigheden er sat tilbage til 1.
 cmd.speed.rangeError=Hastigheden skal være mellem 0,2 og 5.
@@ -185,7 +185,7 @@ cmd.vib.defaulted=Parametrene er sat tilbage til standardværdier.
 cmd.vib.incorrectArgs=Den korrekte brug er: `{1} <Frekvens> <Dybde>`
 cmd.vib.range.frequency=Frekvensen skal være mellem 0,1 og 14.
 cmd.vib.range.depth=Dybden skal være mellem 0,05 og 1.
-cmd.vib.success=Indstillede vibratofrekvensen til {1}Hz.{nl}Indstillede vibratodybden til {2}.
+cmd.vib.success=Indstillede vibratofrekvensen til {1}Hz.\nIndstillede vibratodybden til {2}.
 cmd.vib.invalidArgs=❌ **Ugyldige argumenter.**
 
 cmd.vol.defaulted=Lydstyrken er sat tilbage til standardværdien på 100.
@@ -208,14 +208,14 @@ cmd.scheck.isNotPlaying=Botten spiller ikke noget i øjeblikket.
 cmd.scheck.devOnly=Denne kommando er kun for udviklere.
 
 pmanager.noSpotify=Botten kan ikke afspille Spotify-numre lige nu.
-pmanager.playlistQueued=Størrelse: **{1}** numre.{nl}Længde: **{2}**{nl}{nl}
+pmanager.playlistQueued=Størrelse: **{1}** numre.\nLængde: **{2}**\n\n
 pmanager.APIError=Der opstod en fejl med YouTubes søge-API.
 pmanager.loadFailed=Nummeret kunne ikke indlæses: {1}
 pmanager.noMatches=Der blev ikke fundet nogen matches for dette nummer.
 
 tsched.autoplay.notFound=Autoplay kunne ikke finde {1}
-tsched.autoplay.noSimilar=Autoplay kunne ikke finde lignende numre.{nl}
-tsched.autoplay.unknownError=Der opstod en ukendt fejl under forsøg på autoplay.{nl}
+tsched.autoplay.noSimilar=Autoplay kunne ikke finde lignende numre.\n
+tsched.autoplay.unknownError=Der opstod en ukendt fejl under forsøg på autoplay.\n
 tsched.queued=♾️ Autoplay i kø:
 
 tsched.regfail=Nummeret kunne ikke indlæses af ukendte årsager. Springer over...
@@ -241,6 +241,6 @@ main.ratelimit=Du kan ikke bruge denne kommando i {1} sekunder.
 main.botNoPermission=Jeg har ikke tilladelse til at læse eller sende beskeder i denne kanal.
 main.error=Fejl
 main.unknown=Ukendt
-main.channel=**Kanal**{nl}
-main.duration=**Varighed**{nl}
-main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!{nl}Hvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens "Om mig".
+main.channel=**Kanal**\n
+main.duration=**Varighed**\n
+main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!\nHvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens "Om mig".
