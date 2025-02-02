@@ -11,74 +11,74 @@ cmd.ap.noAPI=Bot nie otrzymał klucza API dla LastFM, ta komenda nie działa bez
 cmd.ap.notAutoplaying=Autoodtwarzanie zostało wyłączone.
 cmd.ap.isAutoplaying=Autoodtwarzanie zostało włączone.
 
-cmd.bc.invalidUsage=Poprawne użycie to: {1} <kanał>{2} lub {3}
+cmd.bc.invalidUsage=Poprawne użycie to: `{1} <kanał>` lub `{2}`
 cmd.bc.alreadyBlocked=Ten kanał został zablokowany.
 cmd.bc.notBlocked=Ten kanał został odblokowany.
-cmd.bc.added=Dodano {1} do listy.
-cmd.bc.removed=Usunięto {1} z listy.
+cmd.bc.added=Dodano <#{1}> do listy.
+cmd.bc.removed=Usunięto <#{1}> z listy.
 cmd.bc.notFound=Nie znaleziono tego kanału na tym serwerze Discord.
-cmd.bc.channelList=Zablokowane kanały dla {1}
-cmd.bc.noChannels=Brak
+cmd.bc.channelList=Zablokowane kanały dla {1}:
+cmd.bc.noChannels=**Brak**
 
 cmd.bug.noReport=Podaj coś do zgłoszenia.
-cmd.bug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{1}Programista skontaktuje się z Tobą przez DM bota.{2}Proszę użyć komendy {3}, aby odpowiedzieć na wiadomości.{4}
+cmd.bug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!{nl}Programista skontaktuje się z Tobą przez DM bota.{nl}Proszę użyć komendy **{1}**, aby odpowiedzieć na wiadomości.{nl}
 
 cmd.cq.cleared=Kolejka została wyczyszczona.
 
 cmd.dc.disconnected=Rozłączono z kanałem głosowym i wyczyszczono kolejkę.
 
-cmd.dj.roleList=Role:
-cmd.dj.userList=Użytkownicy:
+cmd.dj.roleList=**Role**:{nl}
 cmd.dj.roleListEmpty=Brak.
+cmd.dj.userList={nl}{nl}**Użytkownicy:**{nl}
 cmd.dj.guildDJs=DJe dla {1}
 cmd.dj.notGiven=Nie podano członków ani ról.
 cmd.dj.member=członek
 cmd.dj.member.plural=członkowie
 cmd.dj.role=rola
 cmd.dj.role.plural=role
-cmd.dj.membersAndRoles=i
+cmd.dj.membersAndRoles={1} {2} i {3} {4}
 cmd.dj.added=Dodano {1} do listy DJ-ów.
 cmd.dj.removed=Usunięto {1} z listy DJ-ów.
 cmd.dj.invalidArgs=Nieprawidłowe argumenty.
 
-cmd.fs.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
-cmd.fs.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
-cmd.fs.nullSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
+cmd.fs.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}{nl}
+cmd.fs.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
+cmd.fs.nullSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.{nl}
 cmd.fs.autoplayQueued=Autoodtwarzanie dodało do kolejki:
 cmd.fs.skippedQueue=Pominięto całą kolejkę.
-cmd.fs.skippedToPos=Pominięto {1} utworów do {2}
-cmd.fs.skippedToTrack=Pominięto bieżący utwór do {1}
+cmd.fs.skippedToPos=Pominięto {1} utworów do {2}.
+cmd.fs.skippedToTrack=Pominięto bieżący utwór do {1}.
 cmd.fs.skipped=Pominięto bieżący utwór.
 
-cmd.git.message={1}Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{2}Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{3}https://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Użyj tego tylko do zgłaszania błędów i sugestii funkcji.{nl}{nl}❕ Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.{nl}https://github.com/ZeNyfh/gigavibe-java-edition
 
-cmd.help.cat.general=Ogólne
-cmd.help.cat.music=Muzyka
-cmd.help.cat.DJ=DJ
-cmd.help.cat.admin=Admin
-cmd.help.cat.dev=Dev
-cmd.help.alias=Alias
-cmd.help.alias.plural=Aliasy
+cmd.help.cat.general=📖 **Ogólne**
+cmd.help.cat.music=🔊 **Muzyka**
+cmd.help.cat.DJ=🎧 **DJ**
+cmd.help.cat.admin=📑 **Admin**
+cmd.help.cat.dev=🔨 **Dev**
+cmd.help.alias={nl}`Alias:`
+cmd.help.alias.plural={nl}`Aliasy:`
 cmd.help.originalFooter=Kliknij guziki, aby uzyskać więcej informacji o grupie.
-cmd.help.footer=Składnia: {1} to argument wymagany, {2} to argument opcjonalny. {3} to alternatywne słowo dla komendy.
-cmd.help.embedTitle=Komendy
+cmd.help.footer=Syntaksa: "<>" to argument wymagany, "[]" to argument opcjonalny. "()" to alternatywne słowo dla komendy.
+cmd.help.embedTitle=📔 **Komendy**
 
-cmd.info.info=Informacje
-cmd.info.ramUsage=Zużycie RAM: {1}
-cmd.info.upTime=Czas działania: {1}
-cmd.info.discordServers=Serwery: {1}
-cmd.info.discordMembers=Użytkownicy: {1}
-cmd.info.registeredCommands=Zarejestrowane komendy: {1}
-cmd.info.voiceChannels=Kanały głosowe: {1}
-cmd.info.playingCount=Liczba odtwarzanych: {1}
-cmd.info.gatewayPing=Ping bramy: {1}ms
+cmd.info.info={1} Informacje
+cmd.info.ramUsage=🔧 **Zużycie RAM:** {1}MB{nl}{nl}
+cmd.info.upTime=⏰ **Czas działania:** {1}{nl}{nl}
+cmd.info.discordServers=📡 **Serwery:** {1}{nl}{nl}
+cmd.info.discordMembers=👤 **Użytkownicy:** {1}{nl}{nl}
+cmd.info.registeredCommands=📑 **Zarejestrowane komendy:** {1}{nl}{nl}
+cmd.info.voiceChannels=🎵 **Kanały głosowe:** {1}{nl}{nl}
+cmd.info.playingCount=🔊 **Liczba odtwarzanych:** {1}{nl}{nl}
+cmd.info.gatewayPing=⏱️ **Ping bramy:** {1}ms{nl}{nl}
 cmd.info.version=Wersja: {1}
-cmd.info.ping=Ping {1}ms
+cmd.info.ping=**Ping:** {1}ms{nl}{nl}
 
-cmd.ins.notEnoughArgs=Nie podano wystarczającej liczby argumentów{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
-cmd.ins.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite{1}Użycie: {2}Liczba całkowita{3}URL/Termin wyszukiwania{4}
+cmd.ins.notEnoughArgs=Nie podano wystarczającej liczby argumentów.{nl}Użycie: <Liczba całkowita> <URL/Termin wyszukiwania>
+cmd.ins.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.{nl}Użycie: <Liczba całkowita> <URL/Termin wyszukiwania>
 cmd.ins.decodingError=Wystąpił błąd podczas dekodowania utworu.
-cmd.ins.addedToPos=Dodano utwór na pozycję: {1}
+cmd.ins.addedToPos=Dodano utwór na pozycję: **{1}**
 cmd.ins.queueError=Wystąpił błąd podczas dodawania utworu do kolejki: {1}
 
 cmd.inv.haveFun=Miłej zabawy!
@@ -87,7 +87,7 @@ cmd.join.noAccess=Bot nie ma dostępu do Twojego kanału.
 cmd.join.joined=Bot dołączył do Twojego kanału głosowego.
 
 cmd.loc.list=Lista języków:
-cmd.loc.languageChanged=Język był zmieniony na: {1} // 1 here being a language name.
+cmd.loc.languageChanged=Język został zmieniony na: {1}
 cmd.loc.unrecognised=Nierozpoznany język. Oto lista języków do wyboru:
 
 cmd.loop.notLooping=Nie powtarza już bieżącego utworu.
@@ -101,15 +101,15 @@ cmd.lyr.source=Teksty pochodzą z lrclib.net
 cmd.lyr.lyricsForTrack=Tekst dla: {1}
 cmd.lyr.tooLong=Tekst był za długi, przesyłam jako plik.
 
-cmd.np.livestreamDuration=Czas trwania transmisji na żywo {1}
-cmd.np.channel=Kanał:
-cmd.np.next=Następne:
-cmd.np.paused=Utwór wstrzymany:
-cmd.np.true=Tak
-cmd.np.false=Nie
-cmd.np.trackLooping=Powtarzanie utwóru:
-cmd.np.queueLooping=Powtarzanie kolejki:
-cmd.np.autoplaying=Autoodtwarzanie:
+cmd.np.livestreamDuration=```Czas trwania transmisji na żywo {1}```
+cmd.np.channel=👤 Kanał:
+cmd.np.next=▶️ Następne:
+cmd.np.paused=⏸️ Utwór wstrzymany:
+cmd.np.true=✅ **Prawda**
+cmd.np.false=❌ **Fałsz**
+cmd.np.trackLooping=🔂 Powtarzanie utworu:
+cmd.np.queueLooping=🔁 Powtarzanie kolejki:
+cmd.np.autoplaying=♾️ Autoodtwarzanie:
 
 cmd.pause.resumed=Utwór jest teraz odtwarzany.
 cmd.pause.paused=Utwór jest teraz wstrzymany.
@@ -118,8 +118,8 @@ cmd.ping.ping=ping: {1}ms
 cmd.ping.gatewayPing=ping bramy: {1}ms
 
 cmd.pitch.defaulted=Przywrócono ton dźwięku do 1.
-cmd.pitch.range=Ton dźwięku musi wynosić od 0.25 do 5
-cmd.pitch.changed=Ustawiono Ton dźwięku utworu na {1}x
+cmd.pitch.range=Ton dźwięku musi wynosić od 0.25 do 5.
+cmd.pitch.changed=Ustawiono ton dźwięku utworu na {1}x.
 
 cmd.play.queuedFromAtt=Dodano do kolejki {1} utworów z załączników.
 cmd.play.queuedFromAtt.error=Wystąpił błąd podczas ładowania utworów z załączników.
@@ -131,16 +131,16 @@ cmd.play.fileError=Wystąpił błąd podczas ładowania utworów z pliku.
 
 cmd.pp.privacyPolicy=Polityka Prywatności
 
-cmd.q.nowPlaying=Teraz odtwarzane:
-cmd.q.queueInfoFooter={1} utworów w kolejce {2} Strona {3} Długość: {4}
+cmd.q.nowPlaying=__**Teraz odtwarzane:**__{nl}{1}
+cmd.q.queueInfoFooter={1} utworów w kolejce | Strona {2}/{3} | Długość: {4}
 cmd.q.empty=Kolejka jest pusta.
 cmd.q.unknownTitle=Nieznany tytuł
-cmd.q.didYouMean=Czy chodziło o {1}?
+cmd.q.didYouMean=Czy chodziło o **{1}**?
 cmd.q.integerError=Strona musi być liczbą całkowitą dodatnią.
 
-cmd.radio.list=Lista stacji radiowych:
-cmd.radio.alternativeList=Lub użyj {1} radio wyszukaj <Słowo/a>{2}
-cmd.radio.useForPlay=Użyj {1} radio <Nazwa Radia>{2}, aby odtworzyć stację radiową.
+cmd.radio.list=📻 **Lista stacji radiowych:**{nl}{nl}
+cmd.radio.alternativeList=*Lub użyj `{1} {2} <Słowo/a>`*
+cmd.radio.useForPlay=Użyj "{1} {2} <Nazwa Radia>", aby odtworzyć stację radiową.
 cmd.radio.noArgsList=Nie podano argumentów, oto kilka stacji radiowych do wyboru:
 cmd.radio.noSearchTerm=Nie podano terminu wyszukiwania.
 cmd.radio.notFound=Nie znaleziono stacji radiowej o podanej nazwie.
@@ -152,9 +152,9 @@ cmd.rem.invalidArgs=Nieprawidłowe argumenty, tylko liczby całkowite.
 cmd.rem.tooLarge=Podana liczba jest większa niż rozmiar kolejki.
 cmd.rem.removed=Usunięto z kolejki utwór {1} pomyślnie.
 
-cmd.seek.invalidArg=Argument jest nieprawidłowy, użyj formatu {1}[GODZINY]:[MINUTY]:<SEKUNDY>{2}"
+cmd.seek.invalidArg=Argument jest nieprawidłowy, użyj formatu `[GODZINY]:[MINUTY]:<SEKUNDY>`
 cmd.seek.timeTooLow=Podany czas jest mniejszy lub równy 0.
-cmd.seek.setPos=Ustawiono pozycję utworu do: {1}. // 1 here being timestamp like 12:34 (can include hours)
+cmd.seek.setPos=Ustawiono pozycję utworu do: **{1}**.
 cmd.seek.cannotSeek=Nie można przewinąć tego utworu.
 cmd.seek.noArg=Nie podano argumentu.
 
@@ -162,31 +162,31 @@ cmd.shuffle.emptyQueue=Kolejka jest pusta.
 cmd.shuffle.shuffled=Kolejka została przetasowana!
 
 cmd.skip.alreadyVoted=Już oddałeś głos na pominięcie.
-cmd.skip.failedToFind=Autoodtwarzanie nie mogło znaleźć niczego
 cmd.skip.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}
-cmd.skip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
+cmd.skip.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
 cmd.skip.noSearchTerm=Wystąpił nieznany błąd podczas próby autoodtwarzania.
 cmd.skip.autoplayQueued=Autoodtwarzanie dodało do kolejki:
-cmd.skip.skippedTheTrack=Przewinięto utwór.
-cmd.skip.skippedTo=Przewinięto utwór do {1}
-cmd.skip.skippedTo.unknown=Przewinięto utwór do Nieznany tytuł.
+cmd.skip.skippedTheTrack=⏩ Przewinięto utwór.
+cmd.skip.skippedTo=⏩ Przewinięto utwór do __**{1}**__
+cmd.skip.skippedTo.unknown=⏩ Przewinięto utwór do __**Nieznany tytuł**__
 cmd.skip.nowPlaying=Teraz odtwarzane: {1}
 cmd.skip.voted.title=Oddano głos na pominięcie utworu.
 cmd.skip.voted.description={1} z {2} potrzebnych do pominięcia.
-cmd.skip.channel=Kanał
-cmd.skip.duration=Czas trwania
+cmd.skip.channel=**Kanał**{nl}{1}{nl}
+cmd.skip.duration=**Czas trwania**{nl}{1}
 
 cmd.speed.defaulted=Przywrócono prędkość do 1.
-cmd.speed.rangeError=Prędkość musi wynosić od 0.2 do 5
+cmd.speed.rangeError=Prędkość musi wynosić od 0.2 do 5.
 cmd.speed.success=Ustawiono prędkość odtwarzania utworu na {1}x.
 
 cmd.tos.TermsOfService=Regulamin
 
 cmd.vib.defaulted=Przywrócono domyślne wartości parametrów.
-cmd.vib.incorrectArgs=Poprawne użycie to: {1} <Częstotliwość> <Głębokość>{2}
-cmd.vib.frequency=Częstotliwość musi wynosić od 0.1 do 14
-cmd.vib.depth=Głębokość musi wynosić od 0.05 do 1
-cmd.vib.success=Ustawiono częstotliwość wibrato na {1}Hz.{2}Ustawiono głębokość wibrato na {3}
+cmd.vib.incorrectArgs=Poprawne użycie to: `{1} <Częstotliwość> <Głębokość>`
+cmd.vib.frequency=Częstotliwość musi wynosić od 0.1 do 14.
+cmd.vib.depth=Głębokość musi wynosić od 0.05 do 1.
+cmd.vib.success=Ustawiono częstotliwość wibrato na {1}Hz.{nl}Ustawiono głębokość wibrato na {2}.
+cmd.vib.invalidArgs=❌ **Nieprawidłowe argumenty.**
 
 cmd.vol.defaulted=Ustawiono głośność na domyślną wartość do 100.
 cmd.vol.incorrectArg=Głośność musi być liczbą całkowitą.
@@ -195,7 +195,7 @@ cmd.vol.tooLow=Głośność nie może być mniejsza niż 0.
 cmd.vol.success=Zmieniono głośność na {1}.
 cmd.vol.invalidValue=Nieprawidłowa wartość.
 
-basecmd.notAllowed=Brak dostępu
+basecmd.notAllowed=❌ **Brak dostępu**
 
 cmd.scheck.notInVC=Nie jesteś w kanale głosowym.
 cmd.scheck.botNotInVC=Bot nie jest w kanale głosowym.
@@ -208,40 +208,39 @@ cmd.scheck.isNotPlaying=Bot obecnie nic nie odtwarza.
 cmd.scheck.devOnly=Ta komenda jest tylko dla programistów.
 
 pmanager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
-pmanager.playlistQueued=Ilość: {1} utworów.{2}Długość: {3}
+pmanager.playlistQueued=Ilość: **{1}** utworów.{nl}Długość: **{2}**{nl}{nl}
 pmanager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
 pmanager.loadFailed=Utwór nie został załadowany: {1}
 pmanager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
 
-tsched.notFound=Autoodtwarzanie nie mogło znaleźć {1}
-tsched.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.
-tsched.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.
-tsched.queued=Autoodtwarzanie dodało do kolejki:
+tsched.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
+tsched.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.{nl}
+tsched.autoplay.unknownError=Wystąpił nieznany błąd podczas próby autoodtwarzania.{nl}
+tsched.queued=♾️ Autoodtwarzanie dodało do kolejki:
 
-tsched.regularFailure=Utwór nie został załadowany z nieznanego powodu. Pomijam...
+tsched.regfail=Utwór nie został załadowany z nieznanego powodu. Pomijam...
 
-tsched.title=Błąd krytyczny
-tsched.description=Odtworzenie utworów nie powiodło się 3 razy, przypuszczalnie z powodu problemu sieciowego poza naszą kontrolą. Czyszczenie kolejki, aby uniknąć spamu.
-tsched.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
+tsched.critfail.title=❌ Błąd krytyczny
+tsched.critfail.description=Odtworzenie utworów nie powiodło się 3 razy, przypuszczalnie z powodu problemu sieciowego poza naszą kontrolą. Czyszczenie kolejki, aby uniknąć spamu.
+tsched.critfail.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
 
-tsched.nowPlaying=Teraz odtwarzane: {1}
+tsched.playnext.nowPlaying=Teraz odtwarzane: {1}
 
+main.day={1} dzień
+main.day.plural={1} dni
+main.hour={1} godzina
+main.hour.plural={1} godzin(y)
+main.minute={1} minuta
+main.minute.plural={1} minut(y)
+main.second={1} sekunda
+main.second.plural={1} sekund(y)
 
-main.day={1} dzień // 1 day
-main.day.plural={1} dni // 2 days
-main.hour={1} godzina // 1 hour
-main.hour.plural={1} godzin(y) // 2 hours
-main.minute={1} minuta // 1 minute
-main.minute.plural={1} minut(y) // 2 minutes
-main.second={1} sekunda // 1 second
-main.second.plural={1} sekund(y) // 2 seconds
-
-main.success=Sukces
+main.success=✅ **Sukces**
 main.noPermission=Nie masz uprawnień do użycia tej komendy.
 main.ratelimit=Nie możesz użyć tej komendy przez kolejne {1} sekund/y.
 main.botNoPermission=Nie mam uprawnień do czytania ani wysyłania wiadomości w tym kanale.
 main.error=Błąd
 main.unknown=Nieznany
-main.channel=Kanał {1}
-main.duration=Czas trwania {1}
-main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!{1}Jeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.
+main.channel=**Kanał**{nl}
+main.duration=**Czas trwania**{nl}
+main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!{nl}Jeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.
