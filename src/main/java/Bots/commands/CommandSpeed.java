@@ -9,7 +9,6 @@ import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandSpeed extends BaseCommand {
@@ -25,19 +24,19 @@ public class CommandSpeed extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setSpeed(1);
-            event.replyEmbeds(createQuickSuccess(localise("cmd.speed.defaulted")));
+            event.replyEmbeds(createQuickSuccess(event.localise("cmd.speed.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5 && value >= 0.2)) {
-            event.replyEmbeds(createQuickError(localise("cmd.speed.rangeError")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.speed.rangeError")));
             return;
         }
 
         timescale.setSpeed(value);
-        event.replyEmbeds(createQuickSuccess(localise("cmd.speed.success", value)));
+        event.replyEmbeds(createQuickSuccess(event.localise("cmd.speed.success", value)));
     }
 
     @Override

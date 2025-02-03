@@ -9,7 +9,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import java.util.List;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
@@ -22,14 +21,14 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
-            event.replyEmbeds(createQuickError(localise("cmd.ap.noAPI")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.ap.noAPI")));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", localise("cmd.ap.notAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", event.localise("cmd.ap.notAutoplaying")));
             AutoplayGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", localise("cmd.ap.isAutoplaying")));
+            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", event.localise("cmd.ap.isAutoplaying")));
             AutoplayGuilds.add(event.getGuild().getIdLong());
             AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
             if (track != null) {

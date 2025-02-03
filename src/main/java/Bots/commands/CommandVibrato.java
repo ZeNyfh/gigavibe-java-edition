@@ -9,7 +9,6 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandVibrato extends BaseCommand {
@@ -26,12 +25,12 @@ public class CommandVibrato extends BaseCommand {
         if (event.getArgs().length == 1) {
             vibrato.setFrequency(2);
             vibrato.setDepth(0.5f);
-            event.replyEmbeds(createQuickSuccess(localise("cmd.vib.defaulted")));
+            event.replyEmbeds(createQuickSuccess(event.localise("cmd.vib.defaulted")));
             return;
         }
 
         if (event.getArgs().length != 3) {
-            event.replyEmbeds(createQuickEmbed(localise("cmd.vib.invalidArgs"), localise("cmd.vib.incorrectArgs", "vibrato")));
+            event.replyEmbeds(createQuickEmbed(event.localise("cmd.vib.invalidArgs"), event.localise("cmd.vib.incorrectArgs", "vibrato")));
             return;
         }
 
@@ -39,18 +38,18 @@ public class CommandVibrato extends BaseCommand {
         float power = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[2])));
 
         if (!(value <= 14 && value >= 0.1)) {
-            event.replyEmbeds(createQuickError(localise("cmd.vib.range.frequency")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.vib.range.frequency")));
             return;
         }
 
         if (!(power <= 1 && power >= 0.05)) {
-            event.replyEmbeds(createQuickError(localise("cmd.vib.range.depth")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.vib.range.depth")));
             return;
         }
 
         vibrato.setFrequency(value);
         vibrato.setDepth(power);
-        event.replyEmbeds(createQuickSuccess(localise("cmd.vib.success", value, power)));
+        event.replyEmbeds(createQuickSuccess(event.localise("cmd.vib.success", value, power)));
     }
 
     @Override

@@ -154,7 +154,7 @@ public class PlayerManager {
         } else {
             commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
-        HashMap<String, String> locale = guildLocales.get(commandGuild.getIdLong());
+        Map<String, String> locale = guildLocales.get(commandGuild.getIdLong());
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 if (sendEmbed) {

@@ -9,12 +9,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-import static Bots.CommandEvent.localise;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
@@ -36,7 +32,7 @@ public class CommandHelp extends BaseCommand {
     }
 
     private void BuildEmbedFromCategory(EmbedBuilder embed, Category category, long guildID) {
-        HashMap<String, String> lang = guildLocales.get(guildID);
+        Map<String, String> lang = guildLocales.get(guildID);
         switch (category) { //Note: This generates an anonymous reference (CommandHelp$1). I do not know why nor how, nor does it matter, but I'm still confused. -9382
             case General -> embed.setTitle(managerLocalise("cmd.help.cat.general", lang)); // General
             case Music -> embed.setTitle(managerLocalise("cmd.help.cat.music", lang)); // Music
@@ -75,7 +71,7 @@ public class CommandHelp extends BaseCommand {
 
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
-        HashMap<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
+        Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         eb.setColor(botColour);
         eb.setFooter(lang.get("cmd.help.footer")); // Syntax: "<>" is a required argument, "[]" is an optional argument. "()" is an alternate word for the command.
         Category ButtonCategory = Category.valueOf(Objects.requireNonNull(event.getButton().getId()).split("help-")[1]);
@@ -108,16 +104,16 @@ public class CommandHelp extends BaseCommand {
         }
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
-        embed.setFooter(localise("cmd.help.footer"));
+        embed.setFooter(event.localise("cmd.help.footer"));
         if (userCategory != null) {
             BuildEmbedFromCategory(embed, userCategory, event.getGuild().getIdLong());
         } else {
-            embed.setTitle(localise("cmd.help.embedTitle"));
+            embed.setTitle(event.localise("cmd.help.embedTitle"));
             for (Category category : Category.values()) {
                 if (category != Category.Dev)
                     embed.appendDescription("**" + category.name() + "**\n" + getCommands(category) + "\n\n");
             }
-            embed.setFooter(localise("cmd.help.originalFooter"));
+            embed.setFooter(event.localise("cmd.help.originalFooter"));
         }
         event.replyEmbeds(a -> a.setActionRow(CategoryButtons), embed.build());
     }

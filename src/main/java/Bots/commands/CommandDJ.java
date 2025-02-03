@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandDJ extends BaseCommand {
@@ -34,9 +33,9 @@ public class CommandDJ extends BaseCommand {
         if (event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
-            builder.append(localise("cmd.dj.roleList")); // list DJ roles in embed
+            builder.append(event.localise("cmd.dj.roleList")); // list DJ roles in embed
             if (DJRoles.isEmpty()) {
-                builder.append(localise("cmd.dj.roleListEmpty"));
+                builder.append(event.localise("cmd.dj.roleListEmpty"));
             } else {
                 int i = 0;
                 for (Object role : DJRoles) {
@@ -51,9 +50,9 @@ public class CommandDJ extends BaseCommand {
                     }
                 }
             }
-            builder.append(localise("cmd.dj.userList"));
+            builder.append(event.localise("cmd.dj.userList"));
             if (DJUsers.isEmpty()) {
-                builder.append(localise("cmd.dj.roleListEmpty"));
+                builder.append(event.localise("cmd.dj.roleListEmpty"));
             } else {
                 int i = 0;
                 for (Object user : DJUsers) {
@@ -65,12 +64,12 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             eb.setColor(botColour);
-            eb.setTitle(String.format(localise("cmd.dj.guildDJs"), event.getGuild().getName()));
+            eb.setTitle(String.format(event.localise("cmd.dj.guildDJs"), event.getGuild().getName()));
             eb.appendDescription(builder);
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar functionality so we merge them initially
             if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.replyEmbeds(createQuickError(localise("main.noPermission")));
+                event.replyEmbeds(createQuickError(event.localise("main.noPermission")));
                 return;
             }
             List<Long> FoundMembers = new ArrayList<>();
@@ -88,7 +87,7 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             if (FoundMembers.size() + FoundRoles.size() == 0) {
-                event.replyEmbeds(createQuickError(localise("cmd.dj.notGiven")));
+                event.replyEmbeds(createQuickError(event.localise("cmd.dj.notGiven")));
                 return;
             }
 
@@ -103,15 +102,15 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             String memberText = FoundMembers.size() == 1 ?
-                    localise("cmd.dj.member") :
-                    localise("cmd.dj.member.plural");
+                    event.localise("cmd.dj.member") :
+                    event.localise("cmd.dj.member.plural");
             String roleText = FoundRoles.size() == 1
-                    ? localise("cmd.dj.role") :
-                    localise("cmd.dj.role.plural");
+                    ? event.localise("cmd.dj.role") :
+                    event.localise("cmd.dj.role.plural");
             String msg;
             if (!FoundMembers.isEmpty()) {
                 if (!FoundRoles.isEmpty()) {
-                    msg = localise("cmd.dj.membersAndRoles", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
+                    msg = event.localise("cmd.dj.membersAndRoles", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
                 } else {
                     msg = String.format("%d %s", FoundMembers.size(), memberText);
                 }
@@ -119,12 +118,12 @@ public class CommandDJ extends BaseCommand {
                 msg = String.format("%d %s", FoundRoles.size(), roleText);
             }
             if (isAdding) {
-                event.replyEmbeds(createQuickSuccess(localise("cmd.dj.added", msg)));
+                event.replyEmbeds(createQuickSuccess(event.localise("cmd.dj.added", msg)));
             } else {
-                event.replyEmbeds(createQuickSuccess(localise("cmd.dj.removed", msg)));
+                event.replyEmbeds(createQuickSuccess(event.localise("cmd.dj.removed", msg)));
             }
         } else {
-            event.replyEmbeds(createQuickError(localise("cmd.dj.invalidArgs")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.dj.invalidArgs")));
         }
     }
 

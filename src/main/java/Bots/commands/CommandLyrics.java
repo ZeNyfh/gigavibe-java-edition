@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.botColour;
 import static Bots.Main.createQuickError;
 
@@ -31,16 +30,16 @@ public class CommandLyrics extends BaseCommand {
 
         String lyrics = LRCLIBManager.getLyrics(audioPlayer.getPlayingTrack()).trim();
         if (lyrics.isEmpty()) {
-            event.replyEmbeds(createQuickError(localise("cmd.lyr.notFound")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.lyr.notFound")));
             return;
         }
-        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(localise("cmd.lyr.source"));
+        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(event.localise("cmd.lyr.source"));
         String title = audioPlayer.getPlayingTrack().getInfo().title;
         if (audioPlayer.getPlayingTrack().getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
             title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri)[0];
         }
 
-        title = localise("cmd.lyr.lyricsForTrack", title);
+        title = event.localise("cmd.lyr.lyricsForTrack", title);
         if (title.length() > 256) {
             title = title.substring(0, 253) + "...";
         }
@@ -49,7 +48,7 @@ public class CommandLyrics extends BaseCommand {
             builder.setTitle(title);
             event.replyEmbeds(builder.build());
         } else {
-            builder.setDescription(localise("cmd.lyr.tooLong"));
+            builder.setDescription(event.localise("cmd.lyr.tooLong"));
             event.replyEmbeds(builder.build());
             event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title + ".txt")).queue();
         }

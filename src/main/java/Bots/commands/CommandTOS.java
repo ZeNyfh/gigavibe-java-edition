@@ -3,14 +3,13 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandTOS extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(localise("cmd.tos.TermsOfService"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
+        event.replyEmbeds(createQuickEmbed(event.localise("cmd.tos.TermsOfService"), "https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/TOS.md"));
     }
 
     @Override

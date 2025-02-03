@@ -9,7 +9,6 @@ import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import static Bots.CommandEvent.localise;
 import static Bots.CommandStateChecker.PerformChecks;
 import static Bots.Main.createQuickEmbed;
 
@@ -26,19 +25,19 @@ public class CommandPause extends BaseCommand {
 
         if (audioPlayer.getPlayingTrack() == null && !musicManager.scheduler.queue.isEmpty()) {
             musicManager.scheduler.nextTrack(); // No embed data :( (playNextTrack is private, dunno if its worth publicising)
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", localise("cmd.pause.resumed")));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", event.localise("cmd.pause.resumed")));
         } else {
             CommandStateChecker.CheckResult checkResult = PerformChecks(event, Check.IS_DJ, Check.IS_PLAYING);
             if (!checkResult.succeeded()) {
-                event.replyEmbeds(createQuickEmbed(localise("basecmd.notAllowed"), checkResult.getMessage()));
+                event.replyEmbeds(createQuickEmbed(event.localise("basecmd.notAllowed"), checkResult.getMessage()));
                 return;
             }
             if (audioPlayer.isPaused()) {
                 audioPlayer.setPaused(false);
-                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", localise("cmd.pause.resumed")));
+                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", event.localise("cmd.pause.resumed")));
             } else {
                 audioPlayer.setPaused(true);
-                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", localise("cmd.pause.paused")));
+                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", event.localise("cmd.pause.paused")));
             }
         }
     }

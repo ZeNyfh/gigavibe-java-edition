@@ -6,7 +6,6 @@ import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickSuccess;
 import static Bots.Main.skipCountGuilds;
 
@@ -23,7 +22,7 @@ public class CommandClearQueue extends BaseCommand {
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
         musicManager.audioPlayer.destroy();
-        event.replyEmbeds(createQuickSuccess(localise("cmd.cq.cleared")));
+        event.replyEmbeds(createQuickSuccess(event.localise("cmd.cq.cleared")));
     }
 
     @Override

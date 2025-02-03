@@ -3,13 +3,12 @@ package Bots.commands;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickEmbed;
 
 public class CommandInvite extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
-        event.replyEmbeds(createQuickEmbed(localise("cmd.inv.haveFun"), "http://zenvibe.ddns.net/"));
+        event.replyEmbeds(createQuickEmbed(event.localise("cmd.inv.haveFun"), "http://zenvibe.ddns.net/"));
     }
 
     @Override

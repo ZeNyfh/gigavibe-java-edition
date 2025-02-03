@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import static Bots.CommandEvent.localise;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
@@ -79,7 +78,7 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(localise("cmd.q.empty")));
+            event.replyEmbeds(createQuickError(event.localise("cmd.q.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -89,8 +88,8 @@ public class CommandQueue extends BaseCommand {
             System.out.println("WARNING: No active song despite populated queue");
         } else {
             String title = track.getInfo().title;
-            if (track.getInfo().title == null) title = localise("cmd.q.unknownTitle");
-            embed.setTitle(localise("cmd.q.nowPlaying", title), track.getInfo().uri);
+            if (track.getInfo().title == null) title = event.localise("cmd.q.unknownTitle");
+            embed.setTitle(event.localise("cmd.q.nowPlaying", title), track.getInfo().uri);
         }
 
         int queueLength = queue.size();
@@ -105,11 +104,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError(localise("cmd.q.didYouMean", "clearqueue")));
+                event.replyEmbeds(createQuickError(event.localise("cmd.q.didYouMean", "clearqueue")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError(localise("cmd.q.integerError")));
+                event.replyEmbeds(createQuickError(event.localise("cmd.q.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea
@@ -121,7 +120,7 @@ public class CommandQueue extends BaseCommand {
         }
         String playbackLength = toTimestamp(queueTimeLength, event.getGuild().getIdLong());
 
-        embed.setFooter(localise("cmd.q.queueInfoFooter", queueLength, pageNumber, (queueLength + 4) / 5, playbackLength));
+        embed.setFooter(event.localise("cmd.q.queueInfoFooter", queueLength, pageNumber, (queueLength + 4) / 5, playbackLength));
         embed.setColor(botColour);
         if (track != null && PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));

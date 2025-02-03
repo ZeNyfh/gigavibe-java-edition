@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.Objects;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 import static java.lang.System.currentTimeMillis;
 
@@ -33,22 +32,22 @@ public class CommandInfo extends BaseCommand {
 
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(localise("cmd.info.info", event.getJDA().getSelfUser().getName()), null);
+        eb.setTitle(event.localise("cmd.info.info", event.getJDA().getSelfUser().getName()), null);
         eb.setColor(botColour);
-        eb.appendDescription(localise("cmd.info.ramUsage", String.format("%,d", memoryUsed / 1024 / 1024)));
+        eb.appendDescription(event.localise("cmd.info.ramUsage", String.format("%,d", memoryUsed / 1024 / 1024)));
         long finalUptime = currentTimeMillis() - Main.startupTime;
         String finalTime = toTimestamp(finalUptime, event.getGuild().getIdLong());
-        eb.appendDescription(localise("cmd.info.upTime", finalTime));
-        eb.appendDescription(localise("cmd.info.discordServers", String.format("%,d", event.getJDA().getGuilds().size())));
-        eb.appendDescription(localise("cmd.info.discordMembers", String.format("%,d", memberCount)));
-        eb.appendDescription(localise("cmd.info.registeredCommands", CommandCount));
-        eb.appendDescription(localise("cmd.info.voiceChannels", vcCount));
-        eb.appendDescription(localise("cmd.info.playingCount", playingCount));
-        eb.appendDescription(localise("cmd.info.gatewayPing", event.getJDA().getGatewayPing()));
-        eb.setFooter(localise("cmd.info.version", botVersion));
+        eb.appendDescription(event.localise("cmd.info.upTime", finalTime));
+        eb.appendDescription(event.localise("cmd.info.discordServers", String.format("%,d", event.getJDA().getGuilds().size())));
+        eb.appendDescription(event.localise("cmd.info.discordMembers", String.format("%,d", memberCount)));
+        eb.appendDescription(event.localise("cmd.info.registeredCommands", CommandCount));
+        eb.appendDescription(event.localise("cmd.info.voiceChannels", vcCount));
+        eb.appendDescription(event.localise("cmd.info.playingCount", playingCount));
+        eb.appendDescription(event.localise("cmd.info.gatewayPing", event.getJDA().getGatewayPing()));
+        eb.setFooter(event.localise("cmd.info.version", botVersion));
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
-            eb.appendDescription("⏱️  " + localise("cmd.info.ping", currentTimeMillis() - time));
+            eb.appendDescription("⏱️  " + event.localise("cmd.info.ping", currentTimeMillis() - time));
             response.editMessageEmbeds(eb.build());
         }, eb.build());
     }

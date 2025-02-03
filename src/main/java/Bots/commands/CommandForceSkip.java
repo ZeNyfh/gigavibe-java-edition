@@ -16,7 +16,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
 
@@ -34,17 +33,17 @@ public class CommandForceSkip extends BaseCommand {
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
             boolean canPlay = true;
-            String errorMessage = "❌ **" + localise("main.error") + ":**\n";
+            String errorMessage = "❌ **" + event.localise("main.error") + ":**\n";
             if (searchTerm.equals("notfound")) {
-                messageBuilder.append(errorMessage).append(localise("cmd.fs.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
                 canPlay = false;
             }
             if (searchTerm.equals("none")) {
-                messageBuilder.append(errorMessage).append(localise("cmd.fs.couldNotFind"));
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.couldNotFind"));
                 canPlay = false;
             }
             if (searchTerm.isEmpty()) {
-                messageBuilder.append(errorMessage).append(localise("cmd.fs.nullSearchTerm"));
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.nullSearchTerm"));
                 canPlay = false;
             }
             if (canPlay) {
@@ -55,14 +54,14 @@ public class CommandForceSkip extends BaseCommand {
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                messageBuilder.append("♾️ ").append(localise("cmd.fs.autoplayQueued", artistName, title));
+                messageBuilder.append("♾️ ").append(event.localise("cmd.fs.autoplayQueued", artistName, title));
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
             if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("cmd.fs.skippedQueue")));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.localise("cmd.fs.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
@@ -77,7 +76,7 @@ public class CommandForceSkip extends BaseCommand {
                     }
                 }
                 String trackHyperLink = "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__";
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + localise("cmd.fs.skippedToPos",
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.localise("cmd.fs.skippedToPos",
                         event.getArgs()[1], trackHyperLink)));
             }
         } else {
@@ -93,11 +92,11 @@ public class CommandForceSkip extends BaseCommand {
                     }
                 }
                 String trackHyperLink = "__**[" + title + "](" + trackInfo.uri + ")**__\n\n";
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("cmd.fs.skippedToTrack", trackHyperLink + messageBuilder).trim())));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skippedToTrack", trackHyperLink + messageBuilder).trim())));
 
             } else {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + localise("cmd.fs.skipped") + "\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skipped") + "\n\n" + messageBuilder).trim()));
             }
         }
         skipCountGuilds.remove(event.getGuild().getIdLong());

@@ -8,7 +8,6 @@ import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.createQuickError;
 import static Bots.Main.createQuickSuccess;
 
@@ -25,28 +24,28 @@ public class CommandVolume extends BaseCommand {
         String[] args = event.getArgs();
         if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);
-            event.replyEmbeds(createQuickSuccess(localise("cmd.vol.defaulted")));
+            event.replyEmbeds(createQuickSuccess(event.localise("cmd.vol.defaulted")));
         } else {
             if (args[1].matches("[^\\d.]")) {
-                event.replyEmbeds(createQuickError(localise("cmd.vol.incorrectArg")));
+                event.replyEmbeds(createQuickError(event.localise("cmd.vol.incorrectArg")));
                 return;
             }
             if (args[1].matches("^\\d+$")) {
                 //If entire thing is a number
                 int volume = Integer.parseInt(args[1]);
                 if (volume > 500) {
-                    event.replyEmbeds(createQuickError(localise("cmd.vol.tooHigh")));
+                    event.replyEmbeds(createQuickError(event.localise("cmd.vol.tooHigh")));
                     return;
                 }
                 if (volume < 0) {
-                    event.replyEmbeds(createQuickError(localise("cmd.vol.tooLow")));
+                    event.replyEmbeds(createQuickError(event.localise("cmd.vol.tooLow")));
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
-                event.replyEmbeds(createQuickSuccess(localise("cmd.vol.success", volume)));
+                event.replyEmbeds(createQuickSuccess(event.localise("cmd.vol.success", volume)));
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
-                event.replyEmbeds(createQuickError(localise("cmd.vol.invalidValue")));
+                event.replyEmbeds(createQuickError(event.localise("cmd.vol.invalidValue")));
             }
         }
     }

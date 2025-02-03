@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Objects;
 
-import static Bots.CommandEvent.localise;
 import static Bots.Main.*;
 
 public class CommandNowPlaying extends BaseCommand {
@@ -39,7 +38,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             String totalTimeText;
             if (totalTime > 432000000) { // 5 days
-                totalTimeText = localise("main.unknown"); //Assume malformed
+                totalTimeText = event.localise("main.unknown"); //Assume malformed
             } else {
                 totalTimeText = toSimpleTimestamp((long) totalTime);
             }
@@ -54,7 +53,7 @@ public class CommandNowPlaying extends BaseCommand {
             }
             embed.setDescription("```" + barText + " " + toSimpleTimestamp(trackPos) + " / " + totalTimeText + "```");
         } else {
-            embed.setDescription(localise("cmd.np.livestreamDuration", toSimpleTimestamp(trackPos)));
+            embed.setDescription(event.localise("cmd.np.livestreamDuration", toSimpleTimestamp(trackPos)));
         }
         try {
             embed.setTitle((track.getInfo().title), (track.getInfo().uri));
@@ -63,9 +62,9 @@ public class CommandNowPlaying extends BaseCommand {
                 embed.setTitle(streamTitle, track.getInfo().uri);
             }
         } catch (Exception ignored) {
-            embed.setTitle(localise("main.unknown"));
+            embed.setTitle(event.localise("main.unknown"));
         }
-        embed.addField(localise("cmd.np.channel"), track.getInfo().author, true);
+        embed.addField(event.localise("cmd.np.channel"), track.getInfo().author, true);
         if (getTrackFromQueue(event.getGuild(), 0) != null) {
             AudioTrack trackQueue0 = getTrackFromQueue(event.getGuild(), 0);
             if (PlayerManager.getInstance().getThumbURL(track) != null) {
@@ -78,31 +77,31 @@ public class CommandNowPlaying extends BaseCommand {
                     title = streamTitle;
                 }
             }
-            embed.addField(localise("cmd.np.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
+            embed.addField(event.localise("cmd.np.next"), "[" + title + "](" + trackQueue0.getInfo().uri + ")", true);
         } else {
             embed.addField(" ", " ", true);
         }
         embed.addField(" ", " ", true);
         if (audioPlayer.isPaused()) {
-            embed.addField(localise("cmd.np.paused"), localise("cmd.np.true"), true);
+            embed.addField(event.localise("cmd.np.paused"), event.localise("cmd.np.true"), true);
         } else {
-            embed.addField(localise("cmd.np.paused"), localise("cmd.np.false"), true);
+            embed.addField(event.localise("cmd.np.paused"), event.localise("cmd.np.false"), true);
         }
         if (LoopGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField(localise("cmd.np.trackLooping"), localise("cmd.np.true"), true);
+            embed.addField(event.localise("cmd.np.trackLooping"), event.localise("cmd.np.true"), true);
             embed.setFooter("Loop Count: " + trackLoops.get(event.getGuild().getIdLong()));
         } else {
-            embed.addField(localise("cmd.np.trackLooping"), localise("cmd.np.false"), true);
+            embed.addField(event.localise("cmd.np.trackLooping"), event.localise("cmd.np.false"), true);
         }
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField(localise("cmd.np.queueLooping"), localise("cmd.np.true"), true);
+            embed.addField(event.localise("cmd.np.queueLooping"), event.localise("cmd.np.true"), true);
         } else {
-            embed.addField(localise("cmd.np.queueLooping"), localise("cmd.np.false"), true);
+            embed.addField(event.localise("cmd.np.queueLooping"), event.localise("cmd.np.false"), true);
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            embed.addField(localise("cmd.np.autoplaying"), localise("cmd.np.true"), true);
+            embed.addField(event.localise("cmd.np.autoplaying"), event.localise("cmd.np.true"), true);
         } else {
-            embed.addField(localise("cmd.np.autoplaying"), localise("cmd.np.false"), true);
+            embed.addField(event.localise("cmd.np.autoplaying"), event.localise("cmd.np.false"), true);
         }
         embed.addField(" ", " ", true);
         embed.setColor(botColour);

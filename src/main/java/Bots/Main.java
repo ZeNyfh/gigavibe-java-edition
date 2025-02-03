@@ -74,7 +74,7 @@ public class Main extends ListenerAdapter {
     public static final List<Long> LoopQueueGuilds = new ArrayList<>();
     public static final Map<Long, Integer> trackLoops = new HashMap<>();
     public static final Map<Long, List<String>> autoPlayedTracks = new HashMap<>();
-    public static final Map<Long, HashMap<String, String>> guildLocales = new HashMap<>();
+    public static final Map<Long, Map<String, String>> guildLocales = new HashMap<>();
     // Event Mappings
     private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
     public static Color botColour = new Color(0, 0, 0);
@@ -321,7 +321,7 @@ public class Main extends ListenerAdapter {
     public static String toTimestamp(long seconds, long guildID) {
         seconds /= 1000;
         if (seconds <= 0) {
-            return String.format(getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal(), guildID), "0");
+            return String.format(getLocalisedTimeUnits(true, TimeUnits.second.ordinal(), guildID), "0");
         } else {
             long days = seconds / 86400;
             seconds %= 86400;
@@ -332,22 +332,22 @@ public class Main extends ListenerAdapter {
             ArrayList<String> totalSet = new ArrayList<>();
 
             if (days != 0) {
-                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.day.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.day.ordinal(), guildID);
+                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, TimeUnits.day.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.day.ordinal(), guildID);
                 totalSet.add(String.format(dayLabel, days));
             }
 
             if (hours != 0) {
-                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.hour.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.hour.ordinal(), guildID);
+                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, TimeUnits.hour.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.hour.ordinal(), guildID);
                 totalSet.add(String.format(hourLabel, hours));
             }
 
             if (minutes != 0) {
-                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.minute.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.minute.ordinal(), guildID);
+                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, TimeUnits.minute.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.minute.ordinal(), guildID);
                 totalSet.add(String.format(minuteLabel, minutes));
             }
 
             if (seconds != 0) {
-                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, LocaleMiddleman.timeUnits.second.ordinal(), guildID) : getLocalisedTimeUnits(true, LocaleMiddleman.timeUnits.second.ordinal(), guildID);
+                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, TimeUnits.second.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.second.ordinal(), guildID);
                 totalSet.add(String.format(secondLabel, seconds));
             }
             return String.join(", ", totalSet);
@@ -730,7 +730,7 @@ public class Main extends ListenerAdapter {
             event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.")).queue(); // this cannot be localised because it isn't in a guild.
             return;
         }
-        HashMap<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
+        Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) {
             event.replyEmbeds(createQuickError(managerLocalise("main.botNoPermission", lang))).setEphemeral(true).queue();
             return;

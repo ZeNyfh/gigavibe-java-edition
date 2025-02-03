@@ -18,7 +18,7 @@ import static Bots.GuildDataManager.GetGuildConfig;
 import static Bots.Main.guildLocales;
 
 public class LocaleManager {
-    public static HashMap<String, HashMap<String, String>> languages = new HashMap<>();
+    public static Map<String, Map<String, String>> languages = new HashMap<>();
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
     public static void init(JDA bot) {

@@ -14,10 +14,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static Bots.Main.*;
@@ -34,7 +31,6 @@ import static Bots.Main.*;
  * @version 2.1.1
  */
 public class CommandEvent {
-    private static HashMap<String, String> lang = null;
     private final Object coreEvent;
     private final JDA JDA;
     private final Guild guild;
@@ -46,6 +42,7 @@ public class CommandEvent {
     private final String rawContent;
     private final List<Message.Attachment> attachments;
     private final JSONObject config;
+    private final Map<String, String> lang;
 
     public CommandEvent(MessageReceivedEvent event) {
         this.coreEvent = event;
@@ -59,7 +56,7 @@ public class CommandEvent {
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.attachments = event.getMessage().getAttachments();
         this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
-        lang = guildLocales.get(event.getGuild().getIdLong());
+        this.lang = guildLocales.get(event.getGuild().getIdLong());
         LocaleMiddleman.setGuildID(event.getGuild().getIdLong());
     }
 
@@ -70,7 +67,7 @@ public class CommandEvent {
         this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getUser();
-        lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
+        this.lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
@@ -109,7 +106,7 @@ public class CommandEvent {
      * @author ZeNyfh
      * @version 1.0.0
      */
-    public static String localise(String key, Object... args) {
+    public String localise(String key, Object... args) {
         return LocaleManager.managerLocalise(key, lang, args);
     }
 

@@ -47,7 +47,7 @@ public class TrackScheduler extends AudioEventAdapter {
         PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
         GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
         long guildID = trackUserData.guildId;
-        HashMap<String, String> lang = guildLocales.get(guildID);
+        Map<String, String> lang = guildLocales.get(guildID);
 
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
             handleTrackFailure(originalEventChannel, player, track);
@@ -155,7 +155,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private void handleCriticalFailure(GuildMessageChannelUnion originalEventChannel) {
         long guildID = originalEventChannel.getGuild().getIdLong();
         guildFailCount.put(guildID, 0);
-        HashMap<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
+        Map<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
         MessageEmbed failureEmbed = createQuickEmbed(
                 managerLocalise("tsched.criticalFailure.title", lang),
@@ -176,7 +176,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private void playNextTrack(AudioPlayer player, GuildMessageChannelUnion originalEventChannel) {
         long guildID = originalEventChannel.getGuild().getIdLong();
-        HashMap<String, String> lang = guildLocales.get(guildID);
+        Map<String, String> lang = guildLocales.get(guildID);
 
         trackLoops.put(guildID, 0);
         nextTrack();

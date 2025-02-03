@@ -38,7 +38,7 @@ public class LocaleMiddleman {
         threadedGuildID.remove();
     }
 
-    public enum timeUnits {
+    public enum TimeUnits {
         second, minute, hour, day
     }
 }
