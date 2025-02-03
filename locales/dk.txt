@@ -25,7 +25,7 @@ cmd.bug.successMessage=Tak for din fejlrapport!\nUdvikleren vil kontakte dig via
 
 cmd.cq.cleared=Ryddede køen.
 
-cmd.dc.disconnected=Forlod kanalen og ryddede køen.
+cmd.dc.disconnected=Forlod kanalen og ryddet køen.
 
 cmd.dj.roleList=**Roller**:\n
 cmd.dj.roleListEmpty=Ingen.
@@ -52,7 +52,7 @@ cmd.fs.skipped=Sprang det nuværende nummer over.
 
 cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.\n\n❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
 
-cmd.help.cat.general=📖 **Generelt**
+cmd.help.cat.general=📖 **Generel**
 cmd.help.cat.music=🔊 **Musik**
 cmd.help.cat.DJ=🎧 **DJ**
 cmd.help.cat.admin=📑 **Admin**
@@ -86,7 +86,7 @@ cmd.inv.haveFun=God fornøjelse!
 cmd.join.noAccess=Botten har ikke adgang til din kanal.
 cmd.join.joined=Botten sluttede sig til din stemmekanal.
 
-cmd.loc.list=Liste over sprog:
+cmd.loc.list=Liste af sprog:
 cmd.loc.languageChanged=Sproget blev ændret til: {1}
 cmd.loc.unrecognised=Ukendt sprog, her er en liste over tilgængelige sprog:
 
@@ -147,9 +147,9 @@ cmd.radio.notFound=Kunne ikke finde en radiokanal med det givne navn.
 cmd.radio.queued=Radiokanal i kø:
 cmd.radio.invalid=Ugyldig radiokanal.
 
-cmd.rem.noSongs=Der er ingen numre i køen at fjerne.
+cmd.rem.noSongs=Der er ingen sange på listen, der kan fjernes.
 cmd.rem.invalidArgs=Ugyldige argumenter, kun heltal.
-cmd.rem.tooLarge=Det angivne tal var større end køens længde.
+cmd.rem.tooLarge=Det angivet tal er større end køens længde.
 cmd.rem.removed=Fjernede nummer {1} fra køen.
 
 cmd.seek.invalidArg=Argumentet er ugyldigt, brug formatet `[TIMER]:[MINUTTER]:<SEKUNDER>`
@@ -211,7 +211,7 @@ pmanager.noSpotify=Botten kan ikke afspille Spotify-numre lige nu.
 pmanager.playlistQueued=Størrelse: **{1}** numre.\nLængde: **{2}**\n\n
 pmanager.APIError=Der opstod en fejl med YouTubes søge-API.
 pmanager.loadFailed=Nummeret kunne ikke indlæses: {1}
-pmanager.noMatches=Der blev ikke fundet nogen matches for dette nummer.
+pmanager.noMatches=Der blev ikke fundet noget lignende for dette nummer.
 
 tsched.autoplay.notFound=Autoplay kunne ikke finde {1}
 tsched.autoplay.noSimilar=Autoplay kunne ikke finde lignende numre.\n
@@ -235,7 +235,7 @@ main.minute.plural={1} minutter
 main.second={1} sekund
 main.second.plural={1} sekunder
 
-main.success=Succes
+main.success=✅ **Succes**
 main.noPermission=Du har ikke tilladelse til at bruge denne kommando.
 main.ratelimit=Du kan ikke bruge denne kommando i {1} sekunder.
 main.botNoPermission=Jeg har ikke tilladelse til at læse eller sende beskeder i denne kanal.
