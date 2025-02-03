@@ -235,7 +235,7 @@ main.minute.plural={1} minut(y)
 main.second={1} sekunda
 main.second.plural={1} sekund(y)
 
-main.success=✅ **Sukces**
+main.success=Sukces
 main.noPermission=Nie masz uprawnień do użycia tej komendy.
 main.ratelimit=Nie możesz użyć tej komendy przez kolejne {1} sekund/y.
 main.botNoPermission=Nie mam uprawnień do czytania ani wysyłania wiadomości w tym kanale.

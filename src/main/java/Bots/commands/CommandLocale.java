@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import static Bots.CommandEvent.localise;
 import static Bots.LocaleManager.languages;
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
 public class CommandLocale extends BaseCommand {
@@ -20,7 +21,7 @@ public class CommandLocale extends BaseCommand {
                 JSONObject config = event.getConfig();
                 config.put("Locale", lang);
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
-                event.replyEmbeds(createQuickSuccess(localise("cmd.loc.languageChanged", lang)));
+                event.replyEmbeds(createQuickSuccess(managerLocalise("cmd.loc.languageChanged", languages.get(lang), lang)));
             } else {
                 event.replyEmbeds(createQuickError(localise("cmd.loc.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
             }

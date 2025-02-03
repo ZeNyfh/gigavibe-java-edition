@@ -235,7 +235,7 @@ main.minute.plural={1} minuten
 main.second={1} seconde
 main.second.plural={1} seconden
 
-main.success=✅ **Succes**
+main.success=Succes
 main.noPermission=Je hebt geen toestemming om deze opdracht te gebruiken.
 main.ratelimit=Je kunt deze opdracht niet gebruiken voor nog {1} seconden.
 main.botNoPermission=Ik heb geen toestemming om berichten te lezen of te verzenden in dit kanaal.
