@@ -16,7 +16,7 @@ cmd.bug.successMessage=¡Gracias por tu informe!\nEl desarrollador se pondrá en
 
 cmd.cq.cleared=La cola ha sido vaciada.
 
-cmd.dc.disconnected=Desconectado del chat de voz y la cola ha sido vaciada.
+cmd.dc.disconnected=Desconectado del chat de voz y limpiado la cola.
 
 cmd.dj.roleList=**Roles**:\n
 cmd.dj.roleListEmpty=Ninguno.
@@ -61,13 +61,13 @@ cmd.info.discordServers=📡 **Servidores:** {1}\n\n
 cmd.info.discordMembers=👤 **Usuarios:** {1}\n\n
 cmd.info.registeredCommands=📑 **Comandos registrados:** {1}\n\n
 cmd.info.voiceChannels=🎵 **Canales de voz:** {1}\n\n
-cmd.info.playingCount=🔊 **Reproducciones actuales:** {1}\n\n
+cmd.info.playingCount=🔊 **Reproducciones activas:** {1}\n\n
 cmd.info.gatewayPing=⏱️ **Ping de entrada:** {1}ms\n\n
 cmd.info.version=Versión: {1}
 cmd.info.ping=**Ping:** {1}ms\n\n
 
 cmd.ins.notEnoughArgs=Argumentos insuficientes.\nUso: <Entero> <URL/Término de búsqueda>
-cmd.ins.invalidArgs=Argumentos inválidos, solo enteros.\nUso: <Entero> <URL/Término de búsqueda>
+cmd.ins.invalidArgs=Argumentos inválidos, solo números enteros.\nUso: <Entero> <URL/Término de búsqueda>
 cmd.ins.decodingError=Ocurrió un error al decodificar la pista.
 cmd.ins.addedToPos=Añadido el track en la posición: **{1}**
 cmd.ins.queueError=Ocurrió un error al añadir la pista a la cola: {1}
@@ -150,7 +150,7 @@ cmd.seek.cannotSeek=No se puede cambiar la posición de esta pista.
 cmd.seek.noArg=No se proporcionaron argumentos.
 
 cmd.shuffle.emptyQueue=La cola está vacía.
-cmd.shuffle.shuffled=La cola ha sido barajada.
+cmd.shuffle.shuffled=La cola ha sido reordenada de forma aleatoria.
 
 cmd.skip.alreadyVoted=Ya has votado para omitir.
 cmd.skip.failedToFind=Autoplay no pudo encontrar {1}
@@ -161,7 +161,7 @@ cmd.skip.skippedTheTrack=⏩ Pista omitida.
 cmd.skip.skippedTo=⏩ Pista omitida a __**{1}**__
 cmd.skip.skippedTo.unknown=⏩ Pista omitida a __**Título desconocido**__
 cmd.skip.nowPlaying=Reproduciendo ahora: {1}
-cmd.skip.voted.title=Votado para omitir la pista.
+cmd.skip.voted.title=Has votado para omitir la pista.
 cmd.skip.voted.description={1} de {2} necesarios para omitir.
 cmd.skip.channel=**Canal**\n{1}\n
 cmd.skip.duration=**Duración**\n{1}
@@ -191,7 +191,7 @@ basecmd.notAllowed=❌ **No permitido**
 cmd.scheck.notInVC=No estás en un canal de voz.
 cmd.scheck.botNotInVC=El bot no está en un canal de voz.
 cmd.scheck.botNotInYourVC=El bot no está en tu canal de voz.
-cmd.scheck.botBusy=El bot ya está ocupado en otro canal de voz.
+cmd.scheck.botBusy=El bot ya está siendo usado en otro canal de voz.
 cmd.scheck.cannotJoin=El bot no puede unirse al canal de voz.
 cmd.scheck.noDJ=No tienes permisos de DJ.
 cmd.scheck.commandBlocked=Este comando está bloqueado en este canal.
