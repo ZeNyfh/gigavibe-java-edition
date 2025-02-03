@@ -33,7 +33,7 @@ public abstract class BaseCommand {
 
     public abstract String getDescription(); //The description, used by cmds
 
-    public String getOptions() { //The options text used by help / commands. Purely decorative
+    public String getOptions() { //The options text used by help. Purely decorative
         return "";
     }
 
