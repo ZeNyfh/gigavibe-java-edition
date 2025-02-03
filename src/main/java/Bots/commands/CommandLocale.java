@@ -29,7 +29,7 @@ public class CommandLocale extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"language", "locale"}; // language is more user-friendly.
+        return new String[]{"language", "locale", "lang"}; // language is more user-friendly.
     }
 
     @Override
