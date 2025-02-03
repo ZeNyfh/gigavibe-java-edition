@@ -32,25 +32,18 @@ public class CommandForceSkip extends BaseCommand {
         StringBuilder messageBuilder = new StringBuilder();
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
-            boolean canPlay = true;
             String errorMessage = "❌ **" + event.localise("main.error") + ":**\n";
             if (searchTerm.equals("notfound")) {
                 messageBuilder.append(errorMessage).append(event.localise("cmd.fs.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
-                canPlay = false;
-            }
-            if (searchTerm.equals("none")) {
+            } else if (searchTerm.equals("none")) {
                 messageBuilder.append(errorMessage).append(event.localise("cmd.fs.couldNotFind"));
-                canPlay = false;
-            }
-            if (searchTerm.isEmpty()) {
+            } else if (searchTerm.isEmpty()) {
                 messageBuilder.append(errorMessage).append(event.localise("cmd.fs.nullSearchTerm"));
-                canPlay = false;
-            }
-            if (canPlay) {
+            } else { // we can play
                 AudioTrack track = audioPlayer.getPlayingTrack();
                 // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-                String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                        ? encode((track.getInfo().title).toLowerCase(), false, true)
+                String artistName = (track.getInfo().author == null || track.getInfo().author.isEmpty())
+                        ? encode(track.getInfo().title.toLowerCase(), false, true)
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
@@ -58,14 +51,15 @@ public class CommandForceSkip extends BaseCommand {
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
-            if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
+            int givenPosition = Integer.parseInt(event.getArgs()[1]);
+            if (givenPosition - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.localise("cmd.fs.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
-                musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
+                musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(givenPosition, list.size()) - 1), list.size()));
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
@@ -93,7 +87,6 @@ public class CommandForceSkip extends BaseCommand {
                 }
                 String trackHyperLink = "__**[" + title + "](" + trackInfo.uri + ")**__\n\n";
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skippedToTrack", trackHyperLink + messageBuilder).trim())));
-
             } else {
                 musicManager.scheduler.nextTrack();
                 event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skipped") + "\n\n" + messageBuilder).trim()));
