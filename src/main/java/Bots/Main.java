@@ -393,7 +393,7 @@ public class Main extends ListenerAdapter {
         int i = 0;
 
         while (i < input.length()) {
-            if (i + toReplace.length() <= input.length() && input.substring(i, i + toReplace.length()).equals(toReplace)) {
+            if (i + toReplace.length() <= input.length() && input.startsWith(toReplace, i)) {
                 result.append(replacement);
                 i += toReplace.length();
             } else {

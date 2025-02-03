@@ -14,7 +14,10 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.interactions.InteractionHookImpl;
 import org.json.simple.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static Bots.Main.*;
@@ -101,8 +104,9 @@ public class CommandEvent {
      * managerLocalise is the same as localise, except that you pass in the key, the map<String, String> (locale map), and then the args.
      * you can get this locale map like using something like:
      * {@code
-     *   Map<String, String> lang = Main.guildLocales.get(long GuildID);
+     * Map<String, String> lang = Main.guildLocales.get(long GuildID);
      * }
+     *
      * @author ZeNyfh
      * @version 1.0.0
      */

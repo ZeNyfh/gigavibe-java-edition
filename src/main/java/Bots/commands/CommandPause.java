@@ -1,9 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-
-import Bots.CommandStateChecker;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker;
 import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
