@@ -195,17 +195,17 @@ cmd.vol.tooLow=Het volume kan niet lager zijn dan 0.
 cmd.vol.success=Het volume is gewijzigd naar {1}.
 cmd.vol.invalidValue=Ongeldige waarde.
 
-basecmd.notAllowed=❌ **Niet toegestaan**
+statecheck.notAllowed=❌ **Niet toegestaan**
 
-cmd.scheck.notInVC=Je bent niet in een spraakkanaal.
-cmd.scheck.botNotInVC=De bot is niet in een spraakkanaal.
-cmd.scheck.botNotInYourVC=De bot is niet in jouw spraakkanaal.
-cmd.scheck.botBusy=De bot is al bezig in een ander spraakkanaal.
-cmd.scheck.cannotJoin=De bot kan dit spraakkanaal niet betreden.
-cmd.scheck.noDJ=Je hebt geen DJ-rechten.
-cmd.scheck.commandBlocked=Deze opdracht is geblokkeerd in dit kanaal.
-cmd.scheck.isNotPlaying=De bot speelt momenteel niets af.
-cmd.scheck.devOnly=Deze opdracht is alleen voor ontwikkelaars.
+statecheck.notInVC=Je bent niet in een spraakkanaal.
+statecheck.botNotInVC=De bot is niet in een spraakkanaal.
+statecheck.botNotInYourVC=De bot is niet in jouw spraakkanaal.
+statecheck.botBusy=De bot is al bezig in een ander spraakkanaal.
+statecheck.cannotJoin=De bot kan dit spraakkanaal niet betreden.
+statecheck.noDJ=Je hebt geen DJ-rechten.
+statecheck.commandBlocked=Deze opdracht is geblokkeerd in dit kanaal.
+statecheck.isNotPlaying=De bot speelt momenteel niets af.
+statecheck.devOnly=Deze opdracht is alleen voor ontwikkelaars.
 
 pmanager.noSpotify=De bot kan momenteel geen Spotify-nummers afspelen.
 pmanager.playlistQueued=Grootte: **{1}** nummers.\nLengte: **{2}**\n\n

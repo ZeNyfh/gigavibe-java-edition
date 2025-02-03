@@ -28,7 +28,7 @@ public class CommandPause extends BaseCommand {
         } else {
             CommandStateChecker.CheckResult checkResult = PerformChecks(event, Check.IS_DJ, Check.IS_PLAYING);
             if (!checkResult.succeeded()) {
-                event.replyEmbeds(createQuickEmbed(event.localise("basecmd.notAllowed"), checkResult.getMessage()));
+                event.replyEmbeds(createQuickEmbed(event.localise("statecheck.notAllowed"), checkResult.getMessage()));
                 return;
             }
             if (audioPlayer.isPaused()) {

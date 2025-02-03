@@ -195,17 +195,17 @@ cmd.vol.tooLow=Lydstyrken kan ikke være lavere end 0.
 cmd.vol.success=Ændrede lydstyrken til {1}.
 cmd.vol.invalidValue=Ugyldig værdi.
 
-basecmd.notAllowed=❌ **Ikke tilladt**
+statecheck.notAllowed=❌ **Ikke tilladt**
 
-cmd.scheck.notInVC=Du er ikke i en stemmekanal.
-cmd.scheck.botNotInVC=Botten er ikke i en stemmekanal.
-cmd.scheck.botNotInYourVC=Botten er ikke i din stemmekanal.
-cmd.scheck.botBusy=Botten er allerede optaget i en anden stemmekanal.
-cmd.scheck.cannotJoin=Botten kan ikke tilslutte sig denne stemmekanal.
-cmd.scheck.noDJ=Du har ikke DJ-tilladelser.
-cmd.scheck.commandBlocked=Denne kommando er blokeret i denne kanal.
-cmd.scheck.isNotPlaying=Botten spiller ikke noget i øjeblikket.
-cmd.scheck.devOnly=Denne kommando er kun for udviklere.
+statecheck.notInVC=Du er ikke i en stemmekanal.
+statecheck.botNotInVC=Botten er ikke i en stemmekanal.
+statecheck.botNotInYourVC=Botten er ikke i din stemmekanal.
+statecheck.botBusy=Botten er allerede optaget i en anden stemmekanal.
+statecheck.cannotJoin=Botten kan ikke tilslutte sig denne stemmekanal.
+statecheck.noDJ=Du har ikke DJ-tilladelser.
+statecheck.commandBlocked=Denne kommando er blokeret i denne kanal.
+statecheck.isNotPlaying=Botten spiller ikke noget i øjeblikket.
+statecheck.devOnly=Denne kommando er kun for udviklere.
 
 pmanager.noSpotify=Botten kan ikke afspille Spotify-numre lige nu.
 pmanager.playlistQueued=Størrelse: **{1}** numre.\nLængde: **{2}**\n\n

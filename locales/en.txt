@@ -200,17 +200,17 @@ cmd.vol.tooLow=The volume can not be lower than 0.
 cmd.vol.success=Changed the volume to {1}. // what the volume was changed to, a number between 1 and 500
 cmd.vol.invalidValue=Invalid value.
 
-basecmd.notAllowed=❌ **Not Allowed**
+statecheck.notAllowed=❌ **Not Allowed**
 
-cmd.scheck.notInVC=You are not in a voice channel.
-cmd.scheck.botNotInVC=The bot is not in a voice channel.
-cmd.scheck.botNotInYourVC=The bot is not in your voice channel.
-cmd.scheck.botBusy=The bot is already busy in another voice channel.
-cmd.scheck.cannotJoin=The bot is unable to join the voice channel.
-cmd.scheck.noDJ=You do not have DJ permissions.
-cmd.scheck.commandBlocked=This command is blocked in this channel.
-cmd.scheck.isNotPlaying=The bot is not currently playing anything.
-cmd.scheck.devOnly=This command is for developers only.
+statecheck.notInVC=You are not in a voice channel.
+statecheck.botNotInVC=The bot is not in a voice channel.
+statecheck.botNotInYourVC=The bot is not in your voice channel.
+statecheck.botBusy=The bot is already busy in another voice channel.
+statecheck.cannotJoin=The bot is unable to join the voice channel.
+statecheck.noDJ=You do not have DJ permissions.
+statecheck.commandBlocked=This command is blocked in this channel.
+statecheck.isNotPlaying=The bot is not currently playing anything.
+statecheck.devOnly=This command is for developers only.
 
 pmanager.noSpotify=The bot is unable to play spotify tracks right now.
 pmanager.playlistQueued=Size: **{1}** tracks.\nLength: **{2}**\n\n // 1 is the amount of tracks, 2 is like 2 hours, 1 minute, 3 seconds, it will translate itself.

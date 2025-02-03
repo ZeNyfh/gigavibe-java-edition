@@ -195,17 +195,17 @@ cmd.vol.tooLow=Głośność nie może być mniejsza niż 0.
 cmd.vol.success=Zmieniono głośność na {1}.
 cmd.vol.invalidValue=Nieprawidłowa wartość.
 
-basecmd.notAllowed=❌ **Brak dostępu**
+statecheck.notAllowed=❌ **Brak dostępu**
 
-cmd.scheck.notInVC=Nie jesteś w kanale głosowym.
-cmd.scheck.botNotInVC=Bot nie jest w kanale głosowym.
-cmd.scheck.botNotInYourVC=Bot nie jest w Twoim kanale głosowym.
-cmd.scheck.botBusy=Bot jest zajęty w innym kanale głosowym.
-cmd.scheck.cannotJoin=Bot nie może dołączyć do kanału głosowego.
-cmd.scheck.noDJ=Nie masz uprawnień DJ-a.
-cmd.scheck.commandBlocked=Ta komenda jest zablokowana w tym kanale.
-cmd.scheck.isNotPlaying=Bot obecnie nic nie odtwarza.
-cmd.scheck.devOnly=Ta komenda jest tylko dla programistów.
+statecheck.notInVC=Nie jesteś w kanale głosowym.
+statecheck.botNotInVC=Bot nie jest w kanale głosowym.
+statecheck.botNotInYourVC=Bot nie jest w Twoim kanale głosowym.
+statecheck.botBusy=Bot jest zajęty w innym kanale głosowym.
+statecheck.cannotJoin=Bot nie może dołączyć do kanału głosowego.
+statecheck.noDJ=Nie masz uprawnień DJ-a.
+statecheck.commandBlocked=Ta komenda jest zablokowana w tym kanale.
+statecheck.isNotPlaying=Bot obecnie nic nie odtwarza.
+statecheck.devOnly=Ta komenda jest tylko dla programistów.
 
 pmanager.noSpotify=Bot nie może obecnie odtwarzać utworów Spotify.
 pmanager.playlistQueued=Ilość: **{1}** utworów.\nDługość: **{2}**\n\n

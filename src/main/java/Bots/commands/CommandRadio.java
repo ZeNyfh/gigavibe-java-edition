@@ -100,7 +100,7 @@ public class CommandRadio extends BaseCommand {
         // We have to do this later manually since a 1-arg version (see above) shouldn't invoke VC joining
         CheckResult checkResult = PerformChecks(event, Check.TRY_JOIN_VC);
         if (!checkResult.succeeded()) {
-            event.replyEmbeds(createQuickEmbed(event.localise("basecmd.notAllowed"), checkResult.getMessage()));
+            event.replyEmbeds(createQuickEmbed(event.localise("statecheck.notAllowed"), checkResult.getMessage()));
             return;
         }
 
