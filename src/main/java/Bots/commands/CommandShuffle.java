@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static Bots.Main.createQuickError;
-import static Bots.Main.createQuickSuccess;
-
 public class CommandShuffle extends BaseCommand {
     @Override
     public Check[] getChecks() {
@@ -25,7 +22,7 @@ public class CommandShuffle extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.shuffle.emptyQueue")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.shuffle.emptyQueue")));
             return;
         }
 
@@ -34,7 +31,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickSuccess(event.localise("cmd.shuffle.shuffled")));
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.shuffle.shuffled")));
     }
 
     @Override

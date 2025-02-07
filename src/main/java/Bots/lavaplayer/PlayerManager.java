@@ -36,6 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Bots.CommandEvent.createQuickError;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
@@ -158,7 +159,7 @@ public class PlayerManager {
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 if (sendEmbed) {
-                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noSpotify", locale)));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noSpotify", locale), locale));
                 }
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
                 return loadResultFuture;
@@ -226,7 +227,7 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noMatches", locale)));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.noMatches", locale), locale));
                 System.err.println("No match found for the track.\nURL:\"" + trackUrl + "\"");
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
@@ -242,7 +243,7 @@ public class PlayerManager {
                 }
                 loadFailedBuilder.append(e.getMessage());
                 if (sendEmbed)
-                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.loadFailed", locale, loadFailedBuilder)));
+                    replyWithEmbed(eventOrChannel, createQuickError(managerLocalise("pmanager.loadFailed", locale, loadFailedBuilder), locale));
                 loadResultFuture.complete(LoadResult.LOAD_FAILED);
             }
         });

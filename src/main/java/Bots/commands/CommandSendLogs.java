@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandSendLogs extends BaseCommand {
     @Override
@@ -28,7 +27,7 @@ public class CommandSendLogs extends BaseCommand {
     @Override
     public void execute(CommandEvent event) throws IOException {
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError("No arguments specified"));
+            event.replyEmbeds(event.createQuickError("No arguments specified"));
             return;
         }
 
@@ -48,13 +47,13 @@ public class CommandSendLogs extends BaseCommand {
             } else {
                 file = new File("logs/" + event.getArgs()[2] + ".zip");
                 if (!file.exists()) {
-                    event.replyEmbeds(createQuickError("Specified log file does not exist"));
+                    event.replyEmbeds(event.createQuickError("Specified log file does not exist"));
                     return;
                 }
             }
             event.replyFiles(FileUpload.fromData(file));
         } else {
-            event.replyEmbeds(createQuickError("Not a valid option for SendLogs"));
+            event.replyEmbeds(event.createQuickError("Not a valid option for SendLogs"));
         }
     }
 

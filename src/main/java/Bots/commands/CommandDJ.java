@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
 
 public class CommandDJ extends BaseCommand {
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
@@ -69,7 +69,7 @@ public class CommandDJ extends BaseCommand {
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar functionality so we merge them initially
             if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.replyEmbeds(createQuickError(event.localise("main.noPermission")));
+                event.replyEmbeds(event.createQuickError(event.localise("main.noPermission")));
                 return;
             }
             List<Long> FoundMembers = new ArrayList<>();
@@ -87,7 +87,7 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             if (FoundMembers.size() + FoundRoles.size() == 0) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.dj.notGiven")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.dj.notGiven")));
                 return;
             }
 
@@ -118,12 +118,12 @@ public class CommandDJ extends BaseCommand {
                 msg = String.format("%d %s", FoundRoles.size(), roleText);
             }
             if (isAdding) {
-                event.replyEmbeds(createQuickSuccess(event.localise("cmd.dj.added", msg)));
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.dj.added", msg)));
             } else {
-                event.replyEmbeds(createQuickSuccess(event.localise("cmd.dj.removed", msg)));
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.dj.removed", msg)));
             }
         } else {
-            event.replyEmbeds(createQuickError(event.localise("cmd.dj.invalidArgs")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.dj.invalidArgs")));
         }
     }
 

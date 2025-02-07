@@ -78,7 +78,7 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.q.empty")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.q.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
@@ -104,11 +104,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.q.didYouMean", "clearqueue")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.q.didYouMean", "clearqueue")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.q.integerError")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.q.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea

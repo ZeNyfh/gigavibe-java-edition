@@ -36,7 +36,7 @@ public class CommandSkip extends BaseCommand {
 
         List<Member> votes = skipCountGuilds.get(event.getGuild().getIdLong());
         if (votes.contains(event.getMember())) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.skip.alreadyVoted")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.skip.alreadyVoted")));
             return;
         } else {
             votes.add(event.getMember());

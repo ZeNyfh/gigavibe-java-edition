@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
 
 public class CommandBlockChannel extends BaseCommand {
     Pattern pattern = Pattern.compile("^<#(\\d+)>$"); //To support rawtext #channel additions (slash commands auto convert to just ID which is really nice)
@@ -23,13 +23,13 @@ public class CommandBlockChannel extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
-            event.replyEmbeds(createQuickError(event.localise("main.noPermission")));
+            event.replyEmbeds(event.createQuickError(event.localise("main.noPermission")));
             return;
         }
         String[] args = event.getArgs();
         if (args.length == 1 || !args[1].equalsIgnoreCase("list")) {
             if (args.length < 3) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.bc.invalidUsage", "blockchannel <remove/add>", "blockchannel list")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.bc.invalidUsage", "blockchannel <remove/add>", "blockchannel list")));
                 return;
             }
         }
@@ -46,23 +46,23 @@ public class CommandBlockChannel extends BaseCommand {
                 if (guildChannel.getId().equals(targetChannel)) {
                     if (args[1].equalsIgnoreCase("add")) {
                         if (blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError(event.localise("cmd.bc.alreadyBlocked")));
+                            event.replyEmbeds(event.createQuickError(event.localise("cmd.bc.alreadyBlocked")));
                             return;
                         }
                         blockedChannels.add(targetChannel);
-                        event.replyEmbeds(createQuickSuccess(event.localise("cmd.bc.added", +guildChannel.getIdLong())));
+                        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.bc.added", +guildChannel.getIdLong())));
                     } else if (args[1].equalsIgnoreCase("remove")) {
                         if (!blockedChannels.contains(guildChannel.getId())) {
-                            event.replyEmbeds(createQuickError(event.localise("cmd.bc.notBlocked")));
+                            event.replyEmbeds(event.createQuickError(event.localise("cmd.bc.notBlocked")));
                             return;
                         }
                         blockedChannels.remove(targetChannel);
-                        event.replyEmbeds(createQuickSuccess(event.localise("cmd.bc.removed", guildChannel.getIdLong())));
+                        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.bc.removed", guildChannel.getIdLong())));
                     }
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError(event.localise("cmd.bc.notFound")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.bc.notFound")));
         } else if (args[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
@@ -77,7 +77,7 @@ public class CommandBlockChannel extends BaseCommand {
             }
             event.replyEmbeds(eb.build());
         } else {
-            event.replyEmbeds(createQuickError(event.localise("cmd.bc.invalidUsage")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.bc.invalidUsage")));
         }
     }
 

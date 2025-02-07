@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static Bots.CommandEvent.createQuickError;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 import static Bots.lavaplayer.LastFMManager.encode;
@@ -108,7 +109,7 @@ public class TrackScheduler extends AudioEventAdapter {
                     PlayerManager.getInstance().loadAndPlay(trackUserData.eventOrChannel, "ytsearch:" + artistName + " " + title, true);
                     createQuickEmbed(managerLocalise("tsched.autoplay.queued", lang), artistName + " - " + title);
                 } else { // cannot autoplay
-                    originalEventChannel.sendMessageEmbeds(createQuickError(errorBuilder.toString())).queue();
+                    originalEventChannel.sendMessageEmbeds(createQuickError(errorBuilder.toString(), lang)).queue();
                     // go to next track in the queue
                     playNextTrack(player, originalEventChannel);
                 }
@@ -140,7 +141,7 @@ public class TrackScheduler extends AudioEventAdapter {
         Map<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
         try {
-            originalEventChannel.sendMessageEmbeds(createQuickError(managerLocalise("tsched.regfail", lang))).queue();
+            originalEventChannel.sendMessageEmbeds(createQuickError(managerLocalise("tsched.regfail", lang), lang)).queue();
         } catch (InsufficientPermissionException ignored) {
             // This should not be logged.
         }

@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
-import static Bots.Main.createQuickError;
-
 public class CommandReplyToMessage extends BaseCommand {
     @Override
     public CommandStateChecker.Check[] getChecks() {
@@ -19,7 +17,7 @@ public class CommandReplyToMessage extends BaseCommand {
     @Override
     public void execute(CommandEvent event) throws Exception {
         if (event.getArgs().length < 2) {
-            event.replyEmbeds(createQuickError("Message not provided."));
+            event.replyEmbeds(event.createQuickError("Message not provided."));
             return;
         }
         String messageContent = event.getContentRaw().split(" ", 3)[2];

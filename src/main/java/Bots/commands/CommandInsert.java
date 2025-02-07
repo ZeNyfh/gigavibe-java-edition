@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandInsert extends BaseCommand {
     @Override
@@ -29,11 +28,11 @@ public class CommandInsert extends BaseCommand {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.ins.notEnoughArgs")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.notEnoughArgs")));
             return;
         }
         if (!args[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.ins.invalidArgs")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.invalidArgs")));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -66,7 +65,7 @@ public class CommandInsert extends BaseCommand {
                     PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
                     sendEmbedBool = false;
                 } catch (FriendlyException ignored) {
-                    event.replyEmbeds(createQuickError(event.localise("cmd.ins.decodingError")));
+                    event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.decodingError")));
                 }
             }
         } else {
@@ -85,7 +84,7 @@ public class CommandInsert extends BaseCommand {
                         if (loadResult.songWasPlayed) {
                             event.replyEmbeds(createQuickEmbed(" ", event.localise("cmd.ins.addedToPos", args[1])));
                         } else {
-                            event.replyEmbeds(createQuickError(event.localise("cmd.ins.queueError", loadResult.name())));
+                            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.queueError", loadResult.name())));
                         }
                     });
                 }

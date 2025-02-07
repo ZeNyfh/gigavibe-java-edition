@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.io.*;
 import java.util.Objects;
 
-import static Bots.Main.createQuickError;
-
 public class CommandGetDump extends BaseCommand {
     @Override
     public Check[] getChecks() {
@@ -34,7 +32,7 @@ public class CommandGetDump extends BaseCommand {
             }
             reader.close();
             if (Objects.equals(PID, "")) {
-                event.replyEmbeds(createQuickError("Could not get dump as the process ID was not found."));
+                event.replyEmbeds(event.createQuickError("Could not get dump as the process ID was not found."));
                 return;
             }
             p = Runtime.getRuntime().exec("jstack " + PID);
@@ -51,7 +49,7 @@ public class CommandGetDump extends BaseCommand {
             p.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
-            event.replyEmbeds(createQuickError("Could not get dump.\n```\n" + e.getMessage() + "\n```"));
+            event.replyEmbeds(event.createQuickError("Could not get dump.\n```\n" + e.getMessage() + "\n```"));
         }
         event.replyFiles(FileUpload.fromData(new File("temp/dump.txt")));
     }

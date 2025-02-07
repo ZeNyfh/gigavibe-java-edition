@@ -90,7 +90,7 @@ public class CommandRadio extends BaseCommand {
             eb.appendDescription(event.localise("cmd.radio.alternativeList", readableBotPrefix, "radio search"));
             eb.setFooter(event.localise("cmd.radio.useForPlay", readableBotPrefix, "radio"));
             if (event.getArgs().length == 1) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.radio.noArgsList")), eb.build());
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.noArgsList")), eb.build());
             } else {
                 event.replyEmbeds(eb.build());
             }
@@ -109,7 +109,7 @@ public class CommandRadio extends BaseCommand {
         StringBuilder radioSearchTerm = new StringBuilder();
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             if (event.getArgs().length == 2) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.radio.noSearchTerm")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.noSearchTerm")));
                 return;
             }
             List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
@@ -128,7 +128,7 @@ public class CommandRadio extends BaseCommand {
         }
         if (radioURL != null) {
             if (radioURL.equals("None")) {
-                event.replyEmbeds(createQuickError(event.localise("cmd.radio.notFound")));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.notFound")));
             } else {
                 PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
                 event.replyEmbeds(createQuickEmbed(event.localise("cmd.radio.queued"), "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
@@ -142,7 +142,7 @@ public class CommandRadio extends BaseCommand {
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError(event.localise("cmd.radio.invalid")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.invalid")));
         }
     }
 

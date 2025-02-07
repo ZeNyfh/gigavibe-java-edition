@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import static Bots.Main.botColour;
-import static Bots.Main.createQuickError;
 
 public class CommandLyrics extends BaseCommand {
     @Override
@@ -30,7 +29,7 @@ public class CommandLyrics extends BaseCommand {
 
         String lyrics = LRCLIBManager.getLyrics(audioPlayer.getPlayingTrack()).trim();
         if (lyrics.isEmpty()) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.lyr.notFound")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.lyr.notFound")));
             return;
         }
         EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(event.localise("cmd.lyr.source"));

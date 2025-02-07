@@ -7,9 +7,6 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Objects;
 
-import static Bots.Main.createQuickError;
-import static Bots.Main.createQuickSuccess;
-
 public class CommandJoin extends BaseCommand {
     @Override
     public Check[] getChecks() {
@@ -22,10 +19,10 @@ public class CommandJoin extends BaseCommand {
         try {
             event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
         } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.join.noAccess")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.join.noAccess")));
             return;
         }
-        event.replyEmbeds(createQuickSuccess(event.localise("cmd.join.joined")));
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.join.joined")));
     }
 
     @Override

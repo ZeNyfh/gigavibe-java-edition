@@ -9,7 +9,7 @@ import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.Main.*;
+import static Bots.Main.AudioFilters;
 
 public class CommandPitch extends BaseCommand {
     @Override
@@ -24,19 +24,19 @@ public class CommandPitch extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setPitch(1);
-            event.replyEmbeds(createQuickSuccess(event.localise("cmd.pitch.defaulted")));
+            event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.pitch.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5.0 && value >= 0.25)) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.pitch.range")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.pitch.range")));
             return;
         }
 
         timescale.setPitch(value);
-        event.replyEmbeds(createQuickSuccess(event.localise("cmd.pitch.changed", value)));
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.pitch.changed", value)));
     }
 
     @Override

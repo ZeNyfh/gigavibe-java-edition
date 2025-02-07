@@ -21,7 +21,7 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.ap.noAPI")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ap.noAPI")));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {

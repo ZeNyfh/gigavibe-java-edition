@@ -7,15 +7,13 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.Objects;
 
-import static Bots.Main.createQuickError;
-
 public class CommandBug extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
         event.deferReply(true); //hacky way of making it ephemeral
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickError(event.localise("cmd.bug.noReport")));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.bug.noReport")));
             return;
         }
         String messageContentCleaned = event.getContentRaw().split(" ", 2)[1];
