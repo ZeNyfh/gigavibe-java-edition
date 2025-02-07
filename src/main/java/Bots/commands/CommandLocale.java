@@ -14,8 +14,14 @@ public class CommandLocale extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        for (String langName : languages.keySet()) {
+            builder.append(String.format("- %s\n", Character.toUpperCase(langName.charAt(0)) + langName.substring(1)));
+        }
+        String languagesString = builder.toString().trim();
+
         if (event.getArgs().length == 1) {
-            event.replyEmbeds(createQuickEmbed(event.localise("cmd.loc.list"), "- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+            event.replyEmbeds(createQuickEmbed(event.localise("cmd.loc.list"), languagesString));
         } else {
             String lang = event.getArgs()[1].toLowerCase();
             if (languages.containsKey(lang)) {
@@ -24,7 +30,7 @@ public class CommandLocale extends BaseCommand {
                 guildLocales.put(event.getGuild().getIdLong(), languages.get(lang));
                 event.replyEmbeds(createQuickSuccess(managerLocalise("cmd.loc.languageChanged", languages.get(lang), lang), languages.get(lang)));
             } else {
-                event.replyEmbeds(event.createQuickError(event.localise("cmd.loc.unrecognised") + "\n- English\n- Polski\n- Nederlands\n- Dansk\n- Español"));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.loc.unrecognised") + "\n" + languagesString));
             }
         }
     }
