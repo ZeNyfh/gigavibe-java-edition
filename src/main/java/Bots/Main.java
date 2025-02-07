@@ -55,9 +55,8 @@ import static Bots.CommandEvent.createQuickError;
 import static Bots.CommandEvent.createQuickSuccess;
 import static Bots.GuildDataManager.GetConfig;
 import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.LocaleManager.getLocalisedTimeUnits;
 import static Bots.LocaleManager.managerLocalise;
-import static Bots.LocaleMiddleman.TimeUnits;
-import static Bots.LocaleMiddleman.getLocalisedTimeUnits;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -314,9 +313,10 @@ public class Main extends ListenerAdapter {
     }
 
     public static String toTimestamp(long seconds, long guildID) {
+        Map<String, String> lang = Main.guildLocales.get(guildID);
         seconds /= 1000;
         if (seconds <= 0) {
-            return String.format(getLocalisedTimeUnits(true, TimeUnits.second.ordinal(), guildID), "0");
+            return String.format(getLocalisedTimeUnits(true, LocaleManager.TimeUnits.second.ordinal(), lang), "0");
         } else {
             long days = seconds / 86400;
             seconds %= 86400;
@@ -327,22 +327,22 @@ public class Main extends ListenerAdapter {
             ArrayList<String> totalSet = new ArrayList<>();
 
             if (days != 0) {
-                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, TimeUnits.day.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.day.ordinal(), guildID);
+                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.day.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.day.ordinal(), lang);
                 totalSet.add(String.format(dayLabel, days));
             }
 
             if (hours != 0) {
-                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, TimeUnits.hour.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.hour.ordinal(), guildID);
+                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.hour.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.hour.ordinal(), lang);
                 totalSet.add(String.format(hourLabel, hours));
             }
 
             if (minutes != 0) {
-                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, TimeUnits.minute.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.minute.ordinal(), guildID);
+                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.minute.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.minute.ordinal(), lang);
                 totalSet.add(String.format(minuteLabel, minutes));
             }
 
             if (seconds != 0) {
-                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, TimeUnits.second.ordinal(), guildID) : getLocalisedTimeUnits(true, TimeUnits.second.ordinal(), guildID);
+                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.second.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.second.ordinal(), lang);
                 totalSet.add(String.format(secondLabel, seconds));
             }
             return String.join(", ", totalSet);
@@ -665,7 +665,6 @@ public class Main extends ListenerAdapter {
                 commandThreads.submit(() -> {
                     try {
                         Command.executeWithChecks(new CommandEvent(event));
-                        LocaleMiddleman.clear();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -698,7 +697,6 @@ public class Main extends ListenerAdapter {
                 commandThreads.submit(() -> {
                     try {
                         Command.executeWithChecks(new CommandEvent(event));
-                        LocaleMiddleman.clear();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

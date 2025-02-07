@@ -102,4 +102,14 @@ public class LocaleManager {
         return localeInput;
     }
 
+    public static String getLocalisedTimeUnits(boolean plural, int unit, Map<String, String> lang) {
+        String[] unitKeys = {"second", "minute", "hour", "day"};
+        String key = "main." + unitKeys[unit] + (plural ? ".plural" : "");
+        return lang.get(key);
+    }
+
+    public enum TimeUnits {
+        second, minute, hour, day
+    }
+
 }

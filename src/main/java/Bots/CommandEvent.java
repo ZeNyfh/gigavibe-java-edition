@@ -60,7 +60,6 @@ public class CommandEvent {
         this.attachments = event.getMessage().getAttachments();
         this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
         this.lang = guildLocales.get(event.getGuild().getIdLong());
-        LocaleMiddleman.setGuildID(event.getGuild().getIdLong());
     }
 
     public CommandEvent(SlashCommandInteractionEvent event) {
@@ -90,7 +89,6 @@ public class CommandEvent {
 
         if (event.getGuild() != null) {
             this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
-            LocaleMiddleman.setGuildID(event.getGuild().getIdLong());
         } else {
             this.config = new JSONObject();
         }
