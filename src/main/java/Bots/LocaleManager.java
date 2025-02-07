@@ -66,7 +66,7 @@ public class LocaleManager {
                         isMissing = true;
                     }
                     System.err.println("MISSING KEY: " + k);
-                    localeMap.put(k, languages.get("english").get(k)); // if the language is missing anything, fallback to english.
+                    localeMap.put(k, languages.get("english").getOrDefault(k, k)); // if the language is missing anything, fallback to english.
                 }
             }
         }
@@ -75,6 +75,15 @@ public class LocaleManager {
 
     // for use in CommandEvent.localise or when the lang map has to be passed in manually.
     public static String managerLocalise(String key, Map<String, String> lang, Object... args) {
+        for (String locale : languages.keySet()) {
+            if (languages.get(locale) == lang) {
+                if (lang.get(key) == null) {
+                    System.err.println(locale.toUpperCase() + " IS MISSING A KEY: " +  key);
+                    return key;
+                }
+            }
+        }
+
         String localisedString = lang.get(key);
         localisedString = localisedString.replaceAll("\\\\n", "\n");
         if (args.length != 0) return String.format(localisedString, args);
