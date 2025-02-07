@@ -114,6 +114,22 @@ public class CommandEvent {
         return LocaleManager.managerLocalise(key, lang, args);
     }
 
+    public MessageEmbed createQuickSuccess(String description) {
+        return createQuickEmbed("✅ **" + localise("main.success") + "**", description);
+    }
+
+    public static MessageEmbed createQuickSuccess(String description, Map<String, String> lang) {
+        return createQuickEmbed("✅ **" + LocaleManager.managerLocalise("main.success", lang) + "**", description);
+    }
+
+    public MessageEmbed createQuickError(String description) {
+        return createQuickEmbed("❌ **" + localise("main.error") + "**", description);
+    }
+
+    public static MessageEmbed createQuickError(String description, Map<String, String> lang) {
+        return createQuickEmbed("❌ **" + LocaleManager.managerLocalise("main.error", lang) + "**", description);
+    }
+
     public boolean isSlash() {
         return this.coreEvent.getClass() == SlashCommandInteractionEvent.class;
     }

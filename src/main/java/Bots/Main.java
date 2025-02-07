@@ -51,10 +51,13 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static Bots.CommandEvent.createQuickError;
+import static Bots.CommandEvent.createQuickSuccess;
 import static Bots.GuildDataManager.GetConfig;
 import static Bots.GuildDataManager.SaveConfigs;
 import static Bots.LocaleManager.managerLocalise;
-import static Bots.LocaleMiddleman.*;
+import static Bots.LocaleMiddleman.TimeUnits;
+import static Bots.LocaleMiddleman.getLocalisedTimeUnits;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
@@ -298,14 +301,6 @@ public class Main extends ListenerAdapter {
 
     public static MessageEmbed createQuickEmbed(String title, String description) {
         return createQuickEmbed(title, description, null);
-    }
-
-    public static MessageEmbed createQuickSuccess(String description) {
-        return createQuickEmbed("✅ **" + getLocalisedSuccess() + "**", description);
-    }
-
-    public static MessageEmbed createQuickError(String description) {
-        return createQuickEmbed("❌ **" + getLocalisedError() + "**", description);
     }
 
     public static AudioTrack getTrackFromQueue(Guild guild, int queuePos) {
@@ -565,7 +560,7 @@ public class Main extends ListenerAdapter {
                     player.setVolume(volume);
                     // TODO: audio filters to be added here.
 
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickSuccess(managerLocalise("main.update", lang))).queue();
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickSuccess(managerLocalise("main.update", lang), lang)).queue();
                     scanner.close();
                     ignoreFiles = file.delete();
                 } catch (Exception e) {
@@ -662,7 +657,7 @@ public class Main extends ListenerAdapter {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
             Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime))).setEphemeral(true).queue();
+                event.replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime), lang)).setEphemeral(true).queue();
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -685,9 +680,9 @@ public class Main extends ListenerAdapter {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         commandLower = commandLower.replaceFirst(botPrefix, "").trim().replaceAll(" +", " ");
         if (commandLower.startsWith(matchTerm)) {
-            if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
+            if (commandLower.length() != matchTerm.length()) { //Makes sure we aren't misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
-                if (!afterChar.equals(" ") && !afterChar.equals("\n")) { //Ensure theres whitespace afterwards
+                if (!afterChar.equals(" ") && !afterChar.equals("\n")) { //Ensure there's whitespace afterwards
                     return false;
                 }
             }
@@ -695,7 +690,7 @@ public class Main extends ListenerAdapter {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
             Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.getMessage().replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime))).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+                event.getMessage().replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime), lang)).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -727,12 +722,12 @@ public class Main extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (!event.isFromGuild()) {
-            event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.")).queue(); // this cannot be localised because it isn't in a guild.
+            event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.", LocaleManager.languages.get("english"))).queue(); // this cannot be localised because it isn't in a guild.
             return;
         }
         Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) {
-            event.replyEmbeds(createQuickError(managerLocalise("main.botNoPermission", lang))).setEphemeral(true).queue();
+            event.replyEmbeds(createQuickError(managerLocalise("main.botNoPermission", lang), lang)).setEphemeral(true).queue();
             return;
         }
         for (BaseCommand Command : commands) {
