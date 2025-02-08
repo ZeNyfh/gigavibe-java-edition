@@ -96,6 +96,7 @@ public class PlayerManager {
     public synchronized GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
+            // create filters for the guild player manager.
             guildMusicManager.audioPlayer.setFilterFactory((track, format, output) -> {
                 VibratoPcmAudioFilter vibrato = new VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate);
                 TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(vibrato, format.channelCount, format.sampleRate);
@@ -104,10 +105,12 @@ public class PlayerManager {
                 //Just make sure the items are in the reverse order they were made and all will be good
                 return Arrays.asList(new AudioFilter[]{timescale, vibrato});
             });
+
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
             return guildMusicManager;
         });
     }
+
 
     public EmbedBuilder createTrackEmbed(AudioTrack audioTrack) {
         EmbedBuilder embed = new EmbedBuilder();
