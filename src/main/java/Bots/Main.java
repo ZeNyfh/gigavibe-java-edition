@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -79,6 +80,7 @@ public class Main extends ListenerAdapter {
     public static final Map<Long, Map<String, String>> guildLocales = new HashMap<>();
     // Event Mappings
     private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+    private static final Map<String, Consumer<StringSelectInteractionEvent>> SelectionInteractionMappings = new HashMap<>();
     public static Color botColour = new Color(0, 0, 0);
     public static String botVersion = ""; // YY.MM.DD
     // config
@@ -446,6 +448,19 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    public static void registerSelectionInteraction(String[] names, Consumer<StringSelectInteractionEvent> func) {
+        for (String name : names) {
+            registerSelectionInteraction(name, func);
+        }
+    }
+
+    public static void registerSelectionInteraction(String name, Consumer<StringSelectInteractionEvent> func) {
+        if (SelectionInteractionMappings.containsKey(name)) {
+            System.err.println("Attempting to override the selection interaction manager for id " + name);
+        }
+        SelectionInteractionMappings.put(name, func);
+    }
+
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
         for (String name : names) {
             registerButtonInteraction(name, func);
@@ -607,6 +622,23 @@ public class Main extends ListenerAdapter {
             }
         }
         System.err.println("Button of ID " + buttonID + " has gone ignored - missing listener?");
+    }
+
+    @Override
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
+        String selectionID = event.getInteraction().getComponent().getId();
+        for (String name : SelectionInteractionMappings.keySet()) {
+            if (name.equalsIgnoreCase(selectionID)) {
+                try {
+                    SelectionInteractionMappings.get(name).accept(event);
+                } catch (Exception e) {
+                    System.err.println("Issue handling selection interaction for " + name);
+                    e.printStackTrace();
+                }
+                return;
+            }
+        }
+        System.err.println("Selection interaction of ID " + selectionID + " has gone ignored - missing listener?");
     }
 
     @Override
