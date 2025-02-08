@@ -244,3 +244,4 @@ main.channel=**Kanał**\n
 main.duration=**Czas trwania**\n
 main.update=Wystąpiła aktualizacja bota, twoja kolejka i parametry zostały przywrócone!\nJeśli chcesz zobaczyć, co się zmieniło, możesz dołączyć do serwera pomocy technicznej, który znajdziesz w sekcji „O mnie” bota.
 main.flag=🇵🇱
+main.languageName=polski

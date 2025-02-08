@@ -244,3 +244,4 @@ main.channel=**Kanal**\n
 main.duration=**Varighed**\n
 main.update=Der skete en opdatering til botten, din kø og parametre er blevet gendannet!\nHvis du ønsker at se, hvad der er ændret, er du velkommen til at tilmelde dig supportserveren, der findes i bottens "Om mig".
 main.flag=🇩🇰
+main.languageName=dansk
