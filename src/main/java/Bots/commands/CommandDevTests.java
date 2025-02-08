@@ -112,7 +112,7 @@ public class CommandDevTests extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "(dirty-config | test-buttons | threads | sleep)"; //(Command1 | Command2 | Command3) - add them here once they exist
+        return "(dirty-config | test-buttons | threads | sleep | guilds | reloadlocale)"; //(Command1 | Command2 | Command3) - add them here once they exist
     }
 
     @Override
