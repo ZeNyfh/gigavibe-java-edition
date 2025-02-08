@@ -93,7 +93,6 @@ cmd.join.joined=Joined your voice channel!
 
 cmd.loc.list=List of languages:
 cmd.loc.languageChanged=The language has been changed to: {1} // 1 here being a language name.
-cmd.loc.unrecognised=Unrecognised language, here is a list of languages to choose from:
 
 cmd.loop.notLooping=No longer looping the current track.
 cmd.loop.looping=Looping the current track.

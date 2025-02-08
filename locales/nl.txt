@@ -88,7 +88,6 @@ cmd.join.joined=De bot is verbonden met je spraakkanaal.
 
 cmd.loc.list=Lijst van talen:
 cmd.loc.languageChanged=De taal is gewijzigd naar: {1}
-cmd.loc.unrecognised=Onbekende taal, hier is een lijst van beschikbare talen:
 
 cmd.loop.notLooping=Het huidige nummer wordt niet meer herhaald.
 cmd.loop.looping=Het huidige nummer wordt nu herhaald.

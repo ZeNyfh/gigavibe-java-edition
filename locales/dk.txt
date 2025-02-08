@@ -88,7 +88,6 @@ cmd.join.joined=Botten sluttede sig til din stemmekanal.
 
 cmd.loc.list=Liste af sprog:
 cmd.loc.languageChanged=Sproget blev ændret til: {1}
-cmd.loc.unrecognised=Ukendt sprog, her er en liste over tilgængelige sprog:
 
 cmd.loop.notLooping=Gentager ikke længere det nuværende nummer.
 cmd.loop.looping=Gentager nu det nuværende nummer.

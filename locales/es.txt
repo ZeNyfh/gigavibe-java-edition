@@ -79,7 +79,6 @@ cmd.join.joined=El bot se ha unido a tu chat de voz.
 
 cmd.loc.list=Lista de idiomas:
 cmd.loc.languageChanged=El idioma ha sido cambiado a: {1}
-cmd.loc.unrecognised=Idioma no reconocido, aquí tienes una lista de idiomas disponibles:
 
 cmd.loop.notLooping=Reproducción en bucle desactivada.
 cmd.loop.looping=Reproducción en bucle activada.

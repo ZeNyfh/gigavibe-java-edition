@@ -88,7 +88,6 @@ cmd.join.joined=Bot dołączył do Twojego kanału głosowego.
 
 cmd.loc.list=Lista języków:
 cmd.loc.languageChanged=Język został zmieniony na: {1}
-cmd.loc.unrecognised=Nierozpoznany język. Oto lista języków do wyboru:
 
 cmd.loop.notLooping=Nie powtarza już bieżącego utworu.
 cmd.loop.looping=Powtarza bieżący utwór.
