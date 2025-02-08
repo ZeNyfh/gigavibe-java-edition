@@ -251,3 +251,4 @@ main.unknown=Unknown
 main.channel=**Channel**\n
 main.duration=**Duration**\n
 main.update=An update to the bot occurred, your queue and parameters have been restored!\nIf you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.
+main.flag=🇬🇧
