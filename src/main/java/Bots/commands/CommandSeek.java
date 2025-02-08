@@ -1,15 +1,15 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.Main.*;
+import static Bots.Main.toSimpleTimestamp;
 
 public class CommandSeek extends BaseCommand {
     @Override
@@ -28,7 +28,7 @@ public class CommandSeek extends BaseCommand {
                 String[] times = args[1].split(":", 3);
                 for (String time : times) {
                     if (!time.matches("^\\d+$")) {
-                        event.replyEmbeds(createQuickError("Argument is invalid, use the format `[HOURS]:[MINUTES]:<SECONDS>`"));
+                        event.replyEmbeds(event.createQuickError(String.format(event.localise("cmd.seek.invalidArg"))));
                         return;
                     }
                 }
@@ -42,17 +42,16 @@ public class CommandSeek extends BaseCommand {
                 }
                 position = position * 1000;
                 if (position <= 0) {
-                    event.replyEmbeds(createQuickError("The time provided is lower than or equal to 0."));
+                    event.replyEmbeds(event.createQuickError(event.localise("cmd.seek.timeTooLow")));
                     return;
                 }
                 audioPlayer.getPlayingTrack().setPosition(position);
-                event.replyEmbeds(createQuickEmbed(" ", "✅ Set the position of the track to: **" + toSimpleTimestamp(position) + ".**"));
-
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.seek.setPos", toSimpleTimestamp(position))));
             } else {
-                event.replyEmbeds(createQuickError("You cannot seek with this track."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.seek.cannotSeek")));
             }
         } else {
-            event.replyEmbeds(createQuickError("No argument given."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.seek.noArg")));
         }
     }
 

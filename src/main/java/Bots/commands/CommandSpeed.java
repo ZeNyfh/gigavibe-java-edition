@@ -1,15 +1,15 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-import static Bots.Main.*;
+import static Bots.Main.AudioFilters;
 
 public class CommandSpeed extends BaseCommand {
     @Override
@@ -24,19 +24,19 @@ public class CommandSpeed extends BaseCommand {
 
         if (event.getArgs().length == 1) {
             timescale.setSpeed(1);
-            event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the speed back to 1."));
+            event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.speed.defaulted")));
             return;
         }
 
         float value = Float.parseFloat(String.format("%.3f %n", Float.parseFloat(event.getArgs()[1])));
 
         if (!(value <= 5 && value >= 0.2)) {
-            event.replyEmbeds(createQuickError("This speed must be between 0.2 and 5"));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.speed.rangeError")));
             return;
         }
 
         timescale.setSpeed(value);
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Set the playback speed of the track to " + value + "x."));
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.speed.success", value)));
     }
 
     @Override

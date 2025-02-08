@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Bots.Main.*;
+import static Bots.Main.botColour;
 
 public class CommandDJ extends BaseCommand {
     Pattern mentionRegex = Pattern.compile("(?:<@&?)?(\\d+)>?");
@@ -33,9 +33,9 @@ public class CommandDJ extends BaseCommand {
         if (event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
-            builder.append("**Roles:**\n"); // list DJ roles in embed
+            builder.append(event.localise("cmd.dj.roleList")); // list DJ roles in embed
             if (DJRoles.isEmpty()) {
-                builder.append("None.");
+                builder.append(event.localise("cmd.dj.roleListEmpty"));
             } else {
                 int i = 0;
                 for (Object role : DJRoles) {
@@ -50,9 +50,9 @@ public class CommandDJ extends BaseCommand {
                     }
                 }
             }
-            builder.append("\n\n**Users:**\n"); // list DJ users in embed
+            builder.append(event.localise("cmd.dj.userList"));
             if (DJUsers.isEmpty()) {
-                builder.append("None.");
+                builder.append(event.localise("cmd.dj.roleListEmpty"));
             } else {
                 int i = 0;
                 for (Object user : DJUsers) {
@@ -64,12 +64,12 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             eb.setColor(botColour);
-            eb.setTitle("DJs for " + event.getGuild().getName());
+            eb.setTitle(String.format(event.localise("cmd.dj.guildDJs"), event.getGuild().getName()));
             eb.appendDescription(builder);
             event.replyEmbeds(eb.build());
         } else if (isAdding || isRemoving) { //Adding or Removing DJs. Shares similar functionality so we merge them initially
             if (!event.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.replyEmbeds(createQuickEmbed("❌ **Insufficient permissions**", "You do not have the permission to use this command."));
+                event.replyEmbeds(event.createQuickError(event.localise("main.noPermission")));
                 return;
             }
             List<Long> FoundMembers = new ArrayList<>();
@@ -87,7 +87,7 @@ public class CommandDJ extends BaseCommand {
                 }
             }
             if (FoundMembers.size() + FoundRoles.size() == 0) {
-                event.replyEmbeds(createQuickError("No members or roles were specified."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.dj.notGiven")));
                 return;
             }
 
@@ -101,12 +101,16 @@ public class CommandDJ extends BaseCommand {
                     modifyDJ(GuildObjectType.role.ordinal(), role, isAdding, config);
                 }
             }
-            String memberText = FoundMembers.size() == 1 ? "member" : "members";
-            String roleText = FoundRoles.size() == 1 ? "role" : "roles";
+            String memberText = FoundMembers.size() == 1 ?
+                    event.localise("cmd.dj.member") :
+                    event.localise("cmd.dj.member.plural");
+            String roleText = FoundRoles.size() == 1
+                    ? event.localise("cmd.dj.role") :
+                    event.localise("cmd.dj.role.plural");
             String msg;
             if (!FoundMembers.isEmpty()) {
                 if (!FoundRoles.isEmpty()) {
-                    msg = String.format("%d %s and %d %s", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
+                    msg = event.localise("cmd.dj.membersAndRoles", FoundMembers.size(), memberText, FoundRoles.size(), roleText);
                 } else {
                     msg = String.format("%d %s", FoundMembers.size(), memberText);
                 }
@@ -114,17 +118,13 @@ public class CommandDJ extends BaseCommand {
                 msg = String.format("%d %s", FoundRoles.size(), roleText);
             }
             if (isAdding) {
-                event.replyEmbeds(createQuickEmbed("✅ **Success**", "Added " + msg + " to the DJ list."));
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.dj.added", msg)));
             } else {
-                event.replyEmbeds(createQuickEmbed("✅ **Success**", "Removed " + msg + " from the DJ list."));
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.dj.removed", msg)));
             }
         } else {
-            event.replyEmbeds(createQuickError("Invalid arguments."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.dj.invalidArgs")));
         }
-    }
-
-    private enum GuildObjectType {
-        role, member
     }
 
     private synchronized void modifyDJ(int type, long id, boolean isAdding, JSONObject config) {
@@ -183,5 +183,9 @@ public class CommandDJ extends BaseCommand {
     @Override
     public long getRatelimit() {
         return 1000;
+    }
+
+    private enum GuildObjectType {
+        role, member
     }
 }

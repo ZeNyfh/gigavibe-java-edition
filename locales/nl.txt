@@ -1,0 +1,247 @@
+// Local gemaakt door etherealelysia.
+// Any line starting with "//" will be ignored.
+// Any newlines will also be ignored.
+// Trailing spaces will be removed.
+// Use this english one as a template.
+// Comments can be added to the messages via a preceding //.
+// if you are unsure what {1}/{2}/{3}... is, check what the variables are within the code, they usually contain values, markdown, or both.
+// please preserve the capitalisation and any punctuation if applicable.
+
+cmd.ap.noAPI=De bot is nog niet geassocieerd met een API-sleutel voor LastFM, zonder de API-sleutel kan de bot niet werken.
+cmd.ap.notAutoplaying=Autoplay is nu uitgeschakeld.
+cmd.ap.isAutoplaying=Autoplay is nu ingeschakeld.
+
+cmd.bc.invalidUsage=Het geldige gebruik hiervan is: `{1} <kanaal>` of `{2}`
+cmd.bc.alreadyBlocked=Dit kanaal is al geblokkeerd.
+cmd.bc.notBlocked=Dit kanaal is niet geblokkeerd.
+cmd.bc.added=<#{1}> is toegevoegd aan de lijst.
+cmd.bc.removed=<#{1}> is verwijderd van de lijst.
+cmd.bc.notFound=Dit kanaal kon niet gevonden worden in deze Discord-server.
+cmd.bc.channelList=Geblokkeerde kanalen voor {1}:
+cmd.bc.noChannels=**Geen**
+
+cmd.bug.noReport=Geef hier aan wat u te melden heeft.
+cmd.bug.successMessage=Bedankt voor uw inzet!\nDe developer zal bereikbaar zijn via de bot's DM's.\nGebruik de **{1}** command om te reageren op de berichten.\n
+
+cmd.cq.cleared=De wachtrij is leeggemaakt.
+
+cmd.dc.disconnected=Het spraakkanaal is verlaten en de wachtrij is leeg gemaakt.
+
+cmd.dj.roleList=**Rollen**:\n
+cmd.dj.roleListEmpty=Geen.
+cmd.dj.userList=\n\n**Gebruikers:**\n
+cmd.dj.guildDJs=DJ's voor {1}
+cmd.dj.notGiven=Geen leden of rollen waren aangegeven.
+cmd.dj.member=lid
+cmd.dj.member.plural=leden
+cmd.dj.role=rol
+cmd.dj.role.plural=rollen
+cmd.dj.membersAndRoles={1} {2} en {3} {4}
+cmd.dj.added={1} is toegevoegd aan de lijst van DJ's.
+cmd.dj.removed={1} is verwijderd van de lijst van DJ's.
+cmd.dj.invalidArgs=Ongeldige argumenten.
+
+cmd.fs.failedToFind=Autoplay kon {1} niet vinden\n
+cmd.fs.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.\n
+cmd.fs.nullSearchTerm=Er is een onbekende fout opgetreden bij het proberen van autoplay.\n
+cmd.fs.autoplayQueued=Autoplay heeft dit op de wachtrij gezet: {1} - {2}
+cmd.fs.skippedQueue=De hele wachtrij is overgeslagen.
+cmd.fs.skippedToPos={1} nummers zijn overgeslagen naar {2}
+cmd.fs.skippedToTrack=Het huidige nummer is overslagen naar {1}
+cmd.fs.skipped=Het huidige nummer is overgeslagen.
+
+cmd.git.message=❕ Gebruik dit ALLEEN voor bugrapporten en functievoorstellen.\n\n❕ Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt reproduceren.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+
+cmd.help.cat.general=📖 **Algemeen**
+cmd.help.cat.music=🔊 **Muziek**
+cmd.help.cat.DJ=🎧 **DJ**
+cmd.help.cat.admin=📑 **Admin**
+cmd.help.cat.dev=🔨 **Ontwikkelaar**
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Aliassen:`
+cmd.help.originalFooter=Klik op de knoppen voor meer informatie over een groep.
+cmd.help.footer=Syntaxis: "<>" is een vereist argument, "[]" is een optioneel argument. "()" is een alternatief woord voor de opdracht.
+cmd.help.embedTitle=📔 **Opdrachten**
+
+cmd.info.info={1} Info
+cmd.info.ramUsage=🔧 **RAM-gebruik:** {1}MB\n\n
+cmd.info.upTime=⏰ **Uptime:** {1}\n\n
+cmd.info.discordServers=📡 **Servers:** {1}\n\n
+cmd.info.discordMembers=👤 **Gebruikers:** {1}\n\n
+cmd.info.registeredCommands=📑 **Geregistreerde opdrachten:** {1}\n\n
+cmd.info.voiceChannels=🎵 **Spraakkanalen:** {1}\n\n
+cmd.info.playingCount=🔊 **Actieve afspelingen:** {1}\n\n
+cmd.info.gatewayPing=⏱️ **Gateway-ping:** {1}ms\n\n
+cmd.info.version=Versie: {1}
+cmd.info.ping=**Ping:** {1}ms\n\n
+
+cmd.ins.notEnoughArgs=Niet genoeg argumenten gegeven.\nGebruik: <Geheel getal> <URL/Zoekterm>
+cmd.ins.invalidArgs=Ongeldige argumenten, alleen gehele getallen.\nGebruik: <Geheel getal> <URL/Zoekterm>
+cmd.ins.decodingError=Er is iets misgegaan bij het decoderen van het nummer.
+cmd.ins.addedToPos=Het nummer is toegevoegd op positie: **{1}**
+cmd.ins.queueError=Er is een fout opgetreden bij het toevoegen van het nummer aan de wachtrij: {1}
+
+cmd.inv.haveFun=Veel plezier!
+
+cmd.join.noAccess=De bot kan je kanaal niet bereiken.
+cmd.join.joined=De bot is verbonden met je spraakkanaal.
+
+cmd.loc.list=Lijst van talen:
+cmd.loc.languageChanged=De taal is gewijzigd naar: {1}
+
+cmd.loop.notLooping=Het huidige nummer wordt niet meer herhaald.
+cmd.loop.looping=Het huidige nummer wordt nu herhaald.
+
+cmd.lq.notLooping=De huidige wachtrij wordt niet meer herhaald.
+cmd.lq.looping=De huidige wachtrij wordt nu herhaald.
+
+cmd.lyr.notFound=Er zijn geen resultaten gevonden of de titel was onbekend.
+cmd.lyr.source=Songtekst afkomstig van lrclib.net
+cmd.lyr.lyricsForTrack=Songtekst voor: {1}
+cmd.lyr.tooLong=De songtekst was te lang, deze wordt als bestand geüpload.
+
+cmd.np.livestreamDuration=```Livestream duur {1}```
+cmd.np.channel=👤 Kanaal:
+cmd.np.next=▶️ Volgende:
+cmd.np.paused=⏸️ Nummer gepauzeerd:
+cmd.np.true=✅ **Waar**
+cmd.np.false=❌ **Onwaar**
+cmd.np.trackLooping=🔂 Nummer herhalen:
+cmd.np.queueLooping=🔁 Wachtrij herhalen:
+cmd.np.autoplaying=♾️ Autoplay:
+
+cmd.pause.resumed=Het nummer wordt nu afgespeeld.
+cmd.pause.paused=Het nummer is nu gepauzeerd.
+
+cmd.ping.ping=ping: {1}ms
+cmd.ping.gatewayPing=gateway-ping: {1}ms
+
+cmd.pitch.defaulted=De toonhoogte is teruggezet naar 1.
+cmd.pitch.range=De toonhoogte moet tussen 0,25 en 5 liggen.
+cmd.pitch.changed=De toonhoogte van het nummer is ingesteld op {1}x.
+
+cmd.play.queuedFromAtt={1} nummers zijn toegevoegd aan de wachtrij vanaf bijlagen.
+cmd.play.queuedFromAtt.error=Er is iets misgegaan bij het laden van de nummers vanuit de bijlagen.
+cmd.play.wrongFormat=Het nummer kon niet worden geladen: Onbekend bestandsformaat.
+cmd.play.noArgs=Geen argumenten gegeven.
+cmd.play.decodeError=Er is iets misgegaan bij het decoderen van het nummer.
+cmd.play.queuedManySongs=Er zijn {1} nummers aan de wachtrij toegevoegd!
+cmd.play.fileError=Er is iets misgegaan bij het laden van de nummers vanuit het bestand.
+
+cmd.pp.privacyPolicy=Privacybeleid
+
+cmd.q.nowPlaying=__**Nu aan het spelen:**__\n{1}
+cmd.q.queueInfoFooter={1} nummers in wachtrij | Pagina {2}/{3} | Lengte: {4}
+cmd.q.empty=De wachtrij is leeg.
+cmd.q.unknownTitle=Onbekende titel
+cmd.q.didYouMean=Bedoelde je **{1}**?
+cmd.q.integerError=De pagina moet een positief geheel getal zijn.
+
+cmd.radio.list=📻 **Radiolijst:**\n\n
+cmd.radio.alternativeList=*Of gebruik `{1} {2} <Tekst>`*
+cmd.radio.useForPlay=Gebruik "{1} {2} <Radio Naam>" om een radiostation af te spelen.
+cmd.radio.noArgsList=Geen argumenten gegeven, hier zijn enkele radiostations om uit te kiezen:
+cmd.radio.noSearchTerm=Geen zoekterm gegeven.
+cmd.radio.notFound=Kon geen radiostation vinden met de opgegeven naam.
+cmd.radio.queued=Radiostation in wachtrij:
+cmd.radio.invalid=Ongeldig radiostation.
+
+cmd.rem.noSongs=Er zijn geen nummers in de wachtrij om te verwijderen.
+cmd.rem.invalidArgs=Ongeldige argumenten, alleen gehele getallen.
+cmd.rem.tooLarge=Het opgegeven getal was groter dan de grootte van de wachtrij.
+cmd.rem.removed=Nummer {1} is succesvol overgeslagen.
+
+cmd.seek.invalidArg=Het argument is ongeldig, gebruik het formaat `[UREN]:[MINUTEN]:<SECONDEN>`
+cmd.seek.timeTooLow=De opgegeven tijd is kleiner dan of gelijk aan 0.
+cmd.seek.setPos=De positie van het nummer is ingesteld op: **{1}**.
+cmd.seek.cannotSeek=Je kunt niet door dit nummer zoeken.
+cmd.seek.noArg=Geen argument gegeven.
+
+cmd.shuffle.emptyQueue=De wachtrij is leeg.
+cmd.shuffle.shuffled=De wachtrij is geschud!
+
+cmd.skip.alreadyVoted=Je hebt al gestemd om over te slaan.
+cmd.skip.failedToFind=Autoplay kon {1} niet vinden
+cmd.skip.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.\n
+cmd.skip.noSearchTerm=Er is een onbekende fout opgetreden bij het proberen van autoplay.
+cmd.skip.autoplayQueued=Autoplay in wachtrij: __**{1} - {2}**__
+cmd.skip.skippedTheTrack=⏩ Het nummer is overgeslagen.
+cmd.skip.skippedTo=⏩ Overgeslagen naar __**{1}**__
+cmd.skip.skippedTo.unknown=⏩ Overgeslagen naar __**Onbekende titel**__
+cmd.skip.nowPlaying=Nu aan het spelen: {1}
+cmd.skip.voted.title=Gestemd om het nummer over te slaan.
+cmd.skip.voted.description={1} van de {2} nodig om over te slaan.
+cmd.skip.channel=**Kanaal**\n{1}\n
+cmd.skip.duration=**Duur**\n{1}
+
+cmd.speed.defaulted=De afspeelsnelheid is teruggezet naar 1.
+cmd.speed.rangeError=De snelheid moet tussen 0,2 en 5 liggen.
+cmd.speed.success=De afspeelsnelheid is ingesteld op {1}x.
+
+cmd.tos.TermsOfService=Servicevoorwaarden
+
+cmd.vib.defaulted=De parameters zijn teruggezet naar hun standaardwaarden.
+cmd.vib.incorrectArgs=Het geldige gebruik is: `{1} <Frequentie> <Diepte>`
+cmd.vib.range.frequency=De frequentie moet tussen 0,1 en 14 liggen.
+cmd.vib.range.depth=De diepte moet tussen 0,05 en 1 liggen.
+cmd.vib.success=De vibratofrequentie is ingesteld op {1}Hz.\nDe vibratodiepte is ingesteld op {2}.
+cmd.vib.invalidArgs=❌ **Ongeldige argumenten.**
+
+cmd.vol.defaulted=Het volume is teruggezet naar de standaardwaarde van 100.
+cmd.vol.incorrectArg=Het volume moet een geheel getal zijn.
+cmd.vol.tooHigh=Het volume kan niet hoger zijn dan 500.
+cmd.vol.tooLow=Het volume kan niet lager zijn dan 0.
+cmd.vol.success=Het volume is gewijzigd naar {1}.
+cmd.vol.invalidValue=Ongeldige waarde.
+
+statecheck.notAllowed=❌ **Niet toegestaan**
+
+statecheck.notInVC=Je bent niet in een spraakkanaal.
+statecheck.botNotInVC=De bot is niet in een spraakkanaal.
+statecheck.botNotInYourVC=De bot is niet in jouw spraakkanaal.
+statecheck.botBusy=De bot is al bezig in een ander spraakkanaal.
+statecheck.cannotJoin=De bot kan dit spraakkanaal niet betreden.
+statecheck.noDJ=Je hebt geen DJ-rechten.
+statecheck.commandBlocked=Deze opdracht is geblokkeerd in dit kanaal.
+statecheck.isNotPlaying=De bot speelt momenteel niets af.
+statecheck.devOnly=Deze opdracht is alleen voor ontwikkelaars.
+
+pmanager.noSpotify=De bot kan momenteel geen Spotify-nummers afspelen.
+pmanager.playlistQueued=Grootte: **{1}** nummers.\nLengte: **{2}**\n\n
+pmanager.APIError=Er is een fout opgetreden met de YouTube-zoek-API.
+pmanager.loadFailed=Het nummer kon niet worden geladen: {1}
+pmanager.noMatches=Er zijn geen overeenkomsten gevonden voor dit nummer.
+
+tsched.autoplay.notFound=Autoplay kon {1} niet vinden
+tsched.autoplay.noSimilar=Autoplay kon geen vergelijkbare nummers vinden.\n
+tsched.autoplay.unknownError=Er is een onbekende fout opgetreden bij het proberen van autoplay.\n
+tsched.queued=♾️ Autoplay in wachtrij:
+
+tsched.regfail=Het nummer kon niet worden geladen vanwege een onbekende reden. Wordt overgeslagen...
+
+tsched.critfail.title=❌ Kritieke fout
+tsched.critfail.description=Het nummer kon 3 keer niet worden geladen, waarschijnlijk vanwege een netwerkprobleem buiten onze controle. De wachtrij wordt geleegd om spam te voorkomen.
+tsched.critfail.footer=Als dit probleem aanhoudt met specifieke audiobronnen, dien dan een bugrapport in met /bug
+
+tsched.playnext.nowPlaying=Nu aan het spelen: {1}
+
+main.day={1} dag
+main.day.plural={1} dagen
+main.hour={1} uur
+main.hour.plural={1} uren
+main.minute={1} minuut
+main.minute.plural={1} minuten
+main.second={1} seconde
+main.second.plural={1} seconden
+
+main.success=Succes
+main.noPermission=Je hebt geen toestemming om deze opdracht te gebruiken.
+main.ratelimit=Je kunt deze opdracht niet gebruiken voor nog {1} seconden.
+main.botNoPermission=Ik heb geen toestemming om berichten te lezen of te verzenden in dit kanaal.
+main.error=Fout
+main.unknown=Onbekend
+main.channel=**Kanaal**\n
+main.duration=**Duur**\n
+main.update=Er is een update uitgevoerd voor de bot, je wachtrij en instellingen zijn hersteld!\nAls je wilt zien wat er is veranderd, kun je lid worden van de ondersteuningsserver die te vinden is in de "Over mij" van de bot.
+main.flag=🇳🇱
+main.languageName=nederlands

@@ -16,11 +16,11 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static Bots.Main.botPrefix;
-import static Bots.Main.createQuickError;
+import static Bots.Main.*;
 
 // TODO: Purge this file and re-make the system to be better
 // (Basically, give the queueing responsibility back to the code that calls this)
@@ -45,6 +45,7 @@ public class CommandEvent {
     private final String rawContent;
     private final List<Message.Attachment> attachments;
     private final JSONObject config;
+    private final Map<String, String> lang;
 
     public CommandEvent(MessageReceivedEvent event) {
         this.coreEvent = event;
@@ -58,6 +59,7 @@ public class CommandEvent {
         this.options = new OptionMapping[0]; //Not a thing outside of slash commands, but we should still define it here
         this.attachments = event.getMessage().getAttachments();
         this.config = GuildDataManager.GetGuildConfig(event.getGuild().getIdLong());
+        this.lang = guildLocales.get(event.getGuild().getIdLong());
     }
 
     public CommandEvent(SlashCommandInteractionEvent event) {
@@ -67,6 +69,7 @@ public class CommandEvent {
         this.channel = event.getGuildChannel();
         this.member = event.getMember();
         this.user = event.getUser();
+        this.lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
 
         List<OptionMapping> options = event.getInteraction().getOptions();
         List<String> args = new ArrayList<>();
@@ -89,6 +92,46 @@ public class CommandEvent {
         } else {
             this.config = new JSONObject();
         }
+    }
+
+    /**
+     * Localise function.
+     * Takes a key value in the format (cmd.name.stringName) for example: "cmd.vol.tooHigh" which then takes all the arguments, it does String.format() in the backend.
+     * if for some reason "lang" is undefined, or you are localising somewhere where "event" is undefined, use LocaleManager.managerLocalise
+     * <p>
+     * managerLocalise is the same as localise, except that you pass in the key, the map<String, String> (locale map), and then the args.
+     * you can get this locale map like using something like:
+     * {@code
+     * Map<String, String> lang = Main.guildLocales.get(long GuildID);
+     * }
+     *
+     * @author ZeNyfh
+     * @version 1.0.0
+     */
+    public String localise(String key, Object... args) {
+        return LocaleManager.managerLocalise(key, lang, args);
+    }
+
+    public MessageEmbed createQuickSuccess(String description) {
+        return createQuickEmbed("✅ **" + localise("main.success") + "**", description);
+    }
+
+    public static MessageEmbed createQuickSuccess(String description, Map<String, String> lang) {
+        if (lang == null) {
+            return createQuickEmbed("✅ **Success**", description);
+        }
+        return createQuickEmbed("✅ **" + LocaleManager.managerLocalise("main.success", lang) + "**", description);
+    }
+
+    public MessageEmbed createQuickError(String description) {
+        return createQuickEmbed("❌ **" + localise("main.error") + "**", description);
+    }
+
+    public static MessageEmbed createQuickError(String description, Map<String, String> lang) {
+        if (lang == null) {
+            return createQuickEmbed("❌ **Error**", description);
+        }
+        return createQuickEmbed("❌ **" + LocaleManager.managerLocalise("main.error", lang) + "**", description);
     }
 
     public boolean isSlash() {
@@ -150,16 +193,16 @@ public class CommandEvent {
         deferReply(false);
     }
 
-    public void reply(Consumer<CommandEvent.Response> lambda, String s) {
+    public void reply(Consumer<Response> lambda, String s) {
         if (isSlash()) {
             SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged())
-                event.getHook().editOriginal(s).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.getHook().editOriginal(s).queue(x -> lambda.accept(new Response(x)));
             else
-                event.reply(s).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.reply(s).queue(x -> lambda.accept(new Response(x)));
         } else {
             try {
-                ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                ((MessageReceivedEvent) this.coreEvent).getMessage().reply(s).queue(x -> lambda.accept(new Response(x)));
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -171,16 +214,16 @@ public class CommandEvent {
         }, s);
     }
 
-    public void replyEmbeds(Consumer<CommandEvent.Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
+    public void replyEmbeds(Consumer<Response> lambda, MessageEmbed embed, MessageEmbed... embeds) {
         if (isSlash()) {
             SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged()) {
                 List<MessageEmbed> allembeds = new ArrayList<>();
                 allembeds.add(embed);
                 allembeds.addAll(List.of(embeds));
-                event.getHook().editOriginalEmbeds(allembeds).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.getHook().editOriginalEmbeds(allembeds).queue(x -> lambda.accept(new Response(x)));
             } else
-                event.replyEmbeds(embed, embeds).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.replyEmbeds(embed, embeds).queue(x -> lambda.accept(new Response(x)));
         } else {
             MessageReceivedEvent event = ((MessageReceivedEvent) this.coreEvent);
             if (!event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_SEND)) {
@@ -190,7 +233,7 @@ public class CommandEvent {
                 } // this can safely be ignored as I expect this to throw an exception.
             }
             try {
-                event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.getMessage().replyEmbeds(embed, embeds).queue(x -> lambda.accept(new Response(x)));
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -202,16 +245,16 @@ public class CommandEvent {
         }, embed, embeds);
     }
 
-    public void replyFiles(Consumer<CommandEvent.Response> lambda, FileUpload... files) {
+    public void replyFiles(Consumer<Response> lambda, FileUpload... files) {
         if (isSlash()) {
             SlashCommandInteractionEvent event = ((SlashCommandInteractionEvent) this.coreEvent);
             if (isAcknowledged())
-                event.getHook().editOriginalAttachments(files).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.getHook().editOriginalAttachments(files).queue(x -> lambda.accept(new Response(x)));
             else
-                event.replyFiles(files).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                event.replyFiles(files).queue(x -> lambda.accept(new Response(x)));
         } else {
             try {
-                ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new CommandEvent.Response(x)));
+                ((MessageReceivedEvent) this.coreEvent).getMessage().replyFiles(files).queue(x -> lambda.accept(new Response(x)));
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }

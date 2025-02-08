@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
@@ -32,39 +32,34 @@ public class CommandForceSkip extends BaseCommand {
         StringBuilder messageBuilder = new StringBuilder();
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
             String searchTerm = LastFMManager.getSimilarSongs(audioPlayer.getPlayingTrack(), event.getGuild().getIdLong());
-            boolean canPlay = true;
+            String errorMessage = "❌ **" + event.localise("main.error") + ":**\n";
             if (searchTerm.equals("notfound")) {
-                messageBuilder.append("❌ **Error:**\nAutoplay failed to find ").append(audioPlayer.getPlayingTrack().getInfo().title).append("\n");
-                canPlay = false;
-            }
-            if (searchTerm.equals("none")) {
-                messageBuilder.append("❌ **Error:**\nAutoplay could not find similar tracks.\n");
-                canPlay = false;
-            }
-            if (searchTerm.isEmpty()) {
-                messageBuilder.append("❌ **Error:**\nAn unknown error occurred when trying to autoplay.\n");
-                canPlay = false;
-            }
-            if (canPlay) {
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.failedToFind", audioPlayer.getPlayingTrack().getInfo().title));
+            } else if (searchTerm.equals("none")) {
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.couldNotFind"));
+            } else if (searchTerm.isEmpty()) {
+                messageBuilder.append(errorMessage).append(event.localise("cmd.fs.nullSearchTerm"));
+            } else { // we can play
                 AudioTrack track = audioPlayer.getPlayingTrack();
                 // TODO: should be replaced with actual logic checking if last.fm has either the author or the artist name in the title.
-                String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
-                        ? encode((track.getInfo().title).toLowerCase(), false, true)
+                String artistName = (track.getInfo().author == null || track.getInfo().author.isEmpty())
+                        ? encode(track.getInfo().title.toLowerCase(), false, true)
                         : encode(track.getInfo().author.toLowerCase(), false, true);
                 String title = encode(track.getInfo().title, true, false);
                 PlayerManager.getInstance().loadAndPlay(event, "ytsearch:" + artistName + " - " + title, false);
-                messageBuilder.append("♾️ Autoplay queued: ").append(artistName).append(" - ").append(title).append("\n");
+                messageBuilder.append("♾️ ").append(event.localise("cmd.fs.autoplayQueued", artistName, title));
             }
         }
         if (event.getArgs().length > 1 && event.getArgs()[1].matches("^\\d+$")) { // autoplay logic shouldn't exist here
-            if (Integer.parseInt(event.getArgs()[1]) - 1 >= musicManager.scheduler.queue.size()) {
+            int givenPosition = Integer.parseInt(event.getArgs()[1]);
+            if (givenPosition - 1 >= musicManager.scheduler.queue.size()) {
                 musicManager.scheduler.queue.clear();
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped the entire queue"));
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.localise("cmd.fs.skippedQueue")));
             } else {
                 List<AudioTrack> list = new ArrayList<>(musicManager.scheduler.queue);
                 musicManager.scheduler.queue.clear();
-                musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(Integer.parseInt(event.getArgs()[1]), list.size()) - 1), list.size()));
+                musicManager.scheduler.queue.addAll(list.subList(Math.max(0, Math.min(givenPosition, list.size()) - 1), list.size()));
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
@@ -74,24 +69,27 @@ public class CommandForceSkip extends BaseCommand {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", "⏩ Skipped " + event.getArgs()[1] + " tracks to __**[" + sanitise(title) + "](" + trackInfo.uri + ")**__"));
+                String trackHyperLink = "__**[" + sanitise(title) + "](" + trackInfo.uri + ")**__";
+                event.replyEmbeds(createQuickEmbed(" ", "⏩ " + event.localise("cmd.fs.skippedToPos",
+                        event.getArgs()[1], trackHyperLink)));
             }
         } else {
             if (!musicManager.scheduler.queue.isEmpty()) {
                 musicManager.scheduler.nextTrack();
                 AudioTrackInfo trackInfo = musicManager.audioPlayer.getPlayingTrack().getInfo();
                 String title = trackInfo.title;
-                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch") || trackInfo.uri.contains("bandcamp"));
+                boolean isHTTP = (trackInfo.uri.contains("youtube") || trackInfo.uri.contains("soundcloud") || trackInfo.uri.contains("twitch") || trackInfo.uri.contains("bandcamp") || trackInfo.uri.contains("spotify"));
                 if (trackInfo.isStream && !isHTTP) {
                     String streamTitle = RadioDataFetcher.getStreamTitle(trackInfo.uri);
                     if (streamTitle != null) {
                         title = streamTitle;
                     }
                 }
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track to __**[" + title + "](" + trackInfo.uri + ")**__\n\n" + messageBuilder).trim()));
+                String trackHyperLink = "__**[" + title + "](" + trackInfo.uri + ")**__\n\n";
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skippedToTrack", trackHyperLink + messageBuilder).trim())));
             } else {
                 musicManager.scheduler.nextTrack();
-                event.replyEmbeds(createQuickEmbed(" ", ("⏩ Skipped the current track\n\n" + messageBuilder).trim()));
+                event.replyEmbeds(createQuickEmbed(" ", ("⏩ " + event.localise("cmd.fs.skipped") + "\n\n" + messageBuilder).trim()));
             }
         }
         skipCountGuilds.remove(event.getGuild().getIdLong());

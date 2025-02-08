@@ -1,14 +1,11 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.Objects;
-
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandJoin extends BaseCommand {
     @Override
@@ -22,11 +19,10 @@ public class CommandJoin extends BaseCommand {
         try {
             event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(event.getMember().getVoiceState()).getChannel());
         } catch (InsufficientPermissionException e) {
-            event.replyEmbeds(createQuickError("The bot can't access your channel"));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.join.noAccess")));
             return;
         }
-        event.replyEmbeds(createQuickEmbed(" ", "✅ Joined your vc."));
-
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.join.joined")));
     }
 
     @Override

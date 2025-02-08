@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 
 import static Bots.Main.LoopQueueGuilds;
 import static Bots.Main.createQuickEmbed;
@@ -16,10 +16,10 @@ public class CommandLoopQueue extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (LoopQueueGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", "No longer looping the current queue."));
+            event.replyEmbeds(createQuickEmbed("❌ \uD83D\uDD01", event.localise("cmd.lq.notLooping")));
             LoopQueueGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", "Looping the current queue."));
+            event.replyEmbeds(createQuickEmbed("✅ \uD83D\uDD01", event.localise("cmd.lq.looping")));
             LoopQueueGuilds.add(event.getGuild().getIdLong());
         }
     }

@@ -64,7 +64,7 @@ public class LRCLIBManager {
         }
         // add stream author/artist here.
 
-        urlBuilder.append(java.net.URLEncoder.encode( artist + " " + title, StandardCharsets.UTF_8).trim());
+        urlBuilder.append(java.net.URLEncoder.encode(artist + " " + title, StandardCharsets.UTF_8).trim());
         String url = urlBuilder.toString();
         if (url.contains("+%28")) {
             url = url.split("\\+%28")[0].trim();
