@@ -55,7 +55,6 @@ public class CommandQueue extends BaseCommand {
             if (PlayerManager.getInstance().getThumbURL(track) != null)
                 eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         }
-        // TODO: invent a better implementation instead of using the raw guildLocales map in cases like these.
         eb.setTitle(managerLocalise("cmd.q.nowPlaying", lang, Objects.requireNonNull(track).getInfo().title), track.getInfo().uri);
         eb.setFooter(managerLocalise("cmd.q.queueInfoFooter", lang, Queue.size(), newPageNumber, maxPage, toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         eb.setColor(botColour);
