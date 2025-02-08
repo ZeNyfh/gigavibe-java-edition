@@ -7,10 +7,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,11 +19,12 @@ public class LocaleManager {
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
     public static void init(JDA bot) {
-        languages.put("english", readLocale("locales/en.txt"));
-        languages.put("polski", readLocale("locales/pl.txt"));
-        languages.put("nederlands", readLocale("locales/nl.txt"));
-        languages.put("dansk", readLocale("locales/dk.txt"));
-        languages.put("español", readLocale("locales/es.txt"));
+        languages.put("english", readLocale("locales/en.txt")); // english needs to always be loaded first as it is used for comparison.
+        for (File file : Objects.requireNonNull(Path.of("locales").toFile().listFiles())) {
+            if (file.getName().equals("en.txt")) continue;
+            Map<String, String> locale = readLocale(file.getAbsolutePath());
+            languages.put(locale.get("main.languageName"), locale);
+        }
         for (Guild g : bot.getGuilds()) {
             JSONObject config = GetGuildConfig(g.getIdLong());
             guildLocales.put(g.getIdLong(), languages.get(config.get("Locale")));
