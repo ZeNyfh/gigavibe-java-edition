@@ -1,0 +1,238 @@
+cmd.ap.noAPI=No se ha proporcionado una clave API a LastFM, este comando no funcionará sin ella.
+cmd.ap.notAutoplaying=La reproducción automática está desactivada.
+cmd.ap.isAutoplaying=La reproducción automática está activada.
+
+cmd.bc.invalidUsage=Uso válido: `{1} <canal>` o `{2}`
+cmd.bc.alreadyBlocked=Este canal ya está bloqueado.
+cmd.bc.notBlocked=Este canal no está bloqueado.
+cmd.bc.added=Añadido <#{1}> a la lista.
+cmd.bc.removed=Eliminado <#{1}> de la lista.
+cmd.bc.notFound=No se encontró el canal en el servidor.
+cmd.bc.channelList=Canales bloqueados en {1}:
+cmd.bc.noChannels=**Ninguno**
+
+cmd.bug.noReport=Por favor, incluya información en el informe.
+cmd.bug.successMessage=¡Gracias por tu informe!\nEl desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.\nUsa el comando **{1}** para responder a los mensajes.\n
+
+cmd.cq.cleared=La cola ha sido vaciada.
+
+cmd.dc.disconnected=Desconectado del chat de voz y limpiado la cola.
+
+cmd.dj.roleList=**Roles**:\n
+cmd.dj.roleListEmpty=Ninguno.
+cmd.dj.userList=\n\n**Usuarios:**\n
+cmd.dj.guildDJs=DJs en {1}
+cmd.dj.notGiven=No se ha especificado ningún miembro o rol.
+cmd.dj.member=miembro
+cmd.dj.member.plural=miembros
+cmd.dj.role=rol
+cmd.dj.role.plural=roles
+cmd.dj.membersAndRoles={1} {2} y {3} {4}
+cmd.dj.added=Añadido {1} a la lista de DJs.
+cmd.dj.removed=Eliminado {1} de la lista de DJs.
+cmd.dj.invalidArgs=Argumentos inválidos.
+
+cmd.fs.failedToFind=La reproducción automática no encontró {1}\n
+cmd.fs.couldNotFind=No se encontraron pistas similares para la reproducción automática.\n
+cmd.fs.nullSearchTerm=Ocurrió un error al intentar iniciar la reproducción automática.\n
+cmd.fs.autoplayQueued=Autoplay en cola: {1} - {2}
+cmd.fs.skippedQueue=La cola ha sido saltada.
+cmd.fs.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.
+cmd.fs.skippedToTrack=La pista actual ha sido saltada y reemplazada por {1}.
+cmd.fs.skipped=La pista actual ha sido saltada.
+
+cmd.git.message=❕ Usar SOLO para informes de errores o sugerencias.\n\n❕ Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+
+cmd.help.cat.general=📖 **General**
+cmd.help.cat.music=🔊 **Música**
+cmd.help.cat.DJ=🎧 **DJ**
+cmd.help.cat.admin=📑 **Administrador**
+cmd.help.cat.dev=🔨 **Desarrollador**
+cmd.help.alias=\n`Alias:`
+cmd.help.alias.plural=\n`Alias:`
+cmd.help.originalFooter=Haz clic en los botones para obtener más información de un grupo.
+cmd.help.footer=Sintaxis: "<>" es un argumento requerido, "[]" es un argumento opcional. "()" es un comando alternativo.
+cmd.help.embedTitle=📔 **Comandos**
+
+cmd.info.info={1} Información
+cmd.info.ramUsage=🔧 **Uso de RAM:** {1}MB\n\n
+cmd.info.upTime=⏰ **Tiempo de actividad:** {1}\n\n
+cmd.info.discordServers=📡 **Servidores:** {1}\n\n
+cmd.info.discordMembers=👤 **Usuarios:** {1}\n\n
+cmd.info.registeredCommands=📑 **Comandos registrados:** {1}\n\n
+cmd.info.voiceChannels=🎵 **Canales de voz:** {1}\n\n
+cmd.info.playingCount=🔊 **Reproducciones activas:** {1}\n\n
+cmd.info.gatewayPing=⏱️ **Ping de entrada:** {1}ms\n\n
+cmd.info.version=Versión: {1}
+cmd.info.ping=**Ping:** {1}ms\n\n
+
+cmd.ins.notEnoughArgs=Argumentos insuficientes.\nUso: <Entero> <URL/Término de búsqueda>
+cmd.ins.invalidArgs=Argumentos inválidos, solo números enteros.\nUso: <Entero> <URL/Término de búsqueda>
+cmd.ins.decodingError=Ocurrió un error al decodificar la pista.
+cmd.ins.addedToPos=Añadido el track en la posición: **{1}**
+cmd.ins.queueError=Ocurrió un error al añadir la pista a la cola: {1}
+
+cmd.inv.haveFun=¡Que te diviertas!
+
+cmd.join.noAccess=El bot no tiene acceso a tu canal.
+cmd.join.joined=El bot se ha unido a tu chat de voz.
+
+cmd.loc.list=Lista de idiomas:
+cmd.loc.languageChanged=El idioma ha sido cambiado a: {1}
+
+cmd.loop.notLooping=Reproducción en bucle desactivada.
+cmd.loop.looping=Reproducción en bucle activada.
+
+cmd.lq.notLooping=Reproducción en bucle de la cola desactivada.
+cmd.lq.looping=Reproducción en bucle de la cola activada.
+
+cmd.lyr.notFound=No se encontraron resultados o el título de la canción es desconocido.
+cmd.lyr.source=Letra obtenida de lrclib.net
+cmd.lyr.lyricsForTrack=Letra de: {1}
+cmd.lyr.tooLong=La letra es demasiado larga, se subirá como archivo.
+
+cmd.np.livestreamDuration=```Duración de la transmisión en vivo {1}```
+cmd.np.channel=👤 Canal:
+cmd.np.next=▶️ Siguiente:
+cmd.np.paused=⏸️ Pista pausada:
+cmd.np.true=✅ **Verdadero**
+cmd.np.false=❌ **Falso**
+cmd.np.trackLooping=🔂 Pista en bucle:
+cmd.np.queueLooping=🔁 Cola en bucle:
+cmd.np.autoplaying=♾️ Reproducción automática:
+
+cmd.pause.resumed=La pista se está reproduciendo.
+cmd.pause.paused=Pista pausada.
+
+cmd.ping.ping=ping: {1}ms
+cmd.ping.gatewayPing=ping de entrada: {1}ms
+
+cmd.pitch.defaulted=El tono ha sido restablecido a 1.
+cmd.pitch.range=El tono debe estar entre 0.25 y 5.
+cmd.pitch.changed=El tono de la pista ha sido establecido a {1}x.
+
+cmd.play.queuedFromAtt=Se han puesto en cola {1} pistas desde los archivos adjuntos.
+cmd.play.queuedFromAtt.error=Hubo un error al cargar las pistas adjuntas.
+cmd.play.wrongFormat=La pista no se pudo cargar: Formato de archivo desconocido.
+cmd.play.noArgs=No se proporcionaron argumentos.
+cmd.play.decodeError=Ocurrió un error al decodificar la pista.
+cmd.play.queuedManySongs=¡{1} canciones añadidas a la cola!
+cmd.play.fileError=Ocurrió un error al cargar las pistas desde el archivo.
+
+cmd.pp.privacyPolicy=Política de privacidad
+
+cmd.q.nowPlaying=__**Reproduciendo ahora:**__\n{1}
+cmd.q.queueInfoFooter={1} canciones en cola | Página {2}/{3} | Duración: {4}
+cmd.q.empty=La cola está vacía.
+cmd.q.unknownTitle=Título desconocido.
+cmd.q.didYouMean=¿Querías usar **{1}**?
+cmd.q.integerError=El número de página debe ser un entero positivo.
+
+cmd.radio.list=📻 **Lista de radios:**\n\n
+cmd.radio.alternativeList=*O usa `{1} {2} <Cadena>`*
+cmd.radio.useForPlay=Usa "{1} {2} <Nombre de la radio>" para usar la radio.
+cmd.radio.noArgsList=No se proporcionaron argumentos, aquí tienes algunas estaciones de radio disponibles:
+cmd.radio.noSearchTerm=No se proporcionó ningún término de búsqueda.
+cmd.radio.notFound=No se encontró ninguna estación de radio con ese nombre.
+cmd.radio.queued=Radio añadida a la cola:
+cmd.radio.invalid=Estación de radio inválida.
+
+cmd.rem.noSongs=No hay canciones que quitar de la lista.
+cmd.rem.invalidArgs=Argumentos inválidos, solo números enteros.
+cmd.rem.tooLarge=El número proporcionado es mayor que el tamaño de la cola.
+cmd.rem.removed=Se ha eliminado con éxito el track {1} de la cola.
+
+cmd.seek.invalidArg=El argumento es inválido, usa el formato `[HORAS]:[MINUTOS]:<SEGUNDOS>`
+cmd.seek.timeTooLow=El tiempo proporcionado es menor o igual a 0.
+cmd.seek.setPos=Se ha establecido la posición de la pista en: **{1}**.
+cmd.seek.cannotSeek=No se puede cambiar la posición de esta pista.
+cmd.seek.noArg=No se proporcionaron argumentos.
+
+cmd.shuffle.emptyQueue=La cola está vacía.
+cmd.shuffle.shuffled=La cola ha sido reordenada de forma aleatoria.
+
+cmd.skip.alreadyVoted=Ya has votado para omitir.
+cmd.skip.failedToFind=Autoplay no pudo encontrar {1}
+cmd.skip.couldNotFind=Autoplay no pudo encontrar pistas similares.\n
+cmd.skip.noSearchTerm=Un error desconocido ocurrió al intentar reproducir automáticamente.
+cmd.skip.autoplayQueued=Autoplay en cola: __**{1} - {2}**__
+cmd.skip.skippedTheTrack=⏩ Pista omitida.
+cmd.skip.skippedTo=⏩ Pista omitida a __**{1}**__
+cmd.skip.skippedTo.unknown=⏩ Pista omitida a __**Título desconocido**__
+cmd.skip.nowPlaying=Reproduciendo ahora: {1}
+cmd.skip.voted.title=Has votado para omitir la pista.
+cmd.skip.voted.description={1} de {2} necesarios para omitir.
+cmd.skip.channel=**Canal**\n{1}\n
+cmd.skip.duration=**Duración**\n{1}
+
+cmd.speed.defaulted=La velocidad se ha restablecido a 1.
+cmd.speed.rangeError=La velocidad debe estar comprendida entre 0.2 y 5.
+cmd.speed.success=Velocidad de reproducción establecida en {1}x.
+
+cmd.tos.TermsOfService=Términos de Servicio
+
+cmd.vib.defaulted=Parámetros restablecidos a sus valores predeterminados.
+cmd.vib.incorrectArgs=El uso correcto es: `{1} <Frecuencia> <Profundidad>`
+cmd.vib.range.frequency=La frecuencia debe estar entre 0.1 y 14.
+cmd.vib.range.depth=La profundidad debe estar entre 0.05 y 1.
+cmd.vib.success=Frecuencia de vibrato establecida en {1}Hz.\nProfundidad de vibrato establecida en {2}.
+cmd.vib.invalidArgs=❌ **Argumentos inválidos.**
+
+cmd.vol.defaulted=El volumen se ha restablecido al valor predeterminado de 100.
+cmd.vol.incorrectArg=El volumen debe ser un número entero.
+cmd.vol.tooHigh=El volumen no puede superar 500.
+cmd.vol.tooLow=El volumen no puede ser menor que 0.
+cmd.vol.success=El volumen ha sido cambiado a {1}.
+cmd.vol.invalidValue=Valor inválido.
+
+statecheck.notAllowed=❌ **No permitido**
+
+statecheck.notInVC=No estás en un canal de voz.
+statecheck.botNotInVC=El bot no está en un canal de voz.
+statecheck.botNotInYourVC=El bot no está en tu canal de voz.
+statecheck.botBusy=El bot ya está siendo usado en otro canal de voz.
+statecheck.cannotJoin=El bot no puede unirse al canal de voz.
+statecheck.noDJ=No tienes permisos de DJ.
+statecheck.commandBlocked=Este comando está bloqueado en este canal.
+statecheck.isNotPlaying=El bot no está reproduciendo nada actualmente.
+statecheck.devOnly=Este comando es exclusivo para desarrolladores.
+
+pmanager.noSpotify=El bot no puede reproducir pistas de Spotify en estos momentos.
+pmanager.playlistQueued=Tamaño: **{1}** pistas.\nDuración: **{2}**\n\n
+pmanager.APIError=Ocurrió un error con la API de búsqueda de YouTube.
+pmanager.loadFailed=La pista no se pudo cargar: {1}.
+pmanager.noMatches=No se encontraron coincidencias para esta pista.
+
+tsched.autoplay.notFound=Autoplay no pudo encontrar {1}
+tsched.autoplay.noSimilar=Autoplay no pudo encontrar pistas similares.\n
+tsched.autoplay.unknownError=Un error desconocido ocurrió al intentar activar la reproducción automática.\n
+tsched.queued=♾️ Autoplay en cola:
+
+tsched.regfail=La pista falló al cargar debido a una razón desconocida. Omitiendo...
+
+tsched.critfail.title=❌ Error Crítico
+tsched.critfail.description=Las pistas han fallado al cargar 3 veces, probablemente debido a un problema de red fuera de nuestro control. Vaciando la cola para evitar la repetición de pistas.
+tsched.critfail.footer=Si este problema persiste con fuentes de audio específicas, por favor, envíe un informe de error usando /bug
+
+tsched.playnext.nowPlaying=Reproduciendo ahora: {1}
+
+main.day={1} día
+main.day.plural={1} días
+main.hour={1} hora
+main.hour.plural={1} horas
+main.minute={1} minuto
+main.minute.plural={1} minutos
+main.second={1} segundo
+main.second.plural={1} segundos
+
+main.success=Éxito
+main.noPermission=No tienes permisos para usar este comando.
+main.ratelimit=No puedes usar este comando durante los próximos {1} segundos.
+main.botNoPermission=No tengo permiso para leer o enviar mensajes a este canal.
+main.error=Error
+main.unknown=Desconocido
+main.channel=**Canal**\n
+main.duration=**Duración**\n
+main.update=El bot ha sido actualizado, ¡tu cola y parámetros han sido restablecidos!\nSi deseas conocer los cambios, siéntete libre de unirte al servidor de soporte que se encuentra en la sección "sobre mí" del bot.
+main.flag=🇪🇸
+main.languageName=español

@@ -1,9 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandEvent;
 import Bots.CommandStateChecker;
 import Bots.CommandStateChecker.Check;
-import Bots.CommandEvent;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -24,19 +24,19 @@ public class CommandPause extends BaseCommand {
 
         if (audioPlayer.getPlayingTrack() == null && !musicManager.scheduler.queue.isEmpty()) {
             musicManager.scheduler.nextTrack(); // No embed data :( (playNextTrack is private, dunno if its worth publicising)
-            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", "Resumed playing from the queue."));
+            event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", event.localise("cmd.pause.resumed")));
         } else {
             CommandStateChecker.CheckResult checkResult = PerformChecks(event, Check.IS_DJ, Check.IS_PLAYING);
             if (!checkResult.succeeded()) {
-                event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.getMessage()));
+                event.replyEmbeds(createQuickEmbed(event.localise("statecheck.notAllowed"), checkResult.getMessage()));
                 return;
             }
             if (audioPlayer.isPaused()) {
                 audioPlayer.setPaused(false);
-                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", "The track is now playing."));
+                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ▶", event.localise("cmd.pause.resumed")));
             } else {
                 audioPlayer.setPaused(true);
-                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", "The track is now paused."));
+                event.replyEmbeds(createQuickEmbed("\uD83C\uDFB5 ⏸", event.localise("cmd.pause.paused")));
             }
         }
     }
@@ -48,7 +48,7 @@ public class CommandPause extends BaseCommand {
 
     @Override
     public String[] getNames() {
-        return new String[]{"pause", "resume", "res", "continue", "unpause", "stop"};
+        return new String[]{"pause", "resume", "continue", "unpause", "stop", "start"};
     }
 
     @Override

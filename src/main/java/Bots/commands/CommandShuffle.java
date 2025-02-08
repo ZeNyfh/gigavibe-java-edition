@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -10,9 +10,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandShuffle extends BaseCommand {
     @Override
@@ -25,7 +22,7 @@ public class CommandShuffle extends BaseCommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("There is nothing in the queue."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.shuffle.emptyQueue")));
             return;
         }
 
@@ -34,7 +31,7 @@ public class CommandShuffle extends BaseCommand {
         for (AudioTrack audioTrack : queue) {
             musicManager.scheduler.queue(audioTrack.makeClone());
         }
-        event.replyEmbeds(createQuickEmbed("✅ **Success**", "Shuffled the queue!"));
+        event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.shuffle.shuffled")));
     }
 
     @Override

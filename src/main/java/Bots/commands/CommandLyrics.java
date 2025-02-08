@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.LRCLIBManager;
 import Bots.lavaplayer.PlayerManager;
@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import static Bots.Main.botColour;
-import static Bots.Main.createQuickError;
 
 public class CommandLyrics extends BaseCommand {
     @Override
@@ -30,16 +29,16 @@ public class CommandLyrics extends BaseCommand {
 
         String lyrics = LRCLIBManager.getLyrics(audioPlayer.getPlayingTrack()).trim();
         if (lyrics.isEmpty()) {
-            event.replyEmbeds(createQuickError("No results found or the song title was unknown."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.lyr.notFound")));
             return;
         }
-        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter("Lyrics sourced from lrclib.net");
+        EmbedBuilder builder = new EmbedBuilder().setColor(botColour).setFooter(event.localise("cmd.lyr.source"));
         String title = audioPlayer.getPlayingTrack().getInfo().title;
         if (audioPlayer.getPlayingTrack().getInfo().isStream && Objects.equals(audioPlayer.getPlayingTrack().getSourceManager().getSourceName(), "http")) {
             title = RadioDataFetcher.getStreamSongNow(audioPlayer.getPlayingTrack().getInfo().uri)[0];
         }
 
-        title = "Lyrics for: " + title;
+        title = event.localise("cmd.lyr.lyricsForTrack", title);
         if (title.length() > 256) {
             title = title.substring(0, 253) + "...";
         }
@@ -48,7 +47,7 @@ public class CommandLyrics extends BaseCommand {
             builder.setTitle(title);
             event.replyEmbeds(builder.build());
         } else {
-            builder.setDescription("Lyrics were too long, uploading them as a file.");
+            builder.setDescription(event.localise("cmd.lyr.tooLong"));
             event.replyEmbeds(builder.build());
             event.getChannel().sendFiles(FileUpload.fromData(lyrics.getBytes(StandardCharsets.UTF_8), title + ".txt")).queue();
         }

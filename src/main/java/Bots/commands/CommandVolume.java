@@ -1,15 +1,12 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-
-import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandVolume extends BaseCommand {
     @Override
@@ -24,28 +21,28 @@ public class CommandVolume extends BaseCommand {
         String[] args = event.getArgs();
         if (args.length == 1) {
             musicManager.audioPlayer.setVolume(100);
-            event.replyEmbeds(createQuickEmbed(" ", "✅ Set volume to the default of **100**."));
+            event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.vol.defaulted")));
         } else {
             if (args[1].matches("[^\\d.]")) {
-                event.replyEmbeds(createQuickError("The volume must be an integer."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.vol.incorrectArg")));
                 return;
             }
             if (args[1].matches("^\\d+$")) {
                 //If entire thing is a number
                 int volume = Integer.parseInt(args[1]);
                 if (volume > 500) {
-                    event.replyEmbeds(createQuickError("The volume can not be higher than 500."));
+                    event.replyEmbeds(event.createQuickError(event.localise("cmd.vol.tooHigh")));
                     return;
                 }
                 if (volume < 0) {
-                    event.replyEmbeds(createQuickError("The volume can not be lower than 0."));
+                    event.replyEmbeds(event.createQuickError(event.localise("cmd.vol.tooLow")));
                     return;
                 }
                 musicManager.audioPlayer.setVolume(volume);
-                event.replyEmbeds(createQuickEmbed(" ", "✅ Changed the volume to **" + volume + "**."));
+                event.replyEmbeds(event.createQuickSuccess(event.localise("cmd.vol.success", volume)));
             } else {
                 //More specific error if they don't get the point from the [^\\d.] error above
-                event.replyEmbeds(createQuickError("Invalid value."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.vol.invalidValue")));
             }
         }
     }

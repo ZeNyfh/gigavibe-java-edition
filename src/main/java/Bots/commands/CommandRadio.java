@@ -1,9 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
+import Bots.CommandEvent;
 import Bots.CommandStateChecker.Check;
 import Bots.CommandStateChecker.CheckResult;
-import Bots.CommandEvent;
 import Bots.lavaplayer.PlayerManager;
 import Bots.lavaplayer.RadioDataFetcher;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -84,12 +84,13 @@ public class CommandRadio extends BaseCommand {
         if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(botColour);
-            eb.appendDescription("\uD83D\uDCFB **Radio list:**\n\n");
+            eb.appendDescription(event.localise("cmd.radio.list"));
             getRadios().forEach((key, value) -> eb.appendDescription("**[" + key + "](" + value + ")**\n"));
-            eb.appendDescription("\n*Or use `" + readableBotPrefix + " radio search <String>`*");
-            eb.setFooter("Use \"" + readableBotPrefix + " radio <Radio Name>\" to play a radio station.");
+            eb.appendDescription("\n");
+            eb.appendDescription(event.localise("cmd.radio.alternativeList", readableBotPrefix, "radio search"));
+            eb.setFooter(event.localise("cmd.radio.useForPlay", readableBotPrefix, "radio"));
             if (event.getArgs().length == 1) {
-                event.replyEmbeds(createQuickError("No arguments given, heres some radio stations to choose from:"), eb.build());
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.noArgsList")), eb.build());
             } else {
                 event.replyEmbeds(eb.build());
             }
@@ -99,7 +100,7 @@ public class CommandRadio extends BaseCommand {
         // We have to do this later manually since a 1-arg version (see above) shouldn't invoke VC joining
         CheckResult checkResult = PerformChecks(event, Check.TRY_JOIN_VC);
         if (!checkResult.succeeded()) {
-            event.replyEmbeds(createQuickEmbed("❌ **Not Allowed**", checkResult.getMessage()));
+            event.replyEmbeds(createQuickEmbed(event.localise("statecheck.notAllowed"), checkResult.getMessage()));
             return;
         }
 
@@ -108,7 +109,7 @@ public class CommandRadio extends BaseCommand {
         StringBuilder radioSearchTerm = new StringBuilder();
         if (event.getArgs()[1].equalsIgnoreCase("search")) {
             if (event.getArgs().length == 2) {
-                event.replyEmbeds(createQuickError("No search term given."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.noSearchTerm")));
                 return;
             }
             List<String> otherArgs = new ArrayList<>(List.of(event.getArgs()));
@@ -127,21 +128,21 @@ public class CommandRadio extends BaseCommand {
         }
         if (radioURL != null) {
             if (radioURL.equals("None")) {
-                event.replyEmbeds(createQuickError("Couldn't find a radio station with the given name"));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.notFound")));
             } else {
                 PlayerManager.getInstance().loadAndPlay(event, radioURL, false);
-                event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
+                event.replyEmbeds(createQuickEmbed(event.localise("cmd.radio.queued"), "**[" + sanitise(RadioDataFetcher.getStreamTitle(radioURL)) + "](" + radioURL + ")**"));
             }
         } else {
             String wantedRadio = event.getContentRaw().split(" ", 2)[1].toLowerCase();
             for (Map.Entry<String, String> tempMap : getRadios().entrySet()) {
                 if (tempMap.getKey().equalsIgnoreCase(wantedRadio)) {
                     PlayerManager.getInstance().loadAndPlay(event, tempMap.getValue(), false);
-                    event.replyEmbeds(createQuickEmbed("Queued Radio station:", "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
+                    event.replyEmbeds(createQuickEmbed(event.localise("cmd.radio.queued"), "**[" + tempMap.getKey() + "](" + tempMap.getValue() + ")**"));
                     return;
                 }
             }
-            event.replyEmbeds(createQuickError("Not a valid radio station."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.radio.invalid")));
         }
     }
 

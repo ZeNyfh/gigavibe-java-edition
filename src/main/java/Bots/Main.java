@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -51,30 +52,24 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static Bots.GuildDataManager.*;
+import static Bots.CommandEvent.createQuickError;
+import static Bots.CommandEvent.createQuickSuccess;
+import static Bots.GuildDataManager.GetConfig;
+import static Bots.GuildDataManager.SaveConfigs;
+import static Bots.LocaleManager.getLocalisedTimeUnits;
+import static Bots.LocaleManager.managerLocalise;
 import static java.lang.System.currentTimeMillis;
 
 public class Main extends ListenerAdapter {
     // constants*
     public static final long startupTime = currentTimeMillis();
     public static final GatewayIntent[] INTENTS = {GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES};
-    public static Color botColour = new Color(0, 0, 0);
-    public static String botVersion = ""; // YY.MM.DD
-    private static JDA bot;
-
-    // config
-    public static String botPrefix = "";
-    public static String readableBotPrefix = "";
-    public static boolean ignoreFiles = false;
-
     // command management
     public static final List<BaseCommand> commands = new ArrayList<>();
     public static final List<SlashCommandData> slashCommands = new ArrayList<>();
     public static final List<String> commandNames = new ArrayList<>(); // Purely for conflict detection
     public static final Map<BaseCommand, Map<Long, Long>> ratelimitTracker = new HashMap<>();
     public static final ThreadPoolExecutor commandThreads = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-    public static JSONObject commandUsageTracker;
-
     // guild management
     public static final Map<Long, List<Member>> skipCountGuilds = new HashMap<>();
     public static final List<Long> AutoplayGuilds = new ArrayList<>();
@@ -82,9 +77,18 @@ public class Main extends ListenerAdapter {
     public static final List<Long> LoopQueueGuilds = new ArrayList<>();
     public static final Map<Long, Integer> trackLoops = new HashMap<>();
     public static final Map<Long, List<String>> autoPlayedTracks = new HashMap<>();
-
+    public static final Map<Long, Map<String, String>> guildLocales = new HashMap<>();
     // Event Mappings
     private static final Map<String, Consumer<ButtonInteractionEvent>> ButtonInteractionMappings = new HashMap<>();
+    private static final Map<String, Consumer<StringSelectInteractionEvent>> SelectionInteractionMappings = new HashMap<>();
+    public static Color botColour = new Color(0, 0, 0);
+    public static String botVersion = ""; // YY.MM.DD
+    // config
+    public static String botPrefix = "";
+    public static String readableBotPrefix = "";
+    public static boolean ignoreFiles = false;
+    public static JSONObject commandUsageTracker;
+    private static JDA bot;
 
     public static void main(String[] args) throws Exception {
         OutputLogger.Init("log.log");
@@ -108,11 +112,12 @@ public class Main extends ListenerAdapter {
                 .addEventListeners(new Main())
                 .build();
         bot.awaitReady();
+        LocaleManager.init(bot);
         bot.updateCommands().addCommands(slashCommands).queue();
         System.out.println("bot is now running, have fun ig");
         botPrefix = "<@" + bot.getSelfUser().getId() + ">";
         readableBotPrefix = "@" + bot.getSelfUser().getName();
-        bot.getPresence().setActivity(Activity.playing(String.format("music for %,d servers! | " + readableBotPrefix + " help", bot.getGuilds().size())));
+        bot.getPresence().setActivity(Activity.playing("music for " + bot.getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
         for (Guild guild : bot.getGuilds()) {
             trackLoops.put(guild.getIdLong(), 0);
             autoPlayedTracks.put(guild.getIdLong(), new ArrayList<>());
@@ -299,10 +304,6 @@ public class Main extends ListenerAdapter {
         return createQuickEmbed(title, description, null);
     }
 
-    public static MessageEmbed createQuickError(String description) {
-        return createQuickEmbed("❌ **Error**", description);
-    }
-
     public static AudioTrack getTrackFromQueue(Guild guild, int queuePos) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
@@ -313,10 +314,11 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    public static String toTimestamp(long seconds) {
+    public static String toTimestamp(long seconds, long guildID) {
+        Map<String, String> lang = Main.guildLocales.get(guildID);
         seconds /= 1000;
         if (seconds <= 0) {
-            return "0 seconds";
+            return String.format(getLocalisedTimeUnits(true, LocaleManager.TimeUnits.second.ordinal(), lang), "0");
         } else {
             long days = seconds / 86400;
             seconds %= 86400;
@@ -325,10 +327,26 @@ public class Main extends ListenerAdapter {
             long minutes = seconds / 60;
             seconds %= 60;
             ArrayList<String> totalSet = new ArrayList<>();
-            if (days != 0) totalSet.add(days + (days == 1 ? " day" : " days"));
-            if (hours != 0) totalSet.add(hours + (hours == 1 ? " hour" : " hours"));
-            if (minutes != 0) totalSet.add(minutes + (minutes == 1 ? " minute" : " minutes"));
-            if (seconds != 0) totalSet.add(seconds + (seconds == 1 ? " second" : " seconds"));
+
+            if (days != 0) {
+                String dayLabel = days == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.day.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.day.ordinal(), lang);
+                totalSet.add(String.format(dayLabel, days));
+            }
+
+            if (hours != 0) {
+                String hourLabel = hours == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.hour.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.hour.ordinal(), lang);
+                totalSet.add(String.format(hourLabel, hours));
+            }
+
+            if (minutes != 0) {
+                String minuteLabel = minutes == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.minute.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.minute.ordinal(), lang);
+                totalSet.add(String.format(minuteLabel, minutes));
+            }
+
+            if (seconds != 0) {
+                String secondLabel = seconds == 1 ? getLocalisedTimeUnits(false, LocaleManager.TimeUnits.second.ordinal(), lang) : getLocalisedTimeUnits(true, LocaleManager.TimeUnits.second.ordinal(), lang);
+                totalSet.add(String.format(secondLabel, seconds));
+            }
             return String.join(", ", totalSet);
         }
     }
@@ -367,15 +385,28 @@ public class Main extends ListenerAdapter {
         return String.join("", totalSet);
     }
 
+    public static String replaceAllNoRegex(String input, String toReplace, String replacement) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+
+        while (i < input.length()) {
+            if (i + toReplace.length() <= input.length() && input.startsWith(toReplace, i)) {
+                result.append(replacement);
+                i += toReplace.length();
+            } else {
+                result.append(input.charAt(i));
+                i++;
+            }
+        }
+        return result.toString();
+    }
+
     public static String sanitise(String str) {
-        String[] chars = new String[]{"_", "*", "`", "#", ">", "[", "]", "(", ")", "~"};
+        String[] chars = new String[]{"_", "`", "#", "(", ")", "~"};
 
         for (String c : chars) {
             if (str.contains(c)) {
-                // double \ for escaping the regex to ensure normal interpretation
-                // quadruple \ for the replacement because java sucks
-                // also intellij hates the idea of `"\\" + c` and insists its an error, so we use String.format to shut it up
-                str = str.replaceAll(String.format("\\%s", c), "\\\\" + c);
+                str = replaceAllNoRegex(str, c, String.format("\\%s", c));
             }
         }
         return str;
@@ -417,6 +448,19 @@ public class Main extends ListenerAdapter {
         }
     }
 
+    public static void registerSelectionInteraction(String[] names, Consumer<StringSelectInteractionEvent> func) {
+        for (String name : names) {
+            registerSelectionInteraction(name, func);
+        }
+    }
+
+    public static void registerSelectionInteraction(String name, Consumer<StringSelectInteractionEvent> func) {
+        if (SelectionInteractionMappings.containsKey(name)) {
+            System.err.println("Attempting to override the selection interaction manager for id " + name);
+        }
+        SelectionInteractionMappings.put(name, func);
+    }
+
     public static void registerButtonInteraction(String[] names, Consumer<ButtonInteractionEvent> func) {
         for (String name : names) {
             registerButtonInteraction(name, func);
@@ -455,10 +499,100 @@ public class Main extends ListenerAdapter {
         System.exit(0);
     }
 
+    private static void recoverQueues() throws FileNotFoundException {
+        File queueDir = new File(GuildDataManager.configFolder + "/queues/");
+        if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                file.delete();
+            }
+        } else {
+            System.out.println("restoring queues");
+            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
+                Scanner scanner = new Scanner(file);
+                String time;
+                try {
+                    time = scanner.nextLine();
+                } catch (Exception e) {
+                    scanner.close();
+                    file.delete();
+                    e.printStackTrace();
+                    continue;
+                }
+                if (System.currentTimeMillis() - Long.parseLong(time) > 60000) { // 60 seconds feels more reasonable for not restoring a queue
+                    scanner.close();
+                    ignoreFiles = file.delete();
+                    continue;
+                }
+
+                String guildID = scanner.nextLine();
+                String channelID = scanner.nextLine();
+                String vcID = scanner.nextLine();
+                String trackPos = scanner.nextLine();
+                // track states
+                boolean paused = Boolean.parseBoolean(scanner.nextLine());
+                boolean looping = Boolean.parseBoolean(scanner.nextLine());
+                boolean queueLooping = Boolean.parseBoolean(scanner.nextLine());
+                boolean autoplaying = Boolean.parseBoolean(scanner.nextLine());
+                // track modifiers
+                int volume = Integer.parseInt(scanner.nextLine());
+                double speed = Double.parseDouble(scanner.nextLine());
+                double pitch = Double.parseDouble(scanner.nextLine());
+                float frequency = Float.parseFloat(scanner.nextLine());
+                float depth = Float.parseFloat(scanner.nextLine());
+                try {
+                    Guild guild = bot.getGuildById(guildID);
+                    GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
+                    Map<String, String> lang = guildLocales.get(guild.getIdLong());
+                    VoiceChannel vc = guild.getVoiceChannelById(vcID);
+                    if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
+                        continue;
+                    }
+                    guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
+                    boolean first = true;
+                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine();
+                        if (first) {
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
+                                if (loadResult.songWasPlayed) {
+                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
+                                } else {
+                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
+                                }
+                            });
+                            first = false;
+                        } else {
+                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
+                        }
+                    }
+                    AudioPlayer player = musicManager.audioPlayer;
+                    // setting player states
+                    player.setPaused(paused);
+                    if (looping) LoopGuilds.add(Long.valueOf(guildID));
+                    if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
+                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
+                    // setting track modifiers
+                    player.setVolume(volume);
+                    // TODO: audio filters to be added here.
+
+                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickSuccess(managerLocalise("main.update", lang), lang)).queue();
+                    scanner.close();
+                    ignoreFiles = file.delete();
+                } catch (Exception e) {
+                    scanner.close();
+                    ignoreFiles = file.delete();
+                    e.printStackTrace();
+                }
+                scanner.close();
+                ignoreFiles = file.delete();
+            }
+        }
+    }
+
     @Override
     public void onGuildJoin(@NotNull GuildJoinEvent event) {
         trackLoops.put(event.getGuild().getIdLong(), 0);
-        event.getJDA().getPresence().setActivity(Activity.playing(String.format("music for %,d servers! | " + readableBotPrefix + " help", event.getJDA().getGuilds().size())));
+        event.getJDA().getPresence().setActivity(Activity.playing("music for " + event.getJDA().getGuilds().size() + " servers! | " + readableBotPrefix + " help"));
         try {
             GuildDataManager.CreateGuildConfig(event.getGuild().getIdLong());
         } catch (IOException e) {
@@ -488,6 +622,23 @@ public class Main extends ListenerAdapter {
             }
         }
         System.err.println("Button of ID " + buttonID + " has gone ignored - missing listener?");
+    }
+
+    @Override
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
+        String selectionID = event.getInteraction().getComponent().getId();
+        for (String name : SelectionInteractionMappings.keySet()) {
+            if (name.equalsIgnoreCase(selectionID)) {
+                try {
+                    SelectionInteractionMappings.get(name).accept(event);
+                } catch (Exception e) {
+                    System.err.println("Issue handling selection interaction for " + name);
+                    e.printStackTrace();
+                }
+                return;
+            }
+        }
+        System.err.println("Selection interaction of ID " + selectionID + " has gone ignored - missing listener?");
     }
 
     @Override
@@ -536,8 +687,9 @@ public class Main extends ListenerAdapter {
     private boolean processSlashCommand(BaseCommand Command, SlashCommandInteractionEvent event) {
         if (event.getInteraction().getName().equalsIgnoreCase(Command.getNames()[0])) {
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getInteraction().getMember()));
+            Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).setEphemeral(true).queue();
+                event.replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime), lang)).setEphemeral(true).queue();
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -559,16 +711,17 @@ public class Main extends ListenerAdapter {
         String commandLower = event.getMessage().getContentRaw().toLowerCase();
         commandLower = commandLower.replaceFirst(botPrefix, "").trim().replaceAll(" +", " ");
         if (commandLower.startsWith(matchTerm)) {
-            if (commandLower.length() != matchTerm.length()) { //Makes sure we arent misinterpreting
+            if (commandLower.length() != matchTerm.length()) { //Makes sure we aren't misinterpreting
                 String afterChar = commandLower.substring(matchTerm.length(), matchTerm.length() + 1);
-                if (!afterChar.equals(" ") && !afterChar.equals("\n")) { //Ensure theres whitespace afterwards
+                if (!afterChar.equals(" ") && !afterChar.equals("\n")) { //Ensure there's whitespace afterwards
                     return false;
                 }
             }
             //ratelimit code. ratelimit is per-user per-guild
             float ratelimitTime = handleRateLimit(Command, Objects.requireNonNull(event.getMember()));
+            Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
             if (ratelimitTime > 0) {
-                event.getMessage().replyEmbeds(createQuickError("You cannot use this command for another " + ratelimitTime + " seconds.")).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
+                event.getMessage().replyEmbeds(createQuickError(managerLocalise("main.ratelimit", lang, ratelimitTime), lang)).queue(message -> message.delete().queueAfter((long) ratelimitTime, TimeUnit.SECONDS));
             } else {
                 //run command
                 String primaryName = Command.getNames()[0];
@@ -599,11 +752,12 @@ public class Main extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (!event.isFromGuild()) {
-            event.replyEmbeds(createQuickError("I don't currently work outside of guilds.")).queue();
+            event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.", LocaleManager.languages.get("english"))).queue(); // this cannot be localised because it isn't in a guild.
             return;
         }
+        Map<String, String> lang = guildLocales.get(Objects.requireNonNull(event.getGuild()).getIdLong());
         if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) {
-            event.replyEmbeds(createQuickError("I don't have permission to read or send messages to this channel.")).setEphemeral(true).queue();
+            event.replyEmbeds(createQuickError(managerLocalise("main.botNoPermission", lang), lang)).setEphemeral(true).queue();
             return;
         }
         for (BaseCommand Command : commands) {
@@ -633,94 +787,5 @@ public class Main extends ListenerAdapter {
 
     public enum AudioFilters {
         Vibrato, Timescale
-    }
-
-    private static void recoverQueues() throws FileNotFoundException {
-        File queueDir = new File(GuildDataManager.configFolder + "/queues/");
-        if (Objects.requireNonNull(queueDir.listFiles()).length == 0) { // can be safely ignored and the files can be deleted.
-            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
-                file.delete();
-            }
-        } else {
-            System.out.println("restoring queues");
-            for (File file : Objects.requireNonNull(queueDir.listFiles())) {
-                Scanner scanner = new Scanner(file);
-                String time;
-                try {
-                    time = scanner.nextLine();
-                } catch (Exception e) {
-                    scanner.close();
-                    file.delete();
-                    e.printStackTrace();
-                    continue;
-                }
-                if (System.currentTimeMillis() - Long.parseLong(time) > 60000) { // 60 seconds feels more reasonable for not restoring a queue
-                    scanner.close();
-                    ignoreFiles = file.delete();
-                    continue;
-                }
-
-                String guildID = scanner.nextLine();
-                String channelID = scanner.nextLine();
-                String vcID = scanner.nextLine();
-                String trackPos = scanner.nextLine();
-                // track states
-                boolean paused = Boolean.parseBoolean(scanner.nextLine());
-                boolean looping = Boolean.parseBoolean(scanner.nextLine());
-                boolean queueLooping = Boolean.parseBoolean(scanner.nextLine());
-                boolean autoplaying = Boolean.parseBoolean(scanner.nextLine());
-                // track modifiers
-                int volume = Integer.parseInt(scanner.nextLine());
-                double speed = Double.parseDouble(scanner.nextLine());
-                double pitch = Double.parseDouble(scanner.nextLine());
-                float frequency = Float.parseFloat(scanner.nextLine());
-                float depth = Float.parseFloat(scanner.nextLine());
-                try {
-                    Guild guild = bot.getGuildById(guildID);
-                    GuildMessageChannelUnion channelUnion = (GuildMessageChannelUnion) Objects.requireNonNull(guild).getGuildChannelById(channelID);
-                    VoiceChannel vc = guild.getVoiceChannelById(vcID);
-                    if (Objects.requireNonNull(vc).getMembers().isEmpty()) {
-                        continue;
-                    }
-                    guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(vcID));
-                    boolean first = true;
-                    GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        if (first) {
-                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false).whenComplete((loadResult, throwable) -> {
-                                if (loadResult.songWasPlayed) {
-                                    PlayerManager.getInstance().getMusicManager(guild).audioPlayer.getPlayingTrack().setPosition(Long.parseLong(trackPos));
-                                } else {
-                                    System.err.println("Track " + line + " from a restored queue was unable to be loaded: " + loadResult.name());
-                                }
-                            });
-                            first = false;
-                        } else {
-                            PlayerManager.getInstance().loadAndPlay(channelUnion, line, false);
-                        }
-                    }
-                    AudioPlayer player = musicManager.audioPlayer;
-                    // setting player states
-                    player.setPaused(paused);
-                    if (looping) LoopGuilds.add(Long.valueOf(guildID));
-                    if (queueLooping) LoopQueueGuilds.add(Long.valueOf(guildID));
-                    if (autoplaying) AutoplayGuilds.add(Long.valueOf(guildID));
-                    // setting track modifiers
-                    player.setVolume(volume);
-                    // TODO: audio filters to be added here.
-
-                    Objects.requireNonNull(channelUnion).sendMessageEmbeds(createQuickEmbed("✅ **Success**", "An update to the bot occurred, your queue and parameters have been restored!\n-# If you wish to see what changed, feel free to join the support server found in the bot's about me.")).queue();
-                    scanner.close();
-                    ignoreFiles = file.delete();
-                } catch (Exception e) {
-                    scanner.close();
-                    ignoreFiles = file.delete();
-                    e.printStackTrace();
-                }
-                scanner.close();
-                ignoreFiles = file.delete();
-            }
-        }
     }
 }

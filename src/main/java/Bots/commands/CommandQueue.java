@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
+import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
 public class CommandQueue extends BaseCommand {
@@ -25,6 +26,7 @@ public class CommandQueue extends BaseCommand {
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(Objects.requireNonNull(event.getGuild()));
         final BlockingQueue<AudioTrack> Queue = manager.scheduler.queue;
+        Map<String, String> lang = guildLocales.get(event.getGuild().getIdLong());
         int newPageNumber = 1;
         if (Objects.equals(event.getButton().getId(), "forward")) {
             newPageNumber = queuePages.getOrDefault(event.getGuild().getIdLong(), 1) + 1;
@@ -49,11 +51,12 @@ public class CommandQueue extends BaseCommand {
         if (track == null) {
             System.out.println("WARNING: No active song despite populated queue");
         } else {
-            eb.setTitle("__**Now playing:**__\n" + track.getInfo().title, track.getInfo().uri);
+            eb.setTitle(managerLocalise("cmd.q.nowPlaying", lang, track.getInfo().title), track.getInfo().uri);
             if (PlayerManager.getInstance().getThumbURL(track) != null)
                 eb.setThumbnail(PlayerManager.getInstance().getThumbURL(track));
         }
-        eb.setFooter(Queue.size() + " songs queued | Page " + newPageNumber + "/" + maxPage + " | Length: " + toTimestamp(queueTimeLength));
+        eb.setTitle(managerLocalise("cmd.q.nowPlaying", lang, Objects.requireNonNull(track).getInfo().title), track.getInfo().uri);
+        eb.setFooter(managerLocalise("cmd.q.queueInfoFooter", lang, Queue.size(), newPageNumber, maxPage, toTimestamp(queueTimeLength, event.getGuild().getIdLong())));
         eb.setColor(botColour);
         event.getInteraction().editMessageEmbeds(eb.build()).queue();
     }
@@ -74,18 +77,20 @@ public class CommandQueue extends BaseCommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         List<AudioTrack> queue = new ArrayList<>(musicManager.scheduler.queue);
         if (queue.isEmpty()) {
-            event.replyEmbeds(createQuickError("The queue is empty."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.q.empty")));
             return;
         }
         EmbedBuilder embed = new EmbedBuilder();
         AudioTrack track = audioPlayer.getPlayingTrack();
+
         if (track == null) {
             System.out.println("WARNING: No active song despite populated queue");
         } else {
             String title = track.getInfo().title;
-            if (title == null) title = "Unknown title";
-            embed.setTitle("__**Now playing:**__\n" + title, track.getInfo().uri);
+            if (track.getInfo().title == null) title = event.localise("cmd.q.unknownTitle");
+            embed.setTitle(event.localise("cmd.q.nowPlaying", title), track.getInfo().uri);
         }
+
         int queueLength = queue.size();
         long queueTimeLength = 0;
         for (AudioTrack audioTrack : queue) {
@@ -98,11 +103,11 @@ public class CommandQueue extends BaseCommand {
         int pageNumber = 1;
         if (args.length >= 2) {
             if (args[1].equalsIgnoreCase("clear")) {
-                event.replyEmbeds(createQuickError("Did you mean to use **clearqueue**?"));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.q.didYouMean", "clearqueue")));
                 return;
             }
             if (!args[1].matches("^\\d+$")) {
-                event.replyEmbeds(createQuickError("The page must be a positive integer."));
+                event.replyEmbeds(event.createQuickError(event.localise("cmd.q.integerError")));
                 return;
             }
             pageNumber = Math.max(Integer.parseInt(args[1]), 1); //page 0 is a bad idea
@@ -112,7 +117,9 @@ public class CommandQueue extends BaseCommand {
             AudioTrackInfo trackInfo = queue.get(i).getInfo();
             embed.appendDescription(i + 1 + ". [" + trackInfo.title + "](" + trackInfo.uri + ")\n");
         }
-        embed.setFooter(queueLength + " songs queued | Page " + pageNumber + "/" + ((queueLength + 4) / 5) + " | Length: " + toTimestamp(queueTimeLength));
+        String playbackLength = toTimestamp(queueTimeLength, event.getGuild().getIdLong());
+
+        embed.setFooter(event.localise("cmd.q.queueInfoFooter", queueLength, pageNumber, (queueLength + 4) / 5, playbackLength));
         embed.setColor(botColour);
         if (track != null && PlayerManager.getInstance().getThumbURL(track) != null)
             embed.setThumbnail(PlayerManager.getInstance().getThumbURL(track));

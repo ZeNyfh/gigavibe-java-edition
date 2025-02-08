@@ -61,6 +61,7 @@ public class GuildDataManager {
         defaultConfig.put("BlockedChannels", new JSONArray());
         defaultConfig.put("DJRoles", new JSONArray());
         defaultConfig.put("DJUsers", new JSONArray());
+        defaultConfig.put("Locale", "english");
         return defaultConfig;
     }
 

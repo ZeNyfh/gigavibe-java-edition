@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.LastFMManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -21,14 +21,14 @@ public class CommandAutoplay extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         if (!LastFMManager.hasAPI) {
-            event.replyEmbeds(createQuickError("The bot has not been given an API key for LastFM, this command does not work without it."));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ap.noAPI")));
             return;
         }
         if (AutoplayGuilds.contains(event.getGuild().getIdLong())) {
-            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", "No longer autoplaying."));
+            event.replyEmbeds(createQuickEmbed("❌ ♾\uFE0F", event.localise("cmd.ap.notAutoplaying")));
             AutoplayGuilds.remove(event.getGuild().getIdLong());
         } else {
-            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", "Now autoplaying."));
+            event.replyEmbeds(createQuickEmbed("✅ ♾\uFE0F", event.localise("cmd.ap.isAutoplaying")));
             AutoplayGuilds.add(event.getGuild().getIdLong());
             AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
             if (track != null) {

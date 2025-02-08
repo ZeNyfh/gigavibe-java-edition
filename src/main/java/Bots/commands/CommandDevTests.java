@@ -1,8 +1,9 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
+import Bots.LocaleManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,12 +14,32 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import static Bots.Main.*;
 
 public class CommandDevTests extends BaseCommand {
+    private static void writeGuilds(CommandEvent event) {
+        JDA bot = event.getJDA();
+        List<Guild> guilds = bot.getGuilds();
+        StringBuilder builder = new StringBuilder();
+        for (Guild g : guilds) {
+            builder.append(g.getName()).append(",").append(g.getMemberCount()).append("\n");
+        }
+        File file = new File("guilds.csv");
+        try {
+            file.delete();
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            writer.write(String.valueOf(builder));
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(builder);
+    }
+
     private void HandleButtonEvent(ButtonInteractionEvent event) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(botColour);
@@ -65,31 +86,13 @@ public class CommandDevTests extends BaseCommand {
             } else if (command.equalsIgnoreCase("guilds")) {
                 writeGuilds(event);
                 event.reply("File made guilds.csv.");
+            } else if (command.equalsIgnoreCase("reloadlocale")) {
+                LocaleManager.init(event.getJDA());
+                event.reply("reinitialised all locales.");
             } else {
                 event.reply("Unrecognised dev command " + command);
             }
         }
-    }
-
-    private static void writeGuilds(CommandEvent event) {
-        JDA bot = event.getJDA();
-        List<Guild> guilds = bot.getGuilds();
-        StringBuilder builder = new StringBuilder();
-        for (Guild g : guilds) {
-            builder.append(g.getName().replaceAll(",", "")).append(",").append(g.getMemberCount()).append(",").append(g.getLocale().getLanguageName()).append("\n");
-        }
-        File file = new File("guilds.csv");
-        try {
-            file.delete();
-            file.createNewFile();
-            FileWriter writer = new FileWriter(file);
-            writer.write(String.valueOf(builder));
-            writer.flush();
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(builder);
     }
 
     @Override
@@ -109,7 +112,7 @@ public class CommandDevTests extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "(dirty-config | test-buttons | threads | sleep)"; //(Command1 | Command2 | Command3) - add them here once they exist
+        return "(dirty-config | test-buttons | threads | sleep | guilds | reloadlocale)"; //(Command1 | Command2 | Command3) - add them here once they exist
     }
 
     @Override

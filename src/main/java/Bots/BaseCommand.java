@@ -21,7 +21,7 @@ public abstract class BaseCommand {
     public final void executeWithChecks(CommandEvent event) throws Exception { //For main - do not override
         CheckResult checkResult = PerformChecks(event, this.getChecks());
         if (!checkResult.succeeded()) {
-            event.replyEmbeds(Main.createQuickEmbed("❌ **Not Allowed**", checkResult.getMessage()));
+            event.replyEmbeds(Main.createQuickEmbed(event.localise("statecheck.notAllowed"), checkResult.getMessage()));
         } else {
             this.execute(event);
         }
@@ -33,7 +33,7 @@ public abstract class BaseCommand {
 
     public abstract String getDescription(); //The description, used by cmds
 
-    public String getOptions() { //The options text used by help / cmds. Purely decorative
+    public String getOptions() { //The options text used by help. Purely decorative
         return "";
     }
 

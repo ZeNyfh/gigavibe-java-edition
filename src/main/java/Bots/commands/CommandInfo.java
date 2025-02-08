@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.Main;
 import Bots.CommandEvent;
+import Bots.Main;
 import Bots.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -32,22 +32,22 @@ public class CommandInfo extends BaseCommand {
 
         long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(event.getJDA().getSelfUser().getName() + " Info", null);
+        eb.setTitle(event.localise("cmd.info.info", event.getJDA().getSelfUser().getName()), null);
         eb.setColor(botColour);
-        eb.appendDescription("\uD83D\uDD27  **Ram usage:** " + String.format("%,d", memoryUsed / 1024 / 1024) + "MB\n\n");
+        eb.appendDescription(event.localise("cmd.info.ramUsage", String.format("%,d", memoryUsed / 1024 / 1024)));
         long finalUptime = currentTimeMillis() - Main.startupTime;
-        String finalTime = toTimestamp(finalUptime);
-        eb.appendDescription("⏰ **Uptime:** " + finalTime + "\n\n");
-        eb.appendDescription("\uD83D\uDCE1 **Guilds:** " + String.format("%,d", event.getJDA().getGuilds().size()) + "\n\n");
-        eb.appendDescription("\uD83D\uDC64 **Users:** " + String.format("%,d", memberCount) + "\n\n");
-        eb.appendDescription("\uD83D\uDCD1 **Registered Commands: **" + CommandCount + "\n\n");
-        eb.appendDescription("\uD83C\uDFB5 **VCs: ** " + vcCount + "\n\n");
-        eb.appendDescription("\uD83D\uDD0A **Playing Count: ** " + playingCount + "\n\n");
-        eb.appendDescription("⏱️ **Gateway Ping: **" + event.getJDA().getGatewayPing() + "ms\n\n");
-        eb.setFooter("Version: " + botVersion);
+        String finalTime = toTimestamp(finalUptime, event.getGuild().getIdLong());
+        eb.appendDescription(event.localise("cmd.info.upTime", finalTime));
+        eb.appendDescription(event.localise("cmd.info.discordServers", String.format("%,d", event.getJDA().getGuilds().size())));
+        eb.appendDescription(event.localise("cmd.info.discordMembers", String.format("%,d", memberCount)));
+        eb.appendDescription(event.localise("cmd.info.registeredCommands", CommandCount));
+        eb.appendDescription(event.localise("cmd.info.voiceChannels", vcCount));
+        eb.appendDescription(event.localise("cmd.info.playingCount", playingCount));
+        eb.appendDescription(event.localise("cmd.info.gatewayPing", event.getJDA().getGatewayPing()));
+        eb.setFooter(event.localise("cmd.info.version", botVersion));
         long time = currentTimeMillis();
         event.replyEmbeds(response -> {
-            eb.appendDescription("⏱️  **Ping:** " + (currentTimeMillis() - time) + "ms");
+            eb.appendDescription("⏱️  " + event.localise("cmd.info.ping", currentTimeMillis() - time));
             response.editMessageEmbeds(eb.build());
         }, eb.build());
     }

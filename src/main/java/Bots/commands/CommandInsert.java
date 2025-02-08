@@ -1,8 +1,8 @@
 package Bots.commands;
 
 import Bots.BaseCommand;
-import Bots.CommandStateChecker.Check;
 import Bots.CommandEvent;
+import Bots.CommandStateChecker.Check;
 import Bots.lavaplayer.GuildMusicManager;
 import Bots.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Bots.Main.createQuickEmbed;
-import static Bots.Main.createQuickError;
 
 public class CommandInsert extends BaseCommand {
     @Override
@@ -29,11 +28,11 @@ public class CommandInsert extends BaseCommand {
         String[] args = event.getContentRaw().split(" ", 3);
         // check here to ensure args[2] is never undefined.
         if (args.length != 3) {
-            event.replyEmbeds(createQuickError("Not enough arguments provided\nUsage: `<Integer> <URL/SearchTerm>`"));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.notEnoughArgs")));
             return;
         }
         if (!args[1].matches("^\\d+$")) {
-            event.replyEmbeds(createQuickError("Invalid arguments, integers only\nUsage: `<Integer> <URL/SearchTerm>`"));
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.invalidArgs")));
             return;
         }
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
@@ -66,7 +65,7 @@ public class CommandInsert extends BaseCommand {
                     PlayerManager.getInstance().loadAndPlay(event, track, sendEmbedBool);
                     sendEmbedBool = false;
                 } catch (FriendlyException ignored) {
-                    event.replyEmbeds(createQuickError("Something went wrong when decoding the track."));
+                    event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.decodingError")));
                 }
             }
         } else {
@@ -83,9 +82,9 @@ public class CommandInsert extends BaseCommand {
                             musicManager.scheduler.queue(TemporaryQueue.get(i));
                         }
                         if (loadResult.songWasPlayed) {
-                            event.replyEmbeds(createQuickEmbed(" ", "Added the track to position **" + args[1] + "**"));
+                            event.replyEmbeds(createQuickEmbed(" ", event.localise("cmd.ins.addedToPos", args[1])));
                         } else {
-                            event.replyEmbeds(createQuickError("There was an error while adding the track to the queue: `" + loadResult.name() + "`"));
+                            event.replyEmbeds(event.createQuickError(event.localise("cmd.ins.queueError", loadResult.name())));
                         }
                     });
                 }
