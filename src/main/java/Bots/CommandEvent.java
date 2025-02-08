@@ -117,6 +117,9 @@ public class CommandEvent {
     }
 
     public static MessageEmbed createQuickSuccess(String description, Map<String, String> lang) {
+        if (lang == null) {
+            return createQuickEmbed("✅ **Success**", description);
+        }
         return createQuickEmbed("✅ **" + LocaleManager.managerLocalise("main.success", lang) + "**", description);
     }
 
@@ -125,6 +128,9 @@ public class CommandEvent {
     }
 
     public static MessageEmbed createQuickError(String description, Map<String, String> lang) {
+        if (lang == null) {
+            return createQuickEmbed("❌ **Error**", description);
+        }
         return createQuickEmbed("❌ **" + LocaleManager.managerLocalise("main.error", lang) + "**", description);
     }
 
