@@ -25,7 +25,6 @@ public class CommandLocale extends BaseCommand {
         }
 
         String label = event.getInteraction().getSelectedOptions().get(0).getValue();
-        System.out.println(label);
 
         JSONObject config = GetGuildConfig(Objects.requireNonNull(event.getGuild()).getIdLong());
         config.put("Locale", label);
