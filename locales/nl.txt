@@ -23,7 +23,7 @@ cmd.bc.noChannels=**Geen**
 cmd.bug.noReport=Geef hier aan wat u te melden heeft.
 cmd.bug.successMessage=Bedankt voor uw inzet!\nDe developer zal bereikbaar zijn via de bot's DM's.\nGebruik de **{1}** command om te reageren op de berichten.\n
 
-cmd.cq.cleared=De wachtrij is leeggemaakt.
+cmd.cq.cleared=De wachtrij is leeg gemaakt.
 
 cmd.dc.disconnected=Het spraakkanaal is verlaten en de wachtrij is leeg gemaakt.
 
