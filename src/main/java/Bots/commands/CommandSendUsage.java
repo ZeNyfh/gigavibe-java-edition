@@ -32,8 +32,12 @@ public class CommandSendUsage extends BaseCommand {
         eb.appendDescription("```js\n");
         for (int i = values.length - 1; i >= 0; i--) {
             String reference = InverseReference.get(values[i]).remove(0);
+            if (reference.endsWith("command")) continue;
             eb.appendDescription(reference + ": " + values[i] + "\n");
         }
+        eb.appendDescription("\nslashcommand: "+ commandUsageTracker.get("slashcommand"));
+        eb.appendDescription("\nprefixcommand: "+ commandUsageTracker.get("prefixcommand"));
+
         eb.appendDescription("```");
         event.replyEmbeds(eb.build());
     }

@@ -278,6 +278,8 @@ public class Main extends ListenerAdapter {
         command.Init();
         ratelimitTracker.put(command, new HashMap<>());
         commandUsageTracker.putIfAbsent(command.getNames()[0], 0L);
+        commandUsageTracker.putIfAbsent("slashcommand", 0L);
+        commandUsageTracker.putIfAbsent("prefixcommand", 0L);
         commands.add(command);
         SlashCommandData slashCommand = Commands.slash(command.getNames()[0], command.getDescription());
         command.ProvideOptions(slashCommand);
@@ -697,6 +699,7 @@ public class Main extends ListenerAdapter {
                 //run command
                 String primaryName = Command.getNames()[0];
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                commandUsageTracker.put("slashcommand", Long.parseLong(String.valueOf(commandUsageTracker.get("slashcommand"))) + 1);
                 commandThreads.submit(() -> {
                     try {
                         Command.executeWithChecks(new CommandEvent(event));
@@ -729,6 +732,7 @@ public class Main extends ListenerAdapter {
                 //run command
                 String primaryName = Command.getNames()[0];
                 commandUsageTracker.put(primaryName, Long.parseLong(String.valueOf(commandUsageTracker.get(primaryName))) + 1); //Nightmarish type conversion but I'm not seeing better
+                commandUsageTracker.put("prefixcommand", Long.parseLong(String.valueOf(commandUsageTracker.get("prefixcommand"))) + 1);
                 commandThreads.submit(() -> {
                     try {
                         Command.executeWithChecks(new CommandEvent(event));
