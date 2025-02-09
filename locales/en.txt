@@ -250,5 +250,5 @@ main.unknown=Unknown
 main.channel=**Channel**\n
 main.duration=**Duration**\n
 main.update=An update to the bot occurred, your queue and parameters have been restored!\nIf you wish to see what changed, feel free to join the support server found in the bot's about me. // a newline.
-main.flag=🇬🇧 // the flag of the language you are translating into (if no flag exists, you can just use )
+main.flag=🇬🇧 // the flag of the language you are translating into (if no flag exists, you can just use 🏳️)
 main.languageName=english // the name of the language you are translating into
