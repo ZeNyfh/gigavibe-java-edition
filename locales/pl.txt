@@ -211,6 +211,8 @@ pmanager.playlistQueued=Ilość: **{1}** utworów.\nDługość: **{2}**\n\n
 pmanager.APIError=Wystąpił błąd w API wyszukiwania YouTube.
 pmanager.loadFailed=Utwór nie został załadowany: {1}
 pmanager.noMatches=Nie znaleziono żadnych wyników dla tego utworu.
+pmanager.duration=Czas trwania: `{1}`\n
+pmanager.channel=Kanał: `{1}`
 
 tsched.autoplay.notFound=Autoodtwarzanie nie mogło znaleźć {1}
 tsched.autoplay.noSimilar=Autoodtwarzanie nie mogło znaleźć podobnych utworów.\n

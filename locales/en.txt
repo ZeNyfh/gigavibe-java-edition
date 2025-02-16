@@ -216,6 +216,8 @@ pmanager.playlistQueued=Size: **{1}** tracks.\nLength: **{2}**\n\n // 1 is the a
 pmanager.APIError=An error with the YouTube search API has occurred.
 pmanager.loadFailed=The track failed to load: {1}
 pmanager.noMatches=No matches found for the track.
+pmanager.duration=Duration: `{1}`\n
+pmanager.channel=Channel: `{1}`
 
 tsched.autoplay.notFound=Autoplay failed to find {1} // a track name
 tsched.autoplay.noSimilar=Autoplay could not find similar tracks.\n

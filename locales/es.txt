@@ -202,6 +202,8 @@ pmanager.playlistQueued=Tamaño: **{1}** pistas.\nDuración: **{2}**\n\n
 pmanager.APIError=Ocurrió un error con la API de búsqueda de YouTube.
 pmanager.loadFailed=La pista no se pudo cargar: {1}.
 pmanager.noMatches=No se encontraron coincidencias para esta pista.
+pmanager.duration=Duración: `{1}`\n
+pmanager.channel=Canal: `{1}`
 
 tsched.autoplay.notFound=Autoplay no pudo encontrar {1}
 tsched.autoplay.noSimilar=Autoplay no pudo encontrar pistas similares.\n

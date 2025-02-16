@@ -211,6 +211,8 @@ pmanager.playlistQueued=Størrelse: **{1}** numre.\nLængde: **{2}**\n\n
 pmanager.APIError=Der opstod en fejl med YouTubes søge-API.
 pmanager.loadFailed=Nummeret kunne ikke indlæses: {1}
 pmanager.noMatches=Der blev ikke fundet noget lignende for dette nummer.
+pmanager.duration=Kanal: `{1}`\n
+pmanager.channel=Varighed: `{1}`
 
 tsched.autoplay.notFound=Autoplay kunne ikke finde {1}
 tsched.autoplay.noSimilar=Autoplay kunne ikke finde lignende numre.\n

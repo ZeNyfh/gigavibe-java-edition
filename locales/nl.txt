@@ -211,6 +211,8 @@ pmanager.playlistQueued=Grootte: **{1}** nummers.\nLengte: **{2}**\n\n
 pmanager.APIError=Er is een fout opgetreden met de YouTube-zoek-API.
 pmanager.loadFailed=Het nummer kon niet worden geladen: {1}
 pmanager.noMatches=Er zijn geen overeenkomsten gevonden voor dit nummer.
+pmanager.duration=Duur: `{1}`\n
+pmanager.channel=Kanaal: `{1}`
 
 tsched.autoplay.notFound=Autoplay kon {1} niet vinden
 tsched.autoplay.noSimilar=Autoplay kon geen vergelijkbare nummers vinden.\n

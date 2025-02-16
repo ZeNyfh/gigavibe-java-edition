@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.CommandEvent.createQuickError;
+import static Bots.LocaleManager.languages;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
@@ -124,12 +125,14 @@ public class PlayerManager {
             embed.setTitle(sanitise(audioTrack.getInfo().title), audioTrack.getInfo().uri);
         }
         String length;
+        long guildId = ((TrackUserData) audioTrack.getUserData()).guildId;
+        Map<String, String> lang = guildLocales.get(guildId);
         if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
-            length = "Unknown";
+            length = managerLocalise("main.unknown", lang);
         } else {
-            length = toTimestamp(audioTrack.getInfo().length, ((TrackUserData) audioTrack.getUserData()).guildId);
+            length = toTimestamp(audioTrack.getInfo().length, guildId);
         }
-        embed.setDescription("Duration: `" + length + "`\n" + "Channel: `" + audioTrack.getInfo().author + "`");
+        embed.setDescription(managerLocalise("pmanager.duration", lang, length) + managerLocalise("pmanager.channel", lang, audioTrack.getInfo().author));
         return embed;
     }
 
