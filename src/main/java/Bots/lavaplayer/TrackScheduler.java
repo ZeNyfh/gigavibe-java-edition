@@ -193,10 +193,10 @@ public class TrackScheduler extends AudioEventAdapter {
                 nextTrack.getInfo().title)), nextTrack.getInfo().uri
         );
 
-        eb.setDescription(managerLocalise("main.channel", lang, (nextTrack.getInfo().author.isEmpty() ?
+        eb.appendDescription(managerLocalise("main.channel", lang));
+        eb.appendDescription((nextTrack.getInfo().author.isEmpty() ?
                 lang.get("main.unknown") :
-                nextTrack.getInfo().author))
-        );
+                nextTrack.getInfo().author));
 
         eb.addField(managerLocalise("main.duration", lang),
                 nextTrack.getInfo().length > 432000000 ? lang.get("main.unknown") :
