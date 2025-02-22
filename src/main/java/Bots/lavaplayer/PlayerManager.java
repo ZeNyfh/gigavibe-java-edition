@@ -41,6 +41,10 @@ import static Bots.LocaleManager.languages;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
+/**
+ * Handles audio player functionality and user interfacing of the bot for those actions, E.g. playing song(s), and outputting embed messages
+ * and system logs where necessary.
+ */
 public class PlayerManager {
     private static final Map<String, Pattern> patterns = new HashMap<>() {{
         put("Spotify", Pattern.compile("<img src=\"([^\"]+)\" width=\""));
@@ -51,6 +55,9 @@ public class PlayerManager {
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
 
+    /**
+     * Constructs a new <code>PlayerManager</code>, initialising various <code>AudioSourceManager</code>s.
+     */
     public PlayerManager() {
         this.musicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
@@ -87,6 +94,12 @@ public class PlayerManager {
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
 
+    /**
+     * Returns a <code>PlayerManager</code> instance if one exists. Otherwise it will instantiate and return one.
+     * Prevents multiple instances of <code>PlayerManager</code>.
+     *
+     * @return  A <code>PlayerManager</code> instace.
+     */
     public synchronized static PlayerManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PlayerManager();
@@ -94,6 +107,13 @@ public class PlayerManager {
         return INSTANCE;
     }
 
+    /**
+     * Returns a <code>GuildMusicManager</code> of the <code>guild</code> specified, if it has been assigned one.
+     * Otherwise, a new <code>GuildMusicManager</code> will be instantiated, added to the <code>musicManagers</code> map and returned.
+     *
+     * @param guild     A <code>Guild</code> object.
+     * @return          A <code>GuildMusicManager</code> object.
+     */
     public synchronized GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
@@ -112,7 +132,13 @@ public class PlayerManager {
         });
     }
 
-
+    /**
+     * Creates an <code>EmbedBuilder</code> object using the <code>audioTrack</code>'s information.
+     * The embed's duration in the description might be "Unknown" if the track's <code>length</code> is too high (5+ days) or low.
+     *
+     * @param audioTrack    An <code>AudioTrack</code> object.
+     * @return              An <code>EmbedBuilder</code> object.
+     */
     public EmbedBuilder createTrackEmbed(AudioTrack audioTrack) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(botColour);
@@ -136,6 +162,14 @@ public class PlayerManager {
         return embed;
     }
 
+    /**
+     * Sends an embed into a given event or channel, either replying to the <code>CommandEvent</code> or simply sending
+     * the embed without replying to anything.
+     *
+     * @param eventOrChannel    The event or channel in which the embed is to be sent.
+     * @param embed             The embed to be sent in the <code>eventOrChannel</code>.
+     * @param forceSendChannel  Whether to force a send without replying to the <code>CommandEvent</code>.
+     */
     private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed, boolean forceSendChannel) {
         if (eventOrChannel instanceof CommandEvent) {
             if (forceSendChannel) {
@@ -148,10 +182,27 @@ public class PlayerManager {
         }
     }
 
+    /**
+     * Sends an embed into a given event or channel and replies to the <code>CommandEvent</code>. Shortened overload of
+     * {@link #replyWithEmbed(Object, MessageEmbed, boolean)}.
+     *
+     * @param eventOrChannel    The event or channel in which the embed is to be sent.
+     * @param embed             The embed to be sent in the <code>eventOrChannel</code>.
+     */
     private void replyWithEmbed(Object eventOrChannel, MessageEmbed embed) {
         replyWithEmbed(eventOrChannel, embed, false);
     }
 
+    /**
+     * Attempts to load, queue and play a track or playlist from a given URL, and (optionally) sends an embed in the given
+     * <code>eventOrChannel</code> based on the results of the method.
+     *
+     * @param eventOrChannel    The event or channel of the <code>CommandEvent</code>.
+     * @param trackUrl          The URL of the track(s) to be played.
+     * @param sendEmbed         Whether to create and send an embed in the <code>eventOrChannel</code> about the song(s) queued (or the error if one occurred).
+     * @return                  A <code>CompletableFuture</code> that contains the <code>LoadResult</code> of the method.
+     * @throws AssertionError   If <code>eventOrChannel</code> is not an event or channel (mind blown).
+     */
     public CompletableFuture<LoadResult> loadAndPlay(Object eventOrChannel, String trackUrl, boolean sendEmbed) {
         assert (eventOrChannel instanceof CommandEvent || eventOrChannel instanceof GuildMessageChannelUnion);
         CompletableFuture<LoadResult> loadResultFuture = new CompletableFuture<>();
@@ -162,6 +213,8 @@ public class PlayerManager {
             commandGuild = ((GuildMessageChannelUnion) eventOrChannel).getGuild();
         }
         Map<String, String> locale = guildLocales.get(commandGuild.getIdLong());
+
+        // If the trackURL is for spotify but the manager can't use spotify, return NO_MATCHES (and embed if sendEmbed)
         if (trackUrl.toLowerCase().contains("spotify")) {
             if (!hasSpotify) {
                 if (sendEmbed) {
@@ -171,8 +224,15 @@ public class PlayerManager {
                 return loadResultFuture;
             }
         }
+
         final GuildMusicManager musicManager = this.getMusicManager(commandGuild);
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+            /**
+             * Sets user data for <code>audioTrack</code>, queues it on the guild's scheduler and (optionally)
+             * sends an embed.
+             *
+             * @param audioTrack    The <code>AudioTrack</code> which was loaded.
+             */
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 audioTrack.setUserData(new TrackUserData(eventOrChannel));
@@ -183,6 +243,12 @@ public class PlayerManager {
                 loadResultFuture.complete(LoadResult.TRACK_LOADED);
             }
 
+            /**
+             * Handles queueing and embed building for playlists  when loaded (assuming the <code>audioPlaylist</code>
+             * instance contains tracks).
+             *
+             * @param audioPlaylist The <code>AudioPlaylist</code> which was loaded.
+             */
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 boolean autoplaying = AutoplayGuilds.contains(commandGuild.getIdLong());
@@ -230,6 +296,10 @@ public class PlayerManager {
                 loadResultFuture.complete(LoadResult.PLAYLIST_LOADED);
             }
 
+            /**
+             * Sends an embed to notify the user that the load query had no matching <code>AudioTrack</code> or
+             * <code>AudioPlaylist</code>.
+             */
             @Override
             public void noMatches() {
                 if (sendEmbed)
@@ -238,6 +308,12 @@ public class PlayerManager {
                 loadResultFuture.complete(LoadResult.NO_MATCHES);
             }
 
+            /**
+             * Sends output to <code>System.err</code> and an embed in <code>eventOrChannel</code> of <code>CommandEvent</code> to notify bot host
+             * and user of an error occuring during the loading process.
+             *
+             * @param e The error that occurred during the loading process.
+             */
             @Override
             public void loadFailed(FriendlyException e) {
                 System.err.println("Track failed to load.\nURL: \"" + trackUrl + "\"\nReason: " + e.getMessage());
@@ -256,6 +332,12 @@ public class PlayerManager {
         return loadResultFuture;
     }
 
+    /**
+     * Returns the URL of the thumbnail for the current <code>AudioTrack</code>, checking if it is a valid image URL.
+     *
+     * @param track The <code>AudioTrack</code> object whose information will be used to search for a thumbnail.
+     * @return      A string URL of the thumbnail image (or <code>null</code> when one was not found for any reason).
+     */
     @Nullable
     public String getThumbURL(AudioTrack track) {
         URL url = null;
@@ -308,25 +390,60 @@ public class PlayerManager {
         return null;
     }
 
+    /**
+     * Possible results of an attempt to load an <code>AudioTrack</code> or <code>AudioPlaylist</code>.
+     */
     public enum LoadResult {
+        /**
+         * A single <code>AudioTrack</code> has been loaded.
+         */
         TRACK_LOADED(true),
+
+        /**
+         * An <code>AudioPlaylist</code> has been loaded.
+         */
         PLAYLIST_LOADED(true),
+
+        /**
+         * There are no matching <code>AudioTrack</code>'s to the load query.
+         */
         NO_MATCHES(false),
+
+        /**
+         * The load attempt has failed due to some error(s).
+         */
         LOAD_FAILED(false);
 
+
+        /**
+         * Whether this entry of <code>LoadResult</code> will cause a song to be played.
+         */
         public final boolean songWasPlayed;
 
+        /**
+         * Sets the current <code>LoadResult</code> instance's <code>songWasPlayed</code> property to the given value.
+         * @param songWasPlayed Whether this entry of <code>LoadResult</code> will cause a song to be played.
+         */
         LoadResult(boolean songWasPlayed) {
             this.songWasPlayed = songWasPlayed;
         }
     }
 
+    /**
+     * Holds necessary information on user, guild and channel with regards to a specific <code>AudioTrack</code> or
+     * <code>AudioPlaylist</code> for later use.
+     */
     public static class TrackUserData {
         public final Object eventOrChannel;
         public final Long channelId;
         public final Long guildId;
         public final String username;
 
+        /**
+         * Constructs a new <code>TrackUserData</code> object.
+         *
+         * @param eventOrChannel    The event or channel where the <code>CommandEvent</code> was called.
+         */
         public TrackUserData(Object eventOrChannel) {
             this.eventOrChannel = eventOrChannel;
             GuildMessageChannelUnion channel;
