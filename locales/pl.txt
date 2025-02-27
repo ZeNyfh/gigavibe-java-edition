@@ -85,6 +85,7 @@ cmd.inv.haveFun=Miłej zabawy!
 
 cmd.join.noAccess=Bot nie ma dostępu do Twojego kanału.
 cmd.join.joined=Bot dołączył do Twojego kanału głosowego.
+cmd.join.botAlreadyInVC=Bot już jest w twoim kanale głosowym.
 
 cmd.loc.list=Lista języków:
 cmd.loc.languageChanged=Język został zmieniony na: {1}

@@ -90,6 +90,7 @@ cmd.inv.haveFun=Have fun!
 
 cmd.join.noAccess=The bot cannot access your channel.
 cmd.join.joined=Joined your voice channel!
+cmd.join.botAlreadyInVC=The bot is already in the voice channel.
 
 cmd.loc.list=List of languages:
 cmd.loc.languageChanged=The language has been changed to: {1} // 1 here being a language name.
