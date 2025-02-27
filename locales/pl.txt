@@ -40,6 +40,7 @@ cmd.dj.membersAndRoles={1} {2} i {3} {4}
 cmd.dj.added=Dodano {1} do listy DJ-ów.
 cmd.dj.removed=Usunięto {1} z listy DJ-ów.
 cmd.dj.invalidArgs=Nieprawidłowe argumenty.
+cmd.dj.noArgs=Nie podano argumentów.
 
 cmd.fs.failedToFind=Autoodtwarzanie nie mogło znaleźć {1}\n
 cmd.fs.couldNotFind=Autoodtwarzanie nie mogło znaleźć podobnych utworów.\n

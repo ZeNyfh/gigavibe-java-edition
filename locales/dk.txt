@@ -40,6 +40,7 @@ cmd.dj.membersAndRoles={1} {2} og {3} {4}
 cmd.dj.added=Tilføjet {1} til DJ-listen.
 cmd.dj.removed=Fjernet {1} fra DJ-listen.
 cmd.dj.invalidArgs=Ugyldige argumenter.
+cmd.dj.noArgs=Ingen argumenter angivet.
 
 cmd.fs.failedToFind=Autoplay kunne ikke finde {1}\n
 cmd.fs.couldNotFind=Autoplay kunne ikke finde lignende numre.\n
