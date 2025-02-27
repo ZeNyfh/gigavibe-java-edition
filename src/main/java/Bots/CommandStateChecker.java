@@ -113,10 +113,9 @@ public class CommandStateChecker {
         }
         if (selfState.getChannel() != null && memberState.getChannel() != selfState.getChannel()) {
             GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(selfState.getGuild());
-            if (manager.audioPlayer.getPlayingTrack() == null && manager.scheduler.queue == null) {
-                return success;
+            if (manager.audioPlayer.getPlayingTrack() != null || !manager.scheduler.queue.isEmpty()) {
+                return new CheckResult(false, event.localise("statecheck.botBusy"));
             }
-            return new CheckResult(false, event.localise("statecheck.botBusy"));
         }
         if (memberState.getChannel() != selfState.getChannel()) {
             try {
