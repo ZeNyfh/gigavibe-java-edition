@@ -2,11 +2,18 @@ package Bots;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +26,9 @@ public class LocaleManager {
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
     public static void init(JDA bot) {
+        if (bot.getSelfUser().getIdLong() == 920435768726532107L) { // only sync on init for the main bot, to update locales on another bot run the dev command "updatelocales".
+            syncLocaleFiles();
+        }
         languages.put("english", readLocale("locales/en.txt")); // english needs to always be loaded first as it is used for comparison.
         for (File file : Objects.requireNonNull(Path.of("locales").toFile().listFiles())) {
             if (file.getName().equals("en.txt")) continue;
@@ -29,6 +39,50 @@ public class LocaleManager {
             JSONObject config = GetGuildConfig(g.getIdLong());
             guildLocales.put(g.getIdLong(), languages.get(config.get("Locale")));
             guildLocales.putIfAbsent(g.getIdLong(), languages.get("english"));
+        }
+    }
+
+    public static void syncLocaleFiles() { // this is public because of usage in CommandDev.
+        String apiUrl = "https://api.github.com/repos/ZeNyfh/gigavibe-java-edition/contents/locales";
+        String rawUrl = "https://raw.githubusercontent.com/ZeNyfh/gigavibe-java-edition/main/locales/";
+        System.out.println("Syncing locales from git.");
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+            if (connection.getResponseCode() != 200) {
+                System.err.println("Could not retrieve locales from github, update them manually from https://github.com/ZeNyfh/gigavibe-java-edition/tree/main/locales");
+                return;
+            }
+
+            InputStream stream = connection.getInputStream();
+            Scanner scanner = new Scanner(stream);
+            StringBuilder jsonBuilder = new StringBuilder();
+            while (scanner.hasNext()) jsonBuilder.append(scanner.nextLine());
+            scanner.close();
+            stream.close();
+
+
+            JSONArray fileArray = (JSONArray) new JSONParser().parse(jsonBuilder.toString());
+            for (Object obj : fileArray) {
+                JSONObject fileObject = (JSONObject) obj;
+                String filename = (String) fileObject.get("name");
+                String fileURL = rawUrl + filename;
+                System.out.println("updating locale from: " + fileURL);
+
+                URL downloadURL = new URL(fileURL);
+                Path localePath = Path.of("locales", filename);
+
+                Files.createDirectories(localePath.getParent()); // creation for first time setup cases.
+
+                try (InputStream downloadStream = downloadURL.openStream()) {
+                    Files.copy(downloadStream, localePath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

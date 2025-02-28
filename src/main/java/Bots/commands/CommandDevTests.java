@@ -86,9 +86,13 @@ public class CommandDevTests extends BaseCommand {
             } else if (command.equalsIgnoreCase("guilds")) {
                 writeGuilds(event);
                 event.reply("File made guilds.csv.");
-            } else if (command.equalsIgnoreCase("reloadlocale")) {
+            } else if (command.equalsIgnoreCase("reloadlocales")) {
                 LocaleManager.init(event.getJDA());
                 event.reply("reinitialised all locales.");
+            } else if (command.equalsIgnoreCase("synclocales")) {
+                LocaleManager.syncLocaleFiles();
+                LocaleManager.init(event.getJDA());
+                event.reply("synced all locales and reinitialised them.");
             } else {
                 event.reply("Unrecognised dev command " + command);
             }
@@ -112,7 +116,7 @@ public class CommandDevTests extends BaseCommand {
 
     @Override
     public String getOptions() {
-        return "(dirty-config | test-buttons | threads | sleep | guilds | reloadlocale)"; //(Command1 | Command2 | Command3) - add them here once they exist
+        return "(dirty-config | test-buttons | threads | sleep | guilds | reloadlocales | synclocales)"; //(Command1 | Command2 | Command3) - add them here once they exist
     }
 
     @Override
