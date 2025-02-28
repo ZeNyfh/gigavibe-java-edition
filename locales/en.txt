@@ -232,6 +232,7 @@ tsched.critfail.description=Tracks have now failed to load 3 times, likely due t
 tsched.critfail.footer=If this issue persists with specific audio sources, please file a bug report using /bug
 
 tsched.playnext.nowPlaying=Now playing: {1} // a track name
+tsched.playnext.playedBy=played by: {1} // a username
 
 // if you experience issues with slavic languages specifically, feel free to use something like minut(y) if it can be two forms for plural.
 // if a language needs something akin to "days 2", then you can move the variable before/after the word!
