@@ -114,10 +114,12 @@ public class LocaleManager {
             for (String k : languages.get("english").keySet()) {
                 if (!localeMap.containsKey(k)) {
                     if (!isMissing) {
-                        System.err.println(localeFile + " seems to be missing some keys.");
+                        String[] fileSplit = localeFile.split("/");
+                        System.err.println("## " + fileSplit[fileSplit.length-1] + " is missing keys.");
                         isMissing = true;
                     }
-                    System.err.println("MISSING KEY: " + k);
+                    System.err.println("- ENGLISH KEY: " + languages.get("english").get(k));
+                    System.err.println("  - MISSING KEY: " + k);
                     localeMap.put(k, languages.get("english").getOrDefault(k, k)); // if the language is missing anything, fallback to english.
                 }
             }
