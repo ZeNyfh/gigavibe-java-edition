@@ -27,10 +27,14 @@ public class CommandDJ extends BaseCommand {
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");
 
-        boolean isAdding = event.getArgs()[1].equalsIgnoreCase("add");
-        boolean isRemoving = event.getArgs()[1].equalsIgnoreCase("remove");
+        boolean isAdding = false;
+        boolean isRemoving = false;
+        if (event.getArgs().length != 1) {
+            isAdding = event.getArgs()[1].equalsIgnoreCase("add");
+            isRemoving = event.getArgs()[1].equalsIgnoreCase("remove");
+        }
 
-        if (event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
+        if (event.getArgs().length == 1 || event.getArgs()[1].equalsIgnoreCase("list")) { // list djs
             EmbedBuilder eb = new EmbedBuilder();
             StringBuilder builder = new StringBuilder();
             builder.append(event.localise("cmd.dj.roleList")); // list DJ roles in embed
