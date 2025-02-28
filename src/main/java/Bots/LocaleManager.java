@@ -26,7 +26,7 @@ public class LocaleManager {
     static Pattern serializePattern = Pattern.compile("\\{(\\d+)}");
 
     public static void init(JDA bot) {
-        if (bot.getSelfUser().getIdLong() == 920435768726532107L) { // only sync on init for the main bot, to update locales on another bot run the dev command "updatelocales".
+        if (bot.getSelfUser().getIdLong() == 920435768726532107L) { // only sync on init for the main bot, to update locales on another bot run the dev command "synclocales".
             syncLocaleFiles();
         }
         languages.put("english", readLocale("locales/en.txt")); // english needs to always be loaded first as it is used for comparison.
