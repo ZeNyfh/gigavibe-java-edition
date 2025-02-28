@@ -36,8 +36,18 @@ public class CommandSendLogs extends BaseCommand {
             StringBuilder builder = new StringBuilder();
             for (Path file : stream.toList()) {
                 String filename = file.getFileName().toString().split("\\.")[0];
-                if (!filename.equalsIgnoreCase("log"))
-                    builder.append("* `").append(filename).append(" | ").append(file.toFile().length()).append("KB`\n");
+                if (!filename.equalsIgnoreCase("log")) {
+                    long fileLen = file.toFile().length();  // Length in bytes
+                    String sizeStr = "B`\n";
+                    if (fileLen >= 1000 && fileLen < 1_000_000) {
+                        fileLen = fileLen % 1024 == 0 ? fileLen / 1024 : 1 + fileLen / 1024;  // round up
+                        sizeStr = "KB`\n";
+                    } else if (fileLen >= 1_000_000) {
+                        fileLen = fileLen % 1_048_576 == 0 ? fileLen / 1_048_576 : 1 + fileLen / 1_048_576;
+                        sizeStr = "MB`\n";
+                    }
+                    builder.append("* `").append(filename).append(" | ").append(fileLen).append(sizeStr);
+                }
             }
             event.replyEmbeds(createQuickEmbed("Log files", builder.toString()));
         } else if (event.getArgs()[1].equalsIgnoreCase("send")) {

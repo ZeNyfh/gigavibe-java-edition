@@ -28,7 +28,8 @@ cmd.bc.noChannels=**None**
 cmd.bug.noReport=Please provide something to report.
 cmd.bug.successMessage=Thank you for sending in a bug report!\nThe developer should be in contact with you via the bot's dms.\nPlease use the **{1}** command to reply to messages.\n // {1} is a command name. \n are newlines, do not remove the bolding (var surrounded by **).
 
-cmd.cq.cleared=Cleared the queue
+cmd.cq.cleared=Cleared the queue.
+cmd.cq.empty=The queue is empty.
 
 cmd.dc.disconnected=Disconnected from the voice channel and cleared the queue.
 

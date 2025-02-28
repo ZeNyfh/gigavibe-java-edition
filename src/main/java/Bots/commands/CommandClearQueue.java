@@ -17,6 +17,11 @@ public class CommandClearQueue extends BaseCommand {
     @Override
     public void execute(CommandEvent event) {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        if (musicManager.scheduler.queue.isEmpty() && musicManager.audioPlayer.getPlayingTrack() == null) {
+            event.replyEmbeds(event.createQuickError(event.localise("cmd.cq.empty")));
+            return;
+        }
+
         skipCountGuilds.remove(event.getGuild().getIdLong());
         musicManager.scheduler.queue.clear();
         musicManager.scheduler.nextTrack();
