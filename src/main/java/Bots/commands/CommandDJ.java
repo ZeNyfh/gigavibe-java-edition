@@ -23,11 +23,6 @@ public class CommandDJ extends BaseCommand {
 
     @Override
     public void execute(CommandEvent event) {
-        if (event.getArgs().length < 2) {
-            event.replyEmbeds(event.createQuickError(event.localise("cmd.dj.noArgs")));
-            return;
-        }
-
         JSONObject config = event.getConfig();
         JSONArray DJRoles = (JSONArray) config.get("DJRoles");
         JSONArray DJUsers = (JSONArray) config.get("DJUsers");

@@ -31,7 +31,6 @@ cmd.dj.membersAndRoles={1} {2} y {3} {4}
 cmd.dj.added=Añadido {1} a la lista de DJs.
 cmd.dj.removed=Eliminado {1} de la lista de DJs.
 cmd.dj.invalidArgs=Argumentos inválidos.
-cmd.dj.noArgs=No se proporcionaron argumentos.
 
 cmd.fs.failedToFind=La reproducción automática no encontró {1}\n
 cmd.fs.couldNotFind=No se encontraron pistas similares para la reproducción automática.\n

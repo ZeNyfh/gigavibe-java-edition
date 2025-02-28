@@ -46,7 +46,6 @@ cmd.dj.membersAndRoles={1} {2} and {3} {4} // count of members, mentions, number
 cmd.dj.added=Added {1} to the DJ list. // user/role name
 cmd.dj.removed=Removed {1} from the DJ list. // user/role name
 cmd.dj.invalidArgs=Invalid Arguments.
-cmd.dj.noArgs=No arguments given.
 
 cmd.fs.failedToFind=Autoplay failed to find {1}\n // song title
 cmd.fs.couldNotFind=Autoplay could not find similar tracks.\n

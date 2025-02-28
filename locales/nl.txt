@@ -40,7 +40,6 @@ cmd.dj.membersAndRoles={1} {2} en {3} {4}
 cmd.dj.added={1} is toegevoegd aan de lijst van DJ's.
 cmd.dj.removed={1} is verwijderd van de lijst van DJ's.
 cmd.dj.invalidArgs=Ongeldige argumenten.
-cmd.dj.noArgs=Geen argumenten gegeven.
 
 cmd.fs.failedToFind=Autoplay kon {1} niet vinden\n
 cmd.fs.couldNotFind=Autoplay kon geen vergelijkbare nummers vinden.\n
