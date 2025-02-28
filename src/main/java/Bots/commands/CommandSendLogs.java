@@ -40,10 +40,10 @@ public class CommandSendLogs extends BaseCommand {
                     long fileLen = file.toFile().length();  // Length in bytes
                     String sizeStr = "B`\n";
                     if (fileLen >= 1000 && fileLen < 1_000_000) {
-                        fileLen /= 1000;
+                        fileLen = fileLen % 1024 == 0 ? fileLen / 1024 : 1 + fileLen / 1024;  // round up
                         sizeStr = "KB`\n";
-                    } else if (fileLen >= 1_000_000){
-                        fileLen /= 1_000_000;
+                    } else if (fileLen >= 1_000_000) {
+                        fileLen = fileLen % 1_048_576 == 0 ? fileLen / 1_048_576 : 1 + fileLen / 1_048_576;
                         sizeStr = "MB`\n";
                     }
                     builder.append("* `").append(filename).append(" | ").append(fileLen).append(sizeStr);
