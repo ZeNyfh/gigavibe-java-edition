@@ -85,6 +85,7 @@ cmd.inv.haveFun=God fornøjelse!
 
 cmd.join.noAccess=Botten har ikke adgang til din kanal.
 cmd.join.joined=Botten sluttede sig til din stemmekanal.
+cmd.join.botAlreadyInVC=Botten er allerede i stemmekanalen.
 
 cmd.loc.list=Liste af sprog:
 cmd.loc.languageChanged=Sproget blev ændret til: {1}
@@ -226,6 +227,7 @@ tsched.critfail.description=Nummeret kunne ikke indlæses 3 gange, sandsynligvis
 tsched.critfail.footer=Hvis dette problem fortsætter med specifikke lydkilder, bedes du indsende en fejlrapport vha. /bug
 
 tsched.playnext.nowPlaying=Spiller nu: {1}
+tsched.playnext.playedBy=spillet af: {1}
 
 main.day={1} dag
 main.day.plural={1} dage
