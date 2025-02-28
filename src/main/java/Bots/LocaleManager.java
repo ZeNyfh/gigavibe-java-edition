@@ -118,7 +118,7 @@ public class LocaleManager {
                         System.err.println("## " + fileSplit[fileSplit.length-1] + " is missing keys.");
                         isMissing = true;
                     }
-                    System.err.println("- ENGLISH KEY: " + languages.get("english").get(k));
+                    System.err.println("- ENGLISH KEY: " + languages.get("english").get(k).replaceAll("%(.)\\$s", "{$1}"));
                     System.err.println("  - MISSING KEY: " + k);
                     localeMap.put(k, languages.get("english").getOrDefault(k, k)); // if the language is missing anything, fallback to english.
                 }
