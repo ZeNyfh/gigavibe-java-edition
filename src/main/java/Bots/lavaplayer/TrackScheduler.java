@@ -207,7 +207,7 @@ public class TrackScheduler extends AudioEventAdapter {
         String name;
         name = ((PlayerManager.TrackUserData) nextTrack.getUserData()).username;
         if (!name.isEmpty()) {
-            eb.setFooter("played by: " + name);
+            eb.setFooter(managerLocalise("tsched.playnext.playedBy", lang, name));
         }
 
         if (PlayerManager.getInstance().getThumbURL(nextTrack) != null) {

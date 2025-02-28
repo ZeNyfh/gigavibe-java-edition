@@ -227,6 +227,8 @@ tsched.critfail.description=Odtworzenie utworów nie powiodło się 3 razy, przy
 tsched.critfail.footer=Jeśli ten problem występuje z konkretnymi źródłami dźwięku, zgłoś błąd za pomocą /bug
 
 tsched.playnext.nowPlaying=Teraz odtwarzane: {1}
+tsched.playnext.playedBy=zagrana przez: {1}
+
 
 main.day={1} dzień
 main.day.plural={1} dni
