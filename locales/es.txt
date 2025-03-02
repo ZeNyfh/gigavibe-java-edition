@@ -76,6 +76,7 @@ cmd.inv.haveFun=¡Que te diviertas!
 
 cmd.join.noAccess=El bot no tiene acceso a tu canal.
 cmd.join.joined=El bot se ha unido a tu chat de voz.
+cmd.join.botAlreadyInVC=El bot ya se encuentra en el chat de voz.
 
 cmd.loc.list=Lista de idiomas:
 cmd.loc.languageChanged=El idioma ha sido cambiado a: {1}
@@ -217,6 +218,8 @@ tsched.critfail.description=Las pistas han fallado al cargar 3 veces, probableme
 tsched.critfail.footer=Si este problema persiste con fuentes de audio específicas, por favor, envíe un informe de error usando /bug
 
 tsched.playnext.nowPlaying=Reproduciendo ahora: {1}
+tsched.playnext.playedBy=reproducido por: {1}
+
 
 main.day={1} día
 main.day.plural={1} días
