@@ -93,6 +93,7 @@ public class CommandSkip extends BaseCommand {
                 }
             }
             musicManager.scheduler.nextTrack();
+            skipCountGuilds.remove(event.getGuild().getIdLong());
             if (musicManager.audioPlayer.getPlayingTrack() == null) { // if there is nothing playing after the skip command
                 event.replyEmbeds(createQuickEmbed(" ", event.localise("cmd.skip.skippedTheTrack")));
             } else { // if there is something playing after the skip command
