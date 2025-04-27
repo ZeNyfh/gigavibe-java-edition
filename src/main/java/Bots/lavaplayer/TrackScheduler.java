@@ -159,7 +159,7 @@ public class TrackScheduler extends AudioEventAdapter {
         Map<String, String> lang = guildLocales.get(originalEventChannel.getGuild().getIdLong());
 
         MessageEmbed failureEmbed = createQuickEmbed(
-                managerLocalise("tsched.criticalFailure.title", lang),
+                managerLocalise("tsched.critfail.title", lang),
                 managerLocalise("tsched.critfail.description", lang),
                 managerLocalise("tsched.critfail.footer", lang)
         );
