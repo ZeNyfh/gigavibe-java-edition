@@ -43,8 +43,8 @@ public class LocaleManager {
     }
 
     public static void syncLocaleFiles() { // this is public because of usage in CommandDev.
-        String apiUrl = "https://api.github.com/repos/ZeNyfh/gigavibe-java-edition/contents/locales";
-        String rawUrl = "https://raw.githubusercontent.com/ZeNyfh/gigavibe-java-edition/main/locales/";
+        String apiUrl = "https://api.github.com/repos/ZeNyfh/Zenvibe/contents/locales";
+        String rawUrl = "https://raw.githubusercontent.com/ZeNyfh/Zenvibe/main/locales/";
         System.out.println("Syncing locales from git.");
         try {
             URL url = new URL(apiUrl);
@@ -53,7 +53,7 @@ public class LocaleManager {
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
             if (connection.getResponseCode() != 200) {
-                System.err.println("Could not retrieve locales from github, update them manually from https://github.com/ZeNyfh/gigavibe-java-edition/tree/main/locales");
+                System.err.println("Could not retrieve locales from github, update them manually from https://github.com/ZeNyfh/Zenvibe/tree/main/locales");
                 return;
             }
 
