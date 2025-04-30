@@ -1,7 +1,7 @@
 # Zenvibe - Terms of Service
 
-Last Updated: December 30, 2023<br>
-Effective: December 30, 2023
+Last Updated: April 30, 2025
+Effective: April 30, 2025
 
 Welcome to Zenvibe! By using this Discord bot, you agree to the following Terms of Service:
 
@@ -39,7 +39,7 @@ Zenvibe is a Discord bot designed to play music from various streaming services 
 - Violations should be handled accordingly by moderators, administrators, or the owner of the guild via Discord's reporting mechanisms or through the guild's own means of moderation.
 
 ## 9. Support and Maintenance
-- Support is available through the [GitHub repository](https://github.com/ZeNyfh/gigavibe-java-edition), the bug command, the [support server](https://discord.com/invite/gYXetvxawe), and contributions from the community.
+- Support is available through the [GitHub repository](https://github.com/ZeNyfh/Zenvibe), the bug command, the [support server](https://discord.com/invite/gYXetvxawe), and contributions from the community.
 
 ## 10. Updates and Notification
 - Users will be notified of changes to the Terms of Service through the Discord server and GitHub repository. Continued use implies acceptance.

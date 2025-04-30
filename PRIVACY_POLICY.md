@@ -1,7 +1,7 @@
 # Zenvibe - Privacy Policy
 
-Last Updated: December 30, 2023
-Effective: December 30, 2023
+Last Updated: April 30, 2025
+Effective: April 30, 2025
 
 Welcome to Zenvibe! This Privacy Policy explains how your personal information is collected, used, and disclosed by Zenvibe, a Discord bot created by me, the GitHub Repository owner, ZeNyfh.<br>
 By using Zenvibe, you agree to the terms outlined in this Privacy Policy.
@@ -19,7 +19,7 @@ By using Zenvibe, you agree to the terms outlined in this Privacy Policy.
 
 ### 1.2 Server Data
 - Zenvibe processes and stores information related to guilds, including server IDs, Role IDs, and User IDs. This data is used solely for the operation of Zenvibe within the Discord environment.<br>
-For more context, Role IDs and User IDs are only stored when the user adds them manually, such as when [Providing Specific Commands or Actions](https://github.com/ZeNyfh/gigavibe-java-edition/blob/main/PRIVACY_POLICY.md#L32
+For more context, Role IDs and User IDs are only stored when the user adds them manually, such as when [Providing Specific Commands or Actions](https://github.com/ZeNyfh/Zenvibe/blob/main/PRIVACY_POLICY.md#L32
 ). Any data that is stored can be removed manually at any time by the user as well.
 
 
