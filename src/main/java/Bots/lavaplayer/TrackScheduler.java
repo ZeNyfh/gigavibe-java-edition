@@ -101,7 +101,7 @@ public class TrackScheduler extends AudioEventAdapter {
                 }
 
                 if (canAutoPlay) {
-                    // TODO: will be replaced by https://github.com/ZeNyfh/gigavibe-java-edition/pull/166
+                    // TODO: will be replaced by https://github.com/ZeNyfh/Zenvibe/pull/166
                     String artistName = (track.getInfo().author.isEmpty() || track.getInfo().author == null)
                             ? encode(track.getInfo().title.toLowerCase(), false, true)
                             : encode(track.getInfo().author.toLowerCase(), false, true);
