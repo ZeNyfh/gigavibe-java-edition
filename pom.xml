@@ -16,6 +16,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/ZeNyfh/Zenvibe</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
