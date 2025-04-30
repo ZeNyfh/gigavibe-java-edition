@@ -50,7 +50,7 @@ cmd.fs.skippedToPos=Sprang {1} numre over til {2}.
 cmd.fs.skippedToTrack=Sprang det nuværende nummer over til {1}.
 cmd.fs.skipped=Sprang det nuværende nummer over.
 
-cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.\n\n❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Brug dette KUN til fejlrapporter og funktionsforslag.\n\n❕ Når du opretter en fejlrapport, skal du angive, hvad fejlen er, og hvordan den kan genskabes.\nhttps://github.com/ZeNyfh/Ze v
 
 cmd.help.cat.general=📖 **Generel**
 cmd.help.cat.music=🔊 **Musik**

@@ -41,7 +41,7 @@ cmd.fs.skippedToPos=Se han saltado {1} pistas hasta llegar a {2}.
 cmd.fs.skippedToTrack=La pista actual ha sido saltada y reemplazada por {1}.
 cmd.fs.skipped=La pista actual ha sido saltada.
 
-cmd.git.message=❕ Usar SOLO para informes de errores o sugerencias.\n\n❕ Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Usar SOLO para informes de errores o sugerencias.\n\n❕ Si haces una propuesta, asegúrate de especificar el problema y cómo reproducirlo.\nhttps://github.com/ZeNyfh/Zenvibe
 
 cmd.help.cat.general=📖 **General**
 cmd.help.cat.music=🔊 **Música**

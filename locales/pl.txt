@@ -50,7 +50,7 @@ cmd.fs.skippedToPos=Pominięto {1} utworów do {2}.
 cmd.fs.skippedToTrack=Pominięto bieżący utwór do {1}.
 cmd.fs.skipped=Pominięto bieżący utwór.
 
-cmd.git.message=❕ Użyj tego tylko do zgłaszania błędów i sugestii funkcji.\n\n❕ Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Użyj tego tylko do zgłaszania błędów i sugestii funkcji.\n\n❕ Podczas zgłaszania problemu upewnij się, że określiłeś/aś, na czym polega błąd i jak go odtworzyć.\nhttps://github.com/ZeNyfh/Zenvibe
 
 cmd.help.cat.general=📖 **Ogólne**
 cmd.help.cat.music=🔊 **Muzyka**

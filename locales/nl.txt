@@ -50,7 +50,7 @@ cmd.fs.skippedToPos={1} nummers zijn overgeslagen naar {2}
 cmd.fs.skippedToTrack=Het huidige nummer is overslagen naar {1}
 cmd.fs.skipped=Het huidige nummer is overgeslagen.
 
-cmd.git.message=❕ Gebruik dit ALLEEN voor bugrapporten en functievoorstellen.\n\n❕ Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt reproduceren.\nhttps://github.com/ZeNyfh/gigavibe-java-edition
+cmd.git.message=❕ Gebruik dit ALLEEN voor bugrapporten en functievoorstellen.\n\n❕ Maak duidelijk wat het probleem is en beschrijf hoe je het probleem kunt reproduceren.\nhttps://github.com/ZeNyfh/Zenvibe
 
 cmd.help.cat.general=📖 **Algemeen**
 cmd.help.cat.music=🔊 **Muziek**
