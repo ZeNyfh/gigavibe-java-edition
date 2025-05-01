@@ -93,19 +93,19 @@
         <dependency>
             <groupId>dev.arbjerg</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>2.2.1</version>
+            <version>42792379f87798ec380a4a4f3c2bbd8c53909339-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>v2</artifactId>
-            <version>1.13.0</version>
+            <version>0e5cfca4e88c32db430ce76e6866b13035c85d22-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.3.0</version>
+            <version>5.5.0</version>
         </dependency>
 
         <dependency>
