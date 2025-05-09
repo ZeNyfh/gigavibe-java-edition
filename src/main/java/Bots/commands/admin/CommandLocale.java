@@ -3,6 +3,7 @@ package Bots.commands.admin;
 import Bots.BaseCommand;
 import Bots.CommandEvent;
 import Bots.CommandStateChecker;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import org.json.simple.JSONObject;
@@ -24,10 +25,14 @@ public class CommandLocale extends BaseCommand {
             event.replyEmbeds(createQuickError("I currently do not work outside of discord servers.", null)).queue();
             return;
         }
+        JSONObject config = GetGuildConfig(Objects.requireNonNull(event.getGuild()).getIdLong());
+        if (!Objects.requireNonNull(event.getMember()).hasPermission(Permission.MESSAGE_MANAGE)) {
+            Map<String, String> curLang = languages.get(config.get("Locale"));
+            event.replyEmbeds(createQuickError(managerLocalise("main.noPermission", curLang), curLang)).setEphemeral(true).queue();
+            return;
+        }
 
         String selectionValue = event.getInteraction().getSelectedOptions().get(0).getValue();
-
-        JSONObject config = GetGuildConfig(Objects.requireNonNull(event.getGuild()).getIdLong());
         config.put("Locale", selectionValue);
         Map<String, String> locale = languages.get(selectionValue);
         guildLocales.put(event.getGuild().getIdLong(), locale);
@@ -56,11 +61,6 @@ public class CommandLocale extends BaseCommand {
     @Override
     public Category getCategory() {
         return Category.Admin;
-    }
-
-    @Override
-    public CommandStateChecker.Check[] getChecks() {
-        return new CommandStateChecker.Check[]{CommandStateChecker.Check.IS_DJ};
     }
 
     @Override
