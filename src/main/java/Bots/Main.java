@@ -217,7 +217,7 @@ public class Main extends ListenerAdapter {
             Enumeration<JarEntry> resources = jarFile.entries();
             while (resources.hasMoreElements()) {
                 JarEntry url = resources.nextElement();
-                if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/Command") && !url.toString().contains("$")) {
+                if (url.toString().endsWith(".class") && url.toString().startsWith("Bots/commands/") && !url.toString().contains("$")) {
                     classes.add(ClassLoader.getSystemClassLoader().loadClass(url.getName().substring(0, url.getName().length() - 6).replaceAll("/", ".")));
                 }
             }
