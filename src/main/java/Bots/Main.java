@@ -194,14 +194,18 @@ public class Main extends ListenerAdapter {
             System.out.println("detected process in IDE, registering commands in a different way...");
             Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources("");
             while (resources.hasMoreElements()) {
-                URL url = resources.nextElement();
-                if (url.getPath().contains("classes")) {
-                    url = new URL("file:" + url.getPath() + "Bots/commands/");
+                URL folder = resources.nextElement();
+                if (folder.getPath().contains("classes")) {
+                    folder = new URL("file:" + folder.getPath() + "Bots/commands/");
                 }
                 try {
-                    for (File classFile : Objects.requireNonNull(new File(url.getFile()).listFiles())) {
-                        if (classFile.getName().endsWith(".class") && !classFile.getName().contains("$")) {
-                            classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                    for (File subfolder : Objects.requireNonNull(new File(folder.getFile()).listFiles())) {
+                        if (subfolder.isDirectory()) {
+                            for (File classFile : Objects.requireNonNull(subfolder.listFiles())) {
+                                if (classFile.getName().endsWith(".class") && !classFile.getName().contains("$")) {
+                                    classes.add(ClassLoader.getSystemClassLoader().loadClass("Bots.commands." + subfolder.getName() + "." + classFile.getName().substring(0, classFile.getName().length() - 6)));
+                                }
+                            }
                         }
                     }
                     break;
