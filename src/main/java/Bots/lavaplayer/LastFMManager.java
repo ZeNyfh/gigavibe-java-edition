@@ -3,9 +3,6 @@ package Bots.lavaplayer;
 import com.sedmelluq.discord.lavaplayer.tools.JsonBrowser;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
 import java.io.File;
