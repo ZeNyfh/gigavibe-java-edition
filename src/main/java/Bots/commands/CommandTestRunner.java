@@ -11,8 +11,10 @@ public class CommandTestRunner extends BaseCommand {
 		StringBuilder report = new StringBuilder("🔧 **Integration Test Report**\n\n");
 		TestUtils.PassTracker t = new TestUtils.PassTracker();
 
+		// should probably have a way of running individual tests with the command, but for now just run all tests, I want this to work similarly to JUnit which sadly cannot be used here.
 		try {
 			t.setDidPass(AudioPlaybackTests.runAll(report, event));
+			// t.setDidPass(anotherTest);
 		} catch (Exception e) {
 			throw new TestUtils.ReportingException("Failed to run tests", report);
 		} finally {
