@@ -99,7 +99,7 @@
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>v2</artifactId>
-            <version>0e5cfca4e88c32db430ce76e6866b13035c85d22-SNAPSHOT</version>
+            <version>1.13.2</version>
         </dependency>
 
         <dependency>
