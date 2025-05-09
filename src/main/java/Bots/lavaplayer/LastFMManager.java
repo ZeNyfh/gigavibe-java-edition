@@ -1,5 +1,6 @@
 package Bots.lavaplayer;
 
+import com.sedmelluq.discord.lavaplayer.tools.JsonBrowser;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.simple.JSONArray;
@@ -106,21 +107,27 @@ public class LastFMManager {
     }
 
     private static String extractTracks(String rawJson, long guildID) {
-        Object object = JSONValue.parse(rawJson);
-        JSONArray trackInfoArray = (JSONArray) ((JSONObject) (((JSONObject) object).get("similartracks"))).get("track");
-        StringBuilder builder = new StringBuilder();
+        JsonBrowser parsedJson;
+        try {
+            parsedJson = JsonBrowser.parse(rawJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
 
-        for (Object obj : trackInfoArray) {
-            builder.append(((JSONObject) ((JSONObject) obj).get("artist")).get("name")).append(" - ");
-            builder.append(((JSONObject) obj).get("name"));
-            if (autoPlayedTracks.get(guildID).contains(builder.toString())) {
-                builder.setLength(0);
-            } else {
-                List<String> list = autoPlayedTracks.get(guildID);
-                list.add(builder.toString().toLowerCase());
-                autoPlayedTracks.put(guildID, list);
-                break;
-            }
+        JsonBrowser trackInfoArray = parsedJson.get("similartracks").get("track").index(0);
+        String artistName = trackInfoArray.get("artist").get("name").text();
+        String songName = trackInfoArray.get("name").text();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(artistName).append(" - ").append(songName);
+
+        if (autoPlayedTracks.get(guildID).contains(builder.toString())) {
+            builder.setLength(0);
+        } else {
+            List<String> list = autoPlayedTracks.get(guildID);
+            list.add(builder.toString().toLowerCase());
+            autoPlayedTracks.put(guildID, list);
         }
         return builder.toString();
     }
