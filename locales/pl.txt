@@ -24,6 +24,7 @@ cmd.bug.noReport=Podaj coś do zgłoszenia.
 cmd.bug.successMessage=Dziękujemy za przesłanie zgłoszenia o błędzie!\nProgramista skontaktuje się z Tobą przez DM bota.\nProszę użyć komendy **{1}**, aby odpowiedzieć na wiadomości.\n
 
 cmd.cq.cleared=Kolejka została wyczyszczona.
+cmd.cq.empty=Kolejka jest pusta.
 
 cmd.dc.disconnected=Rozłączono z kanałem głosowym i wyczyszczono kolejkę.
 
