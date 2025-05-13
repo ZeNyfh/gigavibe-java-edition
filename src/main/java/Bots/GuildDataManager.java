@@ -236,8 +236,8 @@ public class GuildDataManager {
                 }
                 FileWriter writer = new FileWriter(guildQueueFile);
                 writer.write(System.currentTimeMillis() + "\n"); // time now
-                PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) playingTrack.getUserData();
-                GuildChannel channel = bot.getGuildChannelById(trackUserData.channelId);
+                PlayerManager.TrackData trackData = (PlayerManager.TrackData) playingTrack.getUserData();
+                GuildChannel channel = bot.getGuildChannelById(trackData.channelId);
                 writer.write(Objects.requireNonNull(channel).getGuild().getId() + "\n"); // guild id
                 writer.write(channel.getId() + "\n"); // channel id
                 writer.write(Objects.requireNonNull(Objects.requireNonNull(guild.getSelfMember().getVoiceState()).getChannel()).getId() + "\n"); // vc id

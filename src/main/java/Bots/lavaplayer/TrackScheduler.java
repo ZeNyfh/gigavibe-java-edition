@@ -45,9 +45,9 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
-        PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
-        GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackUserData.channelId);
-        long guildID = trackUserData.guildId;
+        PlayerManager.TrackData trackData = (PlayerManager.TrackData) track.getUserData();
+        GuildMessageChannelUnion originalEventChannel = (GuildMessageChannelUnion) getGuildChannelFromID(trackData.channelId);
+        long guildID = trackData.guildId;
         Map<String, String> lang = guildLocales.get(guildID);
 
         if (endReason == AudioTrackEndReason.LOAD_FAILED) {
@@ -106,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter {
                             ? encode(track.getInfo().title.toLowerCase(), false, true)
                             : encode(track.getInfo().author.toLowerCase(), false, true);
                     String title = encode(track.getInfo().title, true, false);
-                    PlayerManager.getInstance().loadAndPlay(trackUserData.eventOrChannel, "ytsearch:" + artistName + " " + title, true);
+                    PlayerManager.getInstance().loadAndPlay(trackData.eventOrChannel, "ytsearch:" + artistName + " " + title, true);
                     createQuickEmbed(managerLocalise("tsched.autoplay.queued", lang), artistName + " - " + title);
                 } else { // cannot autoplay
                     originalEventChannel.sendMessageEmbeds(createQuickError(errorBuilder.toString(), lang)).queue();
@@ -205,7 +205,7 @@ public class TrackScheduler extends AudioEventAdapter {
         );
 
         String name;
-        name = ((PlayerManager.TrackUserData) nextTrack.getUserData()).username;
+        name = ((PlayerManager.TrackData) nextTrack.getUserData()).username;
         if (!name.isEmpty()) {
             eb.setFooter(managerLocalise("tsched.playnext.playedBy", lang, name));
         }
@@ -223,8 +223,8 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        PlayerManager.TrackUserData trackUserData = (PlayerManager.TrackUserData) track.getUserData();
-        Guild guild = getGuildChannelFromID(trackUserData.channelId).getGuild();
+        PlayerManager.TrackData trackData = (PlayerManager.TrackData) track.getUserData();
+        Guild guild = getGuildChannelFromID(trackData.channelId).getGuild();
 
         System.err.println("AudioPlayer in " + guild.getIdLong() + " (" + guild.getName() + ") threw friendly exception on track " + track.getInfo().uri);
         System.err.println(exception.getMessage());

@@ -37,7 +37,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static Bots.CommandEvent.createQuickError;
-import static Bots.LocaleManager.languages;
 import static Bots.LocaleManager.managerLocalise;
 import static Bots.Main.*;
 
@@ -151,7 +150,7 @@ public class PlayerManager {
             embed.setTitle(sanitise(audioTrack.getInfo().title), audioTrack.getInfo().uri);
         }
         String length;
-        long guildId = ((TrackUserData) audioTrack.getUserData()).guildId;
+        long guildId = ((TrackData) audioTrack.getUserData()).guildId;
         Map<String, String> lang = guildLocales.get(guildId);
         if (audioTrack.getInfo().length > 432000000 || audioTrack.getInfo().length <= 1) {
             length = managerLocalise("main.unknown", lang);
@@ -235,7 +234,7 @@ public class PlayerManager {
              */
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
-                audioTrack.setUserData(new TrackUserData(eventOrChannel));
+                audioTrack.setUserData(new TrackData(eventOrChannel));
                 musicManager.scheduler.queue(audioTrack);
                 if (sendEmbed) {
                     replyWithEmbed(eventOrChannel, createTrackEmbed(audioTrack).build());
@@ -255,7 +254,7 @@ public class PlayerManager {
                 Map<String, String> locale = guildLocales.get(commandGuild.getIdLong());
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 for (AudioTrack audioTrack : tracks) {
-                    audioTrack.setUserData(new TrackUserData(eventOrChannel));
+                    audioTrack.setUserData(new TrackData(eventOrChannel));
                 }
                 if (!tracks.isEmpty()) {
                     AudioTrack track = tracks.get(0);
@@ -264,7 +263,7 @@ public class PlayerManager {
                     if (tracks.size() == 1 || audioPlaylist.getName().contains("Search results for:") || autoplaying) {
                         musicManager.scheduler.queue(track);
                         if (sendEmbed) {
-                            track.setUserData(new TrackUserData(eventOrChannel));
+                            track.setUserData(new TrackData(eventOrChannel));
                             replyWithEmbed(eventOrChannel, createTrackEmbed(track).build(), autoplaying);
                         }
                     } else {
@@ -433,7 +432,7 @@ public class PlayerManager {
      * Holds necessary information on user, guild and channel with regards to a specific <code>AudioTrack</code> or
      * <code>AudioPlaylist</code> for later use.
      */
-    public static class TrackUserData {
+    public static class TrackData {
         public final Object eventOrChannel;
         public final Long channelId;
         public final Long guildId;
@@ -444,7 +443,7 @@ public class PlayerManager {
          *
          * @param eventOrChannel    The event or channel where the <code>CommandEvent</code> was called.
          */
-        public TrackUserData(Object eventOrChannel) {
+        public TrackData(Object eventOrChannel) {
             this.eventOrChannel = eventOrChannel;
             GuildMessageChannelUnion channel;
             if (eventOrChannel instanceof CommandEvent) {
