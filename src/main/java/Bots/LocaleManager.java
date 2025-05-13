@@ -115,7 +115,9 @@ public class LocaleManager {
                 if (!localeMap.containsKey(k)) {
                     if (!isMissing) {
                         String[] fileSplit = localeFile.split("/");
-                        System.err.println("## " + fileSplit[fileSplit.length-1] + " is missing keys.");
+                        String langName = fileSplit[fileSplit.length-1];
+                        String flag = ":flag_" + langName.split("\\.", 2)[0] + ":";
+                        System.err.println("## " + flag + " " + fileSplit[fileSplit.length-1] + " is missing keys.");
                         isMissing = true;
                     }
                     System.err.println("- ENGLISH KEY: " + languages.get("english").get(k).replaceAll("%(.)\\$s", "{$1}"));
