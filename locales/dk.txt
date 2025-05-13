@@ -24,6 +24,7 @@ cmd.bug.noReport=Angiv venligst noget at rapportere.
 cmd.bug.successMessage=Tak for din fejlrapport!\nUdvikleren vil kontakte dig via botens DM'er.\nBrug kommandoen **{1}** til at svare på beskeder.\n
 
 cmd.cq.cleared=Ryddede køen.
+cmd.cq.empty=Køen er tom.
 
 cmd.dc.disconnected=Forlod kanalen og ryddet køen.
 
