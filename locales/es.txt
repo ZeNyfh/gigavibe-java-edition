@@ -15,6 +15,7 @@ cmd.bug.noReport=Por favor, incluya información en el informe.
 cmd.bug.successMessage=¡Gracias por tu informe!\nEl desarrollador se pondrá en contacto contigo mediante mensajes privados del bot.\nUsa el comando **{1}** para responder a los mensajes.\n
 
 cmd.cq.cleared=La cola ha sido vaciada.
+cmd.cq.empty=La cola está vacía.
 
 cmd.dc.disconnected=Desconectado del chat de voz y limpiado la cola.
 
